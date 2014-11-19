@@ -1,0 +1,173 @@
+/***************/
+/* Layout      */
+/***************/
+
+#mainPage {
+	background: #ffffff;
+	color: #333333;
+	margin: 0 auto;
+	/* turman : need some place !! */
+	/* max-width: 960px;*/
+	max-width: auto;
+	/* turman : désactivation pour pouvoir scroller sur la page sessions */
+	/* overflow-x: hidden;*/ /* prevents box-shadow causing a horizontal scrollbar in firefox when viewport < 960px wide */
+	/* turman: désactivation car je galere trop en css */
+	/* 
+	   -moz-box-shadow: 0 0 0.3em #255b17;
+	-webkit-box-shadow: 0 0 0.3em #255b17;
+	        box-shadow: 0 0 0.3em #255b17;
+	*/
+}
+
+#mainNav {
+	margin-top: 0px;
+	margin-left: 10px;
+	width: 200px;
+	float: left;
+	height: auto;
+	background-color: FFFFF
+}
+
+#mainBody {
+	margin-left: 210px;
+	margin-right: 20px;
+	height: auto;
+	background-color: FFFFF
+}
+
+/*****************/
+/* Fonts & Links */
+/*****************/
+
+a:link, a:visited {
+    color: #666;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #6A6;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/*****************/
+/* Headers       */
+/*****************/
+
+h1 {
+	color: #48802c;
+	font-weight: normal;
+	font-size: 1.50em;
+	margin: 0.8em 0 0.3em 0;
+}
+
+h2 {
+	color: #48802c;
+	font-weight: normal;
+	font-size: 1.25em;
+	margin: 0.8em 0 0.3em 0;
+}
+
+h3 {
+	color: #48802c;
+	font-weight: normal;
+	font-size: 1.10em;
+	margin: 0.8em 0 0.3em 0;
+}
+
+/*****************/
+/* Tabs          */
+/*****************/
+
+/* les tableaux doivent avoir des bordures completes (et pas que le top) */
+table {
+	//border-top: 1px solid #DFDFDF;
+	border: 1px solid #DFDFDF;
+}
+
+/* le style FlexTab fournit un effet de style : changement de couleur quand curseur passe sur la ligne */
+.flexyTab tr:hover {
+	background: #E1F2B6;
+}
+
+/* mais on ne veut PAS avoir cet effet sur TOUS les tableaux */
+th:hover, tr:hover {
+	background: ;
+}
+
+/*****************/
+/* Selectable tabs */
+/*****************/
+
+.tabSelected {
+	background-color: #aaffaa; 
+	text-align: center; 
+	border: 2px solid #66aa66;
+}
+
+.tabSelected:hover {
+	background-color: #66ff66; 
+}
+
+.tabNotSelected {
+	background-color: #ddffdd; 
+	text-align: center; 
+	border: 2px solid #66aa66;
+}
+
+.tabNotSelected:hover{
+	background-color: #66ff66; 
+}
+
+/***************/
+/* Tooltip */
+/***************/
+
+a.tooltip {
+ position: relative;
+ color: black;
+ text-decoration: none;
+ border-bottom: 1px gray dotted; /* on souligne le texte */
+}
+
+a.tooltip span {
+ display: none; /* on masque l'infobulle */
+}
+
+a.tooltip:hover {
+ background: none; /* correction d'un bug IE */
+ z-index: 500; /* on définit une valeur pour l'ordre d'affichage */
+ cursor: help; /* on change le curseur par défaut en curseur d'aide */
+
+}
+a.tooltip:hover span {
+ display: inline; /* on affiche l'infobulle */
+ position: absolute;
+ //white-space: nowrap; /* on change la valeur de la propriété white-space pour qu'il n'y ait pas de retour à la ligne non-désiré */
+ top: 30px; /* on positionne notre infobulle */
+ left: -200px;
+ background: white;
+ color: green;
+ padding: 3px;
+ border: 1px solid green;
+ border-left: 4px solid green;
+}
+
+/*****************/
+/* Miscellaneous */
+/*****************/
+	
+/* bloc avec bordure */		
+.block {
+	border: 1px solid #CCC;
+	padding: 5px 5px 5px 5px; 
+	margin: 10px 10px 0px 0px;
+}
+
+/* petit décalage nécessaire à cause du layout */
+ul {
+	margin-left: 20px;
+}
+
+
