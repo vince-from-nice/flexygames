@@ -44,25 +44,28 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-		// turman : see http://www.jworks.nl/2013/09/11/upgrading-grails-2-2-4-to-2-3-0/
-        //runtime ":hibernate:3.6.10.1" // or ":hibernate4:4.1.11.1"
-		runtime ":hibernate:$grailsVersion"
-		
-        runtime ":jquery:1.7.1"
-        runtime ":resources:1.1.6"
+		// plugins for the build system only
+		build ":tomcat:7.0.55"
 
-        // Uncomment these (or add new ones) to enable additional resources capabilities
-        //runtime ":zipped-resources:1.0"
-        //runtime ":cached-resources:1.0"
-        //runtime ":yui-minify-resources:0.1.4"
+		// plugins for the compile step
+		compile ":scaffolding:2.1.2"
+		compile ':cache:1.1.8'
+		compile ":asset-pipeline:1.9.9"
 
-		// turman : see http://www.jworks.nl/2013/09/11/upgrading-grails-2-2-4-to-2-3-0/
-		//build ":tomcat:7.0.42"
-        build ":tomcat:$grailsVersion"
+		// plugins needed at runtime but not for compilation
+		runtime ":hibernate4:4.3.6.1" // or ":hibernate:3.6.10.18"
+		runtime ":database-migration:1.4.0"
+		runtime ":jquery:1.11.1"
 		
-		// turman : putain depuis grails 2.3 on ne peut plus utiliser le plugin manager et il faut rajouter toutes les dÃ©pendances Ã  la main ???
-		//build ":shiro:1.1.4"
-		//build ":file-uploader:1.2.1"
-		//build ":ic-alendar:0.3.4"
+		// turman : putain depuis grails 2.3 on ne peut plus utiliser le plugin manager et il faut rajouter toutes les dépendances à  la main ???
+		compile (":shiro:1.2.1") {
+            excludes([name: 'quartz', group: 'org.opensymphony.quartz'])
+		}
+		compile ":quartz:1.0.2"
+		//compile ":file-uploader:1.2.1"
+		compile (":file-uploader:1.2.1") {
+            excludes([name: 'hibernate'])
+		}
+		compile ":ic-alendar:0.4.1"
     }
 }

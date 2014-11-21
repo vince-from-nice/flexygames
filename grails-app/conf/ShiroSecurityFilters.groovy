@@ -11,7 +11,7 @@ class ShiroSecurityFilters {
                 if (!controllerName) return true
 
                 // turman : no access control for some controllers.
-                if (controllerName in ['player', 'playgrounds', 'site', 'stats', 'teams']) return true
+                if (controllerName in ['player', 'playgrounds', 'site', 'stats', 'teams', 'assets']) return true
 
                 // turman : no access control for some controllers AND actions.
                 if ( 
