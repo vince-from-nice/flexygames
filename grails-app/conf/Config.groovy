@@ -148,13 +148,13 @@ fileuploader {
 		maxSize = 1024 * 32
 		allowedExtensions = ["jpg","jpeg","gif","png", "JPG", "JPEG", "GIF", "PNG"]
 		//path = "/home/turman/Workspace/GGTS/FlexyGames/upload/avatar/"
-		path = "E:\\Workspace\\GGTS\\FlexyGames\\upload\\avatar" 
+		path = "E:\\Repositories\\flexygames\\upload\\avatar" 
 	}
 	logo {
 		maxSize = 1024 * 32
 		allowedExtensions = ["jpg","jpeg","gif","png", "JPG", "JPEG", "GIF", "PNG"]
 		//path = "/home/turman/Workspace/GGTS/FlexyGames/upload/logo/"
-		path   = "E:\\Workspace\\GGTS\\FlexyGames\\upload\\logo"
+		path   = "E:\\Repositories\\flexygames\\upload\\logo"
 	}
 }
 environments {
