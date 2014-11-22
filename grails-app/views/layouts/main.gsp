@@ -38,7 +38,7 @@
 						<li><g:link controller="playgrounds" action="list"><g:message code="mainMenu.playgrounds" /></g:link></li>
 						<li><g:link controller="site" action="stats"><g:message code="mainMenu.stats" /></g:link></li>
 						<li><g:link controller="site" action="tutorial"><g:message code="mainMenu.tutorial" /></g:link></li>
-						<!--li><g:link controller="site" action="about"><g:message code="mainMenu.about" /></g:link></li-->
+						<li><g:link controller="site" action="about"><g:message code="mainMenu.about" /></g:link></li>
 						<li><g:link controller="site" action="contact"><g:message code="mainMenu.contact" /></g:link></li>
 					</ul>
 				</div>
