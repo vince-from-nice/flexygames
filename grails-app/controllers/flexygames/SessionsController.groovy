@@ -113,7 +113,9 @@ class SessionsController {
 			return redirect(action: "list")
 		}
 		try {
-			sessionService.updatePlayerStatus(user, params.statusCode, participation)
+			sessionService.updatePlayerStatus(user, participation, params.statusCode, params.userLog)
+			def newStatus = message(code: 'participation.status.' + params.statusCode)
+			flash.message = "${message(code: 'session.show.update.success', args: [newStatus])}"
 		} catch (Exception e) {
 			flash.error = "${message(code: 'session.show.update.error', args: [e.message])}"
 			return redirect(action: "show", id:participation.session.id)

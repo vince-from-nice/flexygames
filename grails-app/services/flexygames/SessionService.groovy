@@ -25,7 +25,7 @@ class SessionService {
 		}
 	}
 	
-	def updatePlayerStatus(User user, String newStatus, Participation participation) throws Exception  {
+	def updatePlayerStatus(User user, Participation participation, String newStatus, String userLogText) throws Exception  {
 		
 		///////////////////////////////////////////////////////////////////////////////////////////
 		// Checking
@@ -66,11 +66,11 @@ class SessionService {
 		///////////////////////////////////////////////////////////////////////////////////////////
 		
 		String oldStatusCode = participation.statusCode
-		participation.setStatusCode(params.statusCode)
+		participation.setStatusCode(newStatus)
 		participation.setLastUpdate(new Date())
 		participation.setLastUpdater(user.username)
 		// Truncate and clean the user log text before insert it into DB
-		String userLog = params.userLog
+		String userLog = userLogText
 		if (!userLog || userLog == 'null') {
 			userLog = ''
 		}
@@ -102,7 +102,7 @@ class SessionService {
 		}
 
 		// If a non manager user change its status from APPROVED to DECLINED, notify managers by email
-		if (oldStatusCode == Participation.Status.APPROVED.code && params.statusCode == Participation.Status.DECLINED.code
+		if (oldStatusCode == Participation.Status.APPROVED.code && newStatus == Participation.Status.DECLINED.code
 		&& !participation.session.isManagedBy(user.username)) {
 			def title = message(code:'mail.statusUpdateNotificationForManager.title', args:[user.username, participation.session])
 			def body = message(code:'mail.statusUpdateNotificationForManager.body', args:[
@@ -123,16 +123,16 @@ class SessionService {
 
 		// If previous status was effective but new status is not, decrement player part counter
 		if ((oldStatusCode == Participation.Status.DONE_GOOD.code || oldStatusCode == Participation.Status.DONE_BAD.code)
-		&& (params.statusCode != Participation.Status.DONE_GOOD.code && params.statusCode != Participation.Status.DONE_BAD.code)) {
+		&& (newStatus != Participation.Status.DONE_GOOD.code && newStatus != Participation.Status.DONE_BAD.code)) {
 			participation.player.updatePartCounter(-1)
 		}
 		// If new status is effective but old status was not, increment player part counter
-		if ((params.statusCode == Participation.Status.DONE_GOOD.code || params.statusCode == Participation.Status.DONE_BAD.code)
+		if ((newStatus == Participation.Status.DONE_GOOD.code || newStatus == Participation.Status.DONE_BAD.code)
 		&& (oldStatusCode != Participation.Status.DONE_GOOD.code && oldStatusCode != Participation.Status.DONE_BAD.code)) {
 			participation.player.updatePartCounter(1)
 		}
 		// If new status is DONE_BAD, increment player gatecrash counter
-		if (params.statusCode == Participation.Status.DONE_BAD.code) {
+		if (newStatus == Participation.Status.DONE_BAD.code) {
 			participation.player.updateGateCrashCounter(1)
 		}
 		// If old status was DONE_BAD, decrement player gatecrash counter
@@ -140,7 +140,7 @@ class SessionService {
 			participation.player.updateGateCrashCounter(-1)
 		}
 		// If new status is UNDONE, increment player gatecrash counter
-		if (params.statusCode == Participation.Status.UNDONE.code) {
+		if (newStatus == Participation.Status.UNDONE.code) {
 			participation.player.updateAbsenceCounter(1)
 		}
 		// If old status was UNDONE, decrement player gatecrash counter
