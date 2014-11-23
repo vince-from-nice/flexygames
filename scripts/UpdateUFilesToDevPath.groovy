@@ -8,11 +8,11 @@ import groovy.sql.Sql
 sql = Sql.newInstance( 'jdbc:postgresql://localhost/flexygames', 'postgres', '', 'org.postgresql.Driver' )
 sql.eachRow( 'select * from ufile' ) {ufile ->
 	def newPath = null
-	if (ufile.path.indexOf('/home/asas/upload/flexygames/logo/') != -1) {
-		newPath = ufile.path.replace("/home/asas/upload/flexygames/logo/", "E:\\Workspace\\GGTS\\FlexyGames\\upload\\logo\\")
+	if (ufile.path.indexOf('E:\\Workspace\\GGTS\\FlexyGames\\upload\\logo\\') != -1) {
+		newPath = ufile.path.replace("E:\\Workspace\\GGTS\\FlexyGames\\upload\\logo\\", "E:\\Repositories\\flexygames\\upload\\logo\\")
 	}
-	if (ufile.path.indexOf('/home/asas/upload/flexygames/avatar/') != -1) {
-		newPath = ufile.path.replace("/home/asas/upload/flexygames/avatar/", "E:\\Workspace\\GGTS\\FlexyGames\\upload\\avatar\\")
+	if (ufile.path.indexOf('E:\\Workspace\\GGTS\\FlexyGames\\upload\\avatar\\') != -1) {
+		newPath = ufile.path.replace("E:\\Workspace\\GGTS\\FlexyGames\\upload\\avatar\\", "E:\\Repositories\\flexygames\\upload\\avatar\\")
 	}
 	if (newPath) {
 		println "Ufile $ufile.id : changing ${ufile.path} to $newPath"
