@@ -2,9 +2,14 @@ package flexygames
 
 import org.jsoup.Jsoup
 import org.jsoup.safety.Whitelist
+import org.springframework.context.MessageSource;
 
 class ForumService {
 
+	def grailsApplication
+	
+	MessageSource messageSource
+	
 	def mailerService
 	
     def Comment postComment(User user, Session session, String text) throws Exception  {
@@ -17,11 +22,12 @@ class ForumService {
 			def watches = SessionWatch.findAllBySession(session)
 			def emails = watches*.user.email
 			if (emails.size() > 0) {
-				def title = message(code:'mails.newComment.title', args:[user.username])
-				def body = message(code:'mails.newComment.body', args:[
+				def locale = new Locale("fr") // TODO get Locale from user profile
+				def title = messageSource.getMessage('mails.newComment.title', [user.username].toArray(), locale)
+				def body = messageSource.getMessage('mails.newComment.body', [
 					user.username,
 					'' + grailsApplication.config.grails.serverURL + '/sessions/show/' + session.id,
-					session])
+					session].toArray(), locale)
 				body = body.replace("BODY_STRING", comment.text)
 				mailerService.mail(emails, title, body)
 			}

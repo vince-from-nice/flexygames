@@ -40,11 +40,11 @@ class ReminderService {
 							emails << participation.player.email
 						}
 					}
-					// Putain c'est pas facile d'avoir l'i18n dans les services, surtout avec le remplacement des variables !
-					def locale = new Locale("fr") // TODO récupérer la Locale depuis le profil du user
-					//def title = grailsApplication.getMainContext().getMessage("mail.requestNotification.title", null, "", LCH.getLocale())
-					def title = messageSource.getMessage("mail.requestNotification.title", null, locale)
-					def body = messageSource.getMessage("mail.requestNotification.body", null, locale)
+					// TODO get Locale from user profile
+					def locale = new Locale("fr")
+					def title = messageSource.getMessage("mail.requestNotification.title", [] as Object[], locale)
+					def body = messageSource.getMessage("mail.requestNotification.body", [] as Object[], locale)
+					// there was an issue with variables replacement, need to retest
 					body = body.replace("{0}", '' + grailsApplication.config.grails.serverURL + '/sessions/show/' + session.id)
 					body = body.replace("{1}", session.toString())
 					title = title.replace("{0}", session.group.toString())

@@ -19,7 +19,7 @@ environments {
             url = "jdbc:postgresql://localhost/flexygames"
             username = "postgres"
             password = ""
-			loggingSql = true
+			//loggingSql = true
         }
     }
     test {

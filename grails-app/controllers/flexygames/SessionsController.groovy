@@ -196,6 +196,7 @@ class SessionsController {
 			comment = forumService.postComment(user, session, params.comment)
 			flash.message = "Ok comment has been posted !!"
 		} catch (Exception e) {
+			e.printStackTrace()
 			flash.error = "${message(code: 'session.show.comments.update.error', args: [e.message])}"
 			return redirect(uri: "/sessions/show/" + session.id)
 		}

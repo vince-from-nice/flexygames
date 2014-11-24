@@ -20,13 +20,13 @@ class MailerService {
 	def mail(sender, addresses, title, body) {
 		def conf = grailsApplication.config.flexygames.mailing
 		def htmlTitle = '' + conf.title.prefix + title + conf.title.suffix
-		def bodyHeader = grailsApplication.getMainContext().getMessage("mail.body.header", null, "", LCH.getLocale())
-		def bodyFooter = grailsApplication.getMainContext().getMessage("mail.body.footer", null, "", LCH.getLocale())
+		def bodyHeader = grailsApplication.getMainContext().getMessage("mail.body.header", [] as Object[], LCH.getLocale())
+		def bodyFooter = grailsApplication.getMainContext().getMessage("mail.body.footer", [] as Object[], LCH.getLocale())
 		def htmlBody = '' + conf.body.prefix + bodyHeader + body + '<br><br><hr><br>' + bodyFooter + conf.body.suffix
 		println "Mail sent to $addresses : $htmlTitle {$body ...}"
 		println "$htmlBody"
 		// Send mails ONLY in Production environment
-		if (Environment.currentEnvironment == Environment.PRODUCTION || addresses[0] == 'vincent.frison@gmail.com') {
+		if (Environment.currentEnvironment == Environment.PRODUCTION || addresses[0] == 'vincent.frizzzon@gmail.com') {
 			if (sender) {
 				sendMail {
 					cc sender

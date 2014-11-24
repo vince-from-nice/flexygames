@@ -159,8 +159,8 @@ fileuploader {
 }
 environments {
 	production {
-		//fileuploader.avatar.path = "/home/asas/upload/flexygames/avatar/"
-		//fileuploader.logo.path = "/home/asas/upload/flexygames/logo/" 
+		fileuploader.avatar.path = "/home/asas/upload/flexygames/avatar/"
+		fileuploader.logo.path = "/home/asas/upload/flexygames/logo/" 
 	}
 }
 

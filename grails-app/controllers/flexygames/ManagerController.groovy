@@ -427,8 +427,6 @@ class ManagerController {
 		}
 		def title = message(code:'mail.customizedMessage.title', args:[user.username])
 		def info = params.message
-		// Fix temporaire car bug avec les caractères spéciaux HTML (depuis grails 2.2.x ?)
-		//info = info.replaceAll("é", "e").replaceAll("è", "e").replaceAll("à", "a").replaceAll("ù", "u").replaceAll("ô", "o").replaceAll("â", "a").replaceAll("ç", "c")
 		info = info.replace(System.getProperty("line.separator"), "<br>" + System.getProperty("line.separator"))
 		info = new Jsoup().clean(info, Whitelist.basic())
 		def body = message(code:'mail.customizedMessage.body', args:[
