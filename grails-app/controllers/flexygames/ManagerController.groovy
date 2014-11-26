@@ -18,7 +18,7 @@ class ManagerController {
 	 *********************************************************************************************/
 
 	def createSession = {
-		SessionGroup groupInstance = SessionGroup. (params.id)
+		SessionGroup groupInstance = SessionGroup.get(params.id)
 		if (!groupInstance) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), params.id])}"
 			return redirect(controller: "sessions", action: "list")

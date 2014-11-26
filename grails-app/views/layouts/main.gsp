@@ -87,7 +87,7 @@
 						<ul style="margin-left: 20px;">
 							<!--li><g:link controller="admin" action="index"><g:message code="mainMenu.admin" default="Admin" /></g:link></li-->
 							<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-								<g:if test="${!(['auth', 'site', 'sessions', 'stats', 'player', 'teams', 'playgrounds', 'manager', 'myself', 'fileUploader', 'download'].contains(c.logicalPropertyName))}">
+								<g:if test="${!(['assets', 'auth', 'site', 'sessions', 'stats', 'player', 'teams', 'playgrounds', 'manager', 'myself', 'fileUploader', 'download'].contains(c.logicalPropertyName))}">
 									<li class="controller"><g:link controller="${c.logicalPropertyName}">${c.name}</g:link></li>
 								</g:if>
 							</g:each>
