@@ -22,7 +22,8 @@ class ForumService {
 			def watches = SessionWatch.findAllBySession(session)
 			def emails = watches*.user.email
 			if (emails.size() > 0) {
-				def locale = new Locale("fr") // TODO get Locale from user profile
+				// TODO get Locale from user profile
+				def locale = new Locale("fr")
 				def title = messageSource.getMessage('mails.newComment.title', [user.username].toArray(), locale)
 				def body = messageSource.getMessage('mails.newComment.body', [
 					user.username,
