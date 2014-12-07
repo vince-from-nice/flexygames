@@ -117,7 +117,8 @@ class SessionService {
 		// If a non manager user change its status from APPROVED to DECLINED, notify managers by email
 		if (oldStatusCode == Participation.Status.APPROVED.code && newStatus == Participation.Status.DECLINED.code
 		&& !participation.session.isManagedBy(user.username)) {
-			def title = messageSource.getMessage('mail.statusUpdateNotificationForManager.title', [user.username, participation.session].toArray(), locale)
+			def title = messageSource.getMessage('mail.statusUpdateNotificationForManager.title', 
+				[user.username, participation.session].toArray(), locale)
 			def body = messageSource.getMessage('mail.statusUpdateNotificationForManager.body', [
 				user.username,
 				'' + grailsApplication.config.grails.serverURL + '/sessions/show/' + participation.session.id,
