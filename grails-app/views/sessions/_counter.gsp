@@ -1,5 +1,5 @@
 
-			        <tr>
+			        <tr style="width: 100%;">
 			            <g:set var="color" value="red" />
 			            <g:if test="${sessionInstance.availableParticipants.size() >= sessionInstance.group.defaultMinPlayerNbr}">
 			                <g:set var="color" value="#3c3" />

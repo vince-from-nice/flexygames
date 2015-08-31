@@ -23,12 +23,14 @@ class Session implements Comparable<Session> {
 	User creator
 	String extraFieldName
 	String extraFieldValue
+	SortedSet<Composition> compositions
 
 	///////////////////////////////////////////////////////////////////////////
 	// Grails stuff
 	///////////////////////////////////////////////////////////////////////////
 	
-    static hasMany = [participations: Participation, reminders: Reminder, rounds: SessionRound, votes: Vote, comments: Comment]
+    static hasMany = [participations: Participation, reminders: Reminder, rounds: SessionRound, 
+			votes: Vote, comments: Comment, compositions: Composition]
 
     static constraints = {
 		date(nullable: false)
@@ -50,6 +52,7 @@ class Session implements Comparable<Session> {
 		creator(nullable: true)
 		extraFieldName(nullable: true)
 		extraFieldValue(nullable: true)
+		compositions(nullable: true)
     }
 	
     static transients = [

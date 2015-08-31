@@ -146,6 +146,7 @@ class SessionsController {
 			flash.message = "${message(code: 'session.show.participants.join.success')}"
 		} catch (Exception e) {
 			flash.error = e.message
+			println flash.error
 		}
 		redirect(action: "show", id: params.id)
 	}

@@ -7,6 +7,15 @@ function toggleDisplay(id) {
 	}
 }
 
+function toggleTableDisplay(id) {
+	doc = document.getElementById(id)
+	if (doc.style.display == 'table') {
+		doc.style.display = 'none';
+	} else {
+		doc.style.display = 'table';
+	}
+}
+
 function toggleRowDisplay(id) {
 	doc = document.getElementById(id)
 	if (doc.style.display == 'table-row') {

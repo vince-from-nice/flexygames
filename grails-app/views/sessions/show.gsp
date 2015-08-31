@@ -47,6 +47,8 @@
 	<g:render template="/sessions/infos" />
 
 	<g:render template="/sessions/participants" />
+	
+	<g:render template="/sessions/compositions" />
 
 	<g:render template="/sessions/scoresheet" />
 

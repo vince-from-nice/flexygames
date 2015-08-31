@@ -32,9 +32,9 @@
 					        <!-- Score -->
 					        <g:if test="${competition}">
 						        <td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
-						        	<g:if test="${sessionInstance.rounds.size()  > 0}">
-						        		<g:set var="scoreForTeamA" value="${sessionInstance.rounds[0].getActionsByTeam(true).size()}" />
-						        		<g:set var="scoreForTeamB" value="${sessionInstance.rounds[0].getActionsByTeam(false).size()}" />
+						        	<g:each in="${sessionInstance.rounds}" var="round" >
+						        		<g:set var="scoreForTeamA" value="${round.getActionsByTeam(true).size()}" />
+						        		<g:set var="scoreForTeamB" value="${round.getActionsByTeam(false).size()}" />
 										<g:set var="color" value="#444" />
 				            			<g:if test="${scoreForTeamA > scoreForTeamB}">
 				                			<g:set var="color" value="#2f2" />
@@ -43,9 +43,9 @@
 				                			<g:set var="color" value="#f22" />
 				            			</g:if>
 										<span style="color: ${color}; font-weight:bold;">
-											${scoreForTeamA} - ${scoreForTeamB}  
+											<nobr>${scoreForTeamA}-${scoreForTeamB}</nobr>  
 										</span>
-									</g:if>
+									</g:each>
 						        </td>
 					        </g:if>
 

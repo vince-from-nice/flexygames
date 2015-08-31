@@ -66,18 +66,18 @@ h2 {
 	color: #48802c;
 	font-weight: normal;
 	font-size: 1.25em;
-	margin: 0.8em 0 0.3em 0;
+	margin: 0.3em 0 0.3em 0;
 }
 
 h3 {
 	color: #48802c;
 	font-weight: normal;
 	font-size: 1.10em;
-	margin: 0.8em 0 0.3em 0;
+	margin: 0.3em 0 0.3em 0;
 }
 
 /*****************/
-/* Tabs          */
+/* Tables         */
 /*****************/
 
 /* les tableaux doivent avoir des bordures completes (et pas que le top) */
@@ -94,6 +94,18 @@ table {
 /* mais on ne veut PAS avoir cet effet sur TOUS les tableaux */
 th:hover, tr:hover {
 	background: ;
+}
+
+/*****************/
+/* Session zone tables */
+/*****************/
+
+.sessionZoneTab {
+	margin-top: 20px;
+}
+
+.sessionZoneTab th {
+	background-color: #80ffff; 
 }
 
 /*****************/

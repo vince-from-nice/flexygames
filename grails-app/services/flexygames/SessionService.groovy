@@ -13,7 +13,7 @@ class SessionService {
 	
 	def mailerService
 
-	def join(User user, Session session) {
+	def join(User user, Session session) throws Exception {
 		// Check if the session isn't entered into locking mode (and is not in the past btw)
 		if (new Date(session.date.time - session.group.lockingTime* 60 * 1000) < new Date()) {
 			throw new Exception("Sorry, it's too late to join the session !!")

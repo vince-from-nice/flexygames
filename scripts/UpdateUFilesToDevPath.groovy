@@ -10,13 +10,13 @@ sql.eachRow( 'select * from ufile' ) {ufile ->
 	// Logos
 	def newPath = null
 	def badPath = '/home/asas/upload/flexygames/logo/'
-	def goodPath = 'E:\Workspace\GGTS\FlexyGames\upload\logo\'
+	def goodPath = "E:\\Repositories\\flexygames\\upload\\logo\\"
 	if (ufile.path.indexOf('') != -1) {
 		newPath = ufile.path.replace(badPath, goodPath)
 	}
 	// Avatars
 	badPath = '/home/asas/upload/flexygames/avatar/'
-	goodPath = 'E:\Workspace\GGTS\FlexyGames\upload\avatar\'
+	goodPath = "E:\\Repositories\\flexygames\\upload\\avatar\\"
 	if (ufile.path.indexOf(badPath) != -1) {
 		newPath = ufile.path.replace(badPath, goodPath)
 	}

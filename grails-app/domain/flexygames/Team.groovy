@@ -54,7 +54,7 @@ class Team implements Comparable<Team> {
 		description(nullable:true, blank: true, maxSize:100)
 		city(nullable: true)
 		webUrl(nullable: true, url: true)
-		email(nullable: false, email: true)
+		email(nullable: true, email: true)
 		logo(nullable: true)
 		defaultSessionGroup(nullable: true)
 		memberships(nullable: true)
