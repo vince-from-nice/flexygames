@@ -1,27 +1,21 @@
 <g:set var="now" value="${java.lang.System.currentTimeMillis()}" />
-<table class="sessionZoneTab">
-	<tr style="vertical-align: middle; cursor: pointer" onclick="toggleDisplay('commentsSummaryZone'); toggleDisplay('commentsDetailedZone'); return false">
-		<th>
-			<h2 style="vertical-align: top;">
-				<g:message code="session.show.comments" />
-			</h2>
-		</th>
-		<th style="vertical-align: middle; text-align: right; font-size: small;">
-			<g:message code="clickForDetails" />
-		</th>
-	</tr>
-	<tr>
-		<td colspan="2">
-			<div id="commentsSummaryZone" style="display: block;">
-				<g:if test="${sessionInstance.comments.size() > 0}" >
-					<g:message code="session.show.comments.commentsNbr"/> : <b>${sessionInstance.comments.size()}</b>
-				</g:if>
-				<g:else>
-					<g:message code="session.show.comments.noComment"/>
-				</g:else>
-			</div>
-			<div id="commentsDetailedZone" style="display: none;" border="0">
-
+<div class="sessionZone">
+	<div class="sessionZoneHeader" onclick="toggleDisplay('commentsSummaryZone'); toggleDisplay('commentsDetailedZone'); return false">
+		<h2 style="vertical-align: top; display: inline;">
+			<g:message code="session.show.comments" />
+		</h2>
+		<span style="float:right; font-size: small;"><g:message code="clickForDetails" /></span>
+	</div>
+	<div class="sessionZoneContent">
+		<div id="commentsSummaryZone" style="display: block;">
+			<g:if test="${sessionInstance.comments.size() > 0}" >
+				<g:message code="session.show.comments.commentsNbr"/> : <b>${sessionInstance.comments.size()}</b>
+			</g:if>
+			<g:else>
+				<g:message code="session.show.comments.noComment"/>
+			</g:else>
+		</div>
+		<div id="commentsDetailedZone" style="display: none;">
 				<g:if test="${session.currentUser != null}">
 					<g:form action="watch" name="watchForm">
 							<g:hiddenField name="id" value="${sessionInstance.id}" />
@@ -72,7 +66,6 @@
 				<g:else>
 					<i><g:message code="session.show.comments.noComment" /></i><br />
 				</g:else>
-			</div>
-		</td>
-	</tr>
-</table>
+		</div>
+	</div>
+</div>

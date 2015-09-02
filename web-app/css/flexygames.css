@@ -97,15 +97,38 @@ th:hover, tr:hover {
 }
 
 /*****************/
-/* Session zone tables */
+/* Session zones */
 /*****************/
 
-.sessionZoneTab {
+.sessionZone {
 	margin-top: 20px;
+	border: 1px solid #DFDFDF;
+	padding: 0px;
 }
 
-.sessionZoneTab th {
-	background-color: #80ffff; 
+.sessionZoneHeader {
+	padding: 0.3em 0.6em;
+	vertical-align: middle; 
+	cursor: pointer;
+	/* copy/paste from main.css tr style */ 
+	background-color: #efefef;
+	background-image: -moz-linear-gradient(top, #ffffff, #eaeaea);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(1, #eaeaea));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#ffffff', EndColorStr = '#eaeaea');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#eaeaea')";
+	color: #666666;
+	font-weight: bold;
+	line-height: 1.7em;
+}
+
+div.sessionZoneHeader:hover {
+	background: #E1F2F6;
+	/*border: 2px solid green;*/
+}
+
+.sessionZoneContent {
+	background: #FFFFFF;
+	padding: 0.3em 0.3em;
 }
 
 /*****************/

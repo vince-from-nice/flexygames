@@ -13,14 +13,19 @@ class FlexyTagLib {
 	* @attr includeSeconds print seconds as well
 	*/
 	def humanDate = { attrs, body ->
-		def now = System.currentTimeMillis()
-		
 		def date = 0
 		if(attrs.date) date = attrs.date
 		
 		def includeSeconds = false
 		if(includeSeconds) includeSeconds = attrs.includeSeconds
+		
+		return formatDate(date, includeSeconds)
+	}
 	
+	public String formatDate(Long date, Boolean includeSeconds) {
+
+		def now = System.currentTimeMillis()
+		
 		def distance_in_mins = (int)Math.round(Math.abs(date - now)/60000.0)
 		def distance_in_seconds = (int)Math.round(Math.abs(date/1000 - now/1000))
 		

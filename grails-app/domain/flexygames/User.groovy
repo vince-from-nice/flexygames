@@ -128,6 +128,10 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return result
 	}
 	
+	boolean isParticipantOf(Session session) {
+		return session.participations.findIndexOf  { it.player == this} 
+	}
+	
 	boolean isManagedBy(String username) {
 		boolean result = false
 		if (!username) return false
@@ -403,17 +407,17 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return score
 	}
 	
-	// damned pourquoi le SortedSet "participations" ne se remplit qu'avec une seul Ã©lement ? Evidemment passer en lazy:false change rien alors on le fait Ã  la main :(
+	// damned pourquoi le SortedSet "participations" ne se remplit qu'avec une seul élement ? Evidemment passer en lazy:false ne change rien alors on le fait à la main :(
 	List<Team> getAllParticipations() {
 		Participation.findAllByPlayer(this, [sort: "session.date", order:'desc'])
 	}
 	
-	// damned la mÃªme chose !
+	// damned la même chose !
 	List<Membership> getAllMemberships() {
 		Membership.findAllByUser(this, [sort: "team.name", order:'asc'])
 	}
 	
-	// damned la mÃªme chose !
+	// damned la même chose !
 	List<Vote> getAllVotes() {
 		Vote.findAllByPlayer(this, [sort: "session.name", order:'asc'])
 	}
