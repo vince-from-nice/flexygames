@@ -34,11 +34,6 @@
 		    <tr>
 		        <td>
 					<table class="flexyTab">
-						<g:if test="${sessionInstance.participations.size() > 10}">
-						    <thead>
-								<g:render template="counter" model="[]" />
-						    </thead>
-					    </g:if>
 					    <thead>
 					        <tr>
 					            <th style="vertical-align: top; "><g:message code="player" /></th>

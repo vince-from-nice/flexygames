@@ -6,9 +6,15 @@
 		</h2>
 		<span style="float:right; font-size: small;"><g:message code="clickForDetails" /></span>
 	</div>
+	<g:set var="defaultDisplayForSummaryZone" value="block" />
+	<g:set var="defaultDisplayForDetailedZone" value="none" />
+	<g:if test="${sessionInstance.votes.size() > 0}">
+		<g:set var="defaultDisplayForSummaryZone" value="none" />
+		<g:set var="defaultDisplayForDetailedZone" value="table" />
+	</g:if>
 	<div class="sessionZoneContent">
 		<a id="votingArea"></a>
-		<div id="votesSummaryZone" style="display: block;">
+		<div id="votesSummaryZone" style="display: ${defaultDisplayForSummaryZone};">
 			<g:if test="${sessionInstance.votes.size() > 0}" >
 				<g:message code="session.show.votes.votesNbr"/> : <b>${sessionInstance.rounds.size()}</b>
 			</g:if>
@@ -16,7 +22,7 @@
 				<g:message code="session.show.votes.noVote"/>
 			</g:else>
 		</div>
-		<table id="votesDetailedZone" style="display: none;">
+		<table id="votesDetailedZone" style="display: ${defaultDisplayForDetailedZone};">
 			<tr>
 				<th colspan="2" style="text-align: center; width: 40%"><g:message code="session.show.votes.menOfTheMatch" /></th>
 				<th colspan="2" style="text-align: center; width: 40%"><g:message code="session.show.votes.bouletOfTheMatch" /></th>
