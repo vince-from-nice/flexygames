@@ -4,7 +4,7 @@ import java.util.Date;
 
 class Composition implements Comparable<Composition> {
 	
-	Session session
+	CompositionType type
 	String description
 	Date creation
 	User creator
@@ -14,7 +14,9 @@ class Composition implements Comparable<Composition> {
     static constraints = {
     }
 	
-	static belongsTo = [session: Session]
+	static belongsTo = [session: Session]
+	
+	static hasMany = [items: CompositionItem]
 	@Override
 	public int compareTo(Composition o) {
 		return description.compareTo(o.description)

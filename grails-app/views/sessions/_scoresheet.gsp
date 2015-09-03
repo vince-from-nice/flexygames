@@ -25,7 +25,7 @@
 						<g:set var="actionsNbrForTeamB" value="${round.getActionsByTeam(false).size()}" />
 						<td style="text-align: center">
 							<h3><g:message code="round" /> #${index}</h3>
-							<table style="" >
+							<table>
 								<tr>
 									<th><g:message code="session.show.rounds.teamA" /></th>
 									<th><g:message code="session.show.rounds.teamB" /></th>
