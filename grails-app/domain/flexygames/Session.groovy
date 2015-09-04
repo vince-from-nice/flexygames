@@ -67,7 +67,7 @@ class Session implements Comparable<Session> {
 	
 	static mapping = {
 		sort date: "desc"
-		playground (fetch: 'join') // hmm avec lazy:false on peut avoir un "could not initialize proxy - no Session" quand on ajoute un player
+		playground (fetch: 'join')
 		type (fetch:'join')
 		group (fetch:'join')
 	}

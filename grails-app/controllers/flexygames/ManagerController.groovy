@@ -14,7 +14,7 @@ class ManagerController {
 	def mailerService
 
 	/*********************************************************************************************
-	 * Session management
+	 * Session basic management
 	 *********************************************************************************************/
 
 	def createSession = {
@@ -210,6 +210,10 @@ class ManagerController {
 			redirect(controller:"sessions", action: "show", id: sessionInstance.id)
 		}
 	}
+	
+	/*********************************************************************************************
+	 * Session participations management
+	 *********************************************************************************************/
 
 	def requestExtraPlayer = {
 		def s = Session.get(params.id)
@@ -469,6 +473,35 @@ class ManagerController {
 		flash.message = "Mail has been sent to <b>" + addresses.size() + "</b> participant(s)."
 		redirect(controller:"sessions", action: "show", id: session.id)
 	}
+	
+	/*********************************************************************************************
+	 * Session compositions management
+	 *********************************************************************************************/
+
+	def addComposition = {
+		def session = Session.get(params.id)
+		if (!session) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
+			return redirect(controller: "sessions", action: "list")
+		}
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!session.isManagedBy(user.username)) {
+			flash.error = "You cannot manage that session since you're not a manager !"
+			return redirect(controller: "sessions", action: "show", params: [id: params.id])
+		}
+		Composition composition = new Composition(session: session, lastUpdate: new Date(), lastUpdater: user)
+		session.addToCompositions(composition)
+		if (session.save(flush: true)) {
+			flash.message = "A new composition has been added to the session"
+		} else {
+			flash.error = "Sorry, unable to add a new composition to the session"
+		}
+		redirect(uri: "/sessions/show/" + session.id + "#compositionsSessionZone")
+	}
+	
+	/*********************************************************************************************
+	 * Session rounds management
+	 *********************************************************************************************/
 
 	def addRound = {
 		def session = Session.get(params.id)

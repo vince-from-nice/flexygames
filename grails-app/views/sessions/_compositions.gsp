@@ -18,9 +18,13 @@
 		</div>
 		<div id="compositionsDetailedZone" style="display: none;">
 			<g:if test="${sessionInstance.compositions.size() > 0}">
-				<g:each in="${sessionInstance.rounds}" var="round">
+				<g:each in="${sessionInstance.compositions}" var="composition">
+					<p>
+						<g:message code="session.show.compositions.lastUpdateBy" 
+						args="[composition.lastUpdater, grailsApplication.mainContext.getBean('flexygames.FlexyTagLib').formatDate(composition.lastUpdate.time, true)]"/>
+					</p>
+					<img src="${resource(dir: 'images/composition',file: sessionInstance.type.name + 'Background.png')}" alt="Playground Background">
 					<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
-
 						<div>
 							<g:form controller="manager">
 								<g:hiddenField name="id" value="${composition.id}" />
@@ -44,11 +48,6 @@
 			<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
 				<tr>
 					<td>
-						<g:if test="${sessionInstance.date.time > System.currentTimeMillis() }">
-							<h2>
-								<g:message code="session.show.compositions" />
-							</h2>
-						</g:if>
 						<g:form controller="manager">
 							<g:hiddenField name="id" value="${sessionInstance?.id}" />
 							<div class="buttons">
