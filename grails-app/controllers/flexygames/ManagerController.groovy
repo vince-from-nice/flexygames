@@ -415,7 +415,6 @@ class ManagerController {
 		if (params.recipients == "ALL_PARTICIPANTS") {
 			session.participations.each { addresses << it.player.email }
 		} else if (params.recipients == "AVAILABLE_PARTICIPANTS") {
-			//session.participations.each { if (it.statusCode == Participation.Status.AVAILABLE.code) addresses << it.player.email }
 			session.availableParticipants.each { addresses << it.email }
 		} else if (params.recipients == "ONE_PARTICIPANT") {
 			def player = User.get(params.recipientId)
@@ -496,7 +495,60 @@ class ManagerController {
 		} else {
 			flash.error = "Sorry, unable to add a new composition to the session"
 		}
-		redirect(uri: "/sessions/show/" + session.id + "#compositionsSessionZone")
+		redirect(uri: "/sessions/show/" + session.id + "#compositionsDetailedZone")
+	}
+	
+	def updateComposition = {
+		def composition = Composition.get(params.id)
+		if (!composition) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'composition.label', default: 'Composition'), params.id])}"
+			return redirect(controller: "sessions", action: "list")
+		}
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!composition.session.isManagedBy(user.username)) {
+			flash.error = "You cannot manage that session since you're not a manager !"
+			return redirect(controller: "sessions", action: "show", params: [id: composition.session])
+		}
+		composition.description = params["description"]
+		composition.lastUpdate = new Date()
+		composition.lastUpdater = user 
+		// delete all existing items
+		composition.items.clear()
+		composition.save(flush: true)
+		// recreate an item for each eligible player 
+		def eligiblePlayers = composition.session.getParticipantsEligibleForComposition()
+		eligiblePlayers.each { player ->
+			def x = params["compo-player-$player.id-x"]
+			def y = params["compo-player-$player.id-y"]
+			println "Composition item for $player has coords : $x, $y"
+			if (x && y) {
+				CompositionItem item = new CompositionItem(player: player, composition: composition)
+				item.x = x
+				item.y = y
+			}	
+		}		
+		if (composition.save(flush: true)) {
+			flash.message = "Composition has been updated"
+		} else {
+			flash.error = "Sorry, unable to update composition"
+		}
+		redirect(uri: "/sessions/show/" + composition.session.id + "#compositionsDetailedZone")
+	}
+	
+	def deleteComposition = {
+		def composition = Composition.get(params.id)
+		if (!composition) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'composition.label', default: 'Composition'), params.id])}"
+			return redirect(controller: "sessions", action: "list")
+		}
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!composition.session.isManagedBy(user.username)) {
+			flash.error = "You cannot manage that session since you're not a manager !"
+			return redirect(controller: "sessions", action: "show", params: [id: composition.session])
+		}
+		composition.delete(flush: true)
+		flash.message = "Composition has been deleted !"
+		redirect(uri: "/sessions/show/" + composition.session.id + "#compositionsDetailedZone")
 	}
 	
 	/*********************************************************************************************

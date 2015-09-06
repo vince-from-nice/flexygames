@@ -6,12 +6,6 @@
 		</h2>
 		<span style="float:right; font-size: small;"><g:message code="clickForDetails" /></span>
 	</div>
-	<g:set var="defaultDisplayForSummaryZone" value="block" />
-	<g:set var="defaultDisplayForDetailedZone" value="none" />
-	<g:if test="${sessionInstance.comments.size() > 0}">
-		<g:set var="defaultDisplayForSummaryZone" value="none" />
-		<g:set var="defaultDisplayForDetailedZone" value="block" />
-	</g:if>
 	<div class="sessionZoneContent">
 		<g:if test="${session.currentUser != null}">
 			<g:form action="watch" name="watchForm">
@@ -36,6 +30,12 @@
 			</div>
 		</shiro:user>
 		<br />
+		<g:set var="defaultDisplayForSummaryZone" value="block" />
+		<g:set var="defaultDisplayForDetailedZone" value="none" />
+		<g:if test="${sessionInstance.comments.size() > 0}">
+			<g:set var="defaultDisplayForSummaryZone" value="none" />
+			<g:set var="defaultDisplayForDetailedZone" value="block" />
+		</g:if>
 		<div id="commentsSummaryZone" style="display: ${defaultDisplayForSummaryZone};">
 			<g:if test="${sessionInstance.comments.size() > 0}" >
 				<g:message code="session.show.comments.commentsNbr"/> : <b>${sessionInstance.comments.size()}</b>

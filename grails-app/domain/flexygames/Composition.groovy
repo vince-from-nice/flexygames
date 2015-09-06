@@ -11,7 +11,7 @@ class Composition implements Comparable<Composition> {
 	Date lastUpdate
 	User lastUpdater
 	
-    static constraints = {
+    static constraints = {   
 		description nullable:true, blank:true 
 		lastUpdate nullable:false
 		lastUpdater nullable:false

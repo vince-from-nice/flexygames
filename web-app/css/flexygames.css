@@ -1,7 +1,6 @@
 /***************/
 /* Layout      */
 /***************/
-
 #mainPage {
 	background: #ffffff;
 	color: #333333;
@@ -35,26 +34,24 @@
 	background-color: FFFFF
 }
 
-/*****************/
+/********************************/
 /* Fonts & Links */
-/*****************/
-
+/********************************/
 a:link, a:visited {
-    color: #666;
-    font-weight: bold;
-    text-decoration: none;
+	color: #666;
+	font-weight: bold;
+	text-decoration: none;
 }
 
 a:hover {
-    color: #6A6;
-    font-weight: bold;
-    text-decoration: none;
+	color: #6A6;
+	font-weight: bold;
+	text-decoration: none;
 }
 
-/*****************/
+/********************************/
 /* Headers       */
-/*****************/
-
+/********************************/
 h1 {
 	color: #48802c;
 	font-weight: normal;
@@ -76,13 +73,13 @@ h3 {
 	margin: 0.3em 0 0.3em 0;
 }
 
-/*****************/
+/********************************/
 /* Tables         */
-/*****************/
+/********************************/
 
 /* les tableaux doivent avoir des bordures completes (et pas que le top) */
-table {
-	//border-top: 1px solid #DFDFDF;
+table { //
+	border-top: 1px solid #DFDFDF;
 	border: 1px solid #DFDFDF;
 }
 
@@ -93,13 +90,12 @@ table {
 
 /* mais on ne veut PAS avoir cet effet sur TOUS les tableaux */
 th:hover, tr:hover {
-	background: ;
+	background:;
 }
 
-/*****************/
+/********************************/
 /* Session zones */
-/*****************/
-
+/********************************/
 .sessionZone {
 	margin-top: 20px;
 	border: 1px solid #DFDFDF;
@@ -108,13 +104,13 @@ th:hover, tr:hover {
 
 .sessionZoneHeader {
 	padding: 0.3em 0.6em;
-	vertical-align: middle; 
+	vertical-align: middle;
 	cursor: pointer;
-	/* copy/paste from main.css tr style */ 
+	/* copy/paste from main.css tr style */
 	background-color: #efefef;
 	background-image: -moz-linear-gradient(top, #ffffff, #eaeaea);
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(1, #eaeaea));
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#ffffff', EndColorStr = '#eaeaea');
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr= '#ffffff', EndColorStr= '#eaeaea');
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#eaeaea')";
 	color: #666666;
 	font-weight: bold;
@@ -131,72 +127,109 @@ div.sessionZoneHeader:hover {
 	padding: 0.3em 0.3em;
 }
 
-/*****************/
-/* Selectable tabs */
-/*****************/
+/********************************/
+/* Player compositions */
+/********************************/
+.draggableCompoPlayer {
+	float: right;
+	text-align: center;
+	vertical-align: middle;
+	width: 50px;
+	max-width: 50px;
+	height: 50px;
+	max-height: 50px;
+	margin : 5%;
+	background-color: #29e;
+	color: white;
+	border-radius: 0.75em;
+	border: 1px solid black;
+	padding: 4%;
+	margin: 5px;
+	-webkit-transform: translate(0px, 0px);
+	transform: translate(0px, 0px);
+	transition: background-color 0.3s;
+}
 
+.draggableCompoPlayer.can-drop {
+  /*color: #000;
+  background-color: #4e4;*/
+}
+
+.drop-active {
+  /*border-color: #aaa;*/
+}
+
+.drop-target {
+  /*background-color: #29e;
+  border-color: #fff;
+  border-style: solid;*/
+}
+
+/********************************/
+/* Selectable tabs */
+/********************************/
 .tabSelected {
-	background-color: #aaffaa; 
-	text-align: center; 
+	background-color: #aaffaa;
+	text-align: center;
 	border: 2px solid #66aa66;
 }
 
 .tabSelected:hover {
-	background-color: #66ff66; 
+	background-color: #66ff66;
 }
 
 .tabNotSelected {
-	background-color: #ddffdd; 
-	text-align: center; 
+	background-color: #ddffdd;
+	text-align: center;
 	border: 2px solid #66aa66;
 }
 
-.tabNotSelected:hover{
-	background-color: #66ff66; 
+.tabNotSelected:hover {
+	background-color: #66ff66;
 }
 
 /***************/
 /* Tooltip */
 /***************/
-
 a.tooltip {
- position: relative;
- color: black;
- text-decoration: none;
- border-bottom: 1px gray dotted; /* on souligne le texte */
+	position: relative;
+	color: black;
+	text-decoration: none;
+	border-bottom: 1px gray dotted; /* on souligne le texte */
 }
 
 a.tooltip span {
- display: none; /* on masque l'infobulle */
+	display: none; /* on masque l'infobulle */
 }
 
 a.tooltip:hover {
- background: none; /* correction d'un bug IE */
- z-index: 500; /* on définit une valeur pour l'ordre d'affichage */
- cursor: help; /* on change le curseur par défaut en curseur d'aide */
-
+	background: none; /* correction d'un bug IE */
+	z-index: 500; /* on définit une valeur pour l'ordre d'affichage */
+	cursor: help; /* on change le curseur par défaut en curseur d'aide */
 }
+
 a.tooltip:hover span {
- display: inline; /* on affiche l'infobulle */
- position: absolute;
- //white-space: nowrap; /* on change la valeur de la propriété white-space pour qu'il n'y ait pas de retour à la ligne non-désiré */
- top: 30px; /* on positionne notre infobulle */
- left: -200px;
- background: white;
- color: green;
- padding: 3px;
- border: 1px solid green;
- border-left: 4px solid green;
+	display: inline; /* on affiche l'infobulle */
+	position: absolute; //
+	white-space: nowrap;
+	/* on change la valeur de la propriété white-space pour qu'il n'y ait pas de retour à la ligne non-désiré */
+	top: 30px; /* on positionne notre infobulle */
+	left: -200px;
+	background: white;
+	color: green;
+	padding: 3px;
+	border: 1px solid green;
+	border-left: 4px solid green;
 }
 
-/*****************/
+/********************************/
 /* Miscellaneous */
-/*****************/
-	
-/* bloc avec bordure */		
+/********************************/
+
+/* bloc avec bordure */
 .block {
 	border: 1px solid #CCC;
-	padding: 5px 5px 5px 5px; 
+	padding: 5px 5px 5px 5px;
 	margin: 10px 10px 0px 0px;
 }
 
@@ -204,5 +237,3 @@ a.tooltip:hover span {
 ul {
 	margin-left: 20px;
 }
-
-
