@@ -1,6 +1,7 @@
 package flexygames
 
 import java.util.Date;
+import java.util.List;
 
 class Composition implements Comparable<Composition> {
 	
@@ -10,6 +11,7 @@ class Composition implements Comparable<Composition> {
 	//User creator
 	Date lastUpdate
 	User lastUpdater
+	List<CompositionItem> items
 	
     static constraints = {   
 		description nullable:true, blank:true 

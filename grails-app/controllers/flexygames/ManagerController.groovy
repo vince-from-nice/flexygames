@@ -1,5 +1,7 @@
 package flexygames
 
+import groovy.json.JsonSlurper;
+
 import java.text.SimpleDateFormat
 
 import org.apache.shiro.SecurityUtils
@@ -509,23 +511,34 @@ class ManagerController {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: composition.session])
 		}
+		
+		// Create a new composition
 		composition.description = params["description"]
 		composition.lastUpdate = new Date()
 		composition.lastUpdater = user 
-		// delete all existing items
-		composition.items.clear()
+		
+		// Delete all existing items
+		/*composition.items.clear()
+		composition.items.each { 
+			composition.removeFromItems(it);
+			it.delete() 
+		}*/		
+		def items = CompositionItem.findAllByComposition(composition)
+		items.each{it.delete()}
+		//composition.removeFromItems(items)		
 		composition.save(flush: true)
-		// recreate an item for each eligible player 
-		def eligiblePlayers = composition.session.getParticipantsEligibleForComposition()
-		eligiblePlayers.each { player ->
-			def x = params["compo-player-$player.id-x"]
-			def y = params["compo-player-$player.id-y"]
-			println "Composition item for $player has coords : $x, $y"
-			if (x && y) {
-				CompositionItem item = new CompositionItem(player: player, composition: composition)
-				item.x = x
-				item.y = y
-			}	
+		
+		// Recreate an item for each player 
+		println "data: " + params["data"]
+		def jsonSlurper = new JsonSlurper()
+		def compoData = jsonSlurper.parseText(params["data"])
+		println "compo id: " + compoData['compositionId']
+		def players = compoData['players']
+		players.each { player ->
+			CompositionItem item = new CompositionItem(player: player, composition: composition)
+			item.x = player['x']
+			item.y = player['y']
+			composition.addToItems(item)
 		}		
 		if (composition.save(flush: true)) {
 			flash.message = "Composition has been updated"

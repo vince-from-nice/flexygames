@@ -9,7 +9,7 @@
 	<div class="sessionZoneContent">
 		<g:set var="defaultDisplayForSummaryZone" value="block" />
 		<g:set var="defaultDisplayForDetailedZone" value="none" />
-		<g:if test="${sessionInstance.comments.size() > 0}">
+		<g:if test="${sessionInstance.compositions.size() > 0}">
 			<g:set var="defaultDisplayForSummaryZone" value="none" />
 			<g:set var="defaultDisplayForDetailedZone" value="block" />
 		</g:if>
@@ -25,28 +25,35 @@
 		<div id="compositionsDetailedZone" style="display: ${defaultDisplayForDetailedZone};">
 			<g:if test="${sessionInstance.compositions.size() > 0}">
 				<g:javascript>
-// On attend que tout le DOM soit complètement chargé pour que les éléments compo-#id soient bien trouvables
-/*document.addEventListener("DOMContentLoaded", function(event) {
-    console.log("DOM fully loaded and parsed, adding restriction for composition drag and drop");
-	initDragging();
-});*/
+// On attend que tout le DOM soit complètement chargé afin que les éléments soient bien trouvables
+document.addEventListener("DOMContentLoaded", function(event) {
+    //console.log("DOM fully loaded and parsed, adding restriction for composition drag and drop");
+	//initDragging();
+	translateCompositionPlayers();
+});
+
+function translateCompositionPlayers() {
+	// TODO
+}
 
 function editComposition(compositionId) {
 	initDragging(compositionId);
 	toggleTableDisplay('edit-zone-for-compo-' + compositionId);
-	var compoDescription = document.getElementById('description-for-compo-' + compositionId);
-	compoDescription.removeAttribute('readonly');
+	//var compoDescription = document.getElementById('description-for-compo-' + compositionId);
+	//compoDescription.removeAttribute('readonly');
+	var compoForm = document.forms["form-for-composition-" + compositionId];
+	compoForm["description"].removeAttribute('readonly');
 }
 
 function saveComposition(compositionId) {
 	var compoForm = document.forms["form-for-composition-" + compositionId];
-	//var compoForm = document.getElementById('form-for-composition-' + compositionId);
 	//var compoDescription = document.getElementById('description-for-compo-' + compositionId);
 	//compoDescription.setAttribute('readonly', 'readonly');
 	compoForm["description"].setAttribute('readonly', 'readonly');
 	toggleTableDisplay('edit-zone-for-compo-' + compositionId);
 	var eligiblePlayers = document.querySelectorAll('[id^=compo-player-]');
 	var eligiblePlayer, x = 0, y = 0, playerId = 0, xInput, yInput;
+	var data = '{"compositionId": ' + compositionId + ', "players": [';
 	for (var i = 0; i < eligiblePlayers.length; i++) {
 		eligiblePlayer = eligiblePlayers[i];
     	x = (parseFloat(eligiblePlayer.getAttribute('data-x')) || 0);
@@ -54,18 +61,14 @@ function saveComposition(compositionId) {
     	playerId = eligiblePlayer.id.substring('compo-player-'.length);
     	//compoForm['compo-player-' + playerId + '-x'].value = x;
     	//compoForm['compo-player-' + playerId + '-y'].value = y;
-		xInput = document.createElement('compo-player-' + playerId + '-x');
-    	xInput.type = 'hidden';
-    	xInput.name = 'compo-player-' + playerId + '-x';
-    	xInput.value = x;
-    	compoForm.appendChild(xInput);
-		yInput = document.createElement('compo-player-' + playerId + '-y');
-    	yInput.type = 'hidden';
-    	yInput.name = 'compo-player-' + playerId + '-y';
-    	yInput.value = y;
-    	compoForm.appendChild(yInput);
+    	data += '{"id": '+ playerId + ', "x": ' + x + ', "y": ' + y + '}';
+    	if (i < eligiblePlayers.length - 1) {
+    		data += ', ';
+    	}
     	//alert('player#' + i + ' id= ' + playerId + ' coords:' + x + ' ' + y);
     }
+    data += ']}';
+    compoForm['data'].value = data;
     compoForm.submit();
 }
 
@@ -140,14 +143,15 @@ interact('.compoDropZone').dropzone({
 				</g:javascript>
 				<center>
 				<g:each in="${sessionInstance.compositions}" var="composition">
-					<form name="form-for-composition-${composition.id}" method="post" action="../../manager/index">
-					<!--g:form name="form-for-composition-${composition.id}" controller="manager"-->
+					<!--form name="form-for-composition-${composition.id}" method="post" action="../../manager/index"-->
+					<g:form name="form-for-composition-${composition.id}" controller="manager">
 						<g:hiddenField name="id" value="${composition.id}" />
-						<g:hiddenField name="_action_updateComposition" value="save" />
+						<g:hiddenField name="data" value="[]" />
+						<!--g:hiddenField name="_action_updateComposition" value="save" /-->
 						<table style="max-width: 600px; padding: 0px; margin: 0px;">
 							<tr>
 								<td>
-									<g:textField name="description" id="description-for-compo-${composition.id}" maxlength="100" readonly="readonly" value="${composition.description}" style="width: 90%;" />
+									<g:textField name="description" maxlength="100" readonly="readonly" value="${composition.description}" style="width: 90%;" />
 								</td>
 								<td><b><g:message code="session.show.compositions.bench" /></b>:</td>
 							</tr>
@@ -181,7 +185,7 @@ interact('.compoDropZone').dropzone({
 							<tr id="edit-zone-for-compo-${composition.id}" style="display: none; border: solid red 2px;">
 								<td colspan="2">
 									<g:message code="session.show.compositions.editMode"/>
-									<g:actionSubmit class="edit" action="updateComposition" value="${message(code:'save')}" onclick="saveComposition(${composition.id}); return false; " />
+									<g:actionSubmit class="edit" action="updateComposition" value="${message(code:'save')}" onclick="saveComposition(${composition.id}); return true; " />
 								</td>
 							</tr>
 							<tr>
@@ -196,7 +200,7 @@ interact('.compoDropZone').dropzone({
 								</td>
 							</tr>
 						</table>
-					</form>
+					</g:form>
 				</g:each>
 				</center>
 			</g:if>
