@@ -71,6 +71,20 @@ class SessionsController {
 			redirect(action: "list")
 		}
 		else {
+			// Prepare data about compositions (move it to the Composition domain class) ?
+//			def playersByComposition = []
+//			session.compositions.each { compo ->
+//				def compositionPlayers = [:]
+//				compositionPlayers['compositionId'] = compo.id
+//				def players = []
+//				compo.items.each { item ->
+//					def player = [id: item.player.id, x: item.x, y: item.y]
+//					players << player
+//				}
+//				playersByComposition << compositionPlayers
+//			}
+			
+			// Prepare data about votes (move it to the Vote domain class) ?
 			def participantsByScore = []
 			session.getEffectiveParticipants().each{ player ->
 				int score = 0
@@ -82,7 +96,6 @@ class SessionsController {
 				participantsByScore << player
 				participantsByScore.sort{it.scoreInCurrentSession}
 			}
-
 			def currentVotes = null
 			def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
 			if (user) {
@@ -97,7 +110,9 @@ class SessionsController {
 					else if (vote.score == -1) currentVotes.put('thirdNegative',  vote.player)
 				}
 			}
-			[sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes]
+			
+			[sessionInstance: session, /*playersByComposition: playersByComposition,*/ 
+				participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes ]
 		}
 	}
 

@@ -28,16 +28,63 @@
 // On attend que tout le DOM soit complètement chargé afin que les éléments soient bien trouvables
 document.addEventListener("DOMContentLoaded", function(event) {
     //console.log("DOM fully loaded and parsed, adding restriction for composition drag and drop");
-	//initDragging();
-	translateCompositionPlayers();
+	//initCompositionDragging();
+	//translateCompositionPlayers();
 });
 
-function translateCompositionPlayers() {
-	// TODO
+function initCompositionDragging(compositionId) {
+	interact('.draggableCompoPlayer')
+	  .draggable({
+	    inertia: true,
+	    restrict: {
+	      endOnly: true,
+	      elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
+	      //restriction: "parent",
+	      //restriction: ".compoDropZone",
+	      restriction: '#compo-' + compositionId,
+	      //restriction: document.getElementById('compo-148928'),
+	      //restriction: document.getElementsByClassName("compoDropZone"),
+	    },	
+	    onmove: compositionPlayerDragMoveListener,
+	    onend: function (event) {
+	      var textEl = event.target.querySelector('p');
+	      /*textEl && (textEl.textContent = 'moved a distance of ' + (Math.sqrt(event.dx * event.dx + event.dy * event.dy)|0) + 'px');*/
+	    }
+	  });
 }
 
+interact('.compoDropZone').dropzone({
+  overlap: 0.75,
+  ondropactivate: function (event) {
+    // add active dropzone feedback
+    event.target.classList.add('drop-active');
+  },
+  ondragenter: function (event) {
+    var draggableElement = event.relatedTarget,
+        dropzoneElement = event.target;
+    // feedback the possibility of a drop
+    dropzoneElement.classList.add('drop-target');
+    draggableElement.classList.add('can-drop');
+    //draggableElement.textContent = 'Dragged in';
+  },
+  ondragleave: function (event) {
+    // remove the drop feedback style
+    event.target.classList.remove('drop-target');
+    event.relatedTarget.classList.remove('can-drop');
+    //event.relatedTarget.textContent = 'Dragged out';
+  },
+  ondrop: function (event) {
+    //event.relatedTarget.textContent = 'Dropped';
+  },
+  ondropdeactivate: function (event) {
+    // remove active dropzone feedback
+    event.target.classList.remove('drop-active');
+    event.target.classList.remove('drop-target');
+  }
+});
+
 function editComposition(compositionId) {
-	initDragging(compositionId);
+	initCompositionDragging(compositionId);
 	toggleTableDisplay('edit-zone-for-compo-' + compositionId);
 	//var compoDescription = document.getElementById('description-for-compo-' + compositionId);
 	//compoDescription.removeAttribute('readonly');
@@ -72,74 +119,20 @@ function saveComposition(compositionId) {
     compoForm.submit();
 }
 
-function initDragging(compositionId) {
-	interact('.draggableCompoPlayer')
-	  .draggable({
-	    inertia: true,
-	    restrict: {
-	      endOnly: true,
-	      elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
-	      //restriction: "parent",
-	      //restriction: ".compoDropZone",
-	      restriction: '#compo-' + compositionId,
-	      //restriction: document.getElementById('compo-148928'),
-	      //restriction: document.getElementsByClassName("compoDropZone"),
-	    },	
-	    onmove: dragMoveListener,
-	    onend: function (event) {
-	      var textEl = event.target.querySelector('p');
-	      /*textEl && (textEl.textContent =
-	        'moved a distance of '
-	        + (Math.sqrt(event.dx * event.dx +
-	                     event.dy * event.dy)|0) + 'px');*/
-	    }
-	  });
+function compositionPlayerDragMoveListener(event, x, y) {
+	moveCompositionPlayerElement(event.target, event.dx, event.dy);
 }
 
-function dragMoveListener (event) {
-  var target = event.target,
-  x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-  y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
+function moveCompositionPlayerElement(target, x, y) {
+  var x = (parseFloat(target.getAttribute('data-x')) || 0) + x;
+  var y = (parseFloat(target.getAttribute('data-y')) || 0) + y;
   target.style.webkitTransform =
   target.style.transform =
-    'translate(' + x + 'px, ' + y + 'px)';
-
+    'translate(' + x + 'px, ' + y + 'px)';  
   target.setAttribute('data-x', x);
-  target.setAttribute('data-y', y);
+  target.setAttribute('data-y', y);  
+  console.log('Player has been translated of [' + x + ', ' + y + ']');
 }
-    
-interact('.compoDropZone').dropzone({
-  overlap: 0.75,
-
-  ondropactivate: function (event) {
-    // add active dropzone feedback
-    event.target.classList.add('drop-active');
-  },
-  ondragenter: function (event) {
-    var draggableElement = event.relatedTarget,
-        dropzoneElement = event.target;
-
-    // feedback the possibility of a drop
-    dropzoneElement.classList.add('drop-target');
-    draggableElement.classList.add('can-drop');
-    //draggableElement.textContent = 'Dragged in';
-  },
-  ondragleave: function (event) {
-    // remove the drop feedback style
-    event.target.classList.remove('drop-target');
-    event.relatedTarget.classList.remove('can-drop');
-    //event.relatedTarget.textContent = 'Dragged out';
-  },
-  ondrop: function (event) {
-    //event.relatedTarget.textContent = 'Dropped';
-  },
-  ondropdeactivate: function (event) {
-    // remove active dropzone feedback
-    event.target.classList.remove('drop-active');
-    event.target.classList.remove('drop-target');
-  }
-});
 				</g:javascript>
 				<center>
 				<g:each in="${sessionInstance.compositions}" var="composition">
@@ -160,20 +153,19 @@ interact('.compoDropZone').dropzone({
 									<img src="${resource(dir: 'images/composition',file: sessionInstance.type.name + 'Background.png')}" alt="Playground Background">
 								</td>
 								<td style="width: x; text-align: right; display: inline;">
-									<g:each in="${sessionInstance.getParticipantsEligibleForComposition()}" var="player">
-										<div id="compo-player-${player.id}" class="draggableCompoPlayer">
-											<p>
-												<g:if test="${player.avatar}">
-													<img style="width: 30px; max-height: 30px;" src="${createLink(controller:'fileUploader', action:'show', id:player.avatar.id)}" alt="User avatar"  />
-												</g:if> 
-												<g:else>
-													<img style="width:30px; vertical-align: middle;" src="${resource(dir:'images/user',file:'no_avatar.jpg')}" alt="Anonymous avatar" />
-												</g:else> 
-												<br />
-												<span style="font-size: x-small; vertical-align: top">${player.username}</span>
-											</p>
-										</div>
-									</g:each>
+									<g:if test="${composition.items.size() > 0}">
+										<g:each in="${composition.items}" var="item">
+											<g:render template="compositionPlayer" 
+												model="['playerId': item.player.id, 'avatarId': item.player.avatar.id, 'playerUsername': item.player.username, 'x': item.x, 'y': item.y]" />
+										</g:each>
+									</g:if>
+									<g:else>
+										<g:each in="${sessionInstance.getParticipantsEligibleForComposition()}" var="player">
+											<g:render template="compositionPlayer" 
+												model="['playerId': player.id, 'avatarId': player.avatar.id, 'playerUsername': player.username, 'x': 0, 'y': 0]" />
+										</g:each>									
+									</g:else>
+
 								</td>
 							</tr>
 							<tr>

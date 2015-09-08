@@ -10,7 +10,7 @@
 		<table class="fuckCSS" id="participantsSummaryZone" style="display: table; width: 100%; ">
 			<tr>
 				<td colspan="6" style="text-align: center; width: 100%; ">
-					<g:set var="currentUserParticipation" value="${sessionInstance.getParticipationOf(session.currentUser.username)}" />
+					<g:set var="currentUserParticipation" value="${sessionInstance.getParticipationOf(session.currentUser?.username)}" />
 					<g:if test="${currentUserParticipation}">
 						<div style="text-align: center; vertical-align: middle; border: solid black 1px; 
 							background-color: ${flexygames.Participation.Status.color(currentUserParticipation.statusCode)}; ">

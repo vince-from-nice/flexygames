@@ -1,3 +1,4 @@
+
 <g:set var="part" value="${sessionInstance.getParticipationOf(username)}" />
 <g:if test="${part}">
 	<td style="text-align: center; vertical-align: middle; border: solid black 1px; background-color: ${flexygames.Participation.Status.color(part.statusCode)}; ">

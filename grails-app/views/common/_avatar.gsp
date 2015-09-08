@@ -1,3 +1,4 @@
+
 		<g:link controller="player" action="show" id="${player.id}">
 			<g:set var="maxHeight" value="auto" />
 			<g:if test="${!width}">
