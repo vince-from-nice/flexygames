@@ -1,5 +1,5 @@
 										
-										<div id="compo-player-${playerId}" class="draggableCompoPlayer" >
+										<div id="compo-${compositionId}-player-${playerId}" class="draggableCompoPlayer" style="width: 60px; " >
 												<g:if test="${avatarId > 0}">
 													<img style="width: 40px; max-height: 40px;" src="${createLink(controller:'fileUploader', action:'show', id:avatarId)}" alt="User avatar"  />
 												</g:if> 
@@ -12,5 +12,5 @@
 												</g:if>
 												<span style="font-size: x-small; vertical-align: top">${username}</span>
 										</div>
-										<g:javascript>moveCompositionPlayerElement(document.getElementById('compo-player-${playerId}'), ${x}, ${y});</g:javascript>
+										<g:javascript>moveCompositionPlayerElement(document.getElementById('compo-${compositionId}-player-${playerId}'), ${x}, ${y});</g:javascript>
 										

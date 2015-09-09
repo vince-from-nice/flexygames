@@ -512,7 +512,7 @@ class ManagerController {
 			return redirect(controller: "sessions", action: "show", params: [id: composition.session])
 		}
 		
-		// Create a new composition
+		// Update the composition
 		composition.description = params["description"]
 		composition.lastUpdate = new Date()
 		composition.lastUpdater = user 

@@ -24,8 +24,13 @@ class Composition implements Comparable<Composition> {
 	static hasMany = [items: CompositionItem]
 	@Override
 	public int compareTo(Composition o) {
-		if (o instanceof Composition && description != null) {
-			return description.compareTo(o?.description)
+		if (o != null && o instanceof Composition && description != null && o.description != null) {
+			def i = description.compareTo(o.description)
+			if (i != 0) {
+				return i
+			} else {
+				return - lastUpdate.compareTo(o.lastUpdate)
+			}
 		} else {
 			return -1
 		}
