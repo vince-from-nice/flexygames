@@ -490,7 +490,10 @@ class ManagerController {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: params.id])
 		}
-		Composition composition = new Composition(session: session, lastUpdate: new Date(), lastUpdater: user)
+		Composition composition = new Composition(session: session, 
+				description: "Compo #" + (session.compositions.size() + 1), 
+				lastUpdate: new Date(), 
+				lastUpdater: user)
 		session.addToCompositions(composition)
 		if (session.save(flush: true)) {
 			flash.message = "A new composition has been added to the session"

@@ -58,6 +58,6 @@
 	<g:render template="/sessions/comments" />
 	
 	<g:render template="/layouts/backLinks" />
-				
+
 </body>
 </html>

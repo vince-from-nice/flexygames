@@ -136,9 +136,22 @@ function moveCompositionPlayerElement(target, x, y) {
   target.setAttribute('data-y', y);  
   //console.log('Player has been translated of [' + x + ', ' + y + ']');
 }
+
+// http://stackoverflow.com/questions/8840580/force-dom-redraw-refresh-on-chrome-mac
+var forceRedraw = function(element){
+    if (!element) { return; }
+    var n = document.createTextNode(' ');
+    var disp = element.style.display;  // don't worry about previous display style
+    element.appendChild(n);
+    element.style.display = 'none';
+    setTimeout(function(){
+        element.style.display = disp;
+        n.parentNode.removeChild(n);
+    },20); // you can play with this timeout to make it as short as possible
+}
 				</g:javascript>
 				<center>
-				<table style="width: 400px; padding: 0px; margin: 0px; ">
+				<table style="width: 400px; padding: 0px; margin: 0px; border: 0px; ">
 					<tr>
 					<g:each in="${sessionInstance.compositions}" var="composition">
 						<td style="width: 400px; padding: 20px; margin: 0px; text-align: center; ">
@@ -154,13 +167,15 @@ function moveCompositionPlayerElement(target, x, y) {
 										</td>
 									</tr>
 									<tr>
-										<td id="compo-${composition.id}" class="compoDropZone" style="width: 400px; padding: 0px; margin: 0px; ">
-											<table style="width: 400px; padding: 0px; margin: 0px; border: 0px; ">
+										<td class="compoDropZone" style="width: 400px; padding: 0px; margin: 0px; ">
+											<table id="compo-${composition.id}" style="width: 400px; padding: 0px; margin: 0px; border: 0px; ">
 												<tr>
 													<td style="width: 400px; height: 540px; padding: 0px; margin: 0px; " background="${resource(dir: 'images/composition',file: sessionInstance.type.name + 'Background.png')}"> </td>
 												</tr>
 												<tr>
-													<td style="width: 400px; padding: 0px; margin: 0px; ">
+													<td style="width: 400px; padding: 0px; margin: 0px; text-align: center; ">
+														<h3><g:message code="session.show.compositions.bench" /> :</h3>
+														<div >
 														<g:if test="${composition.items.size() > 0}">
 															<g:each in="${composition.items}" var="item">
 																<g:render template="compositionPlayer" 
@@ -173,9 +188,24 @@ function moveCompositionPlayerElement(target, x, y) {
 																	model="['compositionId': composition.id, 'playerId': player.id, 'avatarId': player.avatar.id, 'playerUsername': player.username, 'x': 0, 'y': 0]" />
 															</g:each>									
 														</g:else>
+														</div>														
 													</td>
 												</tr>
 											</table>
+											<g:javascript>
+// Try to recalculate table dimensions (for the bench TD) but nothing is working for now :(
+var el = document.getElementById('compo-${composition.id}');
+
+el.style.display='none';
+el.offsetHeight; // no need to store this anywhere, the reference is enough
+el.style.display='table';
+
+el.style.cssText += ';-webkit-transform:rotateZ(0deg)';
+el.offsetHeight;
+el.style.cssText += ';-webkit-transform:none';
+
+forceRedraw(el);
+											</g:javascript>
 										</td>
 									</tr>
 									<tr>
@@ -195,8 +225,8 @@ function moveCompositionPlayerElement(target, x, y) {
 											<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
 												<div class="buttons" style="margin: 5px; ">
 													<input id="edit-button-for-compo-${composition.id}" type="button" class="edit" onclick="editComposition(${composition.id})" value="${message(code:'edit')}" />
-													<g:actionSubmit class="create" action="duplicateComposition" value="${message(code:'duplicate')}" />
-													<g:actionSubmit class="delete" action="deleteComposition" value="${message(code:'delete')}" />
+													<g:actionSubmit class="create" action="duplicateComposition" value="${message(code:'duplicate')}" onclick="alert('Sorry, not yet implemented'); return false; " />
+													<g:actionSubmit class="delete" action="deleteComposition" value="${message(code:'delete')}" onclick="return confirm('${message(code:'management.compositions.areYouSureToDelete')}')" />
 												</div>
 											</g:if>
 										</td>
