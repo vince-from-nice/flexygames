@@ -7,7 +7,13 @@
 		<span style="float:right; font-size: small;"><g:message code="clickForDetails" /></span>
 	</div>
 	<div class="sessionZoneContent">
-		<table class="fuckCSS" id="participantsSummaryZone" style="display: table; width: 100%; ">
+		<g:set var="defaultDisplayForSummaryZone" value="table" />
+		<g:set var="defaultDisplayForDetailedZone" value="none" />
+		<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+			<g:set var="defaultDisplayForSummaryZone" value="none" />
+			<g:set var="defaultDisplayForDetailedZone" value="table" />
+		</g:if>
+		<table class="fuckCSS" id="participantsSummaryZone" style="display: ${defaultDisplayForSummaryZone}; width: 100%; ">
 			<tr>
 				<td colspan="6" style="text-align: center; width: 100%; ">
 					<g:set var="currentUserParticipation" value="${sessionInstance.getParticipationOf(session.currentUser?.username)}" />
@@ -30,7 +36,7 @@
 			</tr>
 			<g:render template="counter" model="[]" />
 		</table>
-		<table id="participantsDetailedZone" style="border: 0px; display: none; width: 100%">
+		<table id="participantsDetailedZone" style="border: 0px; display: ${defaultDisplayForDetailedZone}; width: 100%">
 		    <tr>
 		        <td>
 					<table class="flexyTab">
@@ -39,15 +45,21 @@
 					            <th style="vertical-align: top; "><g:message code="player" /></th>
 					            <th style="vertical-align: top; ">&nbsp;</th>
 					            <th style="vertical-align: top; "></th>
-					            <th style="vertical-align: top; min-width: 160px;"><g:message code="teams" /></th>
+					            <th style="vertical-align: top;"><g:message code="teams" /></th>
 					            <th style="vertical-align: top; text-align: center;"><g:message code="status" /></th>
-					            <th style="vertical-align: top; min-width: 250px;"><g:message code="log" /></th>
+					            <th style="vertical-align: top; min-width: 200px;"><g:message code="log" /></th>
 					        </tr>
 					    </thead>
 					    <tbody>
 					    	<g:if test="${sessionInstance.participations.size() > 0}">
+					    		<g:javascript>var pendingParticipationIds = [];</g:javascript>
 						        <g:each in="${sessionInstance.participations}" status="i" var="p">
-						            <tr class="${(i % 2) == 0 ? 'odd' : 'even'}" style="border: solid grey 1px">
+						        	<g:set var="display" value="table-row" />
+						        	<g:if test="${p.statusCode == flexygames.Participation.Status.REQUESTED.code}">
+						        		<g:javascript>pendingParticipationIds.push(${p.id});</g:javascript>
+						        		<g:set var="display" value="none" />
+						        	</g:if>
+						            <tr id="participation-${p.id}" class="${(i % 2) == 0 ? 'odd' : 'even'}" style="display: ${display}; border: solid grey 1px">
 										<td style="vertical-align: middle; text-align: right; height: 50px; padding-left: 0px">
 											<g:render template="/common/avatar" model="[player: p.player]" />
 										</td>
@@ -135,6 +147,24 @@
 					</table>
 		        </td>
 		        <td style="width: 100px;">
+		        <g:javascript>
+function togglePendingParticipations() {
+	for (var i = 0; i < pendingParticipationIds.length; i++) {
+		var id = pendingParticipationIds[i];
+		//console.log('toggling participation-' + id);
+		var player = document.getElementById('participation-' + id);
+		if (player.style.display == 'table-row') {
+			player.style.display = 'none';
+		} else {
+			player.style.display = 'table-row';
+		}
+	}
+}
+		        </g:javascript>
+		        	<h3><g:message code="options" /></h3>
+   					<g:checkBox name="hidePendingPlayers" value="${true}" checked="true" onclick="togglePendingParticipations(); return false; " />
+					<g:message code="session.show.participants.hidePendingPlayers" />
+					<br />
 					<h3><g:message code="session.show.participants.legend" /></h3>
 					<table style="border: solid black 1px;">	
 						<tr>
