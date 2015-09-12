@@ -23,7 +23,7 @@
 		<link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'flexygames_logo.114x114.png')}">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
-		<link rel="stylesheet" href="${resource(dir:'css',file:'flexygames.css')}" />
+		<link rel="stylesheet" href="${resource(dir:'css',file:'flexygames-20150911.css')}" />
 		
 		<g:layoutHead/>
 		<g:javascript library="application"/>
