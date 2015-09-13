@@ -162,7 +162,7 @@ function togglePendingParticipations() {
 }
 		        </g:javascript>
 		        	<h3><g:message code="options" /></h3>
-   					<g:checkBox name="hidePendingPlayers" value="${true}" checked="true" onclick="togglePendingParticipations(); return false; " />
+   					<g:checkBox name="hidePendingPlayers" value="${true}" checked="true" onclick="togglePendingParticipations(); return true; " />
 					<g:message code="session.show.participants.hidePendingPlayers" />
 					<br />
 					<h3><g:message code="session.show.participants.legend" /></h3>
