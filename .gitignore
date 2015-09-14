@@ -1,2 +1,8 @@
 target*
 upload*
+misc
+.project
+.classpath
+.settings
+.idea
+*.iml

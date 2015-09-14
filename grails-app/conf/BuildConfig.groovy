@@ -16,7 +16,7 @@ grails.project.dependency.resolution = {
         // uncomment to disable ehcache
         // excludes 'ehcache'
     }
-    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
 
     repositories {
@@ -37,10 +37,17 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
     }
+
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.16'
+
+        // turman : add PG driver (put the driver into /lib/ was enough with Eclipse/GGTS but not with IntelliJ)
+        runtime 'org.postgresql:postgresql:9.3-1103-jdbc41'
+
+        // turman : add Jsoup library for HTML cleaning of user inputs
+        runtime 'org.jsoup:jsoup:1.7.2'
     }
 
     plugins {
@@ -65,5 +72,7 @@ grails.project.dependency.resolution = {
 		compile ":quartz:1.0.2"
 		compile ":file-uploader:1.2.1"
 		compile ":ic-alendar:0.4.1"
+
     }
 }
+
