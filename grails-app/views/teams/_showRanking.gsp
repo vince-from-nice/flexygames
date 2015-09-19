@@ -15,6 +15,12 @@
 			onChange="document.getElementById('statsForm').submit();" />
 	</g:form>
 	<br />
+	<g:if test="${currentCriteria == 'actionByRound' || currentCriteria == 'successRatio'}">
+		<br />
+		<div style="border: 1px solid red; background-color: orange; padding: 10px; width: auto">
+			<g:message code="stats.minPartsForAverage" />
+		</div>
+	</g:if>
 	<br />
 	<table style="width: auto;">
 		<g:set var="rank" value="1" />

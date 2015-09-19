@@ -43,13 +43,17 @@ class TeamsController {
 	// TODO redo that ugly method
 	def private getMembersTreeForRanking(params, Team team, String criteria) {
 		TreeMap<User, Number> memberMap = new TreeMap<User, Number> ()
+		// TODO make it customizable
+		def MIN_PARTS_FOR_AVERAGE_SCORING = 10
 		def members = team.members
 		members.each { player ->
 			def value = 0
 			if (criteria.equals('successRatio')) {
 				def wins = player.getWinsByTeam(team).size()
 				def parts = wins + player.getDrawsByTeam(team).size() + player.getDefeatsByTeam(team).size()
-				if (parts > 0) value = wins / parts
+				if (parts > 0) {
+					value = wins / parts
+				}
 			} else if (criteria.equals('statuses.doneGood')) {
 				value = player.getParticipationsByStatusAndTeam(Participation.Status.DONE_GOOD.code, team).size()
 			} else if (criteria.equals('statuses.doneBad')) {
@@ -62,16 +66,22 @@ class TeamsController {
 				value = player.getActionsByTeam(team).size()
 			} else if (criteria.equals('actionByRound')) {
 				def rounds = player.getRoundsByTeam(team).size()
-				if (rounds > 0) value = player.getActionsByTeam(team).size() / player.getRoundsByTeam(team).size()
+				if (rounds > 0) {
+					value = player.getActionsByTeam(team).size() / player.getRoundsByTeam(team).size()
+				}
 			} else if (criteria.equals('votingScore')) {
 				value = player.getVotingScore() // TODO change ByTeam
 			}
-			memberMap.put(player, value)
+			def x = player.getEffectiveParticipationsByTeam(team).size()
+			if (x > MIN_PARTS_FOR_AVERAGE_SCORING ||
+					(!criteria.equals('actionByRound') && !criteria.equals('successRatio'))) {
+					memberMap.put(player, value)
+			}
 		}
 		def memberSortedMap = sortMapByValue(memberMap)
 		return memberSortedMap
 	}
-	
+
 	// TODO redo that ugly method
 	static private Map sortMapByValue(Map map) {
 		List list = new LinkedList(map.entrySet());
@@ -88,5 +98,5 @@ class TeamsController {
 	   }
 	   return result;
    }
-	
+
 }
