@@ -171,6 +171,34 @@ class SessionsController {
 		redirect(action: "show", id: params.id)
 	}
 
+	// Used by the mails sent by reminders (here the id is for the session, not for the participation like it is in the original method)
+	def updateFromMail = {
+		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!user) {
+			flash.error = "You need to be authenticated in order to update status !!"
+			return redirect(action: "list")
+		}
+		def session = Session.get(params.id)
+		if (!session) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
+			redirect(action: "list")
+		}
+		Participation participation = Participation.findBySessionAndPlayer(session, user)
+		if (!participation) {
+			flash.error = "Sorry, unable to find your participation in the session !!"
+			return redirect(action: "list")
+		}
+		try {
+			sessionService.updatePlayerStatus(user, participation, params.statusCode, '')
+			def newStatus = message(code: 'participation.status.' + params.statusCode)
+			flash.message = "${message(code: 'session.show.update.success', args: [newStatus])}"
+		} catch (Exception e) {
+			flash.error = "${message(code: 'session.show.update.error', args: [e.message])}"
+			return redirect(action: "show", id:participation.session.id)
+		}
+		return redirect(action: "show", id:participation.session.id)
+	}
+
 	def vote = {
 		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
 		if (!user) {

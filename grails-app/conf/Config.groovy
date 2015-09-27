@@ -90,6 +90,18 @@ log4j = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+
+}
+
+environments {
+    development {
+        log4j = {
+            // Vincent: log SQL statements
+            //debug 'org.hibernate.SQL'
+            //trace 'org.hibernate.type.descriptor.sql.BasicBinder'
+            //trace 'org.hibernate.type'
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,13 +130,27 @@ grails.mail.default.from="webmaster@flexygames.net"
 environments {
 	development {
 		grails {
+            // Config for Orange SMTP
 			mail {
-				//host = "localhost"
-				//host = "smtp.free.fr"
+                // It doesn't work..
 				host = "smtp.orange.fr"
 				port = 465
-				//port = 25
 			}
+
+            // Config for GMail SMTP
+            mail {
+                // It works but I need to activate a security parameter in Google account: "Allow application which are less secure"
+                host = "smtp.gmail.com"
+                port = 465
+                username = "vincent.frison@gmail.com"
+                password = "not_in_git"
+                props = ["mail.smtp.auth":"true",
+                         "mail.smtp.socketFactory.port":"465",
+                         "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+                         "mail.smtp.socketFactory.fallback":"false",
+                         "mail.smtp.starttls.enable": "true",
+                         "mail.debug": "true"]
+            }
 		}
 	}
 	production {
