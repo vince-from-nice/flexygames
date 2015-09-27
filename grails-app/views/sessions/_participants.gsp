@@ -187,7 +187,7 @@
                                 onclick="togglePendingParticipations(); return true; "/>
                     <g:message code="session.show.participants.hidePendingPlayers"/>
                     <br/>
-
+                    <br/>
                     <h3><g:message code="session.show.participants.legend"/></h3>
                     <table style="border: solid black 1px;">
                         <tr>

@@ -6,8 +6,14 @@
 		</h2>
 		<span style="float:right; font-size: small;"><g:message code="clickForDetails" /></span>
 	</div>
+	<g:set var="defaultDisplayForSummaryZone" value="block" />
+	<g:set var="defaultDisplayForDetailedZone" value="none" />
+	<g:if test="${sessionInstance.votes.size() > 0}">
+		<g:set var="defaultDisplayForSummaryZone" value="none" />
+		<g:set var="defaultDisplayForDetailedZone" value="table" />
+	</g:if>
 	<div class="sessionZoneContent">
-		<div id="scorescheetSummaryZone" style="display: block;">
+		<div id="scorescheetSummaryZone" style="display: ${defaultDisplayForSummaryZone};">
 			<g:if test="${sessionInstance.rounds.size() > 0}" >
 				<g:message code="session.show.rounds.roundsNbr"/> : <b>${sessionInstance.rounds.size()}</b>
 			</g:if>
@@ -15,7 +21,7 @@
 				<g:message code="session.show.rounds.noRound"/>
 			</g:else>
 		</div>
-		<table id="scorescheetDetailedZone" style="display: none; border: none; margin: 0px">
+		<table id="scorescheetDetailedZone" style="display: ${defaultDisplayForDetailedZone}; border: none; margin: 0px">
 			<tr>
 				<g:set var="index" value="${0}" />
 				<g:if test="${sessionInstance.rounds.size() > 0}" >
