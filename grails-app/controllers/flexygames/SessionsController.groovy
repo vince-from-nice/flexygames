@@ -127,6 +127,10 @@ class SessionsController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Participation'), params.id])}"
 			return redirect(action: "list")
 		}
+		if (participation.player != user) {
+			flash.error = "Are you kidding ??"
+			return redirect(action: "list")
+		}
 		try {
 			sessionService.updatePlayerStatus(user, participation, params.statusCode, params.userLog)
 			def newStatus = message(code: 'participation.status.' + params.statusCode)
@@ -135,16 +139,17 @@ class SessionsController {
 			flash.error = "${message(code: 'session.show.update.error', args: [e.message])}"
 			return redirect(action: "show", id:participation.session.id)
 		}
-		
+
+		// If user comes from another FG pages (such as the homepage or mySessions) we redirect to it
 		String referer =  request.getHeader('referer')
-		// If user comes from another FG site (such as the homepage) we redirect to it
 		if (referer.contains(grailsApplication.config.grails.serverURL)) {
-			return redirect(url:referer)
+			// Maybe adding a salt parameter would solve the issue with Chrome under Android ?
+			return redirect(url:referer + "?salt=" + UUID.randomUUID().toString())
 		}
 		// Else we redirect to the session page
 		return redirect(action: "show", id:participation.session.id)
 	}
-	
+
 	def join = {
 		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
 		if (!user) {
