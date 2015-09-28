@@ -127,10 +127,6 @@ class SessionsController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Participation'), params.id])}"
 			return redirect(action: "list")
 		}
-		if (participation.player != user) {
-			flash.error = "Are you kidding ??"
-			return redirect(action: "list")
-		}
 		try {
 			sessionService.updatePlayerStatus(user, participation, params.statusCode, params.userLog)
 			def newStatus = message(code: 'participation.status.' + params.statusCode)
