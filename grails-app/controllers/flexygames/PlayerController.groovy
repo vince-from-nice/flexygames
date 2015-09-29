@@ -1,5 +1,7 @@
 package flexygames
 
+import grails.converters.JSON
+
 import java.text.SimpleDateFormat
 import java.util.regex.Matcher
 
@@ -56,6 +58,15 @@ class PlayerController {
 		//		println "\tUser.count() returns " + User.count()
 		//		println "\tUser list size is " + users.size()
 		[playerInstanceList: users, playerInstanceTotal: User.count()]
+	}
+
+	def jsonList = {
+		def users = User.list(sort: 'username', order: 'asc')
+		def json = []
+		users.each { u ->
+			json << [id: u.id, username: u.username]
+		}
+		render  json as JSON
 	}
 
 	def show = {
