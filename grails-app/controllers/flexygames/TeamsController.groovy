@@ -34,45 +34,81 @@ class TeamsController {
 		}
 		if (params.mode == "ranking") {
 			def criteria = (params.criteria ? params.criteria : 'statuses.doneGood')
-			 [teamInstance: team, members: getMembersTreeForRanking(params, team, criteria), currentCriteria: criteria]
+			def sessionGroupId = (params.sessionGroupId ? Integer.parseInt(params.sessionGroupId) : 0)
+			 [teamInstance: team, members: getMembersTreeForRanking(params, team, criteria, sessionGroupId), currentCriteria: criteria, currentSessionGroupId: sessionGroupId]
 		} else {
 			[teamInstance: team]
 		}
 	}
 	
 	// TODO redo that ugly method
-	def private getMembersTreeForRanking(params, Team team, String criteria) {
+	def private getMembersTreeForRanking(params, Team team, String criteria, int sessionGroupId) {
 		TreeMap<User, Number> memberMap = new TreeMap<User, Number> ()
 		// TODO make it customizable
 		def MIN_PARTS_FOR_AVERAGE_SCORING = 10
 		def members = team.members
+		SessionGroup sessionGroup
+		if (sessionGroupId > 0) {
+			sessionGroup = SessionGroup.get(sessionGroupId)
+		}
 		members.each { player ->
 			def value = 0
 			if (criteria.equals('successRatio')) {
-				def wins = player.getWinsByTeam(team).size()
-				def parts = wins + player.getDrawsByTeam(team).size() + player.getDefeatsByTeam(team).size()
+				def wins, parts
+				if (sessionGroup) {
+					wins = player.getWinsBySessionGroup(sessionGroup).size()
+					parts = wins + player.getDrawsBySessionGroup(sessionGroup).size() + player.getDefeatsBySessionGroup(sessionGroup).size()
+				} else {
+					wins = player.getWinsByTeam(team).size()
+					parts = wins + player.getDrawsByTeam(team).size() + player.getDefeatsByTeam(team).size()
+				}
 				if (parts > 0) {
 					value = wins / parts
 				}
-			} else if (criteria.equals('statuses.doneGood')) {
-				value = player.getParticipationsByStatusAndTeam(Participation.Status.DONE_GOOD.code, team).size()
-			} else if (criteria.equals('statuses.doneBad')) {
-				value = player.getParticipationsByStatusAndTeam(Participation.Status.DONE_BAD.code, team).size()
-			} else if (criteria.equals('statuses.undone')) {
-				value = player.getParticipationsByStatusAndTeam(Participation.Status.UNDONE.code, team).size()
-			} else if (criteria.equals('statuses.removed')) {
-				value = player.getParticipationsByStatusAndTeam(Participation.Status.REMOVED.code, team).size()
 			} else if (criteria.equals('actionScore')) {
-				value = player.getActionsByTeam(team).size()
+				if (sessionGroup) {
+					value = player.getActionsBySessionGroup(sessionGroup).size()
+				} else {
+					value = player.getActionsByTeam(team).size()
+				}
 			} else if (criteria.equals('actionByRound')) {
-				def rounds = player.getRoundsByTeam(team).size()
+				def actions, rounds
+				if (sessionGroup) {
+					actions = player.getActionsBySessionGroup(sessionGroup).size()
+					rounds = player.getRoundsBySessionGroup(sessionGroup).size()
+				} else {
+					actions = player.getActionsByTeam(team).size()
+					rounds = player.getRoundsByTeam(team).size()
+				}
 				if (rounds > 0) {
-					value = player.getActionsByTeam(team).size() / player.getRoundsByTeam(team).size()
+					value = actions / rounds
 				}
 			} else if (criteria.equals('votingScore')) {
-				value = player.getVotingScore() // TODO change ByTeam
+				//TODO change ByTeam
+				value = player.getVotingScore()
+			} else {
+				def status
+				if (criteria.equals('statuses.doneGood')) {
+					status = Participation.Status.DONE_GOOD.code
+				} else if (criteria.equals('statuses.doneBad')) {
+					status = Participation.Status.DONE_BAD.code
+				} else if (criteria.equals('statuses.undone')) {
+					status = Participation.Status.UNDONE.code
+				} else if (criteria.equals('statuses.removed')) {
+					status = Participation.Status.REMOVED.code
+				}
+				if (sessionGroup) {
+					value = player.getParticipationsByStatusAndSessionGroup(status, sessionGroup).size()
+				} else {
+					value = player.getParticipationsByStatusAndTeam(status, team).size()
+				}
 			}
-			def x = player.getEffectiveParticipationsByTeam(team).size()
+			def x
+			if (sessionGroup) {
+				x = player.getEffectiveParticipationsBySessionGroup(sessionGroup).size()
+			} else {
+				x = player.getEffectiveParticipationsByTeam(team).size()
+			}
 			if (x > MIN_PARTS_FOR_AVERAGE_SCORING ||
 					(!criteria.equals('actionByRound') && !criteria.equals('successRatio'))) {
 					memberMap.put(player, value)

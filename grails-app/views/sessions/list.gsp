@@ -39,8 +39,8 @@
 				<g:if test="${session.filteredTeam && session.filteredTeam != 'ALL'}" >
 					<g:set var="groups" value="${flexygames.Team.get(session.filteredTeam).getAllSessionGroups()}"/>
 				</g:if>
-				<g:select name="filteredSessionGroup" from="${groups}" 
-					optionKey="id" value="${session.filteredSessionGroup}" noSelection="['ALL': message(code:'session.list.filter.allSessionGroups')]" 
+				<g:select name="filteredSessionGroup" from="${groups}"
+					optionKey="id" value="${session.filteredSessionGroup}" noSelection="['ALL': message(code:'session.list.filter.allSessionGroups')]"
 					onChange="document.getElementById('groupFilterForm').submit();"  />
 			</g:form>
 		</td>

@@ -56,12 +56,12 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 
 	static mapping = {
 		table 'uzer'
-		avatar fetch: 'join' // for a one-to-one relation we can safely use the fetch:'join' mapping
-		memberships lazy: false // for a one-to-many relation lasy:false is recommended because using fetch:'join' seems dangerous (http://grails.org/doc/latest/guide/GORM.html#fetching)
-		participations lazy: true // sauf qu'avec lazy:true sur les participations, le listage des teams consomme beaucoup moins !!
-		skills lazy: true // no need to load them 
-		actions lazy: true // no need to load them 
-		votes lazy: true // no need to load them
+		avatar fetch: 'join'
+		memberships lazy: true
+		participations lazy: true, batchSize: 50
+		skills lazy: true
+		actions lazy: true
+		votes lazy: true
 		memberships cascade: "all-delete-orphan"
 	}
 
@@ -271,6 +271,16 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		def result = []
 		getParticipationsByStatus(statusCode).each { p ->
 			if (team.id in p.session.group.defaultTeams*.id) {
+				result << p
+			}
+		}
+		return result
+	}
+
+	List<Participation> getParticipationsByStatusAndSessionGroup(String statusCode, SessionGroup sessionGroup) {
+		def result = []
+		getParticipationsByStatus(statusCode).each { p ->
+			if (sessionGroup.id == p.session.group.id) {
 				result << p
 			}
 		}

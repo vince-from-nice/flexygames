@@ -13,26 +13,24 @@ hibernate {
 environments {
     development {
         dataSource {
-            pooled = true
             dbCreate = "update" // one of 'create', 'create-drop','update'
             //url = "jdbc:hsqldb:mem:devDB"
             driverClassName = "org.postgresql.Driver"
             url = "jdbc:postgresql://localhost/flexygames"
             username = "postgres"
             password = ""
-			//loggingSql = true
+			loggingSql = true // see log4j block in Config.groovy
+            format_sql = true
         }
     }
     test {
         dataSource {
-            pooled = true
             dbCreate = "update"
             url = "jdbc:hsqldb:mem:testDb"
         }
     }
     production {
         dataSource {
-            pooled = true
             dbCreate = "update"
             driverClassName = "org.postgresql.Driver"
             url = "jdbc:postgresql://localhost/asas_flexygames"

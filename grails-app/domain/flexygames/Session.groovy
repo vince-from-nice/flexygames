@@ -70,6 +70,12 @@ class Session implements Comparable<Session> {
 		playground (fetch: 'join')
 		type (fetch:'join')
 		group (fetch:'join')
+		participations lazy: true, batchSize: 50
+		reminders lazy: true, batchSize: 10
+		rounds lazy: true, batchSize: 10
+		votes lazy: true, batchSize: 10
+		comments lazy: true, batchSize: 10
+		compositions lazy: true, batchSize:10
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
