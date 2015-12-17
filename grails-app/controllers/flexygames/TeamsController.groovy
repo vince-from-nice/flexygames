@@ -109,7 +109,7 @@ class TeamsController {
 			} else {
 				x = player.getEffectiveParticipationsByTeam(team).size()
 			}
-			if (x > MIN_PARTS_FOR_AVERAGE_SCORING ||
+			if (x >= MIN_PARTS_FOR_AVERAGE_SCORING ||
 					(!criteria.equals('actionByRound') && !criteria.equals('successRatio'))) {
 					memberMap.put(player, value)
 			}

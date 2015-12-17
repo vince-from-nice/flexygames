@@ -20,11 +20,11 @@
 							'successRatio']" />
 					<g:if test="${currentCriteria == 'actionByRound' || currentCriteria == 'successRatio'}">
 						<br />
-						<div style="border: 2px solid red; background-color: orange; padding: 10px; width: auto">
+						<br />
+						<div style="border: 2px solid red; background-color: #FFF3F3; color: orange; padding: 10px; width: auto">
 							<g:message code="stats.minPartsForAverage" />
 						</div>
 					</g:if>
-					<br/>
 					<br/>
 					<g:message code="stats.selectSessionGroup" /> :
 					<br/>
@@ -36,7 +36,9 @@
 					<g:submitButton name="Click & Wait" />
 					<br/>
 					<br/>
-					<g:message code="stats.clickAndWaitExplanation" />
+					<div style="border: 2px solid orange; background-color: #FFF3F3; color: darkgreen; padding: 10px; width: auto">
+						<g:message code="stats.clickAndWaitExplanation" />
+					</div>
 				</g:form>
 			</td>
 			<td>
