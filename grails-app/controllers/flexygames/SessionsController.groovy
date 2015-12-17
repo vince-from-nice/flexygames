@@ -71,6 +71,9 @@ class SessionsController {
 			redirect(action: "list")
 		}
 		else {
+			// Prepare data about participants
+			// Since Participation.compareTo() is smart there is nothing special to do, the participation table will well sorted
+
 			// Prepare data about compositions (move it to the Composition domain class) ?
 //			def playersByComposition = []
 //			session.compositions.each { compo ->

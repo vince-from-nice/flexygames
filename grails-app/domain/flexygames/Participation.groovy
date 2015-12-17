@@ -177,8 +177,8 @@ class Participation implements Comparable<Participation> {
 	///////////////////////////////////////////////////////////////////////////
 	
 	String toString() {
-		return "Participation of $player for $session"
-	}
+		return "Participation of $p	layer for $session"
+}
 
 //	public boolean equals (Object o) {
 //		if (o instanceof Participation) {
@@ -189,6 +189,14 @@ class Participation implements Comparable<Participation> {
 
 	int compareTo(Object o) {
 		if (o instanceof Participation && o.session.id == o.session.id) {
+			int i = statusCode.compareTo(o.statusCode)
+			if (i != 0) {
+				return i
+			}
+			if (statusCode == Status.AVAILABLE.code()) {
+				i = lastUpdate.compareTo(o.lastUpdate)
+				if (i != 0) return i
+			}
 			return player.compareTo(o.player)
 		}
 		return -1
