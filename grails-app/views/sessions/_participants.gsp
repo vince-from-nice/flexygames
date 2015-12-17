@@ -1,4 +1,3 @@
-<g:set var="now" value="${java.lang.System.currentTimeMillis()}"/>
 <div class="sessionZone">
     <div class="sessionZoneHeader" onclick="toggleTableDisplay('participantsSummaryZone');
     toggleTableDisplay('participantsDetailedZone');
@@ -59,13 +58,17 @@
                         </thead>
                         <tbody>
                         <g:if test="${sessionInstance.participations.size() > 0}">
+							<g:set var="hidePendingPlayersByDefault" value="${true}" />
+							<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+								<g:set var="hidePendingPlayersByDefault" value="${false}" />
+							</g:if>
                             <g:javascript>var pendingParticipationIds = [];</g:javascript>
                             <g:each in="${sessionInstance.participations}" status="i" var="p">
                                 <g:set var="display" value="table-row"/>
                                 <g:if test="${p.statusCode == flexygames.Participation.Status.REQUESTED.code}">
                                     <g:if test="${p.player != session.currentUser}">
                                         <g:javascript>pendingParticipationIds.push(${p.id});</g:javascript>
-                                        <g:set var="display" value="none"/>
+                                        <g:set var="display" value="${hidePendingPlayersByDefault?'none':'table-row'}"/>
                                     </g:if>
                                 </g:if>
                                 <tr id="participation-${p.id}" class="${(i % 2) == 0 ? 'odd' : 'even'}"
@@ -183,7 +186,7 @@
                         }
                     </g:javascript>
                     <h3><g:message code="options"/></h3>
-                    <g:checkBox name="hidePendingPlayers" value="${true}" checked="true"
+                    <g:checkBox name="hidePendingPlayers" value="${hidePendingPlayersByDefault}" checked="${hidePendingPlayersByDefault}"
                                 onclick="togglePendingParticipations(); return true; "/>
                     <g:message code="session.show.participants.hidePendingPlayers"/>
                     <br/>

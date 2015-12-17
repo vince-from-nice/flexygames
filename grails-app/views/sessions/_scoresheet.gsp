@@ -8,7 +8,7 @@
 	</div>
 	<g:set var="defaultDisplayForSummaryZone" value="block" />
 	<g:set var="defaultDisplayForDetailedZone" value="none" />
-	<g:if test="${sessionInstance.votes.size() > 0}">
+	<g:if test="${sessionInstance.rounds.size() > 0}">
 		<g:set var="defaultDisplayForSummaryZone" value="none" />
 		<g:set var="defaultDisplayForDetailedZone" value="table" />
 	</g:if>

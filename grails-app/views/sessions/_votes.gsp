@@ -1,4 +1,3 @@
-<g:if test="${sessionInstance.date.time < System.currentTimeMillis() }">
 <div class="sessionZone">
 	<div class="sessionZoneHeader" onclick="toggleDisplay('votesSummaryZone'); toggleTableDisplay('votesDetailedZone'); return false">
 		<h2 style="vertical-align: top; display: inline;">
@@ -8,7 +7,7 @@
 	</div>
 	<g:set var="defaultDisplayForSummaryZone" value="block" />
 	<g:set var="defaultDisplayForDetailedZone" value="none" />
-	<g:if test="${sessionInstance.votes.size() > 0}">
+	<g:if test="${sessionInstance.date < new Date() || sessionInstance.votes.size() > 0}">
 		<g:set var="defaultDisplayForSummaryZone" value="none" />
 		<g:set var="defaultDisplayForDetailedZone" value="table" />
 	</g:if>
@@ -223,5 +222,4 @@
 		 </table>
 	</div>
 </div>
-</g:if>
 <g:set scope="request" var="timeAfterVoting" value="${java.lang.System.currentTimeMillis()}" />

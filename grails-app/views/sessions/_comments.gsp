@@ -1,4 +1,3 @@
-<g:set var="now" value="${java.lang.System.currentTimeMillis()}" />
 <div class="sessionZone">
 	<div class="sessionZoneHeader" onclick="toggleDisplay('commentsSummaryZone'); toggleDisplay('commentsDetailedZone'); return false">
 		<h2 style="vertical-align: top; display: inline;">
