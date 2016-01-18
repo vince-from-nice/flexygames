@@ -8,6 +8,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:datePicker name="date" precision="day"  value="${sessionInstance?.date}"  />
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'duration', 'error')} ">
@@ -16,6 +17,7 @@
 		
 	</label>
 	<g:field name="duration" type="number" min="1" value="${sessionInstance.duration}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'rdvBeforeStart', 'error')} ">
@@ -24,6 +26,7 @@
 		
 	</label>
 	<g:field name="rdvBeforeStart" type="number" min="0" value="${sessionInstance.rdvBeforeStart}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'name', 'error')} ">
@@ -32,6 +35,7 @@
 		
 	</label>
 	<g:textField name="name" value="${sessionInstance?.name}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'description', 'error')} ">
@@ -40,6 +44,7 @@
 		
 	</label>
 	<g:textField name="description" maxlength="100" value="${sessionInstance?.description}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'playground', 'error')} required">
@@ -48,6 +53,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="playground" name="playground.id" from="${flexygames.Playground.list()}" optionKey="id" required="" value="${sessionInstance?.playground?.id}" class="many-to-one"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'type', 'error')} required">
@@ -56,6 +62,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="type" name="type.id" from="${flexygames.GameType.list()}" optionKey="id" required="" value="${sessionInstance?.type?.id}" class="many-to-one"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'group', 'error')} required">
@@ -64,6 +71,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="group" name="group.id" from="${flexygames.SessionGroup.list()}" optionKey="id" required="" value="${sessionInstance?.group?.id}" class="many-to-one"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'participations', 'error')} ">
@@ -80,6 +88,7 @@
 <g:link controller="participation" action="create" params="['session.id': sessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'participation.label', default: 'Participation')])}</g:link>
 </li>
 </ul>
+
 
 </div>
 
@@ -98,6 +107,7 @@
 </li>
 </ul>
 
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'rounds', 'error')} ">
@@ -114,6 +124,7 @@
 <g:link controller="sessionRound" action="create" params="['session.id': sessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'sessionRound.label', default: 'SessionRound')])}</g:link>
 </li>
 </ul>
+
 
 </div>
 
@@ -132,6 +143,7 @@
 </li>
 </ul>
 
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'comments', 'error')} ">
@@ -142,12 +154,13 @@
 	
 <ul class="one-to-many">
 <g:each in="${sessionInstance?.comments?}" var="c">
-    <li><g:link controller="comment" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
+    <li><g:link controller="sessionComment" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
 </g:each>
 <li class="add">
-<g:link controller="comment" action="create" params="['session.id': sessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'comment.label', default: 'Comment')])}</g:link>
+<g:link controller="sessionComment" action="create" params="['session.id': sessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'sessionComment.label', default: 'SessionComment')])}</g:link>
 </li>
 </ul>
+
 
 </div>
 
@@ -157,6 +170,7 @@
 		
 	</label>
 	<g:field type="url" name="imageUrl" value="${sessionInstance?.imageUrl}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'galleryUrl', 'error')} ">
@@ -165,6 +179,7 @@
 		
 	</label>
 	<g:field type="url" name="galleryUrl" value="${sessionInstance?.galleryUrl}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'creation', 'error')} ">
@@ -173,6 +188,7 @@
 		
 	</label>
 	<g:datePicker name="creation" precision="day"  value="${sessionInstance?.creation}" default="none" noSelection="['': '']" />
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'creator', 'error')} ">
@@ -181,6 +197,7 @@
 		
 	</label>
 	<g:select id="creator" name="creator.id" from="${flexygames.User.list()}" optionKey="id" value="${sessionInstance?.creator?.id}" class="many-to-one" noSelection="['null': '']"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'extraFieldName', 'error')} ">
@@ -189,6 +206,7 @@
 		
 	</label>
 	<g:textField name="extraFieldName" value="${sessionInstance?.extraFieldName}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'extraFieldValue', 'error')} ">
@@ -197,5 +215,24 @@
 		
 	</label>
 	<g:textField name="extraFieldValue" value="${sessionInstance?.extraFieldValue}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'compositions', 'error')} ">
+	<label for="compositions">
+		<g:message code="session.compositions.label" default="Compositions" />
+		
+	</label>
+	
+<ul class="one-to-many">
+<g:each in="${sessionInstance?.compositions?}" var="c">
+    <li><g:link controller="composition" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="composition" action="create" params="['session.id': sessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'composition.label', default: 'Composition')])}</g:link>
+</li>
+</ul>
+
+
 </div>
 

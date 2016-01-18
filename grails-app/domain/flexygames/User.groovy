@@ -1,6 +1,5 @@
 package flexygames
 
-import java.util.List
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -497,7 +496,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	int countComments() {
 		if (this.commentCounter == null) {
-			this.commentCounter = Comment.findAllByUser(this).size()
+			this.commentCounter = SessionComment.findAllByUser(this).size()
 			if (!this.save(flush: true)) {
 				println "Error when initializing the comment counter for $this : " + this.errors
 			} else {

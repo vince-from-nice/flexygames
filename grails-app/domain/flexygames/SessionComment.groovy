@@ -1,6 +1,6 @@
 package flexygames
 
-class Comment implements Comparable<Comment> {
+class SessionComment implements Comparable<SessionComment> {
     
     Date date
     String text
@@ -13,12 +13,9 @@ class Comment implements Comparable<Comment> {
         date()
         text(blank:false, maxSize:10000)
     }
-	
-	int compareTo(Object o) {
-		if (o instanceof Comment) {
-			return - date.compareTo(o.date)
-		} else {
-			return false
-		}
-	}
+
+    @Override
+    int compareTo(SessionComment o) {
+        return - date.compareTo(o.date)
+    }
 }

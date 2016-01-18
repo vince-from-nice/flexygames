@@ -1,6 +1,6 @@
 
 <%@ page import="flexygames.Session" %>
-<!doctype html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta name="layout" content="main">
@@ -12,7 +12,7 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
+				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
 				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 			</ul>
 		</div>
@@ -144,7 +144,7 @@
 					<span id="comments-label" class="property-label"><g:message code="session.comments.label" default="Comments" /></span>
 					
 						<g:each in="${sessionInstance.comments}" var="c">
-						<span class="property-value" aria-labelledby="comments-label"><g:link controller="comment" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="comments-label"><g:link controller="sessionComment" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></span>
 						</g:each>
 					
 				</li>
@@ -204,11 +204,21 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${sessionInstance?.compositions}">
+				<li class="fieldcontain">
+					<span id="compositions-label" class="property-label"><g:message code="session.compositions.label" default="Compositions" /></span>
+					
+						<g:each in="${sessionInstance.compositions}" var="c">
+						<span class="property-value" aria-labelledby="compositions-label"><g:link controller="composition" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></span>
+						</g:each>
+					
+				</li>
+				</g:if>
+			
 			</ol>
-			<g:form>
+			<g:form url="[resource:sessionInstance, action:'delete']" method="DELETE">
 				<fieldset class="buttons">
-					<g:hiddenField name="id" value="${sessionInstance?.id}" />
-					<g:link class="edit" action="edit" id="${sessionInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
+					<g:link class="edit" action="edit" resource="${sessionInstance}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
 					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 				</fieldset>
 			</g:form>

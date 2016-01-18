@@ -1,16 +1,10 @@
 package flexygames
 
-import java.util.Map;
-
-import groovy.sql.Sql
-
 import org.apache.shiro.SecurityUtils
-import org.hibernate.SessionFactory
-
 import com.lucastex.grails.fileuploader.UFile
 
 
-class Team implements Comparable<Team> {
+class Team implements Comparable {
 
 	String name
 	String description
@@ -47,7 +41,7 @@ class Team implements Comparable<Team> {
 		memberships cascade: "all-delete-orphan"
 	}
 
-	static transients = ['members', 'managers', 'allSessions', 'allParticipationCount', 'allEffectiveParticipationCount', 'sessionFactory']
+	static transients = ['members', 'managers', 'sessions', 'allParticipationCount', 'allEffectiveParticipationCount', 'sessionFactory']
 
 	static constraints = {
 		name(blank: true, unique: true)
@@ -138,17 +132,23 @@ class Team implements Comparable<Team> {
 		}
 		return false
 	}
-	
-	List<Session> getAllSessions() {
-		def result = []
-		sessionGroups.each{ g ->
-			Session.findAllByGroup(g, [sort:"date", order:"desc"]).each{
-				result << it
-			}
-		}
-		return result
+
+	int countSessions() {
+		// bug avec countBy() qui plante parfois ?
+		//return Session.countByGroupInList(getSessionGroups())
+		return Session.findAllByGroupInList(sessionGroups).size()
 	}
-	
+
+	List<Session> getSessions(params) {
+		return Session.findAllByGroupInList(sessionGroups, [sort:params.sort, order:params.order, max:params.max, offset:params.offset])
+	}
+
+	// TODO
+	def getBlogEntriesForAllMembers(params) {
+		def members = this.getMembers();
+		BlogEntry.findAllByUserInList(members, params)
+	}
+
 	List<Session> getAllSessionGroups() {
 		def result = []
 		sessionGroups.each{ g ->

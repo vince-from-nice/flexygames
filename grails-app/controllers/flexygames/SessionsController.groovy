@@ -1,5 +1,11 @@
 package flexygames
 
+import flexygames.Participation
+import flexygames.Session
+import flexygames.Team
+import flexygames.User
+import flexygames.Vote
+
 import java.text.SimpleDateFormat
 
 import org.apache.shiro.SecurityUtils

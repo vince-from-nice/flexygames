@@ -24,7 +24,7 @@
 	width: 200px;
 	float: left;
 	height: auto;
-	background-color: FFFFF
+	background-color: FFFFF;
 }
 
 #mainBody {
@@ -91,6 +91,28 @@ table { //
 /* mais on ne veut PAS avoir cet effet sur TOUS les tableaux */
 th:hover, tr:hover {
 	background:;
+}
+
+/********************************/
+/* Blogs */
+/********************************/
+
+.userBlogEntry {
+	margin: 10px;
+	border: 2px solid #037880;
+	padding: 10px;
+}
+
+.competitionBlogEntry {
+	margin: 10px;
+	border: 2px solid #af6b33;
+	padding: 10px;
+}
+
+.trainingBlogEntry {
+	margin: 10px;
+	border: 2px solid green;
+	padding: 10px;
 }
 
 /********************************/

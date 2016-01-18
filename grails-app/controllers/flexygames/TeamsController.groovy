@@ -1,7 +1,5 @@
 package flexygames
 
-import java.util.Map;
-
 class TeamsController {
 
 	def index = { redirect(action:"list") }
@@ -26,16 +24,46 @@ class TeamsController {
 			return redirect(action: "list")
 		}
 		if (!params.mode) {
-			if (team.getSessionGroups(true).size() > 0) {
+			/*if (team.getSessionGroups(true).size() > 0) {
 				params.mode = "competition"
 			} else {
 				params.mode = "training"
-			}
+			}*/
+			params.mode = "blogs"
 		}
-		if (params.mode == "ranking") {
+		if (params.mode == "blogs") {
+			params.teamId = team.id
+			params.max = Math.min(params.max ? params.int('max') : 10, 30)
+			if(!params.offset) params.offset = 0
+			if(!params.sort) params.sort = "date"
+			if(!params.order) params.order = "desc"
+			// Get blog entries for all users of the team
+			def userBlogEntries = team.getBlogEntriesForAllMembers()
+			// Create implicit blog entries from the sessions of the team
+			def sessions = team.getSessions(params)
+			def sessionBlogEntries = []
+			sessions.each { session ->
+				BlogEntry be = new BlogEntry()
+				be.date = session.date
+				be.team = session.group.defaultTeams[0]
+				be.session = session
+				if (session.name) {
+					be.title = session.name + " (" + session.date + ")"
+				} else {
+					be.title = session.group.competition
+				}
+
+				sessionBlogEntries << be
+			}
+			// TODO merge the pagination between userBlogEntries and sessionBlogEntries
+			def blogEntriesTotal = team.countSessions()
+			def allBlogEntries = userBlogEntries + sessionBlogEntries
+			return [teamInstance: team, allBlogEntries: allBlogEntries, blogEntriesTotal: blogEntriesTotal, params: params]
+		}
+		else if (params.mode == "ranking") {
 			def criteria = (params.criteria ? params.criteria : 'statuses.doneGood')
 			def sessionGroupId = (params.sessionGroupId ? Integer.parseInt(params.sessionGroupId) : 0)
-			 [teamInstance: team, members: getMembersTreeForRanking(params, team, criteria, sessionGroupId), currentCriteria: criteria, currentSessionGroupId: sessionGroupId]
+			 return [teamInstance: team, members: getMembersTreeForRanking(params, team, criteria, sessionGroupId), currentCriteria: criteria, currentSessionGroupId: sessionGroupId]
 		} else {
 			[teamInstance: team]
 		}

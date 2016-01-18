@@ -1,105 +1,104 @@
 package flexygames.admin
 
-import org.springframework.dao.DataIntegrityViolationException
+import flexygames.Session
 
-import flexygames.Session;
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
 
+@Transactional(readOnly = true)
 class SessionController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() {
-        redirect(action: "list", params: params)
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Session.list(params), model:[sessionInstanceCount: Session.count()]
     }
 
-    def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [sessionInstanceList: Session.list(params), sessionInstanceTotal: Session.count()]
+    def show(Session sessionInstance) {
+        respond sessionInstance
     }
 
     def create() {
-        [sessionInstance: new Session(params)]
+        respond new Session(params)
     }
 
-    def save() {
-        def sessionInstance = new Session(params)
-        if (!sessionInstance.save(flush: true)) {
-            render(view: "create", model: [sessionInstance: sessionInstance])
+    @Transactional
+    def save(Session sessionInstance) {
+        if (sessionInstance == null) {
+            notFound()
             return
         }
 
-		flash.message = message(code: 'default.created.message', args: [message(code: 'session.label', default: 'Session'), sessionInstance.id])
-        redirect(action: "show", id: sessionInstance.id)
-    }
-
-    def show() {
-        def sessionInstance = Session.get(params.id)
-        if (!sessionInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])
-            redirect(action: "list")
+        if (sessionInstance.hasErrors()) {
+            respond sessionInstance.errors, view:'create'
             return
         }
 
-        [sessionInstance: sessionInstance]
-    }
+        sessionInstance.save flush:true
 
-    def edit() {
-        def sessionInstance = Session.get(params.id)
-        if (!sessionInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        [sessionInstance: sessionInstance]
-    }
-
-    def update() {
-        def sessionInstance = Session.get(params.id)
-        if (!sessionInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        if (params.version) {
-            def version = params.version.toLong()
-            if (sessionInstance.version > version) {
-                sessionInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'session.label', default: 'Session')] as Object[],
-                          "Another user has updated this Session while you were editing")
-                render(view: "edit", model: [sessionInstance: sessionInstance])
-                return
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'session.label', default: 'Session'), sessionInstance.id])
+                redirect sessionInstance
             }
+            '*' { respond sessionInstance, [status: CREATED] }
         }
-
-        sessionInstance.properties = params
-
-        if (!sessionInstance.save(flush: true)) {
-            render(view: "edit", model: [sessionInstance: sessionInstance])
-            return
-        }
-
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'session.label', default: 'Session'), sessionInstance.id])
-        redirect(action: "show", id: sessionInstance.id)
     }
 
-    def delete() {
-        def sessionInstance = Session.get(params.id)
-        if (!sessionInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])
-            redirect(action: "list")
+    def edit(Session sessionInstance) {
+        respond sessionInstance
+    }
+
+    @Transactional
+    def update(Session sessionInstance) {
+        if (sessionInstance == null) {
+            notFound()
             return
         }
 
-        try {
-            sessionInstance.delete(flush: true)
-			flash.message = message(code: 'default.deleted.message', args: [message(code: 'session.label', default: 'Session'), params.id])
-            redirect(action: "list")
+        if (sessionInstance.hasErrors()) {
+            respond sessionInstance.errors, view:'edit'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'session.label', default: 'Session'), params.id])
-            redirect(action: "show", id: params.id)
+
+        sessionInstance.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'Session.label', default: 'Session'), sessionInstance.id])
+                redirect sessionInstance
+            }
+            '*'{ respond sessionInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(Session sessionInstance) {
+
+        if (sessionInstance == null) {
+            notFound()
+            return
+        }
+
+        sessionInstance.delete flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Session.label', default: 'Session'), sessionInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

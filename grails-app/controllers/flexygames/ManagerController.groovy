@@ -194,7 +194,7 @@ class ManagerController {
 		for (User player : sessionInstance.getParticipantsByStatus(Participation.Status.DONE_BAD.code)) {
 			player.updateGateCrashCounter(-1)
 		}
-		for (Comment comment : sessionInstance.comments) {
+		for (SessionComment comment : sessionInstance.comments) {
 			comment.user.updateCommentCounter(-1)
 		}
 		try {

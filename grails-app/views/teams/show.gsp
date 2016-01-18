@@ -56,7 +56,7 @@
 					<br />
 					<g:message code="team.stats.totalOfSessions" /> :
 					<span style="font-size: 20px; font-weight: bold;">
-						${teamInstance.allSessions.size()}
+						${teamInstance.countSessions()}
 					</span>
 					<br />
 					<g:message code="team.stats.totalOfEffectiveSessions" /> :
@@ -97,54 +97,72 @@
 	</table>
 	
 	<table style="width: 100%; ">
-	
+
+		<g:if test="${params.mode=='blogs' }">
+			<g:set var="classForBlogsTab" value="tabSelected" />
+			<g:set var="classForCompetitionTab" value="tabNotSelected" />
+			<g:set var="classForTrainingTab" value="tabNotSelected" />
+			<g:set var="classForMembersTab" value="tabNotSelected" />
+			<g:set var="classForRankingTab" value="tabNotSelected" />
+		</g:if>
 		<g:if test="${params.mode=='competition' }">
+			<g:set var="classForBlogsTab" value="tabNotSelected" />
 			<g:set var="classForCompetitionTab" value="tabSelected" />
 			<g:set var="classForTrainingTab" value="tabNotSelected" />	
 			<g:set var="classForMembersTab" value="tabNotSelected" />
 			<g:set var="classForRankingTab" value="tabNotSelected" />
 		</g:if>
 		<g:if test="${params.mode=='training' }">
+			<g:set var="classForBlogsTab" value="tabNotSelected" />
 			<g:set var="classForCompetitionTab" value="tabNotSelected" />
 			<g:set var="classForTrainingTab" value="tabSelected" />	
 			<g:set var="classForMembersTab" value="tabNotSelected" />
 			<g:set var="classForRankingTab" value="tabNotSelected" />
 		</g:if>
 		<g:if test="${params.mode=='members' }">
+			<g:set var="classForBlogsTab" value="tabNotSelected" />
 			<g:set var="classForCompetitionTab" value="tabNotSelected" />
 			<g:set var="classForTrainingTab" value="tabNotSelected" />	
 			<g:set var="classForMembersTab" value="tabSelected" />
 			<g:set var="classForRankingTab" value="tabNotSelected" />
 		</g:if>
 		<g:if test="${params.mode=='ranking' }">
+			<g:set var="classForBlogsTab" value="tabNotSelected" />
 			<g:set var="classForCompetitionTab" value="tabNotSelected" />
 			<g:set var="classForTrainingTab" value="tabNotSelected" />	
 			<g:set var="classForMembersTab" value="tabNotSelected" />
 			<g:set var="classForRankingTab" value="tabSelected" />
 		</g:if>
-		
+
+		<g:set var="blogsLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'blogs'])}" />
 		<g:set var="competitionLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'competition'])}" />
 		<g:set var="trainingLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'training'])}" />
 		<g:set var="membersLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'members'])}" />
 		<g:set var="rankingLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'ranking'])}" />
-		
+
 		<tr style="">
-			<td class="${classForCompetitionTab}" style="width: 25%;  cursor: pointer;" onclick="document.location='${competitionLink}'">
+			<td class="${classForBlogsTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${blogsLink}'">
+				<b><g:message code="blogs"/></b>
+			</td>
+			<td class="${classForCompetitionTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${competitionLink}'">
 				<b><g:message code="competitions"/></b>
 			</td>
-			<td class="${classForTrainingTab}" style="width: 25%;  cursor: pointer;" onclick="document.location='${trainingLink}'">
+			<td class="${classForTrainingTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${trainingLink}'">
 				<b><g:message code="trainings"/></b>
 			</td>
-			<td class="${classForMembersTab}" style="width: 25%;  cursor: pointer;" onclick="document.location='${membersLink}'">
+			<td class="${classForMembersTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${membersLink}'">
 				<b><g:message code="members"/></b>
 			</td>
-			<td class="${classForRankingTab}" style="width: 25%;  cursor: pointer;" onclick="document.location='${rankingLink}'">
+			<td class="${classForRankingTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${rankingLink}'">
 				<b><g:message code="rankings"/></b>
 			</td>
 		</tr>
 		
 		<tr>
-			<td colspan="4">			
+			<td colspan="4">
+				<g:if test="${params.mode=='blogs'}">
+					<g:render template="showBlog" />
+				</g:if>
 				<g:if test="${params.mode=='competition' || params.mode=='training' }">
 					<g:render template="showSessions" />
 				</g:if>

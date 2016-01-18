@@ -57,7 +57,7 @@
 						</b> <g:message code="team.list.withXmanagers"
 								args="[teamInstance.managers.size()]" /></td>
 						<td style="text-align: right; vertical-align: middle;"><b>
-								${teamInstance.allSessions.size()}
+								${teamInstance.countSessions()}
 						</b> <g:message code="team.list.withXgroups"
 								args="[teamInstance.sessionGroups.size()]" /></td>
 					</tr>

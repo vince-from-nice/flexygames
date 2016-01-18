@@ -12,8 +12,8 @@ class ForumService {
 	
 	def mailerService
 	
-    def Comment postComment(User user, Session session, String text) throws Exception  {
-		def comment = new Comment(user: user, session: session, date: new Date(), text: text)
+    def SessionComment postComment(User user, Session session, String text) throws Exception  {
+		def comment = new SessionComment(user: user, session: session, date: new Date(), text: text)
 		// clean the input before insert it into DB
 		comment.text = comment.text.replace(System.getProperty("line.separator"), "<br>" + System.getProperty("line.separator"))
 		comment.text = new Jsoup().clean(comment.text, Whitelist.basicWithImages())

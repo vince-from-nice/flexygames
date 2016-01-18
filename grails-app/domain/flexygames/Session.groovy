@@ -16,7 +16,7 @@ class Session implements Comparable<Session> {
 	SortedSet<Reminder> reminders
 	List<SessionRound> rounds
 	SortedSet<Vote> votes
-	SortedSet<Comment> comments
+	SortedSet<SessionComment> comments
 	String imageUrl
 	String galleryUrl
 	Date creation
@@ -30,7 +30,7 @@ class Session implements Comparable<Session> {
 	///////////////////////////////////////////////////////////////////////////
 	
     static hasMany = [participations: Participation, reminders: Reminder, rounds: SessionRound, 
-			votes: Vote, comments: Comment, compositions: Composition]
+			votes: Vote, comments: SessionComment, compositions: Composition]
 
     static constraints = {
 		date(nullable: false)

@@ -1,10 +1,7 @@
 package flexygames
 
-
 import flexygames.admin.SessionController
 import grails.test.mixin.*
-
-import org.junit.*
 
 @TestFor(SessionController)
 @Mock(Session)
