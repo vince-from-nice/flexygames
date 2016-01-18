@@ -5,8 +5,7 @@
 				<g:form name="statsForm" action="show">
 					<g:hiddenField name="id" value="${teamInstance.id}"/>
 					<g:hiddenField name="mode" value="${params.mode}"/>
-					<h2><g:message code="Options" /></h2>
-					<br />
+					<div style="border: 2px solid darkcyan; background-color: #ddeedd; color: darkgreen; padding: 10px; width: auto">
 					<g:message code="stats.selectCriteria" /> :
 					<br />
 					<g:select name="criteria" value="${currentCriteria}" valueMessagePrefix="stats.criteria" from="[
@@ -26,6 +25,7 @@
 						</div>
 					</g:if>
 					<br/>
+					<br />
 					<g:message code="stats.selectSessionGroup" /> :
 					<br/>
 					<g:select name="sessionGroupId" value="${currentSessionGroupId}" from="${teamInstance.allSessionGroups}" optionKey="id"
@@ -34,6 +34,7 @@
 					<br/>
 					<g:message code="stats.clickAndWait" /> :
 					<g:submitButton name="Click & Wait" />
+					</div>
 					<br/>
 					<br/>
 					<div style="border: 2px solid orange; background-color: #FFF3F3; color: darkgreen; padding: 10px; width: auto">
