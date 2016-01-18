@@ -1,6 +1,7 @@
 target*
 upload*
 misc
+classes
 .project
 .classpath
 .settings
