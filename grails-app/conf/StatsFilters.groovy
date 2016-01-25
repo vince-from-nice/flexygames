@@ -19,15 +19,16 @@ class StatsFilters {
 				// car le servletApplication est null dans certaines gsp, bug de grails 2.0 ?
 				request.onlineUsers = servletContext.onlineUsers
 				
-				if (controllerName != "fileUploader") {
+				if (controllerName != "fileUploader" && controllerName != 'assets') {
 					
 					// keep init time for stats
 					request.setProperty("timeBeforeController", System.currentTimeMillis())
 					// logging every action, big brother is watching you !
 					def username = SecurityUtils.getSubject().getPrincipal().toString()
 					if (username == "null") username = "anonymous"
+					println '**************************************************************************************************************'
 					println (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " FlexyGames : User $username is doing " + controllerName + "/" + actionName)
-					
+					println '**************************************************************************************************************'
 
 					// who's online
 					def onlineUsers = servletContext.onlineUsers

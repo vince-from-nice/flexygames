@@ -66,7 +66,7 @@
                                   <label for="group"><nobr><g:message code="session.group" default="Group" /><font color="red">*</font></nobr></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'group', 'errors')}">
-									<g:select name="group.id" from="${sessionInstance.group.defaultTeams.first().allSessionGroups}"  
+									<g:select name="group.id" from="${sessionInstance.group.defaultTeams.first().sessionGroups}"
 										optionKey="id" value="${sessionInstance.group.id}" />
                                 </td>
                                 <td style="font-size: 12px">

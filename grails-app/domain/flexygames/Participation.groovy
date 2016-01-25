@@ -60,6 +60,12 @@ class Participation implements Comparable<Participation> {
 		lastUpdate(nullable: true)
 		lastUpdater(nullable: true, blank:false)
 	}
+
+	static mapping = {
+		//cache true
+		player fetch: 'join'
+		session fetch: 'join'
+	}
 	
 	///////////////////////////////////////////////////////////////////////////
 	// Business methods
@@ -187,18 +193,15 @@ class Participation implements Comparable<Participation> {
 //		return false
 //	}
 
-	int compareTo(Object o) {
-		if (o instanceof Participation && o.session.id == o.session.id) {
-			int i = statusCode.compareTo(o.statusCode)
-			if (i != 0) {
-				return i
-			}
-			if (statusCode == Status.AVAILABLE.code()) {
-				i = lastUpdate.compareTo(o.lastUpdate)
-				if (i != 0) return i
-			}
-			return player.compareTo(o.player)
+	int compareTo(Participation o) {
+		int i = statusCode.compareTo(o.statusCode)
+		if (i != 0) {
+			return i
 		}
-		return -1
+		if (statusCode == Status.AVAILABLE.code()) {
+			i = lastUpdate.compareTo(o.lastUpdate)
+			if (i != 0) return i
+		}
+		return player.compareTo(o.player)
 	}
 }

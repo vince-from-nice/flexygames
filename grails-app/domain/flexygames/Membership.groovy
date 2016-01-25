@@ -24,14 +24,12 @@ class Membership implements Comparable<Membership> {
     }
 	
 	static mapping = {
+		//cache true
 		subscriptions lazy: true // no need to load them
 	}
 	
-	public int compareTo (Object o) {
-		if (o instanceof Membership) {
-			return user.compareTo(o.user)
-		}
-		else return -1
+	public int compareTo (Membership o) {
+		return user.compareTo(o.user)
 	}
 	
 	String toString() {

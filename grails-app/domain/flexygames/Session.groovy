@@ -2,7 +2,7 @@ package flexygames
 
 import org.apache.shiro.SecurityUtils
 
-class Session implements Comparable<Session> {
+class Session implements Comparable {
 
     String name
     String description
@@ -66,6 +66,7 @@ class Session implements Comparable<Session> {
     ]
 	
 	static mapping = {
+		//cache true
 		sort date: "desc"
 		playground (fetch: 'join')
 		type (fetch:'join')

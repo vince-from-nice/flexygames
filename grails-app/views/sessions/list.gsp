@@ -37,7 +37,7 @@
 			<g:form name="groupFilterForm" action="list">
 				<g:set var="groups" value="${flexygames.SessionGroup.list(sort: 'name')}"/>
 				<g:if test="${session.filteredTeam && session.filteredTeam != 'ALL'}" >
-					<g:set var="groups" value="${flexygames.Team.get(session.filteredTeam).getAllSessionGroups()}"/>
+					<g:set var="groups" value="${flexygames.Team.get(session.filteredTeam).sessionGroups}"/>
 				</g:if>
 				<g:select name="filteredSessionGroup" from="${groups}"
 					optionKey="id" value="${session.filteredSessionGroup}" noSelection="['ALL': message(code:'session.list.filter.allSessionGroups')]"

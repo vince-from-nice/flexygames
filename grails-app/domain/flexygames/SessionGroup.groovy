@@ -51,7 +51,7 @@ class SessionGroup implements Comparable<SessionGroup> {
 	static mapping = {
 		sort "name"
 		sessions sort: 'date', order: 'desc'
-		defaultTeams lazy: false
+		defaultTeams lazy: false, batchSize: 50
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
@@ -109,15 +109,12 @@ class SessionGroup implements Comparable<SessionGroup> {
 			return false
 		}
 	}
-	
-	public int compareTo (Object o) {
-		if (o instanceof SessionGroup) {
-			if (defaultTeams.size() > 0 && o.defaultTeams.size() > 0) {
-				int i = defaultTeams.first().compareTo(o.defaultTeams.first())
-				if (i != 0) return i
-			}
-			return name.compareTo(o.name)
+
+	public int compareTo (SessionGroup o) {
+		if (defaultTeams.size() > 0 && o.defaultTeams.size() > 0) {
+			int i = defaultTeams.first().compareTo(o.defaultTeams.first())
+			if (i != 0) return i
 		}
-		return -1
+		return name.compareTo(o.name)
 	}
 }

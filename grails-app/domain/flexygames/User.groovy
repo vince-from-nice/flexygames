@@ -55,6 +55,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 
 	static mapping = {
 		table 'uzer'
+		//cache true
 		avatar fetch: 'join'
 		memberships lazy: true
 		participations lazy: true, batchSize: 50
@@ -522,11 +523,8 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return false
 	}
 	
-    public int compareTo (Object o) {
-        if (o instanceof User) {
-            return this.getUsername().toLowerCase().compareTo(o.getUsername().toLowerCase())
-        }
-        else return -1
+    public int compareTo (User o) {
+		return this.getUsername().toLowerCase().compareTo(o.getUsername().toLowerCase())
     }
 
     public String toString() {

@@ -35,10 +35,9 @@ class Team implements Comparable {
 	]
 
 	static mapping = {
-//		members joinTable : "uzer_teams"
-//		managers joinTable: "team_managers"
-		defaultSessionGroup join:'fetch' 
-		memberships cascade: "all-delete-orphan"
+		memberships lazy: true, batchSize: 50, cascade: "all-delete-orphan"
+		sessionGroups lazy: false, batchSize: 50
+		//defaultSessionGroup join:'fetch'
 	}
 
 	static transients = ['members', 'managers', 'sessions', 'allParticipationCount', 'allEffectiveParticipationCount', 'sessionFactory']
@@ -134,29 +133,19 @@ class Team implements Comparable {
 	}
 
 	int countSessions() {
-		// bug avec countBy() qui plante parfois ?
-		//return Session.countByGroupInList(getSessionGroups())
-		return Session.findAllByGroupInList(sessionGroups).size()
+		if (!sessionGroups) return 0
+		return Session.countByGroupInList(sessionGroups)
 	}
 
 	List<Session> getSessions(params) {
 		return Session.findAllByGroupInList(sessionGroups, [sort:params.sort, order:params.order, max:params.max, offset:params.offset])
 	}
 
-	// TODO
 	def getBlogEntriesForAllMembers(params) {
 		def members = this.getMembers();
 		BlogEntry.findAllByUserInList(members, params)
 	}
 
-	List<Session> getAllSessionGroups() {
-		def result = []
-		sessionGroups.each{ g ->
-			result << g
-		}
-		return result
-	}
-	
 	List<Session> getSessionGroups(competition) {
 		def result = []
 		sessionGroups.each{ g ->
@@ -165,8 +154,18 @@ class Team implements Comparable {
 		}
 		return result
 	}
-	
+
 	List<Session> getAllEffectiveSessions() {
+		def result = []
+		Session.findAllByGroupInList(sessionGroups, [sort:"date", order:"desc"]).each{
+			if (it.isEffective()) {
+				result << it
+			}
+		}
+		return result
+	}
+
+	List<Session> getAllEffectiveSessionsOld() {
 		def result = []
 		sessionGroups.each{ g ->
 			Session.findAllByGroup(g, [sort:"date", order:"desc"]).each{
@@ -179,23 +178,18 @@ class Team implements Comparable {
 	}
 	
 	int getAllParticipationCount () {
-		def groups = sessionGroups
-		if (groups.size() == 0) {
+		if (sessionGroups.size() == 0) {
 			return 0
 		}
 		def q = Participation.where {
-			session.group in groups
+			session.group in sessionGroups
 		}
 		return q.count()
 	}
 	
 	int getAllEffectiveParticipationCount () {
-		def groups = sessionGroups
-		if (groups.size() == 0) {
-			return 0
-		}
 		def q = Participation.where {
-			(session.group in groups) && (statusCode == Participation.Status.DONE_GOOD.code || statusCode == Participation.Status.DONE_BAD.code)
+			(session.group in sessionGroups) && (statusCode == Participation.Status.DONE_GOOD.code || statusCode == Participation.Status.DONE_BAD.code)
 		}
 		return q.count()
 	}
@@ -204,9 +198,8 @@ class Team implements Comparable {
 		if (defaultSessionGroup) {
 			return defaultSessionGroup
 		}
-		def all = getAllSessionGroups()
-		if (all.size() > 0) return all.last()
-		return null
+		if (sessionGroups && sessionGroups.size() > 0) { return sessionGroups.last() }
+		else return null
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
