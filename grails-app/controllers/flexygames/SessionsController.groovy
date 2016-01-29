@@ -71,58 +71,52 @@ class SessionsController {
 	}
 
 	def show = {
-		def session = Session.get(params.id)
+		Session session = Session.get(params.id)
 		if (!session) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			redirect(action: "list")
 		}
-		else {
-			// Prepare data about participants
-			// Since Participation.compareTo() is smart there is nothing special to do, the participation table will well sorted
 
-			// Prepare data about compositions (move it to the Composition domain class) ?
-//			def playersByComposition = []
-//			session.compositions.each { compo ->
-//				def compositionPlayers = [:]
-//				compositionPlayers['compositionId'] = compo.id
-//				def players = []
-//				compo.items.each { item ->
-//					def player = [id: item.player.id, x: item.x, y: item.y]
-//					players << player
-//				}
-//				playersByComposition << compositionPlayers
-//			}
-			
-			// Prepare data about votes (move it to the Vote domain class) ?
-			def participantsByScore = []
-			session.getEffectiveParticipants().each{ player ->
-				int score = 0
-				def votes = Vote.findAllBySessionAndPlayer(session, player)
-				votes.each { vote ->
-					score += vote.score
-				}
-				player.scoreInCurrentSession = score
-				participantsByScore << player
-				participantsByScore.sort{it.scoreInCurrentSession}
-			}
-			def currentVotes = null
-			def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
-			if (user) {
-				currentVotes = [:]
-				def votes = Vote.findAllBySessionAndUser(session, user)
-				votes.each{ vote ->
-					if (vote.score == 3) currentVotes.put('firstPositive',  vote.player)
-					else if (vote.score == 2) currentVotes.put('secondPositive',  vote.player)
-					else if (vote.score == 1) currentVotes.put('thirdPositive',  vote.player)
-					else if (vote.score == -3) currentVotes.put('firstNegative',  vote.player)
-					else if (vote.score == -2) currentVotes.put('secondNegative',  vote.player)
-					else if (vote.score == -1) currentVotes.put('thirdNegative',  vote.player)
-				}
-			}
-			
-			[sessionInstance: session, /*playersByComposition: playersByComposition,*/ 
-				participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes ]
+		// Debug
+//		session.participations.each {
+//			println("- participant: " + it.player.username)
+//		}
+
+		// Prepare data about participants
+		// Since Participation.compareTo() is smart there is nothing special to do, the participation table will well sorted
+
+		// Prepare data about votes (move it to the Vote domain class) ?
+		def participantsByScore = []
+		def effectivePlayers = session.getEffectiveParticipants()
+		// Fetch all relevant votes in one query
+		def allVotes = Vote.findAllBySessionAndPlayerInList(session, effectivePlayers)
+		effectivePlayers.each{ player ->
+			int score = 0
+			//def votes = Vote.findAllBySessionAndPlayer(session, player)
+			def votes = allVotes.grep{it.player == player}
+			votes.each{vote -> score += vote.score}
+			player.scoreInCurrentSession = score
+			participantsByScore << player
+			participantsByScore.sort{it.scoreInCurrentSession}
 		}
+		def currentVotes = null
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (user) {
+			currentVotes = [:]
+			def votes = Vote.findAllBySessionAndUser(session, user)
+			votes.each{ vote ->
+				if (vote.score == 3) currentVotes.put('firstPositive',  vote.player)
+				else if (vote.score == 2) currentVotes.put('secondPositive',  vote.player)
+				else if (vote.score == 1) currentVotes.put('thirdPositive',  vote.player)
+				else if (vote.score == -3) currentVotes.put('firstNegative',  vote.player)
+				else if (vote.score == -2) currentVotes.put('secondNegative',  vote.player)
+				else if (vote.score == -1) currentVotes.put('thirdNegative',  vote.player)
+			}
+		}
+
+		[sessionInstance: session, /*playersByComposition: playersByComposition,*/
+			participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes ]
+
 	}
 
 	def update = {
@@ -133,7 +127,7 @@ class SessionsController {
 		}
 		Participation participation = Participation.get(params.id)
 		if (!participation) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Participation'), params.id])}"
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Participation'), params.id])}"
 			return redirect(action: "list")
 		}
 		try {
@@ -163,7 +157,7 @@ class SessionsController {
 		}
 		def session = Session.get(params.id)
 		if (!session) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
 		try  {
@@ -185,7 +179,7 @@ class SessionsController {
 		}
 		def session = Session.get(params.id)
 		if (!session) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			redirect(action: "list")
 		}
 		Participation participation = Participation.findBySessionAndPlayer(session, user)
@@ -212,14 +206,14 @@ class SessionsController {
 		}
 		def session = Session.get(params.id)
 		if (!session) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
 
 		def player = User.findByUsername(params.player)
 		if (!player) {
 			// TODO gérer ce cas afin de pouvoir annuler un vote
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player'), params.firstPositive])}"
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'player', default: 'Player'), params.firstPositive])}"
 			return redirect(action: "show", id: session.id)
 		}
 		
@@ -242,7 +236,7 @@ class SessionsController {
 		}
 		def session = Session.get(params.id)
 		if (!session) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
 		def comment
@@ -265,7 +259,7 @@ class SessionsController {
 		}
 		def session = Session.get(params.id)
 		if (!session) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
 		try {

@@ -72,11 +72,11 @@ class Session implements Comparable {
 		type (fetch:'join')
 		group (fetch:'join')
 		participations lazy: true, batchSize: 50
-		reminders lazy: true, batchSize: 10
-		rounds lazy: true, batchSize: 10
-		votes lazy: true, batchSize: 10
-		comments lazy: true, batchSize: 10
-		compositions lazy: true, batchSize:10
+		reminders lazy: true, batchSize: 50
+		rounds lazy: true, batchSize: 50
+		votes lazy: true, batchSize: 50
+		comments lazy: true, batchSize: 50
+		compositions lazy: true, batchSize:50
 	}
 	
 	///////////////////////////////////////////////////////////////////////////

@@ -58,6 +58,7 @@
                         </thead>
                         <tbody>
                         <g:if test="${sessionInstance.participations.size() > 0}">
+                            <g:set var="sessionIsManagedByCurrentUser" value="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}" />
 							<g:set var="hidePendingPlayersByDefault" value="${true}" />
 							<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
 								<g:set var="hidePendingPlayersByDefault" value="${false}" />
@@ -126,8 +127,7 @@
                                             <g:link controller="teams" action="show" id="${t.id}">${t}</g:link><br/>
                                         </g:each>
                                     </td>
-                                    <g:render template="/common/status"
-                                              model="['sessionInstance': sessionInstance, 'username': p.player.username]"/>
+                                    <g:render template="/common/status" model="['part': p, 'allStatusesArePossible':sessionIsManagedByCurrentUser]"/>
                                     <td style="vertical-align: middle; background-color: ${flexygames.Participation.Status.color(p.statusCode)}; font-size: 12px; border: solid black 1px">
                                         <g:if test="${p.lastUpdate}">
                                             <g:message code="session.show.participants.lastUpdate" args="[]"/>

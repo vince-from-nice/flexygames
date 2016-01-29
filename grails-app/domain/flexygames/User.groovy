@@ -57,12 +57,11 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		table 'uzer'
 		//cache true
 		avatar fetch: 'join'
-		memberships lazy: true
+		memberships lazy: true, batchSize: 50, cascade: "all-delete-orphan"
 		participations lazy: true, batchSize: 50
-		skills lazy: true
-		actions lazy: true
-		votes lazy: true
-		memberships cascade: "all-delete-orphan"
+		skills lazy: true, batchSize: 50
+		actions lazy: true, batchSize: 50
+		votes lazy: true, batchSize: 50
 	}
 
 	static transients = [ 'scoreInCurrentSession', 'relatedSessions', 'sessionGroups', 'teams', 
@@ -147,15 +146,10 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	}
 	
 	Membership getMembershipByTeam(Team team) {
-		// Les memberships ne sont pas chargés par défaut (malgré le lazy:false comme mapping !!) donc on refait une requete :(
-		//println "Checking $team for $this who has " + this.memberships.size() + " membership(s)"
-//		for (Membership ms : memberships) {
-//			if (ms.team.equals(team)) return ms
-//		}
-//		return null
-		return flexygames.Membership.findByUserAndTeam(this, team)
+		//return flexygames.Membership.findByUserAndTeam(this, team)
+		return memberships.find{team == it.team}
 	}
-	
+
 	SortedSet<SessionGroup> getSessionGroups() {
 		SortedSet<SessionGroup> result = new TreeSet<SessionGroup>()
 		teams.each { team ->

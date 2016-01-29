@@ -25,7 +25,9 @@ class Membership implements Comparable<Membership> {
 	
 	static mapping = {
 		//cache true
-		subscriptions lazy: true // no need to load them
+		user fetch: 'join'
+		user team: 'join'
+		subscriptions lazy: true, batchSize: 50
 	}
 	
 	public int compareTo (Membership o) {

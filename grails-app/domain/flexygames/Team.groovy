@@ -36,7 +36,7 @@ class Team implements Comparable {
 
 	static mapping = {
 		memberships lazy: true, batchSize: 50, cascade: "all-delete-orphan"
-		sessionGroups lazy: false, batchSize: 50
+		sessionGroups lazy: true, batchSize: 50
 		//defaultSessionGroup join:'fetch'
 	}
 
