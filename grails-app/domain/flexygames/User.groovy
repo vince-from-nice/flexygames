@@ -26,13 +26,16 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	Date lastLogin
 	Date lastLogout
 	String calendarToken
-	int scoreInCurrentSession // transient
 	Integer partCounter
 	Integer absenceCounter
 	Integer gateCrashCounter
 	Integer actionCounter
 	Integer voteCounter
 	Integer commentCounter
+	int scoreInCurrentSession // transient
+	Membership membershipInCurrentSession // transient
+	SortedSet<Team> teamsInCurrentSession = new TreeSet<Team>() // transient
+	String avatarPath // transient
 
 	SortedSet<flexygames.Role> roles
 	SortedSet<Membership> memberships
@@ -64,13 +67,14 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		votes lazy: true, batchSize: 50
 	}
 
-	static transients = [ 'scoreInCurrentSession', 'relatedSessions', 'sessionGroups', 'teams', 
-		 'wins', 'defeats', 'draws', 'rounds', 'votingScore', 'actionScore', 'effectiveParticipations' ]
-	
-	public static Pattern USERNAME_VALID_CHARS = Pattern.compile("[A-Za-zÃ©Ã‰Ã¨ÃˆÃ´Ã”Ã§Ã‡0-9_\\-]+");
+	static transients = [ 'scoreInCurrentSession', 'membershipInCurrentSession', 'teamsInCurrentSession', 'avatarPath',
+						  'relatedSessions', 'sessionGroups', 'teams', 'wins', 'defeats', 'draws', 'rounds',
+						  'votingScore', 'actionScore', 'effectiveParticipations' ]
+
+	public static Pattern USERNAME_VALID_CHARS = Pattern.compile("[A-Za-zéÉèÈôÔçÇ0-9_\\-]+");
 
     static constraints = {
-        username(nullable: false, blank: false, unique: true, minSize: 2, 
+        username(nullable: false, blank: false, unique: true, minSize: 2,
 			validator: {val -> Matcher m = USERNAME_VALID_CHARS.matcher(val); m.matches()})
         //passwordHash(nullable: false, blank: false)
 		roles(nullable:false, minSize:1)

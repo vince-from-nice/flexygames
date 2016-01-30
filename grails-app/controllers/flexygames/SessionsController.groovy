@@ -1,16 +1,7 @@
 package flexygames
 
-import flexygames.Participation
-import flexygames.Session
-import flexygames.Team
-import flexygames.User
-import flexygames.Vote
-
-import java.text.SimpleDateFormat
-
+import com.lucastex.grails.fileuploader.UFile
 import org.apache.shiro.SecurityUtils
-import org.jsoup.Jsoup
-import org.jsoup.safety.Whitelist;
 
 class SessionsController {
 	
@@ -77,15 +68,48 @@ class SessionsController {
 			redirect(action: "list")
 		}
 
-		// Debug
-//		session.participations.each {
-//			println("- participant: " + it.player.username)
-//		}
+		def allPlayers = session.participations*.player
 
 		// Prepare data about participants
 		// Since Participation.compareTo() is smart there is nothing special to do, the participation table will well sorted
 
-		// Prepare data about votes (move it to the Vote domain class) ?
+		// Prepare data about memberships of participants (for feesUpToDate)
+		Team defaultTeam = session.group.defaultTeams.first()
+		// Fetch membership of all users of the session in a batch way
+		def allMembershipsForCurrentSession = Membership.findAllByTeamAndUserInList(defaultTeam, allPlayers)
+//		session.participations.each { part ->
+//			def player = part.player
+//			def membership = allMembershipsForCurrentSession.find{it.user == player}
+//			player.membershipInCurrentSession = membership
+//			//println("- participant: " + player.username + " has fees up to date:" + membership?.feesUpToDate)
+//		}
+		allMembershipsForCurrentSession.each { membership ->
+			def player = allPlayers.find{it == membership.user}
+			player.membershipInCurrentSession = membership
+		}
+
+		// Prepare data about teams of participants
+		def allMembershipsForAnySession = Membership.findAllByUserInList(allPlayers)
+		// The previous request has fetched memberships of all players in one shot, now dispatch associated teams into their relative players
+		allMembershipsForAnySession.each { membership ->
+			def player = allPlayers.find{it == membership.user}
+			player.teamsInCurrentSession << membership.team
+		}
+
+		// Prepare data about about avatars of participants
+//		def allPlayerIds = allPlayers*.avatar.id
+//		def allUFiles = UFile.getAll(allPlayerIds)
+//		// The previous request has fetched avatars of all players in one shot, now dispatch them into their relative players
+//		allUFiles.each{ ufile ->
+//			if (ufile) {
+//				def player = allPlayers.find { it.avatar?.id == ufile.id }
+//				if (player) {
+//					player.avatarPath = ufile.path
+//				}
+//			}
+//		}
+
+		// Prepare data about votes of participants (move it to the Vote domain class) ?
 		def participantsByScore = []
 		def effectivePlayers = session.getEffectiveParticipants()
 		// Fetch all relevant votes in one query
@@ -114,9 +138,25 @@ class SessionsController {
 			}
 		}
 
-		[sessionInstance: session, /*playersByComposition: playersByComposition,*/
-			participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes ]
+		[sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes ]
+	}
 
+	// TODO remake the grails file uploader plugin
+	def showAvatar = {
+	def file = new File(params.path)
+		if (file.exists()) {
+			log.debug "Serving file path=${params.path} to ${request.remoteAddr}"
+			response.setContentType("application/octet-stream")
+			response.setHeader("Content-disposition", "${params.contentDisposition}; filename=${file.name}")
+			response.outputStream << file.readBytes()
+			return
+		} else {
+			def msg = messageSource.getMessage("fileupload.download.filenotfound", [params.path] as Object[], request.locale)
+			log.error msg
+			flash.message = msg
+			redirect controller: params.errorController, action: params.errorAction
+			return
+		}
 	}
 
 	def update = {

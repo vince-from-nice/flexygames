@@ -173,17 +173,19 @@ fileuploader {
 	avatar {
 		maxSize = 1024 * 32
 		allowedExtensions = ["jpg","jpeg","gif","png", "JPG", "JPEG", "GIF", "PNG"]
-		//path = "/home/turman/Workspace/GGTS/FlexyGames/upload/avatar/"
-		path = "E:\\Repositories\\flexygames\\upload\\avatar" 
 	}
 	logo {
 		maxSize = 1024 * 32
 		allowedExtensions = ["jpg","jpeg","gif","png", "JPG", "JPEG", "GIF", "PNG"]
-		//path = "/home/turman/Workspace/GGTS/FlexyGames/upload/logo/"
-		path   = "E:\\Repositories\\flexygames\\upload\\logo"
 	}
 }
 environments {
+    development {
+        //fileuploader.avatar.path = "/home/turman/Workspace/GGTS/FlexyGames/upload/avatar/"
+        fileuploader.avatar.path = "E:\\Repositories\\flexygames\\upload\\avatar"
+        //fileuploader.logo.path = "/home/turman/Workspace/GGTS/FlexyGames/upload/logo/"
+        fileuploader.logo.path   = "E:\\Repositories\\flexygames\\upload\\logo"
+    }
 	production {
 		fileuploader.avatar.path = "/home/asas/upload/flexygames/avatar/"
 		fileuploader.logo.path = "/home/asas/upload/flexygames/logo/" 

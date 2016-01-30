@@ -82,7 +82,7 @@
                                             ${p.player}
                                         </g:link><br/>
                                         <nobr>
-                                            <g:if test="${p.player.getMembershipByTeam(request.defaultFirstTeam)?.feesUpToDate}">
+                                            <g:if test="${p.player.membershipInCurrentSession?.feesUpToDate}">
                                                 <span style="font-size: 10px; color: green"><g:message
                                                         code="team.show.membership.feesUpToDate"/></span>
                                             </g:if>
@@ -123,7 +123,7 @@
                                         </nobr>
                                     </td>
                                     <td style="vertical-align: middle; font-size: 10px; line-height: 10px; border: solid grey 1px">
-                                        <g:each in="${p.player.teams}" var="t">
+                                        <g:each in="${p.player.teamsInCurrentSession}" var="t">
                                             <g:link controller="teams" action="show" id="${t.id}">${t}</g:link><br/>
                                         </g:each>
                                     </td>

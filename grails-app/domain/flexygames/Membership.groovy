@@ -26,7 +26,7 @@ class Membership implements Comparable<Membership> {
 	static mapping = {
 		//cache true
 		user fetch: 'join'
-		user team: 'join'
+		team fetch: 'join'
 		subscriptions lazy: true, batchSize: 50
 	}
 	
