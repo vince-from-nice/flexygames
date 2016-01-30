@@ -98,7 +98,7 @@
 										</th>
 									</tr>
 								</g:if>
-								<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+								<g:if test="${sessionIsManagedByCurrentUser}">
 									<tr>
 										<td colspan="2">
 										    <g:form controller="manager">
@@ -165,7 +165,7 @@
 					</td>
 				</g:else>
 			</tr>
-			<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+			<g:if test="${sessionIsManagedByCurrentUser}">
 				<tr>
 					<td>
 					    <g:if test="${sessionInstance.date.time > System.currentTimeMillis() }">

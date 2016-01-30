@@ -226,7 +226,7 @@ forceRedraw(el);
 									</tr>
 									<tr>
 										<td style="padding: 0px; margin: 0px; ">
-											<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+											<g:if test="${sessionIsManagedByCurrentUser}">
 												<div class="buttons" style="margin: 5px; ">
 													<input id="edit-button-for-compo-${composition.id}" type="button" class="edit" onclick="editComposition(${composition.id})" value="${message(code:'edit')}" />
 													<g:actionSubmit class="create" action="duplicateComposition" value="${message(code:'duplicate')}" onclick="alert('Sorry, not yet implemented'); return false; " />
@@ -249,7 +249,7 @@ forceRedraw(el);
 				<br />
 				<br />
 			</g:else>
-			<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+			<g:if test="${sessionIsManagedByCurrentUser}">
 				<tr>
 					<td>
 						<g:form controller="manager">

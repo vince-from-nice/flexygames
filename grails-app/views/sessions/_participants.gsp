@@ -11,7 +11,7 @@
     <div class="sessionZoneContent">
         <g:set var="defaultDisplayForSummaryZone" value="table"/>
         <g:set var="defaultDisplayForDetailedZone" value="none"/>
-        <g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+        <g:if test="${sessionIsManagedByCurrentUser}">
             <g:set var="defaultDisplayForSummaryZone" value="none"/>
             <g:set var="defaultDisplayForDetailedZone" value="table"/>
         </g:if>
@@ -58,10 +58,9 @@
                         </thead>
                         <tbody>
                         <g:if test="${sessionInstance.participations.size() > 0}">
-                            <g:set var="sessionIsManagedByCurrentUser" value="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}" />
 							<g:set var="hidePendingPlayersByDefault" value="${true}" />
-							<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
-								<g:set var="hidePendingPlayersByDefault" value="${false}" />
+							<g:if test="${sessionIsManagedByCurrentUser}">
+								<g:set var="hidePendingPlayersByDefault" value="${true}" />
 							</g:if>
                             <g:javascript>var pendingParticipationIds = [];</g:javascript>
                             <g:each in="${sessionInstance.participations}" status="i" var="p">
@@ -275,7 +274,7 @@
                     </table>
                 </td>
             </tr>
-            <g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+            <g:if test="${sessionIsManagedByCurrentUser}">
                 <tr>
                     <td colspan="2">
                     <!--h3><g:message code="management.title"/></h3-->

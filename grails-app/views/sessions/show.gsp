@@ -44,6 +44,8 @@
 	<g:if test="${flash.error}">
 		<div class="errors">${flash.error}</div>
 	</g:if>
+
+	<g:set var="sessionIsManagedByCurrentUser" value="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}" />
 	
 	<g:render template="/sessions/infos" />
 

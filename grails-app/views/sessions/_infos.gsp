@@ -111,7 +111,7 @@
 	</tr>
 </table>
 
-<g:if test="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+<g:if test="${sessionIsManagedByCurrentUser}">
     <!--h3><g:message code="management.title" /></h3-->
 	<g:form controller="manager">
 	    <g:hiddenField name="id" value="${sessionInstance?.id}" />
