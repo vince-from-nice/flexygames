@@ -38,6 +38,7 @@ class MyselfController {
 		def allSessions = [];
 		int year = (params.year ? Integer.parseInt(params.year) : cal.get(Calendar.YEAR))
 		def firstWeek = (params.week ? Integer.parseInt(params.week) : cal.get(Calendar.WEEK_OF_YEAR))
+		cal.set(Calendar.YEAR, year)
 		cal.set(Calendar.WEEK_OF_YEAR, firstWeek)
 		for (i in 0..<WEEKS_NBR) {
 			def week = firstWeek + i
@@ -53,7 +54,7 @@ class MyselfController {
 			//cal.set(Calendar.WEEK_OF_YEAR, week + 1)
 			cal.add(Calendar.DAY_OF_YEAR, 7)
 			Date end = cal.getTime()
-			def sessions = user.getRelatedSessions(start, end)
+			def sessions = user.getAllSessions(start, end)
 			//println "start: $start"
 			//println "end: $end"
 			allSessions.add(sessions)
@@ -139,7 +140,7 @@ class MyselfController {
 		} else if (!team) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team')])}"
 			redirect(action: "myAccount")
-		} else if (user.teams.contains(team)) {
+		} else if (user.allTeams.contains(team)) {
 			flash.message = "Hey you've already joined $team !"
 			redirect(action: "myAccount")
 		} else {

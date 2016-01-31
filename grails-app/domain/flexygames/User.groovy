@@ -68,7 +68,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	}
 
 	static transients = [ 'scoreInCurrentSession', 'membershipInCurrentSession', 'teamsInCurrentSession', 'avatarPath',
-						  'relatedSessions', 'sessionGroups', 'teams', 'wins', 'defeats', 'draws', 'rounds',
+						  'relatedSessions', 'allSessionGroups', 'allTeams', 'wins', 'defeats', 'draws', 'rounds',
 						  'votingScore', 'actionScore', 'effectiveParticipations' ]
 
 	public static Pattern USERNAME_VALID_CHARS = Pattern.compile("[A-Za-zÈ…Ë»Ù‘Á«0-9_\\-]+");
@@ -107,20 +107,64 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	///////////////////////////////////////////////////////////////////////////
 	// Business methods
 	///////////////////////////////////////////////////////////////////////////
-	
-	List<User> getTeams() {
-		def teams = Team.createCriteria().list {
-			memberships {
-				eq ('user.id', this.id)
-			}
-			order 'name', 'asc'
+
+	// TODO on va revoir le lazy hein
+	List<Team> getAllParticipations() {
+		Participation.findAllByPlayer(this, [sort: "session.date", order:'desc'])
+	}
+
+	// TODO on va revoir le lazy hein
+	List<Membership> getAllMemberships() {
+		Membership.findAllByUser(this, [sort: "team.name", order:'asc'])
+	}
+
+	// TODO on va revoir le lazy hein
+	List<Vote> getAllVotes() {
+		Vote.findAllByPlayer(this, [sort: "session.name", order:'asc'])
+	}
+
+	// TODO normalement super simple: return memberships*.team
+	List<User> getAllTeams() {
+//		def teams = Team.createCriteria().list {
+//			memberships {
+//				eq ('user.id', this.id)
+//			}
+//			order 'name', 'asc'
+//		}
+
+		//  could not extract ResultSet; SQL [n/a]; Pas de valeur spÈcifiÈe pour le paramËtre 1
+//		def teams = Team.findAllByMembershipsInList(getAllMemberships())
+
+		def teams = []
+		def memberships = Membership.findAllByUser(this)
+		memberships.each {membership ->
+			teams << membership.team
 		}
+
 		return teams
 	}
-	
-	List<SessionGroup> getRelatedSessions(Date start, Date end) {
+
+	// TODO redo with one big request
+	SortedSet<SessionGroup> getAllSessionGroups() {
+		SortedSet<SessionGroup> result = new TreeSet<SessionGroup>()
+		def teams = getAllTeams()
+		teams.each { team ->
+			team.sessionGroups.each { group ->
+				result << group
+			}
+		}
+
+		// ERROR spi.SqlExceptionHelper  - Pas de valeur spÈcifiÈe pour le paramËtre 1.
+//		def teams = getAllTeams()
+//		SortedSet<SessionGroup> result = SessionGroup.findAllByDefaultTeamsInList(teams)
+
+		return result
+	}
+
+	// TODO redo with one big request
+	List<SessionGroup> getAllSessions(Date start, Date end) {
 		def result = []
-		getSessionGroups().each { group ->
+		getAllSessionGroups().each { group ->
 			group.sessions.each {
 				if ((start == null || it.date > start ) && (end == null || it.date < end )) {
 					result << it
@@ -130,16 +174,22 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		result = result.sort{ it.date }
 		return result
 	}
+
+	Membership getMembershipByTeam(Team team) {
+		//return flexygames.Membership.findByUserAndTeam(this, team)
+		return memberships.find{team == it.team}
+	}
 	
 	boolean isParticipantOf(Session session) {
 		return session.participations.findIndexOf  { it.player == this} 
 	}
-	
+
+	// Obsolete ?
 	boolean isManagedBy(String username) {
 		boolean result = false
 		if (!username) return false
 		User user = User.findByUsername(username)
-		teams.each { team ->
+		allTeams.each { team ->
 			if (team.managers.contains(user)) result = true
 		}
 		return result
@@ -147,21 +197,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	boolean isWatchingSession(Session s) {
 		return SessionWatch.findByUserAndSession(this, s) != null
-	}
-	
-	Membership getMembershipByTeam(Team team) {
-		//return flexygames.Membership.findByUserAndTeam(this, team)
-		return memberships.find{team == it.team}
-	}
-
-	SortedSet<SessionGroup> getSessionGroups() {
-		SortedSet<SessionGroup> result = new TreeSet<SessionGroup>()
-		teams.each { team ->
-			team.sessionGroups.each { group -> 
-				result << group
-			}
-		}
-		return result
 	}
 
 	List<Participation> getParticipationsVisibleInCalendar() {
@@ -184,7 +219,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		}
 		return result
 	}
-	
+
 	///////////////////////////////////////////////////////////////////////////
 	// Stats methods (need to move them)
 	///////////////////////////////////////////////////////////////////////////
@@ -413,21 +448,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 			if (group.id == p.session.group.id) score += p.votingScore
 		}
 		return score
-	}
-	
-	// damned pourquoi le SortedSet "participations" ne se remplit qu'avec une seul Èlement ? Evidemment passer en lazy:false ne change rien alors on le fait ‡ la main :(
-	List<Team> getAllParticipations() {
-		Participation.findAllByPlayer(this, [sort: "session.date", order:'desc'])
-	}
-	
-	// damned la mÍme chose !
-	List<Membership> getAllMemberships() {
-		Membership.findAllByUser(this, [sort: "team.name", order:'asc'])
-	}
-	
-	// damned la mÍme chose !
-	List<Vote> getAllVotes() {
-		Vote.findAllByPlayer(this, [sort: "session.name", order:'asc'])
 	}
 	
 	///////////////////////////////////////////////////////////////////////////

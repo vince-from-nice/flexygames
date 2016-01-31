@@ -75,7 +75,7 @@ class SessionsController {
 
 		// Prepare data about memberships of participants (for feesUpToDate)
 		Team defaultTeam = session.group.defaultTeams.first()
-		// Fetch membership of all users of the session in a batch way
+		// Fetch membership of all users of the session in one shot
 		def allMembershipsForCurrentSession = Membership.findAllByTeamAndUserInList(defaultTeam, allPlayers)
 //		session.participations.each { part ->
 //			def player = part.player

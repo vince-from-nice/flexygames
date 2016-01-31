@@ -18,7 +18,7 @@ class SessionGroup implements Comparable<SessionGroup> {
     int defaultPreferredPlayerNbr
 	int lockingTime // Time in minutes before the session start while session is locked (ie. user cannot update their status)
 	
-	SortedSet<Session> sessions // not a SortedSet because sort is defined into mapping
+	SortedSet<Session> sessions
 	SortedSet<Team> defaultTeams
 	
 	///////////////////////////////////////////////////////////////////////////

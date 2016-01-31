@@ -54,7 +54,7 @@
         	<th style="font-size: 12px; text-align: center; vertical-align: middle;"><g:message code="stats.byRound" /></th>
         	<th style="font-size: 16px; text-align: center; vertical-align: middle;"><g:message code="votes" /></th>
        	</tr>
-		<g:each in="${playerInstance.sessionGroups}" var="group">
+		<g:each in="${playerInstance.allSessionGroups}" var="group">
 			<g:set var="parts" value="${playerInstance.getEffectiveParticipationsBySessionGroup(group).size()}" />
 			<g:if test="${parts > 0}">
 				<g:set var="actions" value="${playerInstance.getActionsBySessionGroup(group).size()}" />
