@@ -1,102 +1,104 @@
 package flexygames.admin
 
-import flexygames.Team;
+import flexygames.Team
 
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+@Transactional(readOnly = true)
 class TeamController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index = {
-        redirect(action: "list", params: params)
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Team.list(params), model:[teamInstanceCount: Team.count()]
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [teamInstanceList: Team.list(params), teamInstanceTotal: Team.count()]
+    def show(Team teamInstance) {
+        respond teamInstance
     }
 
-    def create = {
-        def teamInstance = new Team()
-        teamInstance.properties = params
-        return [teamInstance: teamInstance]
+    def create() {
+        respond new Team(params)
     }
 
-    def save = {
-        def teamInstance = new Team(params)
-        if (teamInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'team.label', default: 'Team'), teamInstance.id])}"
-            redirect(action: "show", id: teamInstance.id)
+    @Transactional
+    def save(Team teamInstance) {
+        if (teamInstance == null) {
+            notFound()
+            return
         }
-        else {
-            render(view: "create", model: [teamInstance: teamInstance])
-        }
-    }
 
-    def show = {
-        def teamInstance = Team.get(params.id)
-        if (!teamInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team'), params.id])}"
-            redirect(action: "list")
+        if (teamInstance.hasErrors()) {
+            respond teamInstance.errors, view:'create'
+            return
         }
-        else {
-            [teamInstance: teamInstance]
-        }
-    }
 
-    def edit = {
-        def teamInstance = Team.get(params.id)
-        if (!teamInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [teamInstance: teamInstance]
-        }
-    }
+        teamInstance.save flush:true
 
-    def update = {
-        def teamInstance = Team.get(params.id)
-        if (teamInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (teamInstance.version > version) {
-                    
-                    teamInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'team.label', default: 'Team')] as Object[], "Another user has updated this Team while you were editing")
-                    render(view: "edit", model: [teamInstance: teamInstance])
-                    return
-                }
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'team.label', default: 'Team'), teamInstance.id])
+                redirect teamInstance
             }
-            teamInstance.properties = params
-            if (!teamInstance.hasErrors() && teamInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'team.label', default: 'Team'), teamInstance.id])}"
-                redirect(action: "show", id: teamInstance.id)
-            }
-            else {
-                render(view: "edit", model: [teamInstance: teamInstance])
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team'), params.id])}"
-            redirect(action: "list")
+            '*' { respond teamInstance, [status: CREATED] }
         }
     }
 
-    def delete = {
-        def teamInstance = Team.get(params.id)
-        if (teamInstance) {
-            try {
-                teamInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'team.label', default: 'Team'), params.id])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'team.label', default: 'Team'), params.id])}"
-                redirect(action: "show", id: params.id)
-            }
+    def edit(Team teamInstance) {
+        respond teamInstance
+    }
+
+    @Transactional
+    def update(Team teamInstance) {
+        if (teamInstance == null) {
+            notFound()
+            return
         }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team'), params.id])}"
-            redirect(action: "list")
+
+        if (teamInstance.hasErrors()) {
+            respond teamInstance.errors, view:'edit'
+            return
+        }
+
+        teamInstance.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'Team.label', default: 'Team'), teamInstance.id])
+                redirect teamInstance
+            }
+            '*'{ respond teamInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(Team teamInstance) {
+
+        if (teamInstance == null) {
+            notFound()
+            return
+        }
+
+        teamInstance.delete flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Team.label', default: 'Team'), teamInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

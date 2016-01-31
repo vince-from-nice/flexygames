@@ -76,12 +76,7 @@
 				</div>
 			</td>
 			<td style="text-align: center;">
-				<g:if test="${teamInstance.logo}">
-					<img style="max-width: 200px; max-height:120px;" src="${createLink(controller:'fileUploader', action:'show', id:teamInstance.logo.id)}" />
-				</g:if>
-				<g:else>
-					<img style="max-width: 200px; max-height:120px;" src="${resource(dir:'images/team',file:'no-logo.png')}" alt="Team logo" />
-				</g:else>
+				<img style="max-width: 200px; max-height:120px;" src="${resource(dir:'images/team',file:teamInstance.logoName)}" alt="Team logo" />
 				<g:if test="${teamInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
 					<br />
 					<br />

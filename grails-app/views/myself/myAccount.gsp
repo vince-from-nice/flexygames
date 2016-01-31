@@ -100,6 +100,7 @@
 					<h2><g:message code="myAccount.myTeams" /></h2>
 					<table>
 						<tr>
+							<th style="width: 40px; ">&nbsp;</th>
 							<th><g:message code="name" /></th>
 							<th><g:message code="training" />?</th>
 							<th><g:message code="competition" />?</th>
@@ -111,6 +112,9 @@
 								<g:form>
 									<g:hiddenField name="id" value="${m.id}" />
 									<tr>
+										<td style="vertical-align: middle; text-align: right; margin: 0px; padding: 0px;">
+											<img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:m.team.logoName)}" alt="Team logo" />
+										</td>
 										<td><g:link controller="teams" action="show" id="${m.team.id}">${m.team}</g:link></td>
 										<td>
 											<g:select name="regularForTraining" from="[message(code:'regular'), message(code:'tourist')]" value="${m.regularForTraining ? message(code:'regular') : message(code:'tourist')}" /> 
@@ -130,15 +134,15 @@
 						</g:if>
 						<g:else>
 							<tr>
-								<td colspan="5"><i><g:message code="myAccount.noTeams" /></i></td>
+								<td colspan="6"><i><g:message code="myAccount.noTeams" /></i></td>
 							</tr>
 						</g:else>
 						<tr>
-							<th colspan="5" style="text-align: center"><g:message code="myAccount.joinNewTeam" /></th>
+							<th colspan="6" style="text-align: center"><g:message code="myAccount.joinNewTeam" /></th>
 						</tr>
 						<g:form>
 							<tr>
-								<td><g:select name="id" from="${flexygames.Team.list(sort:'name', order:'asc')}" optionKey="id" /></td>
+								<td colspan="2"><g:select name="id" from="${flexygames.Team.list(sort:'name', order:'asc')}" optionKey="id" /></td>
 								<td><g:select name="regularForTraining" from="[message(code:'regular'), message(code:'tourist')]" /> </td>
 								<td><g:select name="regularForCompetition" from="[message(code:'regular'), message(code:'tourist')]" /></td>
 								<td colspan="2"><span class="button"><g:actionSubmit class="create" action="joinTeam" value="${message(code:'join')}" /> </span></td>

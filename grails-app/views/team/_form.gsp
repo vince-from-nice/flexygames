@@ -2,12 +2,13 @@
 
 
 
-<div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'name', 'error')} ">
+<div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'name', 'error')} required">
 	<label for="name">
 		<g:message code="team.name.label" default="Name" />
-		
+		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="name" value="${teamInstance?.name}"/>
+	<g:textField name="name" required="" value="${teamInstance?.name}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'description', 'error')} ">
@@ -16,6 +17,7 @@
 		
 	</label>
 	<g:textField name="description" maxlength="100" value="${teamInstance?.description}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'city', 'error')} ">
@@ -24,6 +26,7 @@
 		
 	</label>
 	<g:textField name="city" value="${teamInstance?.city}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'webUrl', 'error')} ">
@@ -32,6 +35,7 @@
 		
 	</label>
 	<g:field type="url" name="webUrl" value="${teamInstance?.webUrl}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'email', 'error')} ">
@@ -40,6 +44,7 @@
 		
 	</label>
 	<g:field type="email" name="email" value="${teamInstance?.email}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'logo', 'error')} ">
@@ -48,6 +53,25 @@
 		
 	</label>
 	<g:select id="logo" name="logo.id" from="${com.lucastex.grails.fileuploader.UFile.list()}" optionKey="id" value="${teamInstance?.logo?.id}" class="many-to-one" noSelection="['null': '']"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'logoName', 'error')} ">
+	<label for="logoName">
+		<g:message code="team.logoName.label" default="Logo Name" />
+		
+	</label>
+	<g:textField name="logoName" value="${teamInstance?.logoName}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'defaultSessionGroup', 'error')} ">
+	<label for="defaultSessionGroup">
+		<g:message code="team.defaultSessionGroup.label" default="Default Session Group" />
+		
+	</label>
+	<g:select id="defaultSessionGroup" name="defaultSessionGroup.id" from="${flexygames.SessionGroup.list()}" optionKey="id" value="${teamInstance?.defaultSessionGroup?.id}" class="many-to-one" noSelection="['null': '']"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'memberships', 'error')} ">
@@ -65,6 +89,7 @@
 </li>
 </ul>
 
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'sessionGroups', 'error')} ">
@@ -73,13 +98,6 @@
 		
 	</label>
 	<g:select name="sessionGroups" from="${flexygames.SessionGroup.list()}" multiple="multiple" optionKey="id" size="5" value="${teamInstance?.sessionGroups*.id}" class="many-to-many"/>
-</div>
 
-<div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'defaultSessionGroup', 'error')} required">
-	<label for="defaultSessionGroup">
-		<g:message code="team.defaultSessionGroup.label" default="Default Session Group" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select id="defaultSessionGroup" name="defaultSessionGroup.id" from="${flexygames.SessionGroup.list()}" optionKey="id" required="" value="${teamInstance?.defaultSessionGroup?.id}" class="many-to-one"/>
 </div>
 

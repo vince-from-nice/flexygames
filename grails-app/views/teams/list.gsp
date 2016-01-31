@@ -35,16 +35,8 @@
 					<tr class="${(i % 2) == 0 ? 'odd' : 'even'}"
 						style="height: 50px; cursor: pointer"
 						onclick="document.location='${teamLink}'">
-						<td
-							style="vertical-align: middle; text-align: right; margin: 0px; padding: 0px;">
-							<g:if test="${teamInstance.logo}">
-								<img style="width: 40px; vertical-align: middle;"
-									src="${createLink(controller:'fileUploader', action:'show', id:teamInstance.logo.id)}" />
-							</g:if> <g:else>
-								<img style="width: 40px; vertical-align: middle;"
-									src="${resource(dir:'images/team',file:'no-logo.png')}"
-									alt="Team logo" />
-							</g:else>
+						<td style="vertical-align: middle; text-align: right; margin: 0px; padding: 0px;">
+							<img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:teamInstance.logoName)}" alt="Team logo" />
 						</td>
 						<td style="text-align: left; vertical-align: middle;">
 							${fieldValue(bean: teamInstance, field: "name")}

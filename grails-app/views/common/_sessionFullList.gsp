@@ -28,12 +28,7 @@
 							<td style="vertical-align: middle; margin: 0px; padding: 0px; ">
 								<g:set var="team" value="${sessionInstance.group.defaultTeams.first()}" />
 								<g:link controller="teams" action="show" id="${team.id}">
-									<g:if test="${team?.logo}">
-										<img style="max-width: 40px; max-height:40px;" src="${createLink(controller:'fileUploader', action:'show', id:team.logo.id)}" />
-									</g:if>
-									<g:else>
-										<img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:'no-logo.png')}" alt="Team logo" />
-									</g:else>
+									<img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:team.logoName)}" alt="Team logo" />
 								</g:link>
 							</td>
 							<g:set var="color" value="#f33" />

@@ -1,6 +1,6 @@
 
 <%@ page import="flexygames.Team" %>
-<!doctype html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta name="layout" content="main">
@@ -12,17 +12,14 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
+				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
 				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 			</ul>
 		</div>
 		<div id="show-team" class="content scaffold-show" role="main">
 			<h1><g:message code="default.show.label" args="[entityName]" /></h1>
 			<g:if test="${flash.message}">
-				<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<g:if test="${flash.error}">
-				<div class="errors">${flash.error}</div>
+			<div class="message" role="status">${flash.message}</div>
 			</g:if>
 			<ol class="property-list team">
 			
@@ -80,6 +77,24 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${teamInstance?.logoName}">
+				<li class="fieldcontain">
+					<span id="logoName-label" class="property-label"><g:message code="team.logoName.label" default="Logo Name" /></span>
+					
+						<span class="property-value" aria-labelledby="logoName-label"><g:fieldValue bean="${teamInstance}" field="logoName"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${teamInstance?.defaultSessionGroup}">
+				<li class="fieldcontain">
+					<span id="defaultSessionGroup-label" class="property-label"><g:message code="team.defaultSessionGroup.label" default="Default Session Group" /></span>
+					
+						<span class="property-value" aria-labelledby="defaultSessionGroup-label"><g:link controller="sessionGroup" action="show" id="${teamInstance?.defaultSessionGroup?.id}">${teamInstance?.defaultSessionGroup?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
 				<g:if test="${teamInstance?.memberships}">
 				<li class="fieldcontain">
 					<span id="memberships-label" class="property-label"><g:message code="team.memberships.label" default="Memberships" /></span>
@@ -102,24 +117,13 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${teamInstance?.defaultSessionGroup}">
-				<li class="fieldcontain">
-					<span id="defaultSessionGroup-label" class="property-label"><g:message code="team.defaultSessionGroup.label" default="Default Session Group" /></span>
-					
-						<span class="property-value" aria-labelledby="defaultSessionGroup-label"><g:link controller="sessionGroup" action="show" id="${teamInstance?.defaultSessionGroup?.id}">${teamInstance?.defaultSessionGroup?.encodeAsHTML()}</g:link></span>
-					
-				</li>
-				</g:if>
-			
 			</ol>
-			<g:form>
+			<g:form url="[resource:teamInstance, action:'delete']" method="DELETE">
 				<fieldset class="buttons">
-					<g:hiddenField name="id" value="${teamInstance?.id}" />
-					<g:link class="edit" action="edit" id="${teamInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
+					<g:link class="edit" action="edit" resource="${teamInstance}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
 					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 				</fieldset>
 			</g:form>
 		</div>
-		
 	</body>
 </html>

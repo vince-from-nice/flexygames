@@ -62,13 +62,9 @@
 								<td style="vertical-align: middle; text-align: right; margin: 0px; padding: 0px">
 									<g:set var="team" value="${m.team}" />
 									<g:link controller="teams" action="show" id="${m.team.id}">
-										<g:if test="${team?.logo}">
-											<img style="max-width: 40px; max-height:40px;" src="${createLink(controller:'fileUploader', action:'show', id:team.logo.id)}" />
-										</g:if>
-										<g:else>
-											<img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:'no-logo.png')}" alt="Team logo" />
-										</g:else>
-										
+										<g:link controller="teams" action="show" id="${team.id}">
+											<img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:team.logoName)}" alt="Team logo" />
+										</g:link>
 									</g:link>
 								</td>
 								<td style="vertical-align: middle; text-align: left">
