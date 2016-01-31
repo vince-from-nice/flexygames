@@ -12,6 +12,7 @@ class Team implements Comparable {
 	String webUrl
 	String email
 	UFile logo
+	String logoName
 	SessionGroup defaultSessionGroup
 	
 	SortedSet<Membership> memberships
@@ -47,8 +48,9 @@ class Team implements Comparable {
 		description(nullable:true, blank: true, maxSize:100)
 		city(nullable: true)
 		webUrl(nullable: true, url: true)
-		email(nullable: true, email: true)
+		email(nullable: true, blank: true, email: true)
 		logo(nullable: true)
+		logoName(nullable: true)
 		defaultSessionGroup(nullable: true)
 		memberships(nullable: true)
 		sessionGroups(nullable: true)

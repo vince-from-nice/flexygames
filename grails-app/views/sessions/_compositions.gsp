@@ -182,7 +182,7 @@ var forceRedraw = function(element){
 																			<img style="width: 45px; height: 45px;" src="${createLink(controller:'fileUploader', action:'show', id:item.player.avatar.id)}" alt="User avatar"  />
 																		</g:if> 
 																		<g:else>
-																			<img style="width:45px; vertical-align: middle;" src="${resource(dir:'images/user',file:'no_avatar.jpg')}" alt="Anonymous avatar" />
+																			<img style="width:45px; vertical-align: middle;" src="${resource(dir:'images/user',file:'no-avatar.jpg')}" alt="Anonymous avatar" />
 																		</g:else> 
 																		<g:set var="username" value="${item.player.username}" />
 																		<g:if test="${username.length() > 8}">

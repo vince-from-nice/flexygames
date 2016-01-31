@@ -104,7 +104,7 @@ class SessionsController {
 //			if (ufile) {
 //				def player = allPlayers.find { it.avatar?.id == ufile.id }
 //				if (player) {
-//					player.avatarPath = ufile.path
+//					player.avatarName = ufile.path
 //				}
 //			}
 //		}

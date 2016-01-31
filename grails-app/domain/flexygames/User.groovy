@@ -21,6 +21,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
     Integer yearBirthDate
 	Date registrationDate
 	UFile avatar
+	String avatarName
 	String passwordResetToken
 	Date passwordResetExpiration
 	Date lastLogin
@@ -35,7 +36,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	int scoreInCurrentSession // transient
 	Membership membershipInCurrentSession // transient
 	SortedSet<Team> teamsInCurrentSession = new TreeSet<Team>() // transient
-	String avatarPath // transient
 
 	SortedSet<flexygames.Role> roles
 	SortedSet<Membership> memberships
@@ -67,7 +67,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		votes lazy: true, batchSize: 50
 	}
 
-	static transients = [ 'scoreInCurrentSession', 'membershipInCurrentSession', 'teamsInCurrentSession', 'avatarPath',
+	static transients = [ 'scoreInCurrentSession', 'membershipInCurrentSession', 'teamsInCurrentSession',
 						  'relatedSessions', 'allSessionGroups', 'allTeams', 'wins', 'defeats', 'draws', 'rounds',
 						  'votingScore', 'actionScore', 'effectiveParticipations' ]
 
@@ -87,6 +87,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
         yearBirthDate(nullable: true, range:1950..2012)
         registrationDate(nullable: false)
 		avatar(nullable: true)
+		avatarName(nullable: true, blank: false)
         memberships(nullable: true)
         skills(nullable: true)
         participations(nullable: true)

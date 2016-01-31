@@ -168,30 +168,26 @@ flexygames.mailing.title.suffix=''
 flexygames.mailing.body.prefix='<html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></head><body>'
 flexygames.mailing.body.suffix='</body></html>'
 
-// file upload config
-fileuploader {
-	avatar {
-		maxSize = 1024 * 32
-		allowedExtensions = ["jpg","jpeg","gif","png", "JPG", "JPEG", "GIF", "PNG"]
-	}
-	logo {
-		maxSize = 1024 * 32
-		allowedExtensions = ["jpg","jpeg","gif","png", "JPG", "JPEG", "GIF", "PNG"]
-	}
+flexygames.upload = {
+    avatar {
+        maxSize = 1024 * 32
+        allowedExtensions = ["jpg","jpeg","gif","png", "JPG", "JPEG", "GIF", "PNG"]
+    }
+    logo {
+        maxSize = 1024 * 32
+        allowedExtensions = ["jpg","jpeg","gif","png", "JPG", "JPEG", "GIF", "PNG"]
+    }
 }
 environments {
     development {
-        //fileuploader.avatar.path = "/home/turman/Workspace/GGTS/FlexyGames/upload/avatar/"
-        fileuploader.avatar.path = "E:\\Repositories\\flexygames\\upload\\avatar"
-        //fileuploader.logo.path = "/home/turman/Workspace/GGTS/FlexyGames/upload/logo/"
-        fileuploader.logo.path   = "E:\\Repositories\\flexygames\\upload\\logo"
+        flexygames.upload.avatar.path = "E:\\Repositories\\flexygames\\web-app\\images\\user"
+        flexygames.upload.logo.path   = "E:\\Repositories\\flexygames\\web-app\\images\team"
     }
-	production {
-		fileuploader.avatar.path = "/home/asas/upload/flexygames/avatar/"
-		fileuploader.logo.path = "/home/asas/upload/flexygames/logo/" 
-	}
+    production {
+        flexygames.upload.avatar.path = "/home/asas/upload/flexygames/web-app/images/avatar/"
+        flexygames.upload.logo.path = "/home/asas/upload/flexygames/web-app/images/logo/"
+    }
 }
-
 
 
 // Uncomment and edit the following lines to start using Grails encoding & escaping improvements
