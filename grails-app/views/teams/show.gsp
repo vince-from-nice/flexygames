@@ -82,10 +82,16 @@
 					<br />
 					<span style="font-size: 12px">
 					<g:message code="team.show.uploadLogo" /><br />
-					<fileuploader:form	upload="logo" id="${teamInstance.id}"
-						successAction="changeTeamLogoSuccess" successController="manager"
-						errorAction="changeTeamLogoError" errorController="manager" />
-					</span>
+					<g:form controller="fileUpload" action="process" method="post" enctype="multipart/form-data" >
+						<g:hiddenField name="uploadType" value="teamLogo" />
+						<g:hiddenField name="id" value="${teamInstance.id}" />
+						<g:hiddenField name="errorAction" value="changeTeamLogoError" />
+						<g:hiddenField name="errorController" value="manager" />
+						<g:hiddenField name="successAction" value="changeTeamLogoSuccess" />
+						<g:hiddenField name="successController" value="manager" />
+						<input type='file' name='file' />
+						<input type='submit' name='submit' value='Submit' />
+					</g:form>
 				</g:if>
 			</td>
 		</tr>

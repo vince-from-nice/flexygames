@@ -67,9 +67,16 @@
 					<br />
 					<span style="font-size: 12px">
 						<g:message code="myAccount.uploadAvatar" /><br />
-						<fileuploader:form	upload="avatar" id="${playerInstance.id}"
-							successAction="changeAvatarSuccess" successController="myself"
-							errorAction="changeAvatarError" errorController="myself" />
+						<g:form controller="fileUpload" action="process" method="post" enctype="multipart/form-data" >
+							<g:hiddenField name="uploadType" value="userAvatar" />
+							<g:hiddenField name="id" value="${playerInstance.id}" />
+							<g:hiddenField name="errorAction" value="changeAvatarError" />
+							<g:hiddenField name="errorController" value="myself" />
+							<g:hiddenField name="successAction" value="changeAvatarSuccess" />
+							<g:hiddenField name="successController" value="myself" />
+							<input type='file' name='file' />
+							<input type='submit' name='submit' value='Submit' />
+						</g:form>
 					</span>
 				</td>
 			</tr>

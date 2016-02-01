@@ -9,8 +9,6 @@ import org.jsoup.Jsoup
 import org.jsoup.safety.Whitelist
 import org.springframework.dao.DataIntegrityViolationException
 
-import com.lucastex.grails.fileuploader.UFile
-
 class ManagerController {
 
 	def mailerService
@@ -702,38 +700,13 @@ class ManagerController {
 	 *********************************************************************************************/
 	
 	def changeTeamLogoSuccess = {
-		Team team = Team.get(params.id)
-		if (!team) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team')])}"
-			return redirect(controller: "teams", action: "list")
-		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
-		if (!team.isManagedBy(user.username)) {
-			flash.error = "You cannot manage that team since you're not a manager !"
-			redirect(controller:"teams", action: "show", id: team.id)
-		}
-		def UFile logo = UFile.get(params.ufileId)
-		if (!logo) {
-			flash.error = "Sorry, your new logo cannot be found"
-		} else {
-			team.logo = logo
-			if (!team.save()) {
-				flash.error = "Sorry, your new logo cannot be saved"
-			} else {
-				flash.message = "Your new logo has been uploaded"
-			}
-		}
-		redirect(controller:"teams", action: "show", id: team.id)
+		flash.message = "Your new logo has been uploaded"
+		redirect(controller:"teams", action: "show", id: params.id)
 	}
 
 	def changeTeamLogoError = {
-		Team team = Team.get(params.id)
-		if (!team) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team')])}"
-			return redirect(controller: "teams", action: "list")
-		}
-		flash.error = "Sorry, your new logo has NOT been uploaded ! Check size that size limit is repected and it has a valid filename extension (such as .jpg, .jpeg, .gif, .png)"
-		redirect(controller:"teams", action: "show", id: team.id)
+		flash.message = "Sorry, your new logo has NOT been uploaded : $flash.message"
+		redirect(controller:"teams", action: "show", id: params.id)
 	}
 
 	def updateMembership = {

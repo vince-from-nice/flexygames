@@ -3,8 +3,6 @@ package flexygames
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.crypto.hash.Sha512Hash
 
-import com.lucastex.grails.fileuploader.UFile
-
 class MyselfController {
 	
 	def userService
@@ -245,22 +243,7 @@ class MyselfController {
 	}
 
 	def changeAvatarSuccess = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
-		if (!user) {
-			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player')])}"
-			redirect(action: "list")
-		}
-		def avatar = UFile.get(params.ufileId)
-		if (!avatar) {
-			flash.message = "Sorry, your new avatar cannot be found"
-		} else {
-			user.avatar = avatar
-			if (!user.save()) {
-				flash.message = "Sorry, your new avatar cannot be saved"
-			} else {
-				flash.message = "Your new avatar has been uploaded"
-			}
-		}
+		flash.message = "Your new avatar has been uploaded"
 		redirect(action: "myAccount")
 	}
 

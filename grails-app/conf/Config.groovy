@@ -162,30 +162,25 @@ environments {
 		}
 	}
 }
+
+// Mailing
 flexygames.mailing.webmaster="webmaster@flexygames.net"
 flexygames.mailing.title.prefix='[FlexyGames] '
 flexygames.mailing.title.suffix=''
 flexygames.mailing.body.prefix='<html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></head><body>'
 flexygames.mailing.body.suffix='</body></html>'
 
-flexygames.upload = {
-    avatar {
-        maxSize = 1024 * 32
-        allowedExtensions = ["jpg","jpeg","gif","png", "JPG", "JPEG", "GIF", "PNG"]
-    }
-    logo {
-        maxSize = 1024 * 32
-        allowedExtensions = ["jpg","jpeg","gif","png", "JPG", "JPEG", "GIF", "PNG"]
-    }
-}
+// File uploading
+flexygames.fileUpload.userAvatar.maxSize = 1024 * 32
+flexygames.fileUpload.userAvatar.allowedExtensions = ["jpg","jpeg","gif","png"]
+flexygames.fileUpload.userAvatar.path = "E:\\Repositories\\flexygames\\web-app\\images\\user"
+flexygames.fileUpload.teamLogo.maxSize = 1024 * 32
+flexygames.fileUpload.teamLogo.allowedExtensions = ["jpg","jpeg","gif","png"]
+flexygames.fileUpload.teamLogo.path = "E:\\Repositories\\flexygames\\web-app\\images\\team"
 environments {
-    development {
-        flexygames.upload.avatar.path = "E:\\Repositories\\flexygames\\web-app\\images\\user"
-        flexygames.upload.logo.path   = "E:\\Repositories\\flexygames\\web-app\\images\team"
-    }
     production {
-        flexygames.upload.avatar.path = "/home/asas/upload/flexygames/web-app/images/avatar/"
-        flexygames.upload.logo.path = "/home/asas/upload/flexygames/web-app/images/logo/"
+        flexygames.fileUpload.userAvatar.path = "/home/asas/upload/flexygames/web-app/images/avatar/"
+        flexygames.fileUpload.teamLogo.path = "/home/asas/upload/flexygames/web-app/images/logo/"
     }
 }
 

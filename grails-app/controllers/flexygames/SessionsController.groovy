@@ -1,6 +1,5 @@
 package flexygames
 
-import com.lucastex.grails.fileuploader.UFile
 import org.apache.shiro.SecurityUtils
 
 class SessionsController {
