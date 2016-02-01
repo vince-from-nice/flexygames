@@ -96,7 +96,7 @@ log4j = {
 environments {
     development {
         log4j = {
-            // Vincent: log SQL statements
+            // Vincent: log SQL statements (see DataSource too)
             //debug 'org.hibernate.SQL'
             //trace 'org.hibernate.type.descriptor.sql.BasicBinder'
             //trace 'org.hibernate.type'

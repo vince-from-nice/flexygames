@@ -7,3 +7,5 @@ classes
 .settings
 .idea
 *.iml
+web-app/images/team/team-*
+web-app/images/user/user-*
