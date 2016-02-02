@@ -29,9 +29,9 @@ class TeamsController {
 			} else {
 				params.mode = "training"
 			}*/
-			params.mode = "blogs"
+			params.mode = "blog"
 		}
-		if (params.mode == "blogs") {
+		if (params.mode == "blog") {
 			params.teamId = team.id
 			params.max = Math.min(params.max ? params.int('max') : 10, 30)
 			if(!params.offset) params.offset = 0

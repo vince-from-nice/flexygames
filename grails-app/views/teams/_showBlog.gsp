@@ -5,7 +5,8 @@
                     <div class="competitionBlogEntry">
                         <g:link controller="sessions" action="show" id="${blogEntry.session.id}" ><b>${blogEntry.session.name}</b></g:link>
                         <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEEEEE dd MMMM yyyy (HH:mm)" />
-                        <g:message code="at" /> ${blogEntry.session.playground}<br />
+                        <hr>
+                        <g:render template="showBlogCommon" bean="${blogEntry}" var="blogEntry" />
                     </div>
                 </g:if>
                 <g:else>
@@ -17,10 +18,12 @@
                         <g:else>
                             <g:link controller="sessions" action="show" id="${blogEntry.session.id}" ><b><g:message code="training" />
                             <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEEEEE dd MMMM yyyy (HH:mm)" /></b></g:link>
-                            <g:message code="at" /> ${blogEntry.session.playground}
                         </g:else>
+                        <hr>
+                        <g:render template="showBlogCommon" bean="${blogEntry}" var="blogEntry" />
                     </div>
                 </g:else>
+
             </g:if>
             <g:else>
                 <div class="userBlogEntry">

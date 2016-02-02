@@ -99,51 +99,51 @@
 	
 	<table style="width: 100%; ">
 
-		<g:if test="${params.mode=='blogs' }">
-			<g:set var="classForBlogsTab" value="tabSelected" />
+		<g:if test="${params.mode=='blog' }">
+			<g:set var="classForblogTab" value="tabSelected" />
 			<g:set var="classForCompetitionTab" value="tabNotSelected" />
 			<g:set var="classForTrainingTab" value="tabNotSelected" />
 			<g:set var="classForMembersTab" value="tabNotSelected" />
 			<g:set var="classForRankingTab" value="tabNotSelected" />
 		</g:if>
 		<g:if test="${params.mode=='competition' }">
-			<g:set var="classForBlogsTab" value="tabNotSelected" />
+			<g:set var="classForblogTab" value="tabNotSelected" />
 			<g:set var="classForCompetitionTab" value="tabSelected" />
 			<g:set var="classForTrainingTab" value="tabNotSelected" />	
 			<g:set var="classForMembersTab" value="tabNotSelected" />
 			<g:set var="classForRankingTab" value="tabNotSelected" />
 		</g:if>
 		<g:if test="${params.mode=='training' }">
-			<g:set var="classForBlogsTab" value="tabNotSelected" />
+			<g:set var="classForblogTab" value="tabNotSelected" />
 			<g:set var="classForCompetitionTab" value="tabNotSelected" />
 			<g:set var="classForTrainingTab" value="tabSelected" />	
 			<g:set var="classForMembersTab" value="tabNotSelected" />
 			<g:set var="classForRankingTab" value="tabNotSelected" />
 		</g:if>
 		<g:if test="${params.mode=='members' }">
-			<g:set var="classForBlogsTab" value="tabNotSelected" />
+			<g:set var="classForblogTab" value="tabNotSelected" />
 			<g:set var="classForCompetitionTab" value="tabNotSelected" />
 			<g:set var="classForTrainingTab" value="tabNotSelected" />	
 			<g:set var="classForMembersTab" value="tabSelected" />
 			<g:set var="classForRankingTab" value="tabNotSelected" />
 		</g:if>
 		<g:if test="${params.mode=='ranking' }">
-			<g:set var="classForBlogsTab" value="tabNotSelected" />
+			<g:set var="classForblogTab" value="tabNotSelected" />
 			<g:set var="classForCompetitionTab" value="tabNotSelected" />
 			<g:set var="classForTrainingTab" value="tabNotSelected" />	
 			<g:set var="classForMembersTab" value="tabNotSelected" />
 			<g:set var="classForRankingTab" value="tabSelected" />
 		</g:if>
 
-		<g:set var="blogsLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'blogs'])}" />
+		<g:set var="blogLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'blog'])}" />
 		<g:set var="competitionLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'competition'])}" />
 		<g:set var="trainingLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'training'])}" />
 		<g:set var="membersLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'members'])}" />
 		<g:set var="rankingLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'ranking'])}" />
 
 		<tr style="">
-			<td class="${classForBlogsTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${blogsLink}'">
-				<b><g:message code="blogs"/></b>
+			<td class="${classForblogTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${blogLink}'">
+				<b><g:message code="blog"/></b>
 			</td>
 			<td class="${classForCompetitionTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${competitionLink}'">
 				<b><g:message code="competitions"/></b>
@@ -161,7 +161,7 @@
 		
 		<tr>
 			<td colspan="4">
-				<g:if test="${params.mode=='blogs'}">
+				<g:if test="${params.mode=='blog'}">
 					<g:render template="showBlog" />
 				</g:if>
 				<g:if test="${params.mode=='competition' || params.mode=='training' }">
