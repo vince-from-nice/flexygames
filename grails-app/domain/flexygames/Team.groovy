@@ -12,7 +12,7 @@ class Team implements Comparable {
 	String webUrl
 	String email
 	UFile logo
-	String logoName
+	String logoName = 'no-logo.png'
 	SessionGroup defaultSessionGroup
 	
 	SortedSet<Membership> memberships
