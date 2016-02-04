@@ -1,4 +1,5 @@
 <%@ page import="flexygames.Team" %>
+<g:set var="teamIsManagedByCurrentUser" value="${teamInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}" />
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -77,7 +78,7 @@
 			</td>
 			<td style="text-align: center;">
 				<img style="max-width: 200px; max-height:120px;" src="${resource(dir:'images/team',file:teamInstance.logoName)}" alt="Team logo" />
-				<g:if test="${teamInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+				<g:if test="${teamIsManagedByCurrentUser}">
 					<br />
 					<br />
 					<span style="font-size: 12px">

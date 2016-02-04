@@ -54,7 +54,7 @@
 								</tr>
 							</g:else>
 						</table>
-						<g:if test="${group.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+						<g:if test="${teamIsManagedByCurrentUser}">
 							<g:form controller="manager" method="post">
 							    <g:hiddenField name="id" value="${group?.id}" />
 							    <g:hiddenField name="create" value="1" />

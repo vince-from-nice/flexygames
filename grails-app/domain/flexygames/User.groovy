@@ -6,8 +6,6 @@ import java.util.regex.Pattern
 import javax.servlet.http.HttpSessionBindingEvent
 import javax.servlet.http.HttpSessionBindingListener
 
-import com.lucastex.grails.fileuploader.UFile
-
 class User implements Comparable<User>, HttpSessionBindingListener {
 
     String username
@@ -20,7 +18,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	String city
     Integer yearBirthDate
 	Date registrationDate
-	UFile avatar
 	String avatarName
 	String passwordResetToken
 	Date passwordResetExpiration
@@ -86,7 +83,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		city(nullable: true, blank: true)
         yearBirthDate(nullable: true, range:1950..2012)
         registrationDate(nullable: false)
-		avatar(nullable: true)
 		avatarName(nullable: true, blank: false)
         memberships(nullable: true)
         skills(nullable: true)

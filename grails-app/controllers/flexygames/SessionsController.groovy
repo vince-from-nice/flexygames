@@ -95,19 +95,6 @@ class SessionsController {
 			player.teamsInCurrentSession << membership.team
 		}
 
-		// Prepare data about about avatars of participants
-//		def allPlayerIds = allPlayers*.avatar.id
-//		def allUFiles = UFile.getAll(allPlayerIds)
-//		// The previous request has fetched avatars of all players in one shot, now dispatch them into their relative players
-//		allUFiles.each{ ufile ->
-//			if (ufile) {
-//				def player = allPlayers.find { it.avatar?.id == ufile.id }
-//				if (player) {
-//					player.avatarName = ufile.path
-//				}
-//			}
-//		}
-
 		// Prepare data about votes of participants (move it to the Vote domain class) ?
 		def participantsByScore = []
 		def effectivePlayers = session.getEffectiveParticipants()

@@ -1,3 +1,11 @@
+    <g:if test="${teamIsManagedByCurrentUser}">
+        <g:form controller="manager" method="post">
+            <g:hiddenField name="id" value="${group?.id}" />
+            <g:hiddenField name="create" value="1" />
+            <g:message code="team.show.createBlogEntryAsManager" />:
+            <g:actionSubmit class="create" action="createBlogEntry" value="${message(code:'create')}" onclick="alert('Sorry but that feature is not ready yet..'); return false;" />
+        </g:form>
+    </g:if>
     <g:if test="${allBlogEntries.size() > 0}">
         <g:each in="${allBlogEntries}" var="blogEntry" >
             <g:if test="blogEntry.session">

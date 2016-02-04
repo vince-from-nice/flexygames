@@ -1,6 +1,6 @@
 
 <%@ page import="flexygames.User" %>
-<!doctype html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta name="layout" content="main">
@@ -12,7 +12,7 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
+				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
 				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 			</ul>
 		</div>
@@ -115,11 +115,11 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${userInstance?.avatar}">
+				<g:if test="${userInstance?.avatarName}">
 				<li class="fieldcontain">
-					<span id="avatar-label" class="property-label"><g:message code="user.avatar.label" default="Avatar" /></span>
+					<span id="avatarName-label" class="property-label"><g:message code="user.avatarName.label" default="Avatar Name" /></span>
 					
-						<span class="property-value" aria-labelledby="avatar-label"><g:link controller="UFile" action="show" id="${userInstance?.avatar?.id}">${userInstance?.avatar?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="avatarName-label"><g:fieldValue bean="${userInstance}" field="avatarName"/></span>
 					
 				</li>
 				</g:if>
@@ -213,6 +213,60 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${userInstance?.partCounter}">
+				<li class="fieldcontain">
+					<span id="partCounter-label" class="property-label"><g:message code="user.partCounter.label" default="Part Counter" /></span>
+					
+						<span class="property-value" aria-labelledby="partCounter-label"><g:fieldValue bean="${userInstance}" field="partCounter"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${userInstance?.absenceCounter}">
+				<li class="fieldcontain">
+					<span id="absenceCounter-label" class="property-label"><g:message code="user.absenceCounter.label" default="Absence Counter" /></span>
+					
+						<span class="property-value" aria-labelledby="absenceCounter-label"><g:fieldValue bean="${userInstance}" field="absenceCounter"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${userInstance?.gateCrashCounter}">
+				<li class="fieldcontain">
+					<span id="gateCrashCounter-label" class="property-label"><g:message code="user.gateCrashCounter.label" default="Gate Crash Counter" /></span>
+					
+						<span class="property-value" aria-labelledby="gateCrashCounter-label"><g:fieldValue bean="${userInstance}" field="gateCrashCounter"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${userInstance?.actionCounter}">
+				<li class="fieldcontain">
+					<span id="actionCounter-label" class="property-label"><g:message code="user.actionCounter.label" default="Action Counter" /></span>
+					
+						<span class="property-value" aria-labelledby="actionCounter-label"><g:fieldValue bean="${userInstance}" field="actionCounter"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${userInstance?.voteCounter}">
+				<li class="fieldcontain">
+					<span id="voteCounter-label" class="property-label"><g:message code="user.voteCounter.label" default="Vote Counter" /></span>
+					
+						<span class="property-value" aria-labelledby="voteCounter-label"><g:fieldValue bean="${userInstance}" field="voteCounter"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${userInstance?.commentCounter}">
+				<li class="fieldcontain">
+					<span id="commentCounter-label" class="property-label"><g:message code="user.commentCounter.label" default="Comment Counter" /></span>
+					
+						<span class="property-value" aria-labelledby="commentCounter-label"><g:fieldValue bean="${userInstance}" field="commentCounter"/></span>
+					
+				</li>
+				</g:if>
+			
 				<g:if test="${userInstance?.passwordHash}">
 				<li class="fieldcontain">
 					<span id="passwordHash-label" class="property-label"><g:message code="user.passwordHash.label" default="Password Hash" /></span>
@@ -243,10 +297,9 @@
 				</g:if>
 			
 			</ol>
-			<g:form>
+			<g:form url="[resource:userInstance, action:'delete']" method="DELETE">
 				<fieldset class="buttons">
-					<g:hiddenField name="id" value="${userInstance?.id}" />
-					<g:link class="edit" action="edit" id="${userInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
+					<g:link class="edit" action="edit" resource="${userInstance}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
 					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 				</fieldset>
 			</g:form>

@@ -8,6 +8,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:textField name="username" required="" value="${userInstance?.username}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'roles', 'error')} required">
@@ -16,6 +17,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select name="roles" from="${flexygames.Role.list()}" multiple="multiple" optionKey="id" size="5" required="" value="${userInstance?.roles*.id}" class="many-to-many"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'firstName', 'error')} ">
@@ -24,6 +26,7 @@
 		
 	</label>
 	<g:textField name="firstName" value="${userInstance?.firstName}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'lastName', 'error')} ">
@@ -32,14 +35,16 @@
 		
 	</label>
 	<g:textField name="lastName" value="${userInstance?.lastName}"/>
+
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'email', 'error')} ">
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'email', 'error')} required">
 	<label for="email">
 		<g:message code="user.email.label" default="Email" />
-		
+		<span class="required-indicator">*</span>
 	</label>
-	<g:field type="email" name="email" value="${userInstance?.email}"/>
+	<g:field type="email" name="email" required="" value="${userInstance?.email}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'phoneNumber', 'error')} ">
@@ -48,6 +53,7 @@
 		
 	</label>
 	<g:textField name="phoneNumber" value="${userInstance?.phoneNumber}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'company', 'error')} ">
@@ -56,6 +62,7 @@
 		
 	</label>
 	<g:textField name="company" value="${userInstance?.company}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'city', 'error')} ">
@@ -64,6 +71,7 @@
 		
 	</label>
 	<g:textField name="city" value="${userInstance?.city}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'yearBirthDate', 'error')} ">
@@ -72,6 +80,7 @@
 		
 	</label>
 	<g:select name="yearBirthDate" from="${1950..2012}" class="range" value="${fieldValue(bean: userInstance, field: 'yearBirthDate')}" noSelection="['': '']"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'registrationDate', 'error')} required">
@@ -80,14 +89,16 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:datePicker name="registrationDate" precision="day"  value="${userInstance?.registrationDate}"  />
+
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'avatar', 'error')} ">
-	<label for="avatar">
-		<g:message code="user.avatar.label" default="Avatar" />
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'avatarName', 'error')} ">
+	<label for="avatarName">
+		<g:message code="user.avatarName.label" default="Avatar Name" />
 		
 	</label>
-	<g:select id="avatar" name="avatar.id" from="${com.lucastex.grails.fileuploader.UFile.list()}" optionKey="id" value="${userInstance?.avatar?.id}" class="many-to-one" noSelection="['null': '']"/>
+	<g:textField name="avatarName" value="${userInstance?.avatarName}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'memberships', 'error')} ">
@@ -105,6 +116,7 @@
 </li>
 </ul>
 
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'skills', 'error')} ">
@@ -113,6 +125,7 @@
 		
 	</label>
 	<g:select name="skills" from="${flexygames.GameSkill.list()}" multiple="multiple" optionKey="id" size="5" value="${userInstance?.skills*.id}" class="many-to-many"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'participations', 'error')} ">
@@ -129,6 +142,7 @@
 <g:link controller="participation" action="create" params="['user.id': userInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'participation.label', default: 'Participation')])}</g:link>
 </li>
 </ul>
+
 
 </div>
 
@@ -147,6 +161,7 @@
 </li>
 </ul>
 
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'passwordResetToken', 'error')} ">
@@ -155,6 +170,7 @@
 		
 	</label>
 	<g:textField name="passwordResetToken" value="${userInstance?.passwordResetToken}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'passwordResetExpiration', 'error')} ">
@@ -163,6 +179,7 @@
 		
 	</label>
 	<g:datePicker name="passwordResetExpiration" precision="day"  value="${userInstance?.passwordResetExpiration}" default="none" noSelection="['': '']" />
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'lastLogin', 'error')} ">
@@ -171,6 +188,7 @@
 		
 	</label>
 	<g:datePicker name="lastLogin" precision="day"  value="${userInstance?.lastLogin}" default="none" noSelection="['': '']" />
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'lastLogout', 'error')} ">
@@ -179,6 +197,7 @@
 		
 	</label>
 	<g:datePicker name="lastLogout" precision="day"  value="${userInstance?.lastLogout}" default="none" noSelection="['': '']" />
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'calendarToken', 'error')} ">
@@ -187,14 +206,70 @@
 		
 	</label>
 	<g:textField name="calendarToken" value="${userInstance?.calendarToken}"/>
+
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'passwordHash', 'error')} ">
-	<label for="passwordHash">
-		<g:message code="user.passwordHash.label" default="Password Hash" />
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'partCounter', 'error')} ">
+	<label for="partCounter">
+		<g:message code="user.partCounter.label" default="Part Counter" />
 		
 	</label>
-	<g:textField name="passwordHash" value="${userInstance?.passwordHash}"/>
+	<g:field name="partCounter" type="number" value="${userInstance.partCounter}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'absenceCounter', 'error')} ">
+	<label for="absenceCounter">
+		<g:message code="user.absenceCounter.label" default="Absence Counter" />
+		
+	</label>
+	<g:field name="absenceCounter" type="number" value="${userInstance.absenceCounter}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'gateCrashCounter', 'error')} ">
+	<label for="gateCrashCounter">
+		<g:message code="user.gateCrashCounter.label" default="Gate Crash Counter" />
+		
+	</label>
+	<g:field name="gateCrashCounter" type="number" value="${userInstance.gateCrashCounter}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'actionCounter', 'error')} ">
+	<label for="actionCounter">
+		<g:message code="user.actionCounter.label" default="Action Counter" />
+		
+	</label>
+	<g:field name="actionCounter" type="number" value="${userInstance.actionCounter}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'voteCounter', 'error')} ">
+	<label for="voteCounter">
+		<g:message code="user.voteCounter.label" default="Vote Counter" />
+		
+	</label>
+	<g:field name="voteCounter" type="number" value="${userInstance.voteCounter}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'commentCounter', 'error')} ">
+	<label for="commentCounter">
+		<g:message code="user.commentCounter.label" default="Comment Counter" />
+		
+	</label>
+	<g:field name="commentCounter" type="number" value="${userInstance.commentCounter}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'passwordHash', 'error')} required">
+	<label for="passwordHash">
+		<g:message code="user.passwordHash.label" default="Password Hash" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:textField name="passwordHash" required="" value="${userInstance?.passwordHash}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'permissions', 'error')} ">
@@ -203,6 +278,7 @@
 		
 	</label>
 	
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'votes', 'error')} ">
@@ -219,6 +295,7 @@
 <g:link controller="vote" action="create" params="['user.id': userInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'vote.label', default: 'Vote')])}</g:link>
 </li>
 </ul>
+
 
 </div>
 

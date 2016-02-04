@@ -68,15 +68,6 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${teamInstance?.logo}">
-				<li class="fieldcontain">
-					<span id="logo-label" class="property-label"><g:message code="team.logo.label" default="Logo" /></span>
-					
-						<span class="property-value" aria-labelledby="logo-label"><g:link controller="UFile" action="show" id="${teamInstance?.logo?.id}">${teamInstance?.logo?.encodeAsHTML()}</g:link></span>
-					
-				</li>
-				</g:if>
-			
 				<g:if test="${teamInstance?.logoName}">
 				<li class="fieldcontain">
 					<span id="logoName-label" class="property-label"><g:message code="team.logoName.label" default="Logo Name" /></span>

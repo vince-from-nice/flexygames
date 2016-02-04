@@ -76,7 +76,7 @@
 					</g:each>
 				</table>
 
-				<g:if test="${teamInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+				<g:if test="${teamIsManagedByCurrentUser}">
 				
 					<div style="border: 2px dotted gray;padding: 0em 1em; background-color: #FCFBC4; margin-bottom: 1em; color: #800000; font-size: 12px" >
 					

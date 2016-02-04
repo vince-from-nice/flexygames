@@ -99,8 +99,8 @@
 			<g:set var="defaultFirstTeam" value="${sessionInstance.group.defaultTeams?.first()}" scope="request" />
 			<h3 style="margin-top: 0px"><g:message code="session.show.relatedTeams" /></h3>
 			<g:link controller="teams" action="show" id="${defaultFirstTeam.id}">
-				<g:if test="${defaultFirstTeam?.logo}">
-					<img style="max-width: 200px; max-height:120px;" src="${createLink(controller:'fileUploader', action:'show', id:defaultFirstTeam.logo.id)}" alt="Team logo" />
+				<g:if test="${defaultFirstTeam?.logoName}">
+					<img style="max-width: 200px; max-height:120px;" src="${resource(dir:'images/team',file:defaultFirstTeam.logoName)}" alt="Team logo" />
 				</g:if>
 				<g:else>
 					<img style="max-width: 200px; max-height:120px;" src="${resource(dir:'images/team',file:'no-logo.png')}" alt="Team logo" />

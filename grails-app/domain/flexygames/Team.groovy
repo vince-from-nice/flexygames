@@ -1,7 +1,6 @@
 package flexygames
 
 import org.apache.shiro.SecurityUtils
-import com.lucastex.grails.fileuploader.UFile
 
 
 class Team implements Comparable {
@@ -11,7 +10,6 @@ class Team implements Comparable {
 	String city
 	String webUrl
 	String email
-	UFile logo
 	String logoName = 'no-logo.png'
 	SessionGroup defaultSessionGroup
 	
@@ -49,7 +47,6 @@ class Team implements Comparable {
 		city(nullable: true)
 		webUrl(nullable: true, url: true)
 		email(nullable: true, blank: true, email: true)
-		logo(nullable: true)
 		logoName(nullable: true)
 		defaultSessionGroup(nullable: true)
 		memberships(nullable: true)

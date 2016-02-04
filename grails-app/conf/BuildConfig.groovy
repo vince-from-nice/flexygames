@@ -70,7 +70,7 @@ grails.project.dependency.resolution = {
             excludes([name: 'quartz', group: 'org.opensymphony.quartz'])
 		}
 		compile ":quartz:1.0.2"
-		compile ":file-uploader:1.2.1"
+		//compile ":file-uploader:1.2.1"
 		compile ":ic-alendar:0.4.1"
 
     }

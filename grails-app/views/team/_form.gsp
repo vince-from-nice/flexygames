@@ -47,15 +47,6 @@
 
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'logo', 'error')} ">
-	<label for="logo">
-		<g:message code="team.logo.label" default="Logo" />
-		
-	</label>
-	<g:select id="logo" name="logo.id" from="${com.lucastex.grails.fileuploader.UFile.list()}" optionKey="id" value="${teamInstance?.logo?.id}" class="many-to-one" noSelection="['null': '']"/>
-
-</div>
-
 <div class="fieldcontain ${hasErrors(bean: teamInstance, field: 'logoName', 'error')} ">
 	<label for="logoName">
 		<g:message code="team.logoName.label" default="Logo Name" />
