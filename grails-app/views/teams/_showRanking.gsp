@@ -28,7 +28,7 @@
 					<br />
 					<g:message code="stats.selectSessionGroup" /> :
 					<br/>
-					<g:select name="sessionGroupId" value="${currentSessionGroupId}" from="${teamInstance.allSessionGroups}" optionKey="id"
+					<g:select name="sessionGroupId" value="${currentSessionGroupId}" from="${teamInstance.sessionGroups}" optionKey="id"
 							  noSelection="['0': message(code:'session.list.filter.allSessionGroups')]" />
 					<br/>
 					<br/>
