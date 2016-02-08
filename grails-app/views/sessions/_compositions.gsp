@@ -178,17 +178,12 @@ var forceRedraw = function(element){
 														<div >
 															<g:each in="${composition.allPlayersIncludingEligibleNotYetPresent}" var="item">
 																<div id="compo-${composition.id}-player-${item.player.id}" class="draggableCompoPlayer" style="width: 60px; " >
-																		<g:if test="${item.player.avatar}">
-																			<img style="width: 45px; height: 45px;" src="${createLink(controller:'fileUploader', action:'show', id:item.player.avatar.id)}" alt="User avatar"  />
-																		</g:if> 
-																		<g:else>
-																			<img style="width:45px; vertical-align: middle;" src="${resource(dir:'images/user',file:'no-avatar.jpg')}" alt="Anonymous avatar" />
-																		</g:else> 
-																		<g:set var="username" value="${item.player.username}" />
-																		<g:if test="${username.length() > 8}">
-																			<g:set var="username" value="${username.substring(0, 7)}.." />
-																		</g:if>
-																		<span style="font-size: x-small; vertical-align: top">${username}</span>
+																	<img style="width:45px; vertical-align: middle;" src="${resource(dir:'images/user',file:item.player.avatarName)}" alt="Player avatar" />
+																	<g:set var="username" value="${item.player.username}" />
+																	<g:if test="${username.length() > 8}">
+																	      <g:set var="username" value="${username.substring(0, 7)}.." />
+																	</g:if>
+																	<span style="font-size: x-small; vertical-align: top">${username}</span>
 																</div>
 																<g:javascript>moveCompositionPlayerElement(document.getElementById('compo-${composition.id}-player-${item.player.id}'), ${item.x}, ${item.y});</g:javascript>
 															</g:each>
