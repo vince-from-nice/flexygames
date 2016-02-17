@@ -1,102 +1,104 @@
-package flexygames.admin
+package flexygames
 
-import flexygames.User;
 
+
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+@Transactional(readOnly = true)
 class UserController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index = {
-        redirect(action: "list", params: params)
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond User.list(params), model:[userInstanceCount: User.count()]
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [userInstanceList: User.list(params), userInstanceTotal: User.count()]
+    def show(User userInstance) {
+        respond userInstance
     }
 
-    def create = {
-        def userInstance = new User()
-        userInstance.properties = params
-        return [userInstance: userInstance]
+    def create() {
+        respond new User(params)
     }
 
-    def save = {
-        def userInstance = new User(params)
-        if (userInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])}"
-            redirect(action: "show", id: userInstance.id)
+    @Transactional
+    def save(User userInstance) {
+        if (userInstance == null) {
+            notFound()
+            return
         }
-        else {
-            render(view: "create", model: [userInstance: userInstance])
-        }
-    }
 
-    def show = {
-        def userInstance = User.get(params.id)
-        if (!userInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
-            redirect(action: "list")
+        if (userInstance.hasErrors()) {
+            respond userInstance.errors, view:'create'
+            return
         }
-        else {
-            [userInstance: userInstance]
-        }
-    }
 
-    def edit = {
-        def userInstance = User.get(params.id)
-        if (!userInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [userInstance: userInstance]
-        }
-    }
+        userInstance.save flush:true
 
-    def update = {
-        def userInstance = User.get(params.id)
-        if (userInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (userInstance.version > version) {
-                    
-                    userInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'user.label', default: 'User')] as Object[], "Another user has updated this User while you were editing")
-                    render(view: "edit", model: [userInstance: userInstance])
-                    return
-                }
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])
+                redirect userInstance
             }
-            userInstance.properties = params
-            if (!userInstance.hasErrors() && userInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])}"
-                redirect(action: "show", id: userInstance.id)
-            }
-            else {
-                render(view: "edit", model: [userInstance: userInstance])
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
-            redirect(action: "list")
+            '*' { respond userInstance, [status: CREATED] }
         }
     }
 
-    def delete = {
-        def userInstance = User.get(params.id)
-        if (userInstance) {
-            try {
-                userInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
-                redirect(action: "show", id: params.id)
-            }
+    def edit(User userInstance) {
+        respond userInstance
+    }
+
+    @Transactional
+    def update(User userInstance) {
+        if (userInstance == null) {
+            notFound()
+            return
         }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
-            redirect(action: "list")
+
+        if (userInstance.hasErrors()) {
+            respond userInstance.errors, view:'edit'
+            return
+        }
+
+        userInstance.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'User.label', default: 'User'), userInstance.id])
+                redirect userInstance
+            }
+            '*'{ respond userInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(User userInstance) {
+
+        if (userInstance == null) {
+            notFound()
+            return
+        }
+
+        userInstance.delete flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'User.label', default: 'User'), userInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }
