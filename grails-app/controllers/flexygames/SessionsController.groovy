@@ -161,12 +161,14 @@ class SessionsController {
 			def newStatus = message(code: 'participation.status.' + params.statusCode)
 			flash.message = "${message(code: 'session.show.update.success', args: [newStatus])}"
 		} catch (Exception e) {
+			println "Exception on status update: " + e.getMessage()
 			flash.error = "${message(code: 'session.show.update.error', args: [e.message])}"
 			return redirect(action: "show", id:participation.session.id)
 		}
 
 		// If user comes from another FG pages (such as the homepage or mySessions) we redirect to it
 		String referer =  request.getHeader('referer')
+		// FIXME
 		if (referer.contains(grailsApplication.config.grails.serverURL)) {
 			// Maybe adding a salt parameter would solve the issue with Chrome under Android ?
 			return redirect(url:referer + "?salt=" + UUID.randomUUID().toString())

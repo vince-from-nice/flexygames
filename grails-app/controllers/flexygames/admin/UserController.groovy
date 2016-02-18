@@ -1,6 +1,6 @@
-package flexygames
+package flexygames.admin
 
-
+import flexygames.User
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -100,5 +100,5 @@ class UserController {
             }
             '*'{ render status: NOT_FOUND }
         }
-    }
+   }
 }

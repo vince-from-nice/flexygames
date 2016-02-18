@@ -183,7 +183,7 @@ class Participation implements Comparable<Participation> {
 	///////////////////////////////////////////////////////////////////////////
 	
 	String toString() {
-		return "Participation of $p	layer for $session"
+		return "Participation of $player for $session"
 }
 
 //	public boolean equals (Object o) {

@@ -135,31 +135,39 @@ class SessionService {
 		// Updating statistics
 		///////////////////////////////////////////////////////////////////////////////////////////
 
+		def updatedUser = participation.player
+
 		// If previous status was effective but new status is not, decrement player part counter
 		if ((oldStatusCode == Participation.Status.DONE_GOOD.code || oldStatusCode == Participation.Status.DONE_BAD.code)
 		&& (newStatus != Participation.Status.DONE_GOOD.code && newStatus != Participation.Status.DONE_BAD.code)) {
-			participation.player.updatePartCounter(-1)
+			updatedUser = participation.player.updatePartCounter(-1)
 		}
 		// If new status is effective but old status was not, increment player part counter
 		if ((newStatus == Participation.Status.DONE_GOOD.code || newStatus == Participation.Status.DONE_BAD.code)
 		&& (oldStatusCode != Participation.Status.DONE_GOOD.code && oldStatusCode != Participation.Status.DONE_BAD.code)) {
-			participation.player.updatePartCounter(1)
+			updatedUser = participation.player.updatePartCounter(1)
 		}
 		// If new status is DONE_BAD, increment player gatecrash counter
 		if (newStatus == Participation.Status.DONE_BAD.code) {
-			participation.player.updateGateCrashCounter(1)
+			updatedUser = participation.player.updateGateCrashCounter(1)
 		}
 		// If old status was DONE_BAD, decrement player gatecrash counter
 		if (oldStatusCode == Participation.Status.DONE_BAD.code) {
-			participation.player.updateGateCrashCounter(-1)
+			updatedUser = participation.player.updateGateCrashCounter(-1)
 		}
 		// If new status is UNDONE, increment player gatecrash counter
 		if (newStatus == Participation.Status.UNDONE.code) {
-			participation.player.updateAbsenceCounter(1)
+			updatedUser = participation.player.updateAbsenceCounter(1)
 		}
 		// If old status was UNDONE, decrement player gatecrash counter
 		if (oldStatusCode == Participation.Status.UNDONE.code) {
-			participation.player.updateAbsenceCounter(-1)
+			updatedUser = participation.player.updateAbsenceCounter(-1)
 		}
+
+		if (!updatedUser) {
+			throw new Exception("Error on updating user : " + participation.player.errors)
+		}
+
+		println "Ok participation and user has been updated after a status change"
 	}
 }
