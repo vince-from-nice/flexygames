@@ -68,9 +68,13 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 						  'relatedSessions', 'allSessionGroups', 'allTeams', 'wins', 'defeats', 'draws', 'rounds',
 						  'votingScore', 'actionScore', 'effectiveParticipations' ]
 
-	public static Pattern USERNAME_VALID_CHARS = Pattern.compile("[A-Za-zéÉèÈôÔçÇ0-9_\\-]+");
+	// Be carefull with the character encoding:
+	// - following line is ok in ANSI or ISO-8859
+	//public static Pattern USERNAME_VALID_CHARS = Pattern.compile("[A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0-9_\\-]+");
+	// - following line is ok in UTF-8:
+	public static Pattern USERNAME_VALID_CHARS = Pattern.compile("[A-Za-zÃ©Ã‰Ã¨ÃˆÃ´Ã”Ã§Ã‡0-9_\\-]+");
 
-    static constraints = {
+	static constraints = {
         username(nullable: false, blank: false, unique: true, minSize: 2,
 			validator: {val -> Matcher m = USERNAME_VALID_CHARS.matcher(val); m.matches()})
         //passwordHash(nullable: false, blank: false)
@@ -129,7 +133,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 //			order 'name', 'asc'
 //		}
 
-		//  could not extract ResultSet; SQL [n/a]; Pas de valeur spécifiée pour le paramètre 1
+		//  could not extract ResultSet; SQL [n/a]; Pas de valeur spï¿½cifiï¿½e pour le paramï¿½tre 1
 //		def teams = Team.findAllByMembershipsInList(getAllMemberships())
 
 		def teams = []
@@ -151,7 +155,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 			}
 		}
 
-		// ERROR spi.SqlExceptionHelper  - Pas de valeur spécifiée pour le paramètre 1.
+		// ERROR spi.SqlExceptionHelper  - Pas de valeur spï¿½cifiï¿½e pour le paramï¿½tre 1.
 //		def teams = getAllTeams()
 //		SortedSet<SessionGroup> result = SessionGroup.findAllByDefaultTeamsInList(teams)
 
