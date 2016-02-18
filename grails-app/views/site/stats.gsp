@@ -19,7 +19,7 @@
 			        	<li><g:message code="statistics.global.playerNbr" /> : <b>${flexygames.User.count()}</b></li>
 			        	<li><g:message code="statistics.global.teamNbr" /> : <b>${flexygames.Team.count()}</b></li>
 			        	<li><g:message code="statistics.global.sessionNbr" /> : <b>${flexygames.Session.count()}</b></li>
-			        	<li><g:message code="statistics.global.effectiveSessionNbr" /> : <b>${flexygames.Session.getAllEffectiveCount()}</b></li>
+						<!--<li><g:message code="statistics.global.effectiveSessionNbr" /> : <b>${/*flexygames.Session.getAllEffectiveCount()*/'?'}</b></li>-->
 			        	<li><g:message code="statistics.global.invitationNbr" /> : <b>${flexygames.Participation.count()}</b></li>
 			        	<li><g:message code="statistics.global.participationNbr" /> : <b>${flexygames.Participation.getAllEffectiveCount()}</b></li>
 			        	<li><g:message code="statistics.global.roundNbr" /> : <b>${flexygames.SessionRound.count()}</b></li>

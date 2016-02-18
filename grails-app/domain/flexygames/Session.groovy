@@ -83,6 +83,7 @@ class Session implements Comparable {
 	// Business methods
 	///////////////////////////////////////////////////////////////////////////
 
+	// TODO need to optimize it !!
 	boolean isEffective () {
 		for (Participation part in participations) {
 			if (part.isEffective()) {
@@ -208,14 +209,6 @@ class Session implements Comparable {
 	Date getEndDate() {
 		// If no duration is defined for that session, we default to 90 min
 		return (duration ? new Date(date.time + duration * 60 * 1000) : new Date(date.time + 90 * 60 * 1000))
-	}
-	
-	static int getAllEffectiveCount () {
-		int result = 0
-		Session.getAll().each {
-			if (it.isEffective()) result++
-		}
-		return result
 	}
 	
 	///////////////////////////////////////////////////////////////////////////

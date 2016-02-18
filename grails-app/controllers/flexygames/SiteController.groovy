@@ -49,11 +49,11 @@ class SiteController {
 		// need to use JSON writer and an optimized SQL query (with aggregate counting)
 	
 		StringBuffer teams = new StringBuffer("[")
-		def allTeams = Team.getAll().sort{ it.members.size()}.reverse()
+		def allTeams = Team.getAll().sort{ it.memberships.size()}.reverse()
 		def max = (allTeams.size() <  STATS_TEAMS_SIZE ? allTeams.size() : STATS_TEAMS_SIZE)
 		for (int i = 0; i < max; i++) {
 			def team = allTeams.get(i)
-			teams.append("['" + team.name + "', " + team.members.size() + "]")
+			teams.append("['" + team.name + "', " + team.memberships.size() + "]")
 			if (i < max - 1) teams.append(", ")
 		}
 		teams.append("]")

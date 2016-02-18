@@ -163,18 +163,6 @@ class Team implements Comparable {
 		}
 		return result
 	}
-
-	List<Session> getAllEffectiveSessionsOld() {
-		def result = []
-		sessionGroups.each{ g ->
-			Session.findAllByGroup(g, [sort:"date", order:"desc"]).each{
-				if (it.isEffective()) {
-					result << it
-				}
-			}
-		}
-		return result
-	}
 	
 	int getAllParticipationCount () {
 		if (sessionGroups.size() == 0) {
