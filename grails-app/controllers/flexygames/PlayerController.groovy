@@ -80,6 +80,12 @@ class PlayerController {
 		}
 	}
 
+	def gluar = {
+		User user = User.get(params.id)
+		println "User $user has " + user.participations.size() + " parts:"
+		user.participations.each{println "\t$it.id $it.session.date $it.statusCode"}
+	}
+
 	def stats = {
 		def playerInstance = User.get(params.id)
 		if (!playerInstance) {
@@ -93,6 +99,9 @@ class PlayerController {
 					flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player'), params.id])}"
 				}
 				return render(view: 'statsForGroup', model: [playerInstance: playerInstance, group: group])
+			} else {
+				def allParticipations = playerInstance.allParticipations
+				def allVotes = playerInstance.allVotes
 			}
 			[playerInstance: playerInstance]
 		}

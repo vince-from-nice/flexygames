@@ -1,6 +1,6 @@
 package flexygames
 
-class Vote implements Comparable<Vote> {
+class Vote implements Comparable<Object> {
     
     int score
     

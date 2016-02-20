@@ -51,7 +51,7 @@ class SessionGroup implements Comparable<SessionGroup> {
 	static mapping = {
 		sort "name"
 		sessions sort: 'date', order: 'desc', lazy: true, batchSize: 50
-		defaultTeams lazy: true, batchSize: 50
+		defaultTeams fetch: 'join' //lazy: true, batchSize: 50
 	}
 	
 	///////////////////////////////////////////////////////////////////////////

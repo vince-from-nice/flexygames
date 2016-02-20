@@ -10,7 +10,8 @@
 	<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
 	</g:if>
-	<h2><g:message code="statistics" /></h2>
+<br />
+<h2><g:message code="player.stats.title.global" /></h2>
 	<table>
 	<tr>
 		<td>

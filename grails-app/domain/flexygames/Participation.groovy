@@ -186,12 +186,12 @@ class Participation implements Comparable<Participation> {
 		return "Participation of $player for $session"
 }
 
-//	public boolean equals (Object o) {
-//		if (o instanceof Participation) {
-//			return session == o.session && player == o.player && statusCode == o.statusCode
-//		}
-//		return false
-//	}
+	public boolean equals (Object o) {
+		if (o instanceof Participation) {
+			return session == o.session && player == o.player && statusCode == o.statusCode && userLog == o.userLog
+		}
+		return false
+	}
 
 	int compareTo(Participation o) {
 		int i = statusCode.compareTo(o.statusCode)

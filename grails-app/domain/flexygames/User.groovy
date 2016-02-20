@@ -30,9 +30,12 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	Integer actionCounter
 	Integer voteCounter
 	Integer commentCounter
+
 	int scoreInCurrentSession // transient
 	Membership membershipInCurrentSession // transient
 	SortedSet<Team> teamsInCurrentSession = new TreeSet<Team>() // transient
+	List<Participation> allParticipations // transient
+	List<Vote> allVotes // transient
 
 	SortedSet<flexygames.Role> roles
 	SortedSet<Membership> memberships
@@ -56,7 +59,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	static mapping = {
 		table 'uzer'
 		//cache true
-		avatar fetch: 'join'
 		memberships lazy: true, batchSize: 50, cascade: "all-delete-orphan"
 		participations lazy: true, batchSize: 50
 		skills lazy: true, batchSize: 50
@@ -65,10 +67,10 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	}
 
 	static transients = [ 'scoreInCurrentSession', 'membershipInCurrentSession', 'teamsInCurrentSession',
-						  'relatedSessions', 'allSessionGroups', 'allTeams', 'wins', 'defeats', 'draws', 'rounds',
-						  'votingScore', 'actionScore', 'effectiveParticipations' ]
+						  'allParticipations', 'allMemberships', 'allTeams', 'allSessionGroups', 'allSessions', 'allVotes',
+						  'wins', 'defeats', 'draws', 'rounds', 'votingScore', 'actionScore', 'effectiveParticipations' ]
 
-	// Be carefull with the character encoding:
+	// Be careful with the character encoding:
 	// - following line is ok in ANSI or ISO-8859
 	//public static Pattern USERNAME_VALID_CHARS = Pattern.compile("[A-Za-z��������0-9_\\-]+");
 	// - following line is ok in UTF-8:
@@ -109,56 +111,60 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	// Business methods
 	///////////////////////////////////////////////////////////////////////////
 
-	// TODO on va revoir le lazy hein
+	// TODO that method shouldn't exist but participations is not fully populated
 	List<Team> getAllParticipations() {
-		Participation.findAllByPlayer(this, [sort: "session.date", order:'desc'])
+		if (allParticipations == null) {
+			allParticipations = Participation.findAllByPlayer(this, [sort: "session.date", order:'desc'])
+			println "User $this has " + allParticipations.size() + " participations"
+		}
+		return allParticipations
 	}
 
-	// TODO on va revoir le lazy hein
+	// TODO that method shouldn't exist but memberships is not fully populated
 	List<Membership> getAllMemberships() {
 		Membership.findAllByUser(this, [sort: "team.name", order:'asc'])
 	}
 
-	// TODO on va revoir le lazy hein
-	List<Vote> getAllVotes() {
-		Vote.findAllByPlayer(this, [sort: "session.name", order:'asc'])
+	// TODO that method shouldn't exist but votes is not fully populated
+		List<Vote> getAllVotes() {
+			if (allVotes == null) {
+				allVotes = Vote.findAllByPlayer(this, [sort: "session.name", order:'asc'])
+				println "User $this has " + allVotes.size() + " votes"
+			}
+			return allVotes
 	}
 
-	// TODO normalement super simple: return memberships*.team
-	List<User> getAllTeams() {
+	// TODO that method shouldn't exist (memberships*.team should be enough) but memberships is not fully populated
+		List<User> getAllTeams() {
+		// Try with criteria
 //		def teams = Team.createCriteria().list {
 //			memberships {
 //				eq ('user.id', this.id)
 //			}
 //			order 'name', 'asc'
 //		}
-
-		//  could not extract ResultSet; SQL [n/a]; Pas de valeur sp�cifi�e pour le param�tre 1
+		//  Error: could not extract ResultSet; SQL [n/a]; Not specified value for parameter 1
 //		def teams = Team.findAllByMembershipsInList(getAllMemberships())
-
 		def teams = []
 		def memberships = Membership.findAllByUser(this)
 		memberships.each {membership ->
 			teams << membership.team
 		}
-
 		return teams
 	}
 
 	// TODO redo with one big request
 	SortedSet<SessionGroup> getAllSessionGroups() {
 		SortedSet<SessionGroup> result = new TreeSet<SessionGroup>()
+		// ERROR spi.SqlExceptionHelper  - Not specified value for parameter 1
+//		def teams = getAllTeams()
+//		SortedSet<SessionGroup> result = SessionGroup.findAllByDefaultTeamsInList(teams)
 		def teams = getAllTeams()
 		teams.each { team ->
 			team.sessionGroups.each { group ->
 				result << group
 			}
 		}
-
-		// ERROR spi.SqlExceptionHelper  - Pas de valeur sp�cifi�e pour le param�tre 1.
-//		def teams = getAllTeams()
-//		SortedSet<SessionGroup> result = SessionGroup.findAllByDefaultTeamsInList(teams)
-
 		return result
 	}
 
@@ -185,7 +191,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return session.participations.findIndexOf  { it.player == this} 
 	}
 
-	// Obsolete ?
 	boolean isManagedBy(String username) {
 		boolean result = false
 		if (!username) return false
@@ -203,7 +208,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	List<Participation> getParticipationsVisibleInCalendar() {
 		def result = []
 		long now = java.lang.System.currentTimeMillis() 
-		allParticipations.each { p ->
+		getAllParticipations().each { p ->
 			// sessions in the past 
 			if (p.session.date.time < now) {
 				if (p.statusCode == Participation.Status.DONE_GOOD.code || p.statusCode == Participation.Status.DONE_BAD.code) {
@@ -262,10 +267,10 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	List<Participation> getActiveParticipations(paramz) {
 		return Participation.findAllByPlayerAndStatusCodeNotEqual(this, Participation.Status.REQUESTED.code, [sort: "session.date", order:'desc', offset: paramz.offset, max: paramz.max])
 	}
-	
+
 	List<Participation> getEffectiveParticipations() {
 		def result = []
-		allParticipations.each { p ->
+		getAllParticipations().each { p ->
 			if (p.isEffective()) {
 				result << p
 			}
@@ -275,7 +280,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<Participation> getEffectiveParticipationsBySessionGroup(group) {
 		def result = []
-		effectiveParticipations.each { p ->
+		getEffectiveParticipations().each { p ->
 			if (group.id in p.session.group.id) {
 				result << p
 			}
@@ -285,7 +290,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<Participation> getEffectiveParticipationsByTeam(Team team) {
 		def result = []
-		effectiveParticipations.each { p ->
+		getEffectiveParticipations().each { p ->
 			if (team.id in p.session.group.defaultTeams*.id) {
 				result << p
 			}
@@ -426,27 +431,27 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		}
 		return result
 	}
-	
+
 	def getVotingScore() {
 		int score = 0
-		getAllParticipations().each{ p ->
-			score += p.votingScore
+		getAllVotes().each { v ->
+			score += v.score
 		}
 		return score
 	}
-	
+
 	def getVotingScoreByTeam(team) {
 		int score = 0
-		getAllParticipations().each{ p ->
-			if (team.id in p.session.group.defaultTeams*.id) score += p.votingScore
+		getAllVotes().each { v ->
+			if (team.id in v.session.group.defaultTeams*.id) score += v.score
 		}
 		return score
 	}
 	
 	def getVotingScoreBySessionGroup(group) {
 		int score = 0
-		getAllParticipations().each{ p ->
-			if (group.id == p.session.group.id) score += p.votingScore
+		getAllVotes().each { v ->
+			if (group.id == v.session.group.id) score += v.score
 		}
 		return score
 	}

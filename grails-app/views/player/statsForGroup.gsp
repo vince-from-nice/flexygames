@@ -10,8 +10,10 @@
 	<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
 	</g:if>
+	<br>
 	<h2><g:message code="player.stats.title.forSessionGroup"  args="[group]" /></h2>
 	[<g:link action="stats" id="${playerInstance.id }"><g:message code="player.stats.title.bySession.backToGlobalStats" /></g:link>]
+	<br>&nbsp;
 	<table class="flexyTab" style="width: 100%">
 		<tr>
 			<th valign="top" rowspan="1"><g:message code="date" /></th>
