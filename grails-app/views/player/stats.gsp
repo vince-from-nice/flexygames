@@ -3,10 +3,10 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="layout" content="main" />
-	<g:set var="entityName" value="${message(code: 'player.label', default: 'Player')}" />
+	<g:set var="entityName" value="${message(code: 'player.label', default: 'userStats.player')}" />
 </head>
 <body>
-	<h1><g:message code="player.stats.title" /> <g:link action="show" id="${playerInstance.id}"><b>${playerInstance}</b></g:link></h1>
+	<h1><g:message code="player.stats.title" /> <g:link action="show" id="${userStats.player.id}"><b>${userStats.player}</b></g:link></h1>
 	<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
 	</g:if>
@@ -16,27 +16,27 @@
 	<tr>
 		<td>
 			<g:message code="player.stats.partCounter.present" /> :
-			<span style="font-size: 20px; font-weight: bold;">${playerInstance.countParticipationsByStatus(flexygames.Participation.Status.DONE_GOOD.code)}</span>
+			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.DONE_GOOD.code)}</span>
 			<br />
 			<br />
 			<g:message code="player.stats.partCounter.absent" /> :
-			<span style="font-size: 20px; font-weight: bold;">${playerInstance.countParticipationsByStatus(flexygames.Participation.Status.UNDONE.code)}</span>
+			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.UNDONE.code)}</span>
 			<br />
 			<br />
 			<g:message code="player.stats.partCounter.gateCrashed" /> :
-			<span style="font-size: 20px; font-weight: bold;">${playerInstance.countParticipationsByStatus(flexygames.Participation.Status.DONE_BAD.code)}</span>
+			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.DONE_BAD.code)}</span>
 		</td>
 		<td>
 			<g:message code="player.stats.partCounter.refused" /> :
-			<span style="font-size: 20px; font-weight: bold;">${playerInstance.countParticipationsByStatus(flexygames.Participation.Status.REMOVED.code)}</span>
+			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.REMOVED.code)}</span>
 			<br />
 			<br />
 			<g:message code="player.stats.partCounter.waitingList" /> :
-			<span style="font-size: 20px; font-weight: bold;">${playerInstance.countParticipationsByStatus(flexygames.Participation.Status.WAITING_LIST.code)}</span>
+			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.WAITING_LIST.code)}</span>
 			<br />
 			<br />
 			<g:message code="player.stats.partCounter.pending" /> :
-			<span style="font-size: 20px; font-weight: bold;">${playerInstance.countParticipationsByStatus(flexygames.Participation.Status.REQUESTED.code)}</span>
+			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.REQUESTED.code)}</span>
 		</td>
 	</tr>
 	</table>
@@ -55,24 +55,24 @@
         	<th style="font-size: 12px; text-align: center; vertical-align: middle;"><g:message code="stats.byRound" /></th>
         	<th style="font-size: 16px; text-align: center; vertical-align: middle;"><g:message code="votes" /></th>
        	</tr>
-		<g:each in="${playerInstance.getAllSessionGroups()}" var="group">
-			<g:set var="parts" value="${playerInstance.getEffectiveParticipationsBySessionGroup(group).size()}" />
+		<g:each in="${userStats.sessionGroups}" var="group">
+			<g:set var="parts" value="${group.effectiveParticipations}" />
 			<g:if test="${parts > 0}">
-				<g:set var="actions" value="${playerInstance.getActionsBySessionGroup(group).size()}" />
-				<g:set var="rounds" value="${playerInstance.getRoundsBySessionGroup(group).size()}" />
-				<g:set var="wins" value="${playerInstance.getWinsBySessionGroup(group).size()}" />
-				<g:set var="draws" value="${playerInstance.getDrawsBySessionGroup(group).size()}" />
-				<g:set var="defeats" value="${playerInstance.getDefeatsBySessionGroup(group).size()}" />
-				<g:set var="groupLink" value="${createLink(controller: 'player', action: 'stats', id: playerInstance.id, absolute: true, params: ['groupId': group.id])}" />
+				<g:set var="actions" value="${group.actions}" />
+				<g:set var="rounds" value="${group.rounds}" />
+				<g:set var="wins" value="${group.wins}" />
+				<g:set var="draws" value="${group.draws}" />
+				<g:set var="defeats" value="${group.defeats}" />
+				<g:set var="groupLink" value="${createLink(controller: 'player', action: 'stats', id: group.id, absolute: true, params: ['groupId': group.id])}" />
 				<tr style="height: 60px; margin: 0px; padding: 0px; border: solid black 1px; cursor: pointer; " onclick="document.location='${groupLink}'">
 					<td style="vertical-align: middle;">
-						<g:set var="team" value="${group.defaultTeams.first()}" />
+						<g:set var="team" value="${group.firstDefaultTeam}" />
 						<g:link controller="teams" action="show" id="${team.id}">
 							<img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:team.logoName)}" alt="Team logo" />
 						</g:link>
 					</td>
 					<td style="vertical-align: middle; ; text-align: left">
-						${group}
+						${group.name}
 					</td>
 					<td style="vertical-align: middle; ; text-align: center; border-left: black solid 1px">
 						${parts}
@@ -128,21 +128,21 @@
 						<g:if test="${rounds > 0}"><g:formatNumber number="${actions/rounds}" type="number" maxFractionDigits="2" /></g:if>
 						<g:else>0</g:else>
 					</td>
-					<td style="vertical-align: middle; text-align: center; border-left: black solid 1px">${playerInstance.getVotingScoreBySessionGroup(group)}</td>
+					<td style="vertical-align: middle; text-align: center; border-left: black solid 1px">${group.votingScore}</td>
 				</tr>
 			</g:if>
 		</g:each>
-		<g:set var="totalActions" value="${playerInstance.actions.size()}" />
-		<g:set var="totalParts" value="${playerInstance.effectiveParticipations.size()}" />
-		<g:set var="totalRounds" value="${playerInstance.rounds.size()}" />
+		<g:set var="totalActions" value="${userStats.player.actions.size()}" />
+		<g:set var="totalParts" value="${userStats.player.effectiveParticipations.size()}" />
+		<g:set var="totalRounds" value="${userStats.player.rounds.size()}" />
 		<tr>
 			<th colspan="2"><g:message code="Total" /></th>
-			<th style="text-align: center; border-left: black solid 1px">${playerInstance.effectiveParticipations.size()}</th>
+			<th style="text-align: center; border-left: black solid 1px">${userStats.player.effectiveParticipations.size()}</th>
 			<th style="text-align: center;">${totalRounds }</th>
 			<th style="text-align: center;">${totalWins}</th>
 			<th style="text-align: center;">${totalDraws}</th>
 			<th style="text-align: center;">${totalDefeats}</th>
-			<th style="text-align: center; border-left: black solid 1px">${playerInstance.actions.size()}</th>
+			<th style="text-align: center; border-left: black solid 1px">${userStats.player.actions.size()}</th>
 			<th style="text-align: center;">
 				<g:if test="${totalParts > 0}"><g:formatNumber number="${totalActions/totalParts}" type="number" maxFractionDigits="2" /></g:if>
 				<g:else>0</g:else>
@@ -151,7 +151,7 @@
 				<g:if test="${totalRounds > 0}"><g:formatNumber number="${totalActions/totalRounds}" type="number" maxFractionDigits="2" /></g:if>
 				<g:else>0</g:else>
 			</th>
-			<th style="text-align: center; border-left: black solid 1px">${playerInstance.votingScore}</th>
+			<th style="text-align: center; border-left: black solid 1px">${userStats.player.votingScore}</th>
 		</tr>
        </table>
 </body>

@@ -36,9 +36,9 @@
 						<g:sortableColumn property="webUrl" title="${message(code: 'team.webUrl.label', default: 'Web Url')}" />
 					
 						<g:sortableColumn property="email" title="${message(code: 'team.email.label', default: 'Email')}" />
-					
-						<th><g:message code="team.logo.label" default="Logo" /></th>
-					
+
+						<th><g:message code="team.logoName.label" default="Logo" /></th>
+
 					</tr>
 				</thead>
 				<tbody>

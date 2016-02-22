@@ -52,7 +52,7 @@
 					
 						<td>${fieldValue(bean: teamInstance, field: "email")}</td>
 					
-						<td>${fieldValue(bean: teamInstance, field: "logo")}</td>
+						<td>${fieldValue(bean: teamInstance, field: "logoName")}</td>
 					
 					</tr>
 				</g:each>
