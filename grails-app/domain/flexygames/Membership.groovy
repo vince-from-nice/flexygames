@@ -31,7 +31,11 @@ class Membership implements Comparable<Membership> {
 	}
 	
 	public int compareTo (Membership o) {
-		return user.compareTo(o.user)
+		int i = user.compareTo(o.user)
+		if (i != 0) {
+			return i
+		}
+		return team.compareTo(o.team)
 	}
 	
 	String toString() {

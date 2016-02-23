@@ -24,7 +24,7 @@ class TeamsController {
 			return redirect(action: "list")
 		}
 		if (!params.mode) {
-			/*if (team.getAllSessionGroups(true).size() > 0) {
+			/*if (team.getAllSubscribedSessionGroups(true).size() > 0) {
 				params.mode = "competition"
 			} else {
 				params.mode = "training"

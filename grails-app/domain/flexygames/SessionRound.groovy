@@ -22,7 +22,9 @@ class SessionRound /*implements Comparable<SessionRound> */{
 	static hasMany = [playersForTeamA: User, playersForTeamB: User, actions: GameAction]
 
 	static mapping = {
-		actions cascade: "all-delete-orphan"
+		actions lazy: true, batchSize: 50, cascade: "all-delete-orphan"
+		playersForTeamA lazy: true, batchSize: 50
+		playersForTeamB lazy: true, batchSize: 50
 	}
 	
 	static constraints = {

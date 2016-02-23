@@ -34,8 +34,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	int scoreInCurrentSession // transient
 	Membership membershipInCurrentSession // transient
 	SortedSet<Team> teamsInCurrentSession = new TreeSet<Team>() // transient
-	List<Participation> allParticipations // transient
-	List<Vote> allVotes // transient
 
 	SortedSet<flexygames.Role> roles
 	SortedSet<Membership> memberships
@@ -67,7 +65,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	}
 
 	static transients = [ 'scoreInCurrentSession', 'membershipInCurrentSession', 'teamsInCurrentSession',
-						  'allParticipations', 'allMemberships', 'allTeams', 'allSessionGroups', 'allSessions', 'allVotes',
+						  'allSubscribedTeams', 'allSubscribedSessionGroups', 'allSessions',
 						  'wins', 'defeats', 'draws', 'rounds', 'votingScore', 'actionScore', 'effectiveParticipations' ]
 
 	// Be careful with the character encoding:
@@ -111,55 +109,32 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	// Business methods
 	///////////////////////////////////////////////////////////////////////////
 
-	// TODO that method shouldn't exist but participations is not fully populated
-	List<Team> getAllParticipations() {
-		if (allParticipations == null) {
-			allParticipations = Participation.findAllByPlayer(this, [sort: "session.date", order:'desc'])
-			println "User $this has " + allParticipations.size() + " participations"
-		}
-		return allParticipations
+	def getEffectiveParticipations = {
+		return participations.grep{it.isEffective()}
 	}
 
-	// TODO that method shouldn't exist but memberships is not fully populated
-	List<Membership> getAllMemberships() {
-		Membership.findAllByUser(this, [sort: "team.name", order:'asc'])
+	def getAllEffectiveSessions = {
+		return getEffectiveParticipations()*.session
 	}
 
-	// TODO that method shouldn't exist but votes is not fully populated
-		List<Vote> getAllVotes() {
-			if (allVotes == null) {
-				allVotes = Vote.findAllByPlayer(this, [sort: "session.name", order:'asc'])
-				println "User $this has " + allVotes.size() + " votes"
-			}
-			return allVotes
+	// Calculate all session groups the player has participated to (not only the groups of the team he has subscribed to)
+	def getAllEffectiveSessionGroups = {
+		SortedSet<SessionGroup> allSessionGroups = new TreeSet<>()
+		getAllEffectiveSessions().each{allSessionGroups << it.group}
+		return allSessionGroups
 	}
 
-	// TODO that method shouldn't exist (memberships*.team should be enough) but memberships is not fully populated
-		List<User> getAllTeams() {
-		// Try with criteria
-//		def teams = Team.createCriteria().list {
-//			memberships {
-//				eq ('user.id', this.id)
-//			}
-//			order 'name', 'asc'
-//		}
-		//  Error: could not extract ResultSet; SQL [n/a]; Not specified value for parameter 1
-//		def teams = Team.findAllByMembershipsInList(getAllMemberships())
-		def teams = []
-		def memberships = Membership.findAllByUser(this)
-		memberships.each {membership ->
-			teams << membership.team
-		}
-		return teams
+	List<User> getAllSubscribedTeams() {
+		return memberships*.team
 	}
 
 	// TODO redo with one big request
-	SortedSet<SessionGroup> getAllSessionGroups() {
+	SortedSet<SessionGroup> getAllSubscribedSessionGroups() {
 		SortedSet<SessionGroup> result = new TreeSet<SessionGroup>()
 		// ERROR spi.SqlExceptionHelper  - Not specified value for parameter 1
-//		def teams = getAllTeams()
+//		def teams = getAllSubscribedTeams()
 //		SortedSet<SessionGroup> result = SessionGroup.findAllByDefaultTeamsInList(teams)
-		def teams = getAllTeams()
+		def teams = getAllSubscribedTeams()
 		teams.each { team ->
 			team.sessionGroups.each { group ->
 				result << group
@@ -169,9 +144,9 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	}
 
 	// TODO redo with one big request
-	List<SessionGroup> getAllSessions(Date start, Date end) {
+	List<SessionGroup> getAllSubscribedSessions(Date start, Date end) {
 		def result = []
-		getAllSessionGroups().each { group ->
+		getAllSubscribedSessionGroups().each { group ->
 			group.sessions.each {
 				if ((start == null || it.date > start ) && (end == null || it.date < end )) {
 					result << it
@@ -195,7 +170,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		boolean result = false
 		if (!username) return false
 		User user = User.findByUsername(username)
-		allTeams.each { team ->
+		allSubscribedTeams.each { team ->
 			if (team.managers.contains(user)) result = true
 		}
 		return result
@@ -208,7 +183,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	List<Participation> getParticipationsVisibleInCalendar() {
 		def result = []
 		long now = java.lang.System.currentTimeMillis() 
-		getAllParticipations().each { p ->
+		participations.each { p ->
 			// sessions in the past 
 			if (p.session.date.time < now) {
 				if (p.statusCode == Participation.Status.DONE_GOOD.code || p.statusCode == Participation.Status.DONE_BAD.code) {
@@ -239,7 +214,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		}
 		return result
 	}
-	
+
 	def getActionsBySessionGroup(SessionGroup group) {
 		def result = []
 		actions.each{ action ->
@@ -268,16 +243,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return Participation.findAllByPlayerAndStatusCodeNotEqual(this, Participation.Status.REQUESTED.code, [sort: "session.date", order:'desc', offset: paramz.offset, max: paramz.max])
 	}
 
-	List<Participation> getEffectiveParticipations() {
-		def result = []
-		getAllParticipations().each { p ->
-			if (p.isEffective()) {
-				result << p
-			}
-		}
-		return result
-	}
-	
 	List<Participation> getEffectiveParticipationsBySessionGroup(group) {
 		def result = []
 		getEffectiveParticipations().each { p ->
@@ -328,7 +293,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getRounds() {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			p.session.rounds.each { r ->
 				if (this in r.playersForTeamA || this in r.playersForTeamB) result << r
 			}
@@ -338,7 +303,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getRoundsByTeam(team) {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			if (team.id in p.session.group.defaultTeams*.id) {
 				p.session.rounds.each { r ->
 					if (this in r.playersForTeamA || this in r.playersForTeamB) result << r
@@ -350,7 +315,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getRoundsBySessionGroup(group) {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			if (group.id == p.session.group.id) {
 				p.session.rounds.each { r ->
 					if (this in r.playersForTeamA || this in r.playersForTeamB) result << r
@@ -362,7 +327,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getWins() {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			result += p.wins
 		}
 		return result
@@ -370,7 +335,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getDraws() {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			result += p.draws
 		}
 		return result
@@ -378,7 +343,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getDefeats() {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			result += p.defeats
 		}
 		return result
@@ -386,7 +351,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getWinsByTeam(team) {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			if (team.id in p.session.group.defaultTeams*.id) result += p.wins
 		}
 		return result
@@ -394,7 +359,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getDrawsByTeam(team) {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			if (team.id in p.session.group.defaultTeams*.id) result += p.draws
 		}
 		return result
@@ -402,7 +367,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getDefeatsByTeam(team) {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			if (team.id in p.session.group.defaultTeams*.id) result += p.defeats
 		}
 		return result
@@ -410,7 +375,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getWinsBySessionGroup(group) {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			if (group.id == p.session.group.id) result += p.wins
 		}
 		return result
@@ -418,7 +383,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getDrawsBySessionGroup(group) {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			if (group.id == p.session.group.id) result += p.draws
 		}
 		return result
@@ -426,7 +391,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<SessionRound> getDefeatsBySessionGroup(group) {
 		def result = []
-		getAllParticipations().each{ p ->
+		participations.each{ p ->
 			if (group.id == p.session.group.id) result += p.defeats
 		}
 		return result
@@ -434,7 +399,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 
 	def getVotingScore() {
 		int score = 0
-		getAllVotes().each { v ->
+		votes.each { v ->
 			score += v.score
 		}
 		return score
@@ -442,7 +407,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 
 	def getVotingScoreByTeam(team) {
 		int score = 0
-		getAllVotes().each { v ->
+		votes.each { v ->
 			if (team.id in v.session.group.defaultTeams*.id) score += v.score
 		}
 		return score
@@ -450,7 +415,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	def getVotingScoreBySessionGroup(group) {
 		int score = 0
-		getAllVotes().each { v ->
+		votes.each { v ->
 			if (group.id == v.session.group.id) score += v.score
 		}
 		return score

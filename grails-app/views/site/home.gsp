@@ -37,7 +37,7 @@
 									${fieldValue(bean: playerInstance, field: "username")}
 								</td>
 	                            <td style="vertical-align: middle; font-size: 12px">
-	                                <g:each in="${playerInstance.allTeams}" var="t">
+	                                <g:each in="${playerInstance.allSubscribedTeams}" var="t">
 	                                    <g:link controller="teams" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link><br />
 	                                </g:each>
 	                            </td>

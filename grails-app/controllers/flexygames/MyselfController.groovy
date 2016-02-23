@@ -52,7 +52,7 @@ class MyselfController {
 			//cal.set(Calendar.WEEK_OF_YEAR, week + 1)
 			cal.add(Calendar.DAY_OF_YEAR, 7)
 			Date end = cal.getTime()
-			def sessions = user.getAllSessions(start, end)
+			def sessions = user.getAllSubscribedSessions(start, end)
 			//println "start: $start"
 			//println "end: $end"
 			allSessions.add(sessions)
@@ -138,7 +138,7 @@ class MyselfController {
 		} else if (!team) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team')])}"
 			redirect(action: "myAccount")
-		} else if (user.allTeams.contains(team)) {
+		} else if (user.allSubscribedTeams.contains(team)) {
 			flash.message = "Hey you've already joined $team !"
 			redirect(action: "myAccount")
 		} else {

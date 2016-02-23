@@ -114,8 +114,8 @@
 							<th></th>
 							<th></th>
 						</tr>
-						<g:if test="${playerInstance.allMemberships.size() > 0}">
-							<g:each in="${playerInstance.allMemberships}" var="m">
+						<g:if test="${playerInstance.memberships.size() > 0}">
+							<g:each in="${playerInstance.memberships}" var="m">
 								<g:form>
 									<g:hiddenField name="id" value="${m.id}" />
 									<tr>

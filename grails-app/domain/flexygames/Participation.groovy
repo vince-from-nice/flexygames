@@ -202,6 +202,10 @@ class Participation implements Comparable<Participation> {
 			i = lastUpdate.compareTo(o.lastUpdate)
 			if (i != 0) return i
 		}
-		return player.compareTo(o.player)
+		i = player.compareTo(o.player)
+		if (i != 0) {
+			return i
+		}
+		return lastUpdate.compareTo(o.lastUpdate)
 	}
 }

@@ -1,6 +1,7 @@
 package flexygames
 
 import grails.converters.JSON
+import spock.util.mop.Use
 
 import java.text.SimpleDateFormat
 import java.util.regex.Matcher
@@ -16,6 +17,8 @@ import org.apache.shiro.crypto.hash.Sha512Hash
 class PlayerController {
 
 	def mailerService
+
+	def statsService
 	
 	def index = { redirect(action:"list") }
 
@@ -85,6 +88,8 @@ class PlayerController {
 		User user = User.get(params.id)
 		println "User $user has " + user.participations.size() + " parts:"
 		user.participations.each{println "\t$it.id $it.session.date $it.statusCode"}
+		println "User $user has " + user.memberships.size() + " memberships:"
+		user.memberships.each{println "\t$it.id $it.team.name"}
 	}
 
 	def stats = {
@@ -102,83 +107,7 @@ class PlayerController {
 				return render(view: 'statsForGroup', model: [playerInstance: player, group: group])
 			} else {
 				// Prepare all data for user statistics
-				def userStats = [:]
-
-				// Fetch from DB in one shot all participations the player has
-				def allEffectiveParticipations = Participation.findAllByPlayerAndStatusCodeNotEqual(player, Participation.Status.REQUESTED.code, [sort: "session.date", order:'desc'])
-
-				// Calculate all sessions the player has participated to
-				def allSessions = allEffectiveParticipations*.session
-				//def allSessions = Session.getAll(allParticipations.session*.id)
-
-				// Calculate all session groups the player has participated to (and not only the groups of the team he has subscribed to !!)
-				SortedSet<SessionGroup> allSessionGroups = new TreeSet<>()
-				allSessions.each{allSessionGroups << it.group}
-
-				// Fetch all votes in one shot
-				def allVotes = player.getAllVotes()
-
-				// Fetch from DB in one shot all rounds the player has participated to
-				def allRounds = SessionRound.findAllBySessionInList(allSessions)
-
-				// Associate rounds with sessions (bad idea)
-//				allSessions.each{it.rounds = new ArrayList<SessionRound>()}
-//				allRounds.each {round ->
-//					def session = allSessions.find{it == round.session}
-//					session.rounds << round
-//				}
-
-				userStats.player = player
-				userStats.sessionGroups = []
-				allSessionGroups.each { sessionGroup ->
-					def group = [:]
-					group.id = sessionGroup.id
-					group.name = sessionGroup.name
-					group.firstDefaultTeam = sessionGroup.defaultTeams.first()
-					group.effectiveParticipations = 0
-					group.actions = 0
-					group.rounds = 0
-					group.wins = 0
-					group.draws = 0
-					group.defeats = 0
-					group.votingScore = 0
-					userStats.sessionGroups << group
-				}
-
-				def allActions = player.actions
-				allActions.each { action ->
-					def group = userStats.sessionGroups.find{it.id == action.sessionRound.session.group.id}
-					if (group != null) {
-						group.actions++
-					}
-				}
-
-				allEffectiveParticipations.each { part ->
-					def group = userStats.sessionGroups.find{it.id == part.session.group.id}
-					if (group != null) {
-						group.effectiveParticipations++
-						group.wins += part.getWins().size()
-						group.draws += part.getDraws().size()
-						group.defeats += part.getDefeats().size()
-					}
-				}
-
-				allRounds.each { round ->
-					def group = userStats.sessionGroups.find{it.id == round.session.group.id}
-					if (group != null) {
-						if (player in round.playersForTeamA || player in round.playersForTeamB) {
-							group.rounds++
-						}
-					}
-				}
-
-				allVotes.each { vote ->
-					def group = userStats.sessionGroups.find{it.id == vote.session.group.id}
-					if (group != null) {
-						group.votingScore += vote.score
-					}
-				}
-
+				def userStats = statsService.getUserStats(player)
 				return [userStats:userStats]
 			}
 		}

@@ -56,7 +56,7 @@
 							<td style="vertical-align: middle; font-size: 12px;"><nobr>${fieldValue(bean: playerInstance, field: "company")}</nobr></td>
 							<td style="vertical-align: middle; font-size: 12px;"><nobr>${fieldValue(bean: playerInstance, field: "city")}</nobr></td>
                             <td style="vertical-align: middle; font-size: 10px; line-height: 10px">
-                                <g:each in="${playerInstance.allTeams}" var="t">
+                                <g:each in="${playerInstance.allSubscribedTeams}" var="t">
                                     <nobr><g:link controller="teams" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link><br /></nobr>
                                 </g:each>
                             </td>

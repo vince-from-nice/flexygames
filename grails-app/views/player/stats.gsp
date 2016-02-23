@@ -63,7 +63,7 @@
 				<g:set var="wins" value="${group.wins}" />
 				<g:set var="draws" value="${group.draws}" />
 				<g:set var="defeats" value="${group.defeats}" />
-				<g:set var="groupLink" value="${createLink(controller: 'player', action: 'stats', id: group.id, absolute: true, params: ['groupId': group.id])}" />
+				<g:set var="groupLink" value="${createLink(controller: 'player', action: 'stats', id: userStats.player.id, absolute: true, params: ['groupId': group.id])}" />
 				<tr style="height: 60px; margin: 0px; padding: 0px; border: solid black 1px; cursor: pointer; " onclick="document.location='${groupLink}'">
 					<td style="vertical-align: middle;">
 						<g:set var="team" value="${group.firstDefaultTeam}" />
@@ -133,11 +133,11 @@
 			</g:if>
 		</g:each>
 		<g:set var="totalActions" value="${userStats.player.actions.size()}" />
-		<g:set var="totalParts" value="${userStats.player.effectiveParticipations.size()}" />
+		<g:set var="totalParts" value="${userStats.player.getEffectiveParticipations().size()}" />
 		<g:set var="totalRounds" value="${userStats.player.rounds.size()}" />
 		<tr>
 			<th colspan="2"><g:message code="Total" /></th>
-			<th style="text-align: center; border-left: black solid 1px">${userStats.player.effectiveParticipations.size()}</th>
+			<th style="text-align: center; border-left: black solid 1px">${totalParts}</th>
 			<th style="text-align: center;">${totalRounds }</th>
 			<th style="text-align: center;">${totalWins}</th>
 			<th style="text-align: center;">${totalDraws}</th>
