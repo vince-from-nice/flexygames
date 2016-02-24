@@ -42,6 +42,14 @@
 	</table>
 	<br />
 	<h2><g:message code="player.stats.title.bySessionGroup" /></h2>
+		<!-- use total counts just for check/fun -->
+		<g:set var="totalParts" value="${0}" />
+		<g:set var="totalActions" value="${0}" />
+		<g:set var="totalRounds" value="${0}" />
+		<g:set var="totalWins" value="${0}" />
+		<g:set var="totalDraws" value="${0}" />
+		<g:set var="totalDefeats" value="${0}" />
+		<g:set var="totalVotes" value="${0}" />
        <table class="flexyTab">
        	<tr>
         	<th style="font-size: 16px; text-align: center; vertical-align: middle;" colspan="2"><g:message code="group" /></th>
@@ -56,13 +64,23 @@
         	<th style="font-size: 16px; text-align: center; vertical-align: middle;"><g:message code="votes" /></th>
        	</tr>
 		<g:each in="${userStats.sessionGroups}" var="group">
+			<g:set var="actions" value="${group.actions}" />
+			<g:set var="rounds" value="${group.rounds}" />
+			<g:set var="wins" value="${group.wins}" />
+			<g:set var="draws" value="${group.draws}" />
+			<g:set var="defeats" value="${group.defeats}" />
+			<g:set var="votingScore" value="${group.votingScore}" />
+			<!-- increments total counts -->
+			<g:set var="votingScore" value="${group.votingScore}" />
+			<g:set var="totalActions" value="${totalActions + actions}" />
+			<g:set var="totalRounds" value="${totalRounds + rounds}" />
+			<g:set var="totalWins" value="${totalWins + wins}" />
+			<g:set var="totalDraws" value="${totalDraws + draws}" />
+			<g:set var="totalDefeats" value="${totalDefeats + defeats}" />
+			<g:set var="totalVotes" value="${totalVotes + votingScore}" />
 			<g:set var="parts" value="${group.effectiveParticipations}" />
 			<g:if test="${parts > 0}">
-				<g:set var="actions" value="${group.actions}" />
-				<g:set var="rounds" value="${group.rounds}" />
-				<g:set var="wins" value="${group.wins}" />
-				<g:set var="draws" value="${group.draws}" />
-				<g:set var="defeats" value="${group.defeats}" />
+				<g:set var="totalParts" value="${totalParts + parts}" />
 				<g:set var="groupLink" value="${createLink(controller: 'player', action: 'stats', id: userStats.player.id, absolute: true, params: ['groupId': group.id])}" />
 				<tr style="height: 60px; margin: 0px; padding: 0px; border: solid black 1px; cursor: pointer; " onclick="document.location='${groupLink}'">
 					<td style="vertical-align: middle;">
@@ -83,7 +101,7 @@
 					<td style="vertical-align: middle; ; text-align: center">
 						<nobr>
 						<span style="font-size: 12px">
-							<g:if test="${wins > 0 || draws > 0 || defeats > 0}">
+							<g:if test="${wins + draws + defeats > 0}">
 								${wins}
 								<g:set var="ratio" value="${wins/(wins+draws+defeats)}" />
 									<g:if test="${ratio == 0}">(0%)</g:if>
@@ -96,7 +114,7 @@
 					<td style="vertical-align: middle; ; text-align: center">
 						<nobr>
 						<span style="font-size: 12px">
-							<g:if test="${wins > 0 || draws > 0 || defeats > 0}">
+							<g:if test="${wins + draws + defeats > 0}">
 								${draws}
 								<g:set var="ratio" value="${draws/(wins+draws+defeats)}" />
 									<g:if test="${ratio == 0}">(0%)</g:if>
@@ -109,7 +127,7 @@
 					<td style="vertical-align: middle; text-align: center">
 						<nobr>
 						<span style="font-size: 12px">
-							<g:if test="${wins > 0 || draws > 0 || defeats > 0}">
+							<g:if test="${wins + draws + defeats > 0}">
 								${defeats}
 								<g:set var="ratio" value="${defeats/(wins+draws+defeats)}" />
 									<g:if test="${ratio == 0}">(0%)</g:if>
@@ -128,13 +146,10 @@
 						<g:if test="${rounds > 0}"><g:formatNumber number="${actions/rounds}" type="number" maxFractionDigits="2" /></g:if>
 						<g:else>0</g:else>
 					</td>
-					<td style="vertical-align: middle; text-align: center; border-left: black solid 1px">${group.votingScore}</td>
+					<td style="vertical-align: middle; text-align: center; border-left: black solid 1px">${votingScore}</td>
 				</tr>
 			</g:if>
 		</g:each>
-		<g:set var="totalActions" value="${userStats.player.actions.size()}" />
-		<g:set var="totalParts" value="${userStats.player.getEffectiveParticipations().size()}" />
-		<g:set var="totalRounds" value="${userStats.player.rounds.size()}" />
 		<tr>
 			<th colspan="2"><g:message code="Total" /></th>
 			<th style="text-align: center; border-left: black solid 1px">${totalParts}</th>
@@ -151,7 +166,7 @@
 				<g:if test="${totalRounds > 0}"><g:formatNumber number="${totalActions/totalRounds}" type="number" maxFractionDigits="2" /></g:if>
 				<g:else>0</g:else>
 			</th>
-			<th style="text-align: center; border-left: black solid 1px">${userStats.player.votingScore}</th>
+			<th style="text-align: center; border-left: black solid 1px">${totalVotes}</th>
 		</tr>
        </table>
 </body>
