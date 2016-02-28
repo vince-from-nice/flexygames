@@ -82,16 +82,6 @@ class Session implements Comparable {
 	///////////////////////////////////////////////////////////////////////////
 	// Business methods
 	///////////////////////////////////////////////////////////////////////////
-
-	// TODO need to optimize it !!
-	boolean isEffective () {
-		for (Participation part in participations) {
-			if (part.isEffective()) {
-				return true
-			}
-		}
-		return false
-	}
 	
     boolean isManagedBy(String username) {
 		//println "checking management of $this for user $username"

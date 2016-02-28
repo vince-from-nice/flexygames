@@ -58,62 +58,17 @@ class Team implements Comparable {
 	///////////////////////////////////////////////////////////////////////////
 
 	List<User> getMembers() {
-		long t1 = System.currentTimeMillis();
-		// Trying to find the less slow method but in fact the problem is more in the user loading (User has many eager collections) 
-		//def users = getMembersWithCriteria()	// 11900ms
-		//def users = getMembersWithWhereQueries // 11500ms
-		def users = getMembersWithHQL() // 11500ms
-		//def users = getMembersWithSQL() // 14000ms !?!
-		long t2 = System.currentTimeMillis();
-		//println "getMembers() : " + (t2 -t1) + " ms for " + users.size() + " members of " + this.toString()
-		return users
-	}
-
-	List<User> getMembersWithCriteria() {
-		User.createCriteria().list {
-			memberships { 
-				eq 'team.id', this.id 
-			}
-			// testing
-			fetchMode "memberships", org.hibernate.FetchMode.SELECT
-			fetchMode "teams", org.hibernate.FetchMode.SELECT
-			order 'username', 'asc'
-		}
-	}
-	
-	List<User> getMembersWithWhereQueries() {
-		User.where {
-			memberships {
-				eq 'team.id', this.id
-			}
-		}.list(order:'username')
-	}
-	
-	List<User> getMembersWithHQL() {
-		// attention la requete suivante ne renvoie pas une liste de User mais d'une paire User/Membership !
-		//User.findAll(" from User as user inner join user.memberships as membership with membership.team.id = " + this.id + ")")
-		User.executeQuery(" select user from User as user inner join user.memberships as membership with membership.team.id = " + this.id + " order by username")
-	}
-	
-	List<User> getMembersWithSQL() {
-		long t1 = System.currentTimeMillis();
-		def userz = systemService.sql.rows("select u.id, u.username from uzer u, membership m where u.id = m.user_id and m.team_id = " + this.id);
-		long t2 = System.currentTimeMillis();
-		println "getMembers() : " + (t2 -t1) + " ms for " + userz.size() + " members of " + this.toString() + " (SQL part)"
-		def userIds = userz.collect {it[0]}
-		def users = User.getAll(userIds)
-		return users
+		return memberships*.user
 	}
 
 	List<User> getManagers() {
-		def users = User.createCriteria().list {
-			memberships { 
-				eq 'team.id', this.id 
-				eq 'manager', true
+		def result = []
+		memberships.each { membership ->
+			if (membership.manager) {
+				result << membership.user
 			}
-			order 'username', 'asc'
 		}
-		return users
+		return result
 	}
 
 	boolean isManagedBy(String username) {
@@ -125,7 +80,7 @@ class Team implements Comparable {
 		if (SecurityUtils.subject.hasRole("Administrator")) {
 			return true
 		}
-		if (managers.contains(user)) {
+		if (getManagers().contains(user)) {
 			return true
 		}
 		return false
@@ -134,6 +89,10 @@ class Team implements Comparable {
 	int countSessions() {
 		if (!sessionGroups) return 0
 		return Session.countByGroupInList(sessionGroups)
+	}
+
+	List<Session> getSessions() {
+		return Session.findAllByGroupInList(sessionGroups)
 	}
 
 	List<Session> getSessions(params) {
@@ -154,17 +113,7 @@ class Team implements Comparable {
 		return result
 	}
 
-	List<Session> getAllEffectiveSessions() {
-		def result = []
-		Session.findAllByGroupInList(sessionGroups, [sort:"date", order:"desc"]).each{
-			if (it.isEffective()) {
-				result << it
-			}
-		}
-		return result
-	}
-	
-	int getAllParticipationCount () {
+	int countAllParticipations() {
 		if (sessionGroups.size() == 0) {
 			return 0
 		}
@@ -174,11 +123,24 @@ class Team implements Comparable {
 		return q.count()
 	}
 	
-	int getAllEffectiveParticipationCount () {
+	int countAllEffectiveParticipations() {
 		def q = Participation.where {
 			(session.group in sessionGroups) && (statusCode == Participation.Status.DONE_GOOD.code || statusCode == Participation.Status.DONE_BAD.code)
 		}
 		return q.count()
+	}
+
+	int countAllEffectiveSessions() {
+		int result
+		def q = Participation.where {
+			(session.group in sessionGroups) && (statusCode == Participation.Status.DONE_GOOD.code || statusCode == Participation.Status.DONE_BAD.code)
+		}
+		def allEffectiveParticipations = q.list()
+		Set<Session> allEffectiveSessions = new HashSet<>()
+		allEffectiveParticipations.each { part ->
+			allEffectiveSessions << part.session
+		}
+		return allEffectiveSessions.size()
 	}
 	
 	SessionGroup getSessionGroupByDefault() {

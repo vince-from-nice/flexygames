@@ -204,7 +204,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	///////////////////////////////////////////////////////////////////////////
 	// Stats methods (need to move them)
 	///////////////////////////////////////////////////////////////////////////
-	
+
 	def getActionsBySessionRound(SessionRound sr) {
 		def result = []
 		actions.each{ action ->
@@ -239,8 +239,8 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return Participation.countByPlayerAndStatusCodeNotEqual(this, Participation.Status.REQUESTED.code)
 	}
 	
-	List<Participation> getActiveParticipations(paramz) {
-		return Participation.findAllByPlayerAndStatusCodeNotEqual(this, Participation.Status.REQUESTED.code, [sort: "session.date", order:'desc', offset: paramz.offset, max: paramz.max])
+	List<Participation> getActiveParticipations(params) {
+		return Participation.findAllByPlayerAndStatusCodeNotEqual(this, Participation.Status.REQUESTED.code, [sort: "session.date", order:'desc', offset: params.offset, max: params.max])
 	}
 
 	List<Participation> getEffectiveParticipationsBySessionGroup(group) {
@@ -263,8 +263,9 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return result
 	}
 	
-	List<Participation> getParticipationsByStatus(String statusCode) {
-		Participation.findAllByPlayerAndStatusCode(this, statusCode, [sort: "session.date", order:'desc'])
+	SortedSet<Participation> getParticipationsByStatus(String statusCode) {
+		//Participation.findAllByPlayerAndStatusCode(this, statusCode, [sort: "session.date", order:'desc'])
+		return participations.grep{it.statusCode == statusCode}
 	}
 	
 	int countParticipationsByStatus(String statusCode) {
@@ -273,7 +274,9 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	List<Participation> getParticipationsByStatusAndTeam(String statusCode, Team team) {
 		def result = []
-		getParticipationsByStatus(statusCode).each { p ->
+		def parts = getParticipationsByStatus(statusCode)
+		parts.each { p ->
+			//println "\t" + p.session.group.defaultTeams*.id
 			if (team.id in p.session.group.defaultTeams*.id) {
 				result << p
 			}
@@ -290,17 +293,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		}
 		return result
 	}
-	
-	List<SessionRound> getRounds() {
-		def result = []
-		participations.each{ p ->
-			p.session.rounds.each { r ->
-				if (this in r.playersForTeamA || this in r.playersForTeamB) result << r
-			}
-		}
-		return result
-	}
-	
+
 	List<SessionRound> getRoundsByTeam(team) {
 		def result = []
 		participations.each{ p ->
@@ -422,7 +415,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
-	// Counter methods for fast computed statistics
+	// Counter methods for precomputed statistics
 	///////////////////////////////////////////////////////////////////////////
 	
 	// Participation counter 

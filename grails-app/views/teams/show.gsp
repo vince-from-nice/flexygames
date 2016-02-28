@@ -62,17 +62,17 @@
 					<br />
 					<g:message code="team.stats.totalOfEffectiveSessions" /> :
 					<span style="font-size: 20px; font-weight: bold;">
-						${teamInstance.allEffectiveSessions.size()}
+						${teamInstance.countAllEffectiveSessions()}
 					</span>
 					<br />
 					<g:message code="team.stats.totalOfParticipations" /> :
 					<span style="font-size: 20px; font-weight: bold;">
-						${teamInstance.allParticipationCount}
+						${teamInstance.countAllParticipations()}
 					</span>
 					<br />
 					<g:message code="team.stats.totalOfEffectiveParticipations" /> :
 					<span style="font-size: 20px; font-weight: bold;">
-						${teamInstance.allEffectiveParticipationCount}
+						${teamInstance.countAllEffectiveParticipations()}
 					</span>
 				</div>
 			</td>
@@ -161,7 +161,7 @@
 		</tr>
 		
 		<tr>
-			<td colspan="4">
+			<td colspan="5">
 				<g:if test="${params.mode=='blog'}">
 					<g:render template="showBlog" />
 				</g:if>

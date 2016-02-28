@@ -51,7 +51,7 @@
 						<th colspan="2"><g:message code="player" /></th>
 						<th><g:message code="stats.criteria.${currentCriteria}" /></th>
 					</tr>
-					<g:each var="item" in="${members}" status="i">
+					<g:each var="item" in="${membersRanking}" status="i">
 						<g:if test="${item.value != lastValue}"><g:set var="borderStyle" value="border-top: solid black 1px; " /></g:if>
 						<g:else><g:set var="borderStyle" value="" /></g:else>
 						<g:set var="userLink" value="${createLink(controller: 'player', action: 'show', id: item.key.id, absolute: true)}" />
