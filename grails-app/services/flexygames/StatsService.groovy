@@ -122,8 +122,11 @@ class StatsService {
                     value = actions / rounds
                 }
             } else if (criteria.equals('votingScore')) {
-                //TODO change ByTeam
-                value = player.getVotingScore()
+                if (sessionGroup) {
+                    value = player.getVotingScoreBySessionGroup(sessionGroup)
+                } else {
+                    value = player.getVotingScoreByTeam(team)
+                }
             } else {
                 def status
                 if (criteria.equals('statuses.doneGood')) {
