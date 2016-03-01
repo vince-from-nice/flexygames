@@ -51,7 +51,8 @@ class SessionGroup implements Comparable<SessionGroup> {
 	static mapping = {
 		sort "name"
 		sessions sort: 'date', order: 'desc', lazy: true, batchSize: 50
-		defaultTeams fetch: 'join' //lazy: true, batchSize: 50
+		//normally fetch:'join' is not a good idea for *-to-many associations but here we're pretty sure there's only one defaultTeam per sessionGroup
+		defaultTeams fetch: 'join' // lazy: true, batchSize: 50
 	}
 	
 	///////////////////////////////////////////////////////////////////////////

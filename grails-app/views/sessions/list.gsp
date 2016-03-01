@@ -16,10 +16,6 @@
 	<g:if test="${flash.error}">
 		<div class="errors">${flash.error}</div>
 	</g:if>
-session.filteredTeam: ${session.filteredTeam}<br>
-session.filteredSessionGroup: ${session.filteredSessionGroup}<br>
-currentSessionGroupForSelectTag: ${currentSessionGroupForSelectTag}<br>
-currentSessionGroupForSelectTag.id: ${currentSessionGroupForSelectTag.id}<br>
 	<table style="width:  auto;">
 	<tr>
 		<td>
@@ -39,8 +35,8 @@ currentSessionGroupForSelectTag.id: ${currentSessionGroupForSelectTag.id}<br>
 		</td>
 		<td>
 			<g:form name="groupFilterForm" action="list">
-				<g:select name="filteredSessionGroup" from="${sessionGroupsForSelectTag}"
-					optionKey="id" value="${currentSessionGroupForSelectTag.id}"
+				<g:select name="filteredSessionGroup" from="${sessionGroups}"
+					optionKey="id" value="${currentSessionGroup?.id}" noSelection="['0': message(code:'session.list.filter.allSessionGroups')]"
 					onChange="document.getElementById('groupFilterForm').submit();"  />
 				<g:set var="gluar" value="gluar"/>
 			</g:form>

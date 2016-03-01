@@ -29,22 +29,21 @@ class SessionsController {
 			session.filteredSessionGroup = 0
 		} else if (params.filteredSessionGroup) {
 			session.filteredSessionGroup = Integer.parseInt(params.filteredSessionGroup)
-			// If the user changes filtered session group we need to reset the team too !
-			//session.filteredTeam = 0
 		}
 
 		// Prepare data for the view
 		def sessionList
 		def sessionListSize
 		def sessionGroups
-		SessionGroupForSelectTag currentSessionGroupForSelectTag = new SessionGroupForSelectTag()
+		def currentSessionGroup
+		//SessionGroupForSelectTag currentSessionGroupForSelectTag = new SessionGroupForSelectTag()
 		if (session.filteredSessionGroup > 0) {
 			params.filteredSessionGroup
-			def sessionGroup = SessionGroup.get(session.filteredSessionGroup)
-			currentSessionGroupForSelectTag = new SessionGroupForSelectTag(sessionGroup.id, sessionGroup.toString())
-			sessionGroups = sessionGroup.defaultTeams.first().sessionGroups
-			sessionList = Session.findAllByGroup(sessionGroup, [max: params.max, offset: params.offset])
-			sessionListSize = Session.countByGroup(sessionGroup)
+			currentSessionGroup = SessionGroup.get(session.filteredSessionGroup)
+			//currentSessionGroupForSelectTag = new SessionGroupForSelectTag(currentSessionGroup.id, currentSessionGroup.toString())
+			sessionGroups = currentSessionGroup.defaultTeams.first().sessionGroups
+			sessionList = Session.findAllByGroup(currentSessionGroup, [max: params.max, offset: params.offset])
+			sessionListSize = Session.countByGroup(currentSessionGroup)
 		} else if (session.filteredTeam > 0) {
 			sessionGroups = Team.get(session.filteredTeam).sessionGroups
 			sessionList = Session.findAllByGroupInList(sessionGroups, [max: params.max, offset: params.offset])
@@ -54,26 +53,9 @@ class SessionsController {
 			sessionList = Session.list([max: params.max, offset: params.offset])
 			sessionListSize = Session.count()
 		}
-		def sessionGroupsForSelectTag = []
-		sessionGroupsForSelectTag << new SessionGroupForSelectTag()
-		sessionGroups.each {sessionGroupsForSelectTag << new SessionGroupForSelectTag(it.id, it.toString())}
 		[sessionInstanceList: sessionList, sessionListSize: sessionListSize,
-		 sessionGroupsForSelectTag: sessionGroupsForSelectTag, currentSessionGroupForSelectTag:currentSessionGroupForSelectTag]
-	}
-
-	// Trick for the Grails select tag
-	// When using the noSelection attribute the default values seems to be ignored => with following class I can make a list with a default value
-	public static class SessionGroupForSelectTag  {
-		public long id = 0
-		public String name = "ANY SessionGroup"
-		public SessionGroupForSelectTag() {}
-		public SessionGroupForSelectTag(long id, String name) {
-			this.id = id
-			this.name = name
-		}
-		public String toString() {
-			return name
-		}
+		 sessionGroups: sessionGroups, currentSessionGroup: currentSessionGroup,
+		]
 	}
 
 	def show = {
