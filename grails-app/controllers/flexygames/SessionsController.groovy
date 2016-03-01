@@ -1,15 +1,16 @@
 package flexygames
 
+import grails.gorm.DetachedCriteria
 import org.apache.shiro.SecurityUtils
 
 class SessionsController {
-	
+
 	def sessionService
-	
+
 	def votingService
 
 	def forumService
-		
+
 	def index = { redirect(action:"list") }
 
 	def home = { redirect(action:"list") }
@@ -21,43 +22,58 @@ class SessionsController {
 		if(!params.sort) params.sort = "date"
 		if(!params.order) params.order = "desc"
 
-		// If the user changes back to "all" we need to reset the other filters too !
-		if (params.filteredGameType == 'ALL' || params.filteredTeam == 'ALL') {
-			params.filteredGameType = 'ALL'
-			params.filteredTeam = 'ALL'
-			params.filteredSessionGroup = 'ALL'
+		// Update session with params
+		if (params.filteredTeam) {
+			session.filteredTeam = Integer.parseInt(params.filteredTeam)
+			// If the user changes filtered team we need to reset the session group too !
+			session.filteredSessionGroup = 0
+		} else if (params.filteredSessionGroup) {
+			session.filteredSessionGroup = Integer.parseInt(params.filteredSessionGroup)
+			// If the user changes filtered session group we need to reset the team too !
+			//session.filteredTeam = 0
 		}
-		
-		// update session with params
-		if (params.filteredGameType) { session.filteredGameType = params.filteredGameType }
-		if (params.filteredTeam) { session.filteredTeam = params.filteredTeam }
-		if (params.filteredSessionGroup) { session.filteredSessionGroup = params.filteredSessionGroup }
 
-		// construct fetching query (ugly, need to use "where" queries instead)
-		def query = "from Session as session  where 1 = 1"
-		def queryParams = []
-		if (session.filteredGameType && session.filteredGameType != 'ALL') {
-			query += " and session.type.id = ? "
-			queryParams += Long.parseLong(session.filteredGameType)
+		// Prepare data for the view
+		def sessionList
+		def sessionListSize
+		def sessionGroups
+		SessionGroupForSelectTag currentSessionGroupForSelectTag = new SessionGroupForSelectTag()
+		if (session.filteredSessionGroup > 0) {
+			params.filteredSessionGroup
+			def sessionGroup = SessionGroup.get(session.filteredSessionGroup)
+			currentSessionGroupForSelectTag = new SessionGroupForSelectTag(sessionGroup.id, sessionGroup.toString())
+			sessionGroups = sessionGroup.defaultTeams.first().sessionGroups
+			sessionList = Session.findAllByGroup(sessionGroup, [max: params.max, offset: params.offset])
+			sessionListSize = Session.countByGroup(sessionGroup)
+		} else if (session.filteredTeam > 0) {
+			sessionGroups = Team.get(session.filteredTeam).sessionGroups
+			sessionList = Session.findAllByGroupInList(sessionGroups, [max: params.max, offset: params.offset])
+			sessionListSize = Session.countByGroupInList(sessionGroups)
+		} else {
+			sessionGroups = SessionGroup.list()
+			sessionList = Session.list([max: params.max, offset: params.offset])
+			sessionListSize = Session.count()
 		}
-		if (session.filteredTeam && session.filteredTeam != 'ALL') {
-			query += " and (1 = 2 "
-			Team.get(session.filteredTeam).sessionGroups.each {
-				query += " or session.group.id = ? "
-				queryParams += it.id
-			}
-			query += ") "
-		}
-		if (session.filteredSessionGroup && session.filteredSessionGroup != 'ALL') {
-			query += " and session.group.id = ? "
-			queryParams += Long.parseLong(session.filteredSessionGroup)
-		}
-		query += " order by session.$params.sort $params.order"
+		def sessionGroupsForSelectTag = []
+		sessionGroupsForSelectTag << new SessionGroupForSelectTag()
+		sessionGroups.each {sessionGroupsForSelectTag << new SessionGroupForSelectTag(it.id, it.toString())}
+		[sessionInstanceList: sessionList, sessionListSize: sessionListSize,
+		 sessionGroupsForSelectTag: sessionGroupsForSelectTag, currentSessionGroupForSelectTag:currentSessionGroupForSelectTag]
+	}
 
-		// perform query and render
-		def sessionList = Session.findAll(query, queryParams, [max: params.max, offset: params.offset])
-		def sessionListSize = Session.findAll(query, queryParams).size()
-		[sessionInstanceList: sessionList, sessionListSize: sessionListSize]
+	// Trick for the Grails select tag
+	// When using the noSelection attribute the default values seems to be ignored => with following class I can make a list with a default value
+	public static class SessionGroupForSelectTag  {
+		public long id = 0
+		public String name = "ANY SessionGroup"
+		public SessionGroupForSelectTag() {}
+		public SessionGroupForSelectTag(long id, String name) {
+			this.id = id
+			this.name = name
+		}
+		public String toString() {
+			return name
+		}
 	}
 
 	def show = {
@@ -244,7 +260,7 @@ class SessionsController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'player', default: 'Player'), params.firstPositive])}"
 			return redirect(action: "show", id: session.id)
 		}
-		
+
 		try  {
 			votingService.vote(user, player, session, params.voteType,)
 			flash.message = "Your vote has been taken into account."
@@ -278,7 +294,7 @@ class SessionsController {
 		}
 		redirect(uri: "/sessions/show/" + session.id + "#comment" + comment.id)
 	}
-	
+
 	def watch = {
 		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
 		if (!user) {

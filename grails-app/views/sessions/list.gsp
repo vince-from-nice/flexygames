@@ -1,5 +1,5 @@
 
-<%@ page import="flexygames.Session"%>
+<%@ page import="flexygames.SessionsController; flexygames.Session"%>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -16,6 +16,10 @@
 	<g:if test="${flash.error}">
 		<div class="errors">${flash.error}</div>
 	</g:if>
+session.filteredTeam: ${session.filteredTeam}<br>
+session.filteredSessionGroup: ${session.filteredSessionGroup}<br>
+currentSessionGroupForSelectTag: ${currentSessionGroupForSelectTag}<br>
+currentSessionGroupForSelectTag.id: ${currentSessionGroupForSelectTag.id}<br>
 	<table style="width:  auto;">
 	<tr>
 		<td>
@@ -24,7 +28,7 @@
 		<td>
 			<g:form name="teamFilterForm" action="list">
 					<g:select name="filteredTeam" from="${flexygames.Team.list(sort: 'name')}" 
-						optionKey="id" value="${session.filteredTeam}" noSelection="['ALL': message(code:'session.list.filter.allTeams')]" 
+						optionKey="id" value="${session.filteredTeam}" noSelection="[0: message(code:'session.list.filter.allTeams')]"
 						onChange="document.getElementById('teamFilterForm').submit();"  />
 				</g:form>
 		</td>
@@ -35,13 +39,10 @@
 		</td>
 		<td>
 			<g:form name="groupFilterForm" action="list">
-				<g:set var="groups" value="${flexygames.SessionGroup.list(sort: 'name')}"/>
-				<g:if test="${session.filteredTeam && session.filteredTeam != 'ALL'}" >
-					<g:set var="groups" value="${flexygames.Team.get(session.filteredTeam).sessionGroups}"/>
-				</g:if>
-				<g:select name="filteredSessionGroup" from="${groups}"
-					optionKey="id" value="${session.filteredSessionGroup}" noSelection="['ALL': message(code:'session.list.filter.allSessionGroups')]"
+				<g:select name="filteredSessionGroup" from="${sessionGroupsForSelectTag}"
+					optionKey="id" value="${currentSessionGroupForSelectTag.id}"
 					onChange="document.getElementById('groupFilterForm').submit();"  />
+				<g:set var="gluar" value="gluar"/>
 			</g:form>
 		</td>
 	</tr>
