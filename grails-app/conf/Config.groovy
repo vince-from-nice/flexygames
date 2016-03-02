@@ -179,8 +179,8 @@ flexygames.fileUpload.teamLogo.allowedExtensions = ["jpg","jpeg","gif","png"]
 flexygames.fileUpload.teamLogo.path = "E:\\Repositories\\flexygames\\web-app\\images\\team"
 environments {
     production {
-        flexygames.fileUpload.userAvatar.path = "/home/asas/upload/flexygames/web-app/images/avatar/"
-        flexygames.fileUpload.teamLogo.path = "/home/asas/upload/flexygames/web-app/images/logo/"
+        flexygames.fileUpload.userAvatar.path = "/home/asas/webapps/flexygames/images/user/"
+        flexygames.fileUpload.teamLogo.path = "/home/asas/webapps/flexygames/images/team/"
     }
 }
 
