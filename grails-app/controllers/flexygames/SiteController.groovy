@@ -63,7 +63,7 @@ class SiteController {
 		max = (allGroups.size() <  STATS_SESSIONS_GROUPS_SIZE ? allGroups.size() : STATS_SESSIONS_GROUPS_SIZE)
 		for (int i = 0; i < max; i++) {
 			def group = allGroups.get(i)
-			groups.append("['" + group.name.replaceAll("'", " ") + "', " + group.sessions.size() + "]")
+			groups.append("['" + group.name.replaceAll("'", "\\\\'") + "', " + group.sessions.size() + "]")
 			if (i < max - 1) groups.append(", ")
 		}
 		groups.append("]")
@@ -73,7 +73,7 @@ class SiteController {
 		max = (allParticipants.size() <  STATS_SCORERS_SIZE ? allParticipants.size() : STATS_SCORERS_SIZE)
 		for (int i = 0; i < max; i++) {
 			def user = allParticipants.get(i)
-			participants.append("['" + user.username + "', " + user.countParticipations() + "]")
+			participants.append("['" + user.username + "', " + user.countParticipations() /*+ ", " + user.id*/ + "]")
 			if (i < max - 1) participants.append(", ")
 		}
 		participants.append("]")
