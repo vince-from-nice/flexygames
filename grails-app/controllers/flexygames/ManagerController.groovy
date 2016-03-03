@@ -415,7 +415,11 @@ class ManagerController {
 		if (params.recipients == "ALL_PARTICIPANTS") {
 			session.participations.each { addresses << it.player.email }
 		} else if (params.recipients == "AVAILABLE_PARTICIPANTS") {
-			session.availableParticipants.each { addresses << it.email }
+			session.participations.each { p ->
+				if (p.statusCode == Participation.Status.AVAILABLE.code || p.statusCode == Participation.Status.APPROVED.code) {
+					addresses << p.player.email
+				}
+			}
 		} else if (params.recipients == "ONE_PARTICIPANT") {
 			def player = User.get(params.recipientId)
 			if (!player) {
