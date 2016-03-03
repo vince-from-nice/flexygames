@@ -166,10 +166,9 @@ class SessionsController {
 
 		// If user comes from another FG pages (such as the homepage or mySessions) we redirect to it
 		String referer =  request.getHeader('referer')
-		// FIXME
 		if (referer.contains(grailsApplication.config.grails.serverURL)) {
-			// Maybe adding a salt parameter would solve the issue with Chrome under Android ?
-			return redirect(url:referer + "?salt=" + UUID.randomUUID().toString())
+			// Maybe adding a salt parameter solve the issue with Chrome under Android
+			return redirect(url:referer + (referer.contains('?') ? '&' : '?') + "salt=" + UUID.randomUUID().toString())
 		}
 		// Else we redirect to the session page
 		return redirect(action: "show", id:participation.session.id)
