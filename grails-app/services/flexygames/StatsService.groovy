@@ -66,7 +66,7 @@ class StatsService {
             }
         }
 
-        player.votes.each { vote ->
+        player.receivedVotes.each { vote ->
             def group = userStats.sessionGroups.find{it.id == vote.session.group.id}
             if (group != null) {
                 group.votingScore += vote.score

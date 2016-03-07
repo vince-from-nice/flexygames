@@ -41,7 +41,8 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	SortedSet<Participation> participations
 	Set<GameAction> actions
 	Set<Vote> votes
-	
+	Set<Vote> receivedVotes
+
 	///////////////////////////////////////////////////////////////////////////
 	// Grails stuff
 	///////////////////////////////////////////////////////////////////////////
@@ -50,9 +51,9 @@ class User implements Comparable<User>, HttpSessionBindingListener {
     //static belongsTo = Team
 	
     static hasMany = [roles: Role, permissions: String, memberships: Membership, 
-		skills: GameSkill, participations: Participation, actions: GameAction, votes: Vote]
+		skills: GameSkill, participations: Participation, actions: GameAction, votes: Vote, receivedVotes: Vote]
 
-    static mappedBy = [actions: "mainContributor"]
+    static mappedBy = [actions: "mainContributor", votes: "user", receivedVotes: "player"]
 
 	static mapping = {
 		table 'uzer'
@@ -62,6 +63,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		skills lazy: true, batchSize: 50
 		actions lazy: true, batchSize: 50
 		votes lazy: true, batchSize: 50
+		receivedVotes lazy: true, batchSize: 50
 	}
 
 	static transients = [ 'scoreInCurrentSession', 'membershipInCurrentSession', 'teamsInCurrentSession',
@@ -160,7 +162,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	boolean isManagedBy(String username) {
 		boolean result = false
 		if (!username) return false
-		User user = findByUsername(username)
+		User user = User.findByUsername(username)
 		allSubscribedTeams.each { team ->
 			if (team.managers.contains(user)) result = true
 		}
@@ -383,7 +385,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 
 	def getVotingScore() {
 		int score = 0
-		votes.each { v ->
+		receivedVotes.each { v ->
 			score += v.score
 		}
 		return score
@@ -391,7 +393,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 
 	def getVotingScoreByTeam(team) {
 		int score = 0
-		votes.each { v ->
+		receivedVotes.each { v ->
 			if (team.id in v.session.group.defaultTeams*.id) score += v.score
 		}
 		return score
@@ -399,7 +401,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	def getVotingScoreBySessionGroup(group) {
 		int score = 0
-		votes.each { v ->
+		receivedVotes.each { v ->
 			if (group.id == v.session.group.id) score += v.score
 		}
 		return score
