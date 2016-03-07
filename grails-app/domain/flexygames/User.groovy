@@ -35,7 +35,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	Membership membershipInCurrentSession // transient
 	SortedSet<Team> teamsInCurrentSession = new TreeSet<Team>() // transient
 
-	SortedSet<flexygames.Role> roles
+	SortedSet<Role> roles
 	SortedSet<Membership> memberships
     SortedSet<GameSkill> skills
 	SortedSet<Participation> participations
@@ -52,7 +52,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
     static hasMany = [roles: Role, permissions: String, memberships: Membership, 
 		skills: GameSkill, participations: Participation, actions: GameAction, votes: Vote]
 
-    static mappedBy = [teams: "members", managedTeams: "managers", actions: "mainContributor"]
+    static mappedBy = [actions: "mainContributor"]
 
 	static mapping = {
 		table 'uzer'
@@ -124,7 +124,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return allSessionGroups
 	}
 
-	List<User> getAllSubscribedTeams() {
+	def getAllSubscribedTeams() {
 		return memberships*.team
 	}
 
@@ -157,19 +157,10 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return result
 	}
 
-	Membership getMembershipByTeam(Team team) {
-		//return flexygames.Membership.findByUserAndTeam(this, team)
-		return memberships.find{team == it.team}
-	}
-	
-	boolean isParticipantOf(Session session) {
-		return session.participations.findIndexOf  { it.player == this} 
-	}
-
 	boolean isManagedBy(String username) {
 		boolean result = false
 		if (!username) return false
-		User user = User.findByUsername(username)
+		User user = findByUsername(username)
 		allSubscribedTeams.each { team ->
 			if (team.managers.contains(user)) result = true
 		}
@@ -182,18 +173,18 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 
 	List<Participation> getParticipationsVisibleInCalendar() {
 		def result = []
-		long now = java.lang.System.currentTimeMillis() 
+		long now = System.currentTimeMillis()
 		participations.each { p ->
 			// sessions in the past 
 			if (p.session.date.time < now) {
-				if (p.statusCode == Participation.Status.DONE_GOOD.code || p.statusCode == Participation.Status.DONE_BAD.code) {
+				if (p.statusCode == Participation.Status.DONE_GOOD.code() || p.statusCode == Participation.Status.DONE_BAD.code()) {
 					result << p
 				}
 			}
 			// sessions in the future 
 			else {
-				if (p.statusCode == Participation.Status.REQUESTED.code || p.statusCode == Participation.Status.AVAILABLE.code || 
-					p.statusCode == Participation.Status.APPROVED.code || p.statusCode == Participation.Status.WAITING_LIST.code) {
+				if (p.statusCode == Participation.Status.REQUESTED.code() || p.statusCode == Participation.Status.AVAILABLE.code() ||
+					p.statusCode == Participation.Status.APPROVED.code() || p.statusCode == Participation.Status.WAITING_LIST.code()) {
 					result << p
 				}
 			}
@@ -236,11 +227,11 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	}
 	
 	int countAllActiveParticipations() {
-		return Participation.countByPlayerAndStatusCodeNotEqual(this, Participation.Status.REQUESTED.code)
+		return Participation.countByPlayerAndStatusCodeNotEqual(this, Participation.Status.REQUESTED.code())
 	}
 	
 	List<Participation> getActiveParticipations(params) {
-		return Participation.findAllByPlayerAndStatusCodeNotEqual(this, Participation.Status.REQUESTED.code, [sort: "session.date", order:'desc', offset: params.offset, max: params.max])
+		return Participation.findAllByPlayerAndStatusCodeNotEqual(this, Participation.Status.REQUESTED.code(), [sort: "session.date", order:'desc', offset: params.offset, max: params.max])
 	}
 
 	List<Participation> getEffectiveParticipationsBySessionGroup(group) {
@@ -441,7 +432,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	int countAbsences() {
 		if (this.absenceCounter == null) {
-			this.absenceCounter = countParticipationsByStatus(Participation.Status.UNDONE.code)
+			this.absenceCounter = countParticipationsByStatus(Participation.Status.UNDONE.code())
 			if (!this.save(flush: true)) {
 				println "Error when initializing the absence counter for $this : " + this.errors
 			} else {
@@ -460,7 +451,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	
 	int countGateCrashes() {
 		if (this.gateCrashCounter == null) {
-			this.gateCrashCounter = countParticipationsByStatus(Participation.Status.DONE_BAD.code)
+			this.gateCrashCounter = countParticipationsByStatus(Participation.Status.DONE_BAD.code())
 			if (!this.save(flush: true)) {
 				println "Error when initializing the gatecrash counter for $this : " + this.errors
 			} else {
