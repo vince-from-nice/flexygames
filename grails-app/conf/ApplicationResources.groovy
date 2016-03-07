@@ -8,6 +8,6 @@ modules = {
 	}
 	
 	flexycharts {
-		resource url:'js/flexycharts.js'
+		resource url:'js/flexycharts-20160303.js'
 	}
 }

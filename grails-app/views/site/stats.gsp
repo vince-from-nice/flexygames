@@ -3,7 +3,8 @@
     <head>
         <meta name="layout" content="main" />
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-		<g:javascript library="flexycharts" />
+		<script type="text/javascript" src="${resource(dir:'js',file:'flexycharts-20160303.js')}"></script>
+		<!--g:javascript library="flexycharts" /-->
     </head>
     <body onload="
     	drawGColumnChart('${message(code:'statistics.global.participants')}', 'participantsDiv', ${participants}, 1000, 300, 'participations');
