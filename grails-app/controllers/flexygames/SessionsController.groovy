@@ -23,23 +23,27 @@ class SessionsController {
 		if(!params.order) params.order = "desc"
 
 		// Update session with params
+		def currentSessionGroup
 		if (params.filteredTeam) {
 			session.filteredTeam = Integer.parseInt(params.filteredTeam)
-			// If the user changes filtered team we need to reset the session group too !
+			// If the user changes filtered team we need to reset the session group to "any"
 			session.filteredSessionGroup = 0
 		} else if (params.filteredSessionGroup) {
 			session.filteredSessionGroup = Integer.parseInt(params.filteredSessionGroup)
+			// If the user changes filtered session group we need to reset the team too
+			if (session.filteredSessionGroup > 0) {
+				currentSessionGroup = SessionGroup.get(session.filteredSessionGroup)
+				session.filteredTeam = currentSessionGroup.getDefaultTeams().first().getId()
+			}
 		}
 
 		// Prepare data for the view
 		def sessionList
 		def sessionListSize
 		def sessionGroups
-		def currentSessionGroup
 		//SessionGroupForSelectTag currentSessionGroupForSelectTag = new SessionGroupForSelectTag()
 		if (session.filteredSessionGroup > 0) {
-			params.filteredSessionGroup
-			currentSessionGroup = SessionGroup.get(session.filteredSessionGroup)
+			if (currentSessionGroup == null) currentSessionGroup = SessionGroup.get(session.filteredSessionGroup)
 			//currentSessionGroupForSelectTag = new SessionGroupForSelectTag(currentSessionGroup.id, currentSessionGroup.toString())
 			sessionGroups = currentSessionGroup.defaultTeams.first().sessionGroups
 			sessionList = Session.findAllByGroup(currentSessionGroup, [max: params.max, offset: params.offset])
