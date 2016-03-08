@@ -112,10 +112,10 @@ class SessionsController {
 			participantsByScore.sort{it.scoreInCurrentSession}
 		}
 		def currentVotes = null
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
-		if (user) {
+		def currentUser = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (currentUser) {
 			currentVotes = [:]
-			def votes = Vote.findAllBySessionAndUser(session, user)
+			def votes = allVotes.grep{it.user == currentUser}
 			votes.each{ vote ->
 				if (vote.score == 3) currentVotes.put('firstPositive',  vote.player)
 				else if (vote.score == 2) currentVotes.put('secondPositive',  vote.player)
@@ -239,18 +239,11 @@ class SessionsController {
 			return redirect(action: "list")
 		}
 
-		def player = User.findByUsername(params.player)
-		if (!player) {
-			// TODO gérer ce cas afin de pouvoir annuler un vote
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'player', default: 'Player'), params.firstPositive])}"
-			return redirect(action: "show", id: session.id)
-		}
-
 		try  {
-			votingService.vote(user, player, session, params.voteType,)
-			flash.message = "Your vote has been taken into account."
+			votingService.vote(session, user, params)
+			flash.votingMessage = "Your vote has been taken into account."
 		} catch (Exception e) {
-			flash.error = "${message(code: 'session.show.votes.update.error', args: [e.message])}"
+			flash.votingError = "${message(code: 'session.show.votes.update.error', args: [e.message])}"
 			return redirect(uri: "/sessions/show/" + session.id)
 		}
 

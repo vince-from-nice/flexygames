@@ -13,6 +13,12 @@
 	</g:if>
 	<div class="sessionZoneContent">
 		<a id="votingArea"></a>
+		<g:if test="${flash.votingMessage}">
+			<div class="message">${flash.votingMessage}</div>
+		</g:if>
+		<g:if test="${flash.votingError}">
+			<div class="errors">${flash.votingError}</div>
+		</g:if>
 		<div id="votesSummaryZone" style="display: ${defaultDisplayForSummaryZone};">
 			<g:if test="${sessionInstance.votes.size() > 0}" >
 				<g:message code="session.show.votes.votesNbr"/> : <b>${sessionInstance.rounds.size()}</b>
@@ -137,85 +143,65 @@
 			    </shiro:notUser>
 			    <shiro:user>
 			        <tr>
-			            <th colspan="4" style="text-align: center">
+			            <th colspan="4" style="text-align: center; vertical-align: middle">
 			            	<g:message code="session.show.votes.dispatch" /> :
 						</th>
-			            <!--td colspan="4" style="text-align: center">
-			            	<input type="button" class="edit" value="${message(code:'session.show.votes.dispatch')}"
-			            		onclick="toggleRowDisplay('firstVoteChoices'); toggleRowDisplay('secondVoteChoices'); toggleRowDisplay('thirdVoteChoices')" />
-						</td-->
 					</tr>
-					<tr id="firstVoteChoices" style="display: table-row; height: 20px">
-						<g:form action="vote">
-							<g:hiddenField name="id" value="${sessionInstance?.id}" />
-							<g:hiddenField name="voteType" value="firstPositive" />
-							<td>
-							    <b><g:message code="session.show.votes.firstChoice" /></b> <small>(<g:message code="session.show.votes.giveXpoints" args="${[3]}" />)</small>
-							</td>
-							<td>
-								<g:select name="player" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.firstPositive}" noSelection="['':'']" />
-								<g:actionSubmit value="Vote" action="vote" />
-			                </td>
-						</g:form>
-			            <g:form action="vote">
-			                <g:hiddenField name="id" value="${sessionInstance?.id}" />
-			                <g:hiddenField name="voteType" value="firstNegative" />
-			                <td>
-			                    <b><g:message code="session.show.votes.firstChoice" /></b> <small>(<g:message code="session.show.votes.removeXpoints" args="${[3]}" />)</small>
-			                </td>
-			                <td>
-			                    <g:select name="player" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.firstNegative}" noSelection="['':'']" />
-			                    <g:actionSubmit value="Vote" action="vote" />
-			                </td>
-			            </g:form>
-					</tr>
-					<tr id="secondVoteChoices" style="display: table-row; height: 20px">
-			            <g:form action="vote">
-			                <g:hiddenField name="id" value="${sessionInstance?.id}" />
-			                <g:hiddenField name="voteType" value="secondPositive" />
-			                <td>
-			                    <b><g:message code="session.show.votes.secondChoice" /></b> <small>(<g:message code="session.show.votes.giveXpoints" args="${[2]}" />)</small>
-			                </td>
-			                <td>
-			                    <g:select name="player" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.secondPositive}" noSelection="['':'']" />
-			                    <g:actionSubmit value="Vote" action="vote" />
-			                </td>
-			            </g:form>
-			            <g:form action="vote">
-			                <g:hiddenField name="id" value="${sessionInstance?.id}" />
-			                <g:hiddenField name="voteType" value="secondNegative" />
-			                <td>
-			                    <b><g:message code="session.show.votes.secondChoice" /></b> <small>(<g:message code="session.show.votes.removeXpoints" args="${[2]}" />)</small>
-			                </td>
-			                <td>
-			                    <g:select name="player" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.secondNegative}" noSelection="['':'']" />
-			                    <g:actionSubmit value="Vote" action="vote" />
-			                </td>
-			            </g:form>
-					</tr>
-					<tr id="thirdVoteChoices" style="display: table-row; height: 20px">
-			            <g:form action="vote">
-			                <g:hiddenField name="id" value="${sessionInstance?.id}" />
-			                <g:hiddenField name="voteType" value="thirdPositive" />
-			                <td>
-			                    <b><g:message code="session.show.votes.thirdChoice" /></b> <small>(<g:message code="session.show.votes.give1point" />)</small>
-			                </td>
-			                <td>
-			                    <g:select name="player" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.thirdPositive}" noSelection="['':'']" />
-			                    <g:actionSubmit value="Vote" action="vote" />
-			                </td>
-			            </g:form>
-			            <g:form action="vote">
-			                <g:hiddenField name="id" value="${sessionInstance?.id}" />
-			                <g:hiddenField name="voteType" value="thirdNegative" />
-			                <td>
-			                    <b><g:message code="session.show.votes.thirdChoice" /></b> <small>(<g:message code="session.show.votes.remove1point" />)</small>
-			                </td>
-			                <td>
-			                    <g:select name="player" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.thirdNegative}" noSelection="['':'']" />
-			                    <g:actionSubmit value="Vote" action="vote" />
-			                </td>
-			            </g:form>
+					<tr>
+						<td colspan="4" style="text-align: center; vertical-align: middle">
+							<g:form action="vote">
+								<g:hiddenField name="id" value="${sessionInstance?.id}" />
+								<table>
+									<tr id="firstVoteChoices" style="display: table-row; height: 20px">
+											<td>
+												<b><g:message code="session.show.votes.firstChoice" /></b> <small>(<g:message code="session.show.votes.giveXpoints" args="${[3]}" />)</small>
+											</td>
+											<td>
+												<g:select name="firstChoiceBestPlayer" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.firstPositive}" noSelection="['':'']" />
+											</td>
+											<td>
+												<b><g:message code="session.show.votes.firstChoice" /></b> <small>(<g:message code="session.show.votes.removeXpoints" args="${[3]}" />)</small>
+											</td>
+											<td>
+												<g:select name="firstChoiceWorstPlayer" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.firstNegative}" noSelection="['':'']" />
+											</td>
+									</tr>
+									<tr id="secondVoteChoices" style="display: table-row; height: 20px">
+											<td>
+												<b><g:message code="session.show.votes.secondChoice" /></b> <small>(<g:message code="session.show.votes.giveXpoints" args="${[2]}" />)</small>
+											</td>
+											<td>
+												<g:select name="secondChoiceBestPlayer" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.secondPositive}" noSelection="['':'']" />
+											</td>
+											<td>
+												<b><g:message code="session.show.votes.secondChoice" /></b> <small>(<g:message code="session.show.votes.removeXpoints" args="${[2]}" />)</small>
+											</td>
+											<td>
+												<g:select name="secondChoiceWorstPlayer" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.secondNegative}" noSelection="['':'']" />
+											</td>
+									</tr>
+									<tr id="thirdVoteChoices" style="display: table-row; height: 20px">
+											<td>
+												<b><g:message code="session.show.votes.thirdChoice" /></b> <small>(<g:message code="session.show.votes.give1point" />)</small>
+											</td>
+											<td>
+												<g:select name="thirdChoiceBestPlayer" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.thirdPositive}" noSelection="['':'']" />
+											</td>
+											<td>
+												<b><g:message code="session.show.votes.thirdChoice" /></b> <small>(<g:message code="session.show.votes.remove1point" />)</small>
+											</td>
+											<td>
+												<g:select name="thirdChoiceWorstPlayer" from="${sessionInstance.effectiveParticipants}" value="${currentVotes.thirdNegative}" noSelection="['':'']" />
+											</td>
+									</tr>
+									<tr>
+										<th colspan="4" style="text-align: center; vertical-align: middle">
+											<g:actionSubmit value="${message(code:'session.show.votes.applyMyVotes')}" action="vote" />
+										</th>
+									</tr>
+								</table>
+							</g:form>
+						</td>
 					</tr>
 			    </shiro:user>
 		    </g:if>
