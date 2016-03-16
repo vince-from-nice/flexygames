@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<meta name="layout" content="desktop">
 		<g:set var="entityName" value="${message(code: 'sessionComment.label', default: 'SessionComment')}" />
 		<title><g:message code="default.create.label" args="[entityName]" /></title>
 	</head>

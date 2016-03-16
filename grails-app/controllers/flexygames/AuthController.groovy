@@ -41,7 +41,7 @@ class AuthController {
             // password is incorrect.
             SecurityUtils.subject.login(authToken)
 			
-			// turman : put the user into the session (online user list will be updated)
+			// turman : put the user into the session
 			def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
 			session.setAttribute("currentUser", user)
 
@@ -76,8 +76,8 @@ class AuthController {
         SecurityUtils.subject?.logout()
 		
 		// turman : update online users in application scope
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
-		session.removeAttribute("currentUser")
+		//def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		//session.removeAttribute("currentUser")
 
         // For now, redirect back to the home page.
         redirect(uri: "/")

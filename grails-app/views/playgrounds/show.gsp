@@ -1,40 +1,55 @@
 <!DOCTYPE html>
 <%@ page import="flexygames.Team"%>
 <html>
-  <head>
-  	<meta name="layout" content="main" />
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <style type="text/css">
-      html { height: 100% }
-      body { height: 100%; margin: 0; padding: 0 }
-      #map_canvas { height: 100% }
-    </style>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.google.api.key}&sensor=true">
-    </script>
-    <script type="text/javascript">
-      function initializeGMap(lat, lon) {
-		if (lat != null && lon != null) {
-	    	var playgroundLatLon = new google.maps.LatLng(lat, lon);
-	        var myOptions = {
-	          center: playgroundLatLon,
-	          zoom: 13,
-	          mapTypeId: google.maps.MapTypeId.ROADMAP
-	        };
-	        var infowindow = new google.maps.InfoWindow({
-	            content: "<h3 style='margin-top: Opx'>${playground}</h3>"
-	        });
-	        var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-	        var playgroundMarker = new google.maps.Marker({position: playgroundLatLon, map: map, title:"${playground}"});
-	        google.maps.event.addListener(playgroundMarker, 'click', function() {
-	        	  infowindow.open(map, playgroundMarker);
-	        	});
-	        infowindow.open(map, playgroundMarker);
-		} else {
-			//alert("Bad coordinates !!");
+<head>
+	<g:render template="/layouts/layout"/>
+	<g:if test="${request.display != 'mobile'}">
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+		<style type="text/css">
+		html {
+			height: 100%
 		}
-      }
-    </script>
-  </head>
+		body {
+			height: 100%;
+			margin: 0;
+			padding: 0
+		}
+		#map_canvas {
+			height: 100%
+		}
+		</style>
+	</g:if>
+	<script type="text/javascript"
+			src="http://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.google.api.key}&sensor=true">
+	</script>
+	<script type="text/javascript">
+		function initializeGMap(lat, lon) {
+			if (lat != null && lon != null) {
+				var playgroundLatLon = new google.maps.LatLng(lat, lon);
+				var myOptions = {
+					center: playgroundLatLon,
+					zoom: 13,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				};
+				var infowindow = new google.maps.InfoWindow({
+					content: "<h3 style='margin-top: Opx'>${playground}</h3>"
+				});
+				var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+				var playgroundMarker = new google.maps.Marker({
+					position: playgroundLatLon,
+					map: map,
+					title: "${playground}"
+				});
+				google.maps.event.addListener(playgroundMarker, 'click', function () {
+					infowindow.open(map, playgroundMarker);
+				});
+				infowindow.open(map, playgroundMarker);
+			} else {
+				//alert("Bad coordinates !!");
+			}
+		}
+	</script>
+</head>
   <body onload="initializeGMap(${playground.latitude}, ${playground.longitude})">
 	<h1>${playground}</h1>
 	<table style="width: 100%; border: 0px">

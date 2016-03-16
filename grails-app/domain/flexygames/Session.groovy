@@ -1,5 +1,6 @@
 package flexygames
 
+import groovy.time.TimeCategory
 import org.apache.shiro.SecurityUtils
 
 class Session implements Comparable {
@@ -82,7 +83,13 @@ class Session implements Comparable {
 	///////////////////////////////////////////////////////////////////////////
 	// Business methods
 	///////////////////////////////////////////////////////////////////////////
-	
+
+	Date getLockingDate() {
+		use(TimeCategory) {
+			return date - group.lockingTime.minutes
+		}
+	}
+
     boolean isManagedBy(String username) {
 		//println "checking management of $this for user $username"
 		//println "group managers are " + group.defaultManagers

@@ -8,11 +8,11 @@
 	<div class="sessionZoneContent">
 		<g:if test="${session.currentUser != null}">
 			<g:form action="watch" name="watchForm">
-					<g:hiddenField name="id" value="${sessionInstance.id}" />
-					<g:checkBox name="watch" value="${true}" checked="${session.currentUser.isWatchingSession(sessionInstance) }" 
-						onclick="document.getElementById('watchForm').submit();" />
-					<g:message code="session.show.comments.checkToWatch" />
-				</g:form>
+				<g:hiddenField name="id" value="${sessionInstance.id}" />
+				<g:checkBox name="watch" value="${true}" checked="${session.currentUser.isWatchingSession(sessionInstance) }"
+					onclick="document.getElementById('watchForm').submit();" />
+				<g:message code="session.show.comments.checkToWatch" />
+			</g:form>
 		</g:if>
 		<br />
 		<shiro:notUser>
@@ -72,5 +72,5 @@
 					<i><g:message code="session.show.comments.noComment" /></i><br />
 				</g:else>
 		</div>
-	</div>
+	</span>
 </div>

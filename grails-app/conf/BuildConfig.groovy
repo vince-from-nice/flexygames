@@ -48,6 +48,9 @@ grails.project.dependency.resolution = {
 
         // turman : add Jsoup library for HTML cleaning of user inputs
         runtime 'org.jsoup:jsoup:1.7.2'
+
+        // turman: needed by the resources plugin !
+        compile 'commons-io:commons-io:2.4'
     }
 
     plugins {
@@ -56,23 +59,23 @@ grails.project.dependency.resolution = {
 
 		// plugins for the compile step
 		compile ":scaffolding:2.1.2"
-		compile ':cache:1.1.8'
-		compile ":asset-pipeline:1.9.9"
+		compile ":cache:1.1.8"
+		compile ":asset-pipeline:2.7.2"
 
 		// plugins needed at runtime but not for compilation
 		runtime ":hibernate4:4.3.6.1" // or ":hibernate:3.6.10.18"
 		runtime ":database-migration:1.4.0"
-		runtime ":jquery:1.11.1"
+		//runtime ":jquery:1.11.1"
 		
-		// turman : putain depuis grails 2.3 on ne peut plus utiliser le plugin manager et il faut rajouter toutes les dépendances à  la main ???
-		compile ":mail:1.0.7"
-		compile (":shiro:1.2.1") {
-            excludes([name: 'quartz', group: 'org.opensymphony.quartz'])
-		}
-		compile ":quartz:1.0.2"
+		// turman : depuis grails 2.3 on ne peut plus utiliser le plugin manager et il faut rajouter toutes les dépendances à  la main !
+		compile "org.grails.plugins:mail:1.0.7"
+        compile "org.grails.plugins:quartz:1.0.2"
+		compile ("org.grails.plugins:shiro:1.2.1") {excludes([name: 'quartz', group: 'org.opensymphony.quartz'])}
 		//compile ":file-uploader:1.2.1"
-		compile ":ic-alendar:0.4.1"
-
+		compile "org.grails.plugins:ic-alendar:0.4.6"
+        compile "org.grails.plugins:spring-mobile:1.1.3"
+        //compile "org.grails.plugins:resources:1.2.14"
+        //compile "org.grails.plugins:jquery-mobile:1.1.0.5"
     }
 }
 

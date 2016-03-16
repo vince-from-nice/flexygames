@@ -1,6 +1,6 @@
 <html>
     <head>
-        <meta name="layout" content="main" />
+		<g:render template="/layouts/layout" />
     </head>
     <body>
         <h1><g:message code="features.title" /></h1>

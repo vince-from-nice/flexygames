@@ -1,9 +1,8 @@
-
 <%@ page import="flexygames.User"%>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="layout" content="main" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<g:render template="/layouts/layout" />
 <g:set var="entityName" value="${message(code: 'player.label', default: 'Player')}" />
 </head>
 <body>

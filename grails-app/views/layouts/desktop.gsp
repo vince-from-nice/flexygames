@@ -53,7 +53,7 @@
 						<li><g:link controller="site" action="contact"><g:message code="mainMenu.contact" /></g:link></li>
 					</ul>
 				</div>
-				<g:render template="/common/logbox" />
+				<g:render template="/layouts/logbox" />
 				<br />
 				<div class="block">
 					<h3><g:message code="layout.whoIsOnline" /></h3>
@@ -101,24 +101,7 @@
 				<br />
 				<hr>
 				<br />
-				<div id="poweredIcons" style="text-align: center;">
-					<a href="http://www.grails.org"><img style="border: 0" src="${createLinkTo(dir:'images',file:'powered/powered-by-grails.gif')}" alt="grails" /></a>
-					<a href="http://groovy.codehaus.org"><img style="border: 0" src="${createLinkTo(dir:'images',file:'powered/powered-by-groovy.jpg')}" alt="groovy" /></a>
-					<a href="http://tomcat.apache.org"><img style="border: 0" src="${createLinkTo(dir:'images',file:'powered/powered-by-tomcat.jpg')}" alt="tomcat" /></a>
-					<a href="http://www.debian.org"><img style="border: 0" src="${createLinkTo(dir:'images',file:'powered/powered-by-debian.jpg')}" alt="debian" /></a>
-				</div>
-				<shiro:hasRole name="Administrator">
-					<br />
-					<hr>
-					<b>Page statistics :</b>
-					<g:set var="now" value="${System.currentTimeMillis()}" />
-					<g:set var="rt" value="${java.lang.Runtime.getRuntime()}" />
-					It was rendered in ${now - timeBeforeController} ms
-					(controller: ${timeAfterController - timeBeforeController} ms
-					view: ${now - timeAfterController} ms) |
-					Memory: Used: <b>${(int)((rt.totalMemory() - rt.freeMemory())/1024)} kB</b> Free: <b>${(int)(rt.freeMemory()/1024)} kB</b>
-					Total: <b>${(int)(rt.totalMemory()/1024)} kB</b> Max: <b>${(int)(rt.maxMemory()/1024)} kB</b> </small>
-				</shiro:hasRole>
+				<g:render template="/layouts/footer" />
 			</div>
 			<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
 	        <r:layoutResources />

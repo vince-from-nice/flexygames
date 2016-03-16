@@ -1,7 +1,9 @@
 package flexygames
 
 class SiteController {
-	
+
+	def displayService
+
 	def mailerService
 	
 	static int STATS_TEAMS_SIZE = 10
@@ -13,7 +15,7 @@ class SiteController {
     def home = {
 		def users = User.list(sort: 'registrationDate', order:'desc', max: 3)
 		def sessions = Session.findAllByDateBetween(new Date() - 2, new Date() + 6, [sort: 'date', order:'asc'])
-        render (view: "home", model: [users: users, sessions: sessions])
+		render(view: (displayService.isMobileDevice(request) ? 'mobileHome' : 'home'), model: [users: users, sessions: sessions])
     }
     
     def about = {
@@ -42,6 +44,8 @@ class SiteController {
 	}
 	
 	def stats = {
+		// TODO move it to StatsService
+
 		//def teams = "[ ['ASAS Football Team', 18], ['ASAS Volleyball Team', 4] ]"
 		//def scorers = "[ [ 'turman', 23 ], [ 'ypos', 12 ], [ 'dudak', 40 ]]"
 		

@@ -41,6 +41,7 @@
 					<td style="vertical-align: top; " >
 						<b><g:formatDate date="${sessionInstance?.date}" format="EEEE dd MMMM yyyy"/></b>
 						<ul>
+							<li><g:message code="session.show.date.locking" />: <b><g:formatDate date="${sessionInstance.lockingDate}" format="HH:mm"/></b></li>
 							<li><g:message code="session.show.date.rdv" />: <b><g:formatDate date="${sessionInstance.rdvDate}" format="HH:mm"/></b></li>
 							<li><g:message code="session.show.date.start" />: <b><g:formatDate date="${sessionInstance?.date}" format="HH:mm"/></b></li>
 							<li><g:message code="session.show.date.end" />: <b><g:formatDate date="${sessionInstance.endDate}" format="HH:mm"/></b></li>

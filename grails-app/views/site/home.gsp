@@ -1,6 +1,6 @@
 <html>
     <head>
-        <meta name="layout" content="main" />
+        <meta name="layout" content="desktop" />
     </head>
     <body onload="if (detectBadBrowser()) alert('${message(code: "home.badBrowser")}');">
         <h1><g:message code="home.title" /></h1>

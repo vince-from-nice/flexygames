@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="layout" content="main" />
+	<g:render template="/layouts/layout" />
 </head>
 <body>
 	<h1>${teamInstance}</h1>
@@ -178,7 +178,7 @@
 		</tr>
 	</table>
 		
-	<g:render template="/layouts/backLinks" />
+	<g:render template="/common/backLinks" />
 		
   </body>
 </html>

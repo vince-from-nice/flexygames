@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<meta name="layout" content="desktop">
 		<g:set var="entityName" value="${message(code: 'gameSkill.label', default: 'GameSkill')}" />
 		<title><g:message code="default.create.label" args="[entityName]" /></title>
 	</head>

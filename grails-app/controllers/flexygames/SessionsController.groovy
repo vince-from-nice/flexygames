@@ -1,9 +1,10 @@
 package flexygames
 
-import grails.gorm.DetachedCriteria
 import org.apache.shiro.SecurityUtils
 
 class SessionsController {
+
+	def displayService
 
 	def sessionService
 
@@ -126,7 +127,8 @@ class SessionsController {
 			}
 		}
 
-		[sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes ]
+		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes ])
+
 	}
 
 	// TODO remake the grails file uploader plugin
