@@ -2,11 +2,11 @@
     <head>
         <meta name="layout" content="mobile" />
     </head>
-    <body onload="if (detectBadBrowser()) alert('${message(code: "home.badBrowser")}');">
+    <body>
 
         <h1><g:message code="home.title" /></h1>
 
-		<div style="border: solid 1px darkred; background-color: #ffcccc"><g:message code="home.mobileSite" /></div>
+		<div style="border: solid 1px darkred; background-color: #ffcccc; padding: 10px; "><g:message code="home.mobileSite" /></div>
 
 		<g:if test="${flash.message}">
 			<div class="message">${flash.message}</div>
@@ -25,7 +25,7 @@
 		<p><g:message code="home.session.closedXDays" args="[2, 6]"/> : </p>
 		<table class="flexyTab">
 			<tr>
-				<th style="padding-left: 0px;"><g:message code="teams" /></th>
+				<th style="text-align: center;"><g:message code="teams" /></th>
 				<th><g:message code="group" /></th>
 				<th><g:message code="date" /></th>
 				<th><g:message code="players" /></th>

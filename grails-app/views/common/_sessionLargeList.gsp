@@ -3,7 +3,7 @@
 					<g:if test="${sessionInstance.group.isVisibleByUsername(username)}">
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}" style="height: 40px;">
-							<td style="vertical-align: middle; font-size: 12px; cursor: pointer" onclick="document.location='${sessionLink}'">
+							<td style="vertical-align: middle; font-size: larger; cursor: pointer" onclick="document.location='${sessionLink}'">
 								<g:link controller="sessions" action="show" id="${sessionInstance.id}">
 									<nobr><g:formatDate date="${sessionInstance.date}" format="EEEEEEE dd MMMM (HH:mm)" /></nobr>
 								</g:link>

@@ -55,7 +55,7 @@
         			<p><g:message code="home.session.closedXDays" args="[2, 6]"/> : </p>
 					<table class="flexyTab">
 						<tr>
-							<th style="padding-left: 0px;"><g:message code="teams" /></th>
+							<th style="text-align: center;"><g:message code="teams" /></th>
 							<th><g:message code="group" /></th>
 							<th><g:message code="date" /></th>
 							<th><g:message code="players" /></th>

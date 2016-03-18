@@ -7,6 +7,7 @@
 
 <hr>
 <div style="text-align: center">
+    <br>
     <g:if test="${request.display == 'mobile'}">
         <g:message code="layout.flavourMobile" />
     </g:if>
@@ -16,7 +17,9 @@
 </div>
 
 <shiro:hasRole name="Administrator">
+    <br>
     <hr>
+    <br>
     <div style="text-align: center">
         <b>Page statistics :</b>
     <g:set var="now" value="${System.currentTimeMillis()}" />
@@ -27,4 +30,5 @@
                         Memory: Used: <b>${(int)((rt.totalMemory() - rt.freeMemory())/1024)} kB</b> Free: <b>${(int)(rt.freeMemory()/1024)} kB</b>
     Total: <b>${(int)(rt.totalMemory()/1024)} kB</b> Max: <b>${(int)(rt.maxMemory()/1024)} kB</b> </small>
     </div>
+    <br>
 </shiro:hasRole>

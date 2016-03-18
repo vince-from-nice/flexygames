@@ -1,6 +1,6 @@
 <html>
     <head>
-		<g:render template="/layouts/layout" />
+		<g:render template="/common/layout" />
     </head>
     <body>
         <h1><g:message code="features.title" /></h1>

@@ -1,9 +1,8 @@
             <table class="flexyTab">
                 <thead>
                 <tr>
-                    <th style="vertical-align: top; "><g:message code="player"/></th>
-                    <th style="vertical-align: top; ">&nbsp;</th>
-                    <th style="vertical-align: top; "></th>
+                    <th style="vertical-align: top; text-align: center;" colspan="2"><g:message code="player"/></th>
+                    <th style="vertical-align: top;">&nbsp;</th>
                     <th style="vertical-align: top;"><g:message code="teams"/></th>
                     <th style="vertical-align: top; text-align: center;"><g:message code="status"/></th>
                     <th style="vertical-align: top; min-width: 200px;"><g:message code="log"/></th>

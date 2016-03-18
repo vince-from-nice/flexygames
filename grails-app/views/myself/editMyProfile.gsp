@@ -1,11 +1,10 @@
-
 <%@ page import="flexygames.User"%>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="layout" content="desktop" />
-<g:set var="entityName" value="${message(code: 'player.label', default: 'Player')}" />
-<title><g:message code="default.edit.label" args="[entityName]" /></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<g:render template="/common/layout" />
+	<g:set var="entityName" value="${message(code: 'player.label', default: 'Player')}" />
+	<title><g:message code="default.edit.label" args="[entityName]" /></title>
 </head>
 <body>
 	<div class="body">

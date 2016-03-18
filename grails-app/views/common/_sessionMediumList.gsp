@@ -17,7 +17,7 @@
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
 						<g:if test="${lastDate != sessionInstance.date.toString().substring(0, sessionInstance.date.toString().length() - 10)}">
 							<tr>
-								<td colspan="6" style="text-align: center; ">
+								<td colspan="6" style="text-align: center; font-size: larger">
 									<b><nobr><g:formatDate date="${sessionInstance.date}" format="EEEEEEE dd MMMM" /></nobr></b>
 								</td>
 							</tr>

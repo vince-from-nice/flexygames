@@ -18,16 +18,18 @@
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta http-equiv="Expires" content="0" />
 		
-		<link rel="shortcut icon" href="${resource(dir: 'images', file: 'flexygames_logo.32x32.png')}" type="image/png">
-		<link rel="apple-touch-icon" href="${resource(dir: 'images', file: 'flexygames_logo.32x32.png')}">
-		<link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'flexygames_logo.114x114.png')}">
+		<link rel="shortcut icon" href="${resource(dir: 'images', file: 'flexygames-icon-32x32.png')}" type="image/png">
+		<link rel="apple-touch-icon" href="${resource(dir: 'images', file: 'flexygames-icon-32x32.png')}">
+		<link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'flexygames-icon-114x114.png')}">
+
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main-20160208.css')}">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile-20160208.css')}">
 		<link rel="stylesheet" href="${resource(dir:'css',file:'flexygames-20160303.css')}" />
-		
-		<g:layoutHead/>
+
 		<g:javascript library="application"/>
 		<g:javascript library="flexygames" />
+
+		<g:layoutHead/>
         <r:layoutResources />
 	</head>
 	
@@ -35,7 +37,7 @@
 		<div id="mainPage">
 			<div id="mainTop">
 				<a href="${createLink(controller:'site', action:'home')}">
-				  <img src="${resource(dir:'images',file:'flexygames_header.png')}" alt="Grails" border="0" />
+				  <img src="${resource(dir:'images',file:'flexygames-header-766x80.png')}" alt="Grails" border="0" />
 				</a>
 			</div>
 			<div id="mainNav">

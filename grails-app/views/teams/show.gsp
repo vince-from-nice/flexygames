@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<g:render template="/layouts/layout" />
+	<g:render template="/common/layout" />
 </head>
 <body>
 	<h1>${teamInstance}</h1>

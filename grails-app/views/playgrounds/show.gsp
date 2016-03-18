@@ -2,7 +2,7 @@
 <%@ page import="flexygames.Team"%>
 <html>
 <head>
-	<g:render template="/layouts/layout"/>
+	<g:render template="/common/layout"/>
 	<g:if test="${request.display != 'mobile'}">
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
 		<style type="text/css">

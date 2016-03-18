@@ -13,13 +13,18 @@ class DisplayFilters {
             }
 
             after = { Map model ->
+                // Ignore calendar request which failed on some users
+                // (Impossible de créer une session après que la réponse ait été envoyée)
+                if (controllerName == 'player' && actionName == 'cal') {
+                    return
+                }
                 // Set the display attribute (useful views)
                 if (displayService.isMobileDevice(request)) {
                     request.display = 'mobile'
                 } else {
                     request.display = 'desktop'
                 }
-                println "Display is set to " + request.display
+                //println "Display is set to " + request.display
             }
 
             afterView = { Exception e ->

@@ -1,7 +1,7 @@
 <%@ page import="flexygames.SessionComment" %>
 <html>
     <head>
-		<g:render template="/layouts/layout" />
+		<g:render template="/common/layout" />
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script type="text/javascript" src="${resource(dir:'js',file:'flexycharts-20160303.js')}"></script>
 		<!--g:javascript library="flexycharts" /-->
