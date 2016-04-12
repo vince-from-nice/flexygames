@@ -42,7 +42,7 @@
 			</div>
 			<div id="mainNav">
 				<div class="block">
-					<h3><g:message code="layout.mainMenu" /></h3>
+					<h3 style="margin-top: 0.2em"><g:message code="layout.mainMenu" /></h3>
 					<ul>
 						<li><g:link controller="site" action="home"><g:message code="mainMenu.home" /></g:link></li>
 						<li><g:link controller="teams" action="list"><g:message code="mainMenu.teams" /></g:link></li>
@@ -58,7 +58,7 @@
 				<g:render template="/layouts/logbox" />
 				<br />
 				<div class="block">
-					<h3><g:message code="layout.whoIsOnline" /></h3>
+					<h3 style="margin-top: 0.2em"><g:message code="layout.whoIsOnline" /></h3>
 					<g:if test="${request.onlineUsers != null}">
 						<g:if test="${request.onlineUsers.size() < 2}">
 							<g:message code="layout.whoIsOnline.text.onePlayer" args="[request.onlineUsers.size()]" />

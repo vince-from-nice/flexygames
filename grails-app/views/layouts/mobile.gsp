@@ -48,10 +48,11 @@
 								<img src="${resource(dir:'images',file:'flexygames-logo-274x80.png')}" alt="Grails" border="0" />
 							</a>
 						</td>
-						<td style="text-align: left; vertical-align: top">
+						<td style="text-align: center; vertical-align: top">
 							<div id='cssmenu'>
 								<ul>
-									<li class='has-sub'><a href='#'><g:message code="layout.mainMenu" /></a>
+									<li class='has-sub'>
+										<a href='#' style="font-size: x-large;">&nbsp;<br><g:message code="layout.mainMenu" /><br>&nbsp;</a>
 										<ul>
 											<li><g:link controller="site" action="home"><g:message code="mainMenu.home" /></g:link></li>
 											<li><g:link controller="teams" action="list"><g:message code="mainMenu.teams" /></g:link></li>
@@ -67,11 +68,12 @@
 								</ul>
 							</div>
 						</td>
-						<td style="text-align: left; vertical-align: top">
+						<td style="text-align: right; vertical-align: top; ">
 							<shiro:user>
 								<div id='cssmenu'>
 								<ul>
-									<li class='has-sub'><a href='#'> <g:message code="logbox.welcome" /> <shiro:principal /></a>
+									<li class='has-sub'>
+										<a href='#' style="font-size: x-large">&nbsp;<br><g:message code="logbox.welcome" /> <shiro:principal /><br>&nbsp;</a>
 										<ul>
 											<li class="">
 												<g:link controller="myself" action="mySessions">
@@ -100,16 +102,16 @@
 							<shiro:notUser>
 								<div id='cssmenu'>
 								<ul>
-									<li class='has-sub'><a href='#'> <g:message code="logbox.title" /></a>
+									<li class='has-sub' style="font-size: x-large"><a href='#'>&nbsp;<br><g:message code="logbox.title" /><br>&nbsp;</a>
 										<ul>
-											<li class="">
-												<g:link controller="player" action="register" style="font-size: 12px">
-													<g:message code="logbox.newAccount" />
-												</g:link>
-											</li>
 											<li class="">
 												<g:link controller="auth" action="login">
 													<g:message code="login" />
+												</g:link>
+											</li>
+											<li class="">
+												<g:link controller="player" action="register" style="font-size: 12px">
+													<g:message code="logbox.newAccount" />
 												</g:link>
 											</li>
 											<li class="">
@@ -126,7 +128,6 @@
 				</table>
 			</div>
 			<div data-role="content">
-				%{--gluar content--}%
 				<g:layoutBody />
 			</div>
 			<div data-role="footer">

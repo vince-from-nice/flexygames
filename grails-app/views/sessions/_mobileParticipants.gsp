@@ -8,10 +8,12 @@
         <span style="float:right; font-size: small;"><g:message code="clickForDetails"/></span>
     </div>
 
+    <g:set var="currentUserParticipation" value="${sessionInstance.getParticipationOf(session.currentUser?.username)}"/>
+
     <div class="sessionZoneContent">
         <g:set var="defaultDisplayForSummaryZone" value="table"/>
         <g:set var="defaultDisplayForDetailedZone" value="none"/>
-        <g:if test="${sessionIsManagedByCurrentUser}">
+        <g:if test="${sessionIsManagedByCurrentUser || currentUserParticipation?.statusCode == flexygames.Participation.Status.REQUESTED.code()}">
             <g:set var="defaultDisplayForSummaryZone" value="none"/>
             <g:set var="defaultDisplayForDetailedZone" value="block"/>
         </g:if>
@@ -19,8 +21,6 @@
                style="display: ${defaultDisplayForSummaryZone}; width: 100%; ">
             <tr>
                 <td colspan="6" style="text-align: center; font-size: x-large; width: 100%; ">
-                    <g:set var="currentUserParticipation"
-                           value="${sessionInstance.getParticipationOf(session.currentUser?.username)}"/>
                     <g:if test="${currentUserParticipation}">
                         <div style="text-align: center; vertical-align: middle; border: solid black 1px;
                         background-color: ${flexygames.Participation.Status.color(currentUserParticipation.statusCode)}; ">

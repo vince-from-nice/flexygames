@@ -13,6 +13,8 @@ class SessionService {
 	
 	def mailerService
 
+	def static final USER_LOG_MAX_SIZE = 256
+
 	def join(User user, Session session) throws Exception {
 		// Check if the session isn't entered into locking mode (and is not in the past btw)
 		if (new Date(session.date.time - session.group.lockingTime* 60 * 1000) < new Date()) {
@@ -82,7 +84,7 @@ class SessionService {
 			userLog = ''
 		}
 		userLog = new Jsoup().clean(userLog, Whitelist.relaxed()) // damned <img> tags are not cleaned !
-		userLog = userLog.substring(0, (userLog.length() > 100 ? 100 : userLog.length()))
+		userLog = userLog.substring(0, (userLog.length() > USER_LOG_MAX_SIZE ? USER_LOG_MAX_SIZE : userLog.length()))
 		participation.setUserLog(userLog)
 		if (participation.save()) {
 			//flash.message = "Participation status for <b>$participation.player</b> has been successfuly updated !"

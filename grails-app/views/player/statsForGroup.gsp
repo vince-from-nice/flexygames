@@ -28,7 +28,7 @@
 		</tr>
 		<g:set var="userParticipations" value="${playerInstance.getEffectiveParticipationsBySessionGroup(group)}" />
 		<g:if test="${userParticipations.size() > 0}">
-			<g:render template="/player/participations" model="['userParticipations': userParticipations, 'withTotals': false]" />
+			<g:render template="/player/participations" model="['userParticipations': userParticipations, 'withTotals': true, 'withAllCols': true]" />
 		</g:if>
 		<g:else>
 			<tr>

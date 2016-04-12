@@ -21,40 +21,40 @@
 					<td style="vertical-align: middle; border-left: solid black 1px; background-color: ${flexygames.Participation.Status.color(part.statusCode)}">
 						<b><g:message code="participation.status.${part.statusCode}" /></b>
 					</td>
-					<td style="text-align: right; vertical-align: middle; border-left: solid black 1px">
-						<g:set var="v" value="${part.wins.size()}" />
-						<g:if test="${v > 0}"><%totalWins += v%><span style="color: green">${v}</span></g:if>
-					</td>
-					<td style="text-align: right; vertical-align: middle;">
-						<g:set var="v" value="${part.draws.size()}" />
-						<g:if test="${v > 0}"><%totalDraws += v%>${v}</g:if>
-					</td>
-					<td style="text-align: right; vertical-align: middle;">
-						<g:set var="v" value="${part.defeats.size()}" />
-						<g:if test="${v > 0}"><%totalDefeats += v%><span style="color: red">${v}</span></g:if>
-					</td>
-					<td style="text-align: right; vertical-align: middle; border-left: solid black 1px">
-						<g:set var="v" value="${part.actionScore}" />
-						<%totalActionScore += v%>
-						<g:if test="${v > 0}">${v}</g:if>
-					</td>
-					<td style="text-align: right; vertical-align: middle; border-left: solid black 1px">
-						<g:set var="v" value="${part.votingScore}" />
-						<%totalVotingScore += v%>
-						<g:if test="${v > 0}"><span style="color: green">+${v}</span></g:if>
-						<g:else>
-							<g:if test="${v < 0}"><span style="color: red">${v}</span></g:if>
-							<g:else><span style="color: black">${v}</span></g:else>
-						</g:else>
-					</td>
+					<g:if test="${withAllCols}">
+						<td style="text-align: right; vertical-align: middle; border-left: solid black 1px">
+							<g:set var="v" value="${part.wins.size()}" />
+							<g:if test="${v > 0}"><%totalWins += v%><span style="color: green">${v}</span></g:if>
+						</td>
+						<td style="text-align: right; vertical-align: middle;">
+							<g:set var="v" value="${part.draws.size()}" />
+							<g:if test="${v > 0}"><%totalDraws += v%>${v}</g:if>
+						</td>
+						<td style="text-align: right; vertical-align: middle;">
+							<g:set var="v" value="${part.defeats.size()}" />
+							<g:if test="${v > 0}"><%totalDefeats += v%><span style="color: red">${v}</span></g:if>
+						</td>
+						<td style="text-align: right; vertical-align: middle; border-left: solid black 1px">
+							<g:set var="v" value="${part.actionScore}" />
+							<%totalActionScore += v%>
+							<g:if test="${v > 0}">${v}</g:if>
+						</td>
+						<td style="text-align: right; vertical-align: middle; border-left: solid black 1px">
+							<g:set var="v" value="${part.votingScore}" />
+							<%totalVotingScore += v%>
+							<g:if test="${v > 0}"><span style="color: green">+${v}</span></g:if>
+							<g:else>
+								<g:if test="${v < 0}"><span style="color: red">${v}</span></g:if>
+								<g:else><span style="color: black">${v}</span></g:else>
+							</g:else>
+						</td>
+					</g:if>
 				</tr>
 			</g:each>
 			<g:if test="${withTotals}">
 				<tr>
-					<th style="font-size: 18px; font-weight: bold; text-align: left; vertical-align: middle;" colspan="2">
-						<g:message code="player.show.totalOfParticipations"/>
+					<th style="font-size: 18px; font-weight: bold; text-align: left; vertical-align: middle;" colspan="4">
 					</th>
-					<th style="font-size: 18px; text-align: center; vertical-align: middle;">${playerInstance.effectiveParticipations.size()}</th>
 					<th style="font-size: 18px; text-align: right; vertical-align: middle;"><span style="color: green">${totalWins}</span></th>
 					<th style="font-size: 18px; text-align: right; vertical-align: middle;">${totalDraws}</th>
 					<th style="font-size: 18px; text-align: right; vertical-align: middle;"><span style="color: red">${totalDefeats}</span></th>

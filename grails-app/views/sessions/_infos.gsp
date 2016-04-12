@@ -1,6 +1,6 @@
 <table style="border: 0px">
 	<tr>
-		<td style="min-width: 400px">
+		<td style="min-width: 400px; width: 40%">
 			<table style="width: auto;">
 				<tr>
 					<td style="vertical-align: top; " ><g:message code="group" default="Group" /></td>
@@ -91,7 +91,7 @@
 		<g:if test="${forecastToken}">
 			<td style="text-align: left; vertical-align: top;">
 				<h3 style="margin-top: 0px"><g:message code="forecast" default="Forecast" /></h3>
-				<div style="width: 70px; text-align: center">
+				<div style="width: 70px; text-align: left">
 					<g:render template="/common/forecast" model="[token: forecastToken, city: sessionInstance.playground.city]" />
 				</div>
 			</td>

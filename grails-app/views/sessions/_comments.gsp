@@ -72,5 +72,5 @@
 					<i><g:message code="session.show.comments.noComment" /></i><br />
 				</g:else>
 		</div>
-	</span>
+	</div>
 </div>

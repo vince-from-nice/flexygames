@@ -1,6 +1,6 @@
 <div class="block">
 	<shiro:user>
-		<h3>
+		<h3 style="margin-top: 0.2em">
 			<g:message code="logbox.welcome" /> <shiro:principal />
 		</h3>
 		<ul>
@@ -27,7 +27,7 @@
 		</ul>
 	</shiro:user>
 	<shiro:notUser>
-		<h3>
+		<h3 style="margin-top: 0.2em">
 			<g:message code="logbox.title" />
 		</h3>
 		<g:form controller="auth" action="signIn" method="post" style="margin: 0px;">

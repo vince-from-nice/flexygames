@@ -16,6 +16,8 @@ import org.apache.shiro.crypto.hash.Sha512Hash
 
 class PlayerController {
 
+	def displayService
+
 	def mailerService
 
 	def statsService
@@ -79,17 +81,8 @@ class PlayerController {
 			redirect(action: "list")
 		}
 		else {
-			[playerInstance: playerInstance]
+			render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [playerInstance: playerInstance])
 		}
-	}
-
-	// Just for testing the non fully populated one-to-many associations in User
-	def gluar = {
-		User user = User.get(params.id)
-		println "User $user has " + user.participations.size() + " parts:"
-		user.participations.each{println "\t$it.id $it.session.date $it.statusCode"}
-		println "User $user has " + user.memberships.size() + " memberships:"
-		user.memberships.each{println "\t$it.id $it.team.name"}
 	}
 
 	def stats = {

@@ -38,7 +38,6 @@
 				<g:select name="filteredSessionGroup" from="${sessionGroups}"
 					optionKey="id" value="${currentSessionGroup?.id}" noSelection="['0': message(code:'session.list.filter.allSessionGroups')]"
 					onChange="document.getElementById('groupFilterForm').submit();"  />
-				<g:set var="gluar" value="gluar"/>
 			</g:form>
 		</td>
 	</tr>

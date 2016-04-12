@@ -124,6 +124,7 @@ class Team implements Comparable {
 	}
 	
 	int countAllEffectiveParticipations() {
+		if (sessionGroups.size() == 0) return 0
 		def q = Participation.where {
 			(session.group in sessionGroups) && (statusCode == Participation.Status.DONE_GOOD.code || statusCode == Participation.Status.DONE_BAD.code)
 		}
@@ -132,8 +133,9 @@ class Team implements Comparable {
 
 	int countAllEffectiveSessions() {
 		int result
+		if (sessionGroups.size() == 0) return 0
 		def q = Participation.where {
-			(session.group in sessionGroups) && (statusCode == Participation.Status.DONE_GOOD.code || statusCode == Participation.Status.DONE_BAD.code)
+			(session.group in sessionGroups) && (statusCode == Participation.Status.DONE_GOOD.code() || statusCode == Participation.Status.DONE_BAD.code())
 		}
 		def allEffectiveParticipations = q.list()
 		Set<Session> allEffectiveSessions = new HashSet<>()

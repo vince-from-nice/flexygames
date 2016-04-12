@@ -12,8 +12,27 @@
 	</g:if>
 	<table style="width: 100%; border: 0px">
 		<tr>
-			<td>
-				<h2><g:message code="informations" /></h2>
+			<td style="text-align: center; vertical-align: middle; ">
+				<img style="max-width: 200px; max-height:120px;" src="${resource(dir:'images/team',file:teamInstance.logoName)}" alt="Team logo" />
+				<g:if test="${teamIsManagedByCurrentUser}">
+					<br />
+					<br />
+					<span style="font-size: 12px">
+					<g:message code="team.show.uploadLogo" /><br />
+					<g:form controller="fileUpload" action="process" method="post" enctype="multipart/form-data" >
+						<g:hiddenField name="uploadType" value="teamLogo" />
+						<g:hiddenField name="id" value="${teamInstance.id}" />
+						<g:hiddenField name="errorAction" value="changeTeamLogoError" />
+						<g:hiddenField name="errorController" value="manager" />
+						<g:hiddenField name="successAction" value="changeTeamLogoSuccess" />
+						<g:hiddenField name="successController" value="manager" />
+						<input type='file' name='file' />
+						<input type='submit' name='submit' value='Submit' />
+					</g:form>
+				</g:if>
+			</td>
+			<td style="width: 40%; ">
+				<h2 style="margin-top: 0px;"><g:message code="informations" /></h2>
 				<table>
 					<tbody>
 						<tr class="prop">
@@ -48,7 +67,7 @@
 				</table>
 			</td>
 			<td>
-				<h2><g:message code="statistics" /></h2>
+				<h2 style="margin-top: 0px;"><g:message code="statistics" /></h2>
 				<div class="block" style="width: auto">
 					<g:message code="team.stats.totalOfMembers" /> :
 					<span style="font-size: 20px; font-weight: bold;">
@@ -75,25 +94,6 @@
 						${teamInstance.countAllEffectiveParticipations()}
 					</span>
 				</div>
-			</td>
-			<td style="text-align: center;">
-				<img style="max-width: 200px; max-height:120px;" src="${resource(dir:'images/team',file:teamInstance.logoName)}" alt="Team logo" />
-				<g:if test="${teamIsManagedByCurrentUser}">
-					<br />
-					<br />
-					<span style="font-size: 12px">
-					<g:message code="team.show.uploadLogo" /><br />
-					<g:form controller="fileUpload" action="process" method="post" enctype="multipart/form-data" >
-						<g:hiddenField name="uploadType" value="teamLogo" />
-						<g:hiddenField name="id" value="${teamInstance.id}" />
-						<g:hiddenField name="errorAction" value="changeTeamLogoError" />
-						<g:hiddenField name="errorController" value="manager" />
-						<g:hiddenField name="successAction" value="changeTeamLogoSuccess" />
-						<g:hiddenField name="successController" value="manager" />
-						<input type='file' name='file' />
-						<input type='submit' name='submit' value='Submit' />
-					</g:form>
-				</g:if>
 			</td>
 		</tr>
 	</table>

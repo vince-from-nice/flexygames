@@ -4,16 +4,18 @@ import org.apache.shiro.SecurityUtils
 import org.apache.shiro.crypto.hash.Sha512Hash
 
 class MyselfController {
-	
+
+	def displayService
+
 	def userService
 	
     def index = {
-        redirect(action: "myPlanning", params: params)
+        redirect(action: "myAccount", params: params)
     }
 
 	def myAccount = {
 		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
-		render (view:"myAccount", model:[playerInstance: user])
+		render(view: (displayService.isMobileDevice(request) ? 'myAccountMobile' : 'myAccount'),  model:[playerInstance: user])
 	}
 	
 	def myPlanning = {
@@ -41,9 +43,7 @@ class MyselfController {
 		for (i in 0..<WEEKS_NBR) {
 			def week = firstWeek + i
 //			cal.set(Calendar.YEAR, year)
-//			gluar =  cal.getTime()
 //			cal.set(Calendar.WEEK_OF_YEAR, week)
-//			gluar =  cal.getTime()
 			cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
 			cal.set(Calendar.HOUR_OF_DAY, 0)
 			cal.set(Calendar.MINUTE, 0)

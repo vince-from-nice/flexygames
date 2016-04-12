@@ -19,7 +19,7 @@ class LoggingFilters {
 
 					// logging every action, big brother is watching you !
 					def username = SecurityUtils.getSubject().getPrincipal().toString()
-					if (username == "null") username = "anonymous"
+					if (username == "null") username = "anonymous (" + request.remoteAddr + ")"
 					println '**************************************************************************************************************'
 					println (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " FlexyGames : User $username is doing " + controllerName + "/" + actionName)
 					println '**************************************************************************************************************'

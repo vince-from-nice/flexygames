@@ -19,7 +19,7 @@
 #cssmenu {
     width: 220px;
     font-family: Raleway, sans-serif;
-    font-size: 2.50em; /* turman: not the best way to have big font in menu */
+    font-size: x-large; /* turman */
     color: #ffffff;
 }
 #cssmenu ul ul {
@@ -35,7 +35,9 @@
     padding: 16px 22px;
     cursor: pointer;
     z-index: 2;
-    font-size: 16px;
+    /* turman */
+    /*font-size: 16px;*/
+    font-size: x-large;
     text-decoration: none;
     color: #ffffff;
     background: #3ab4a6;
@@ -89,7 +91,9 @@
     padding: 14px 22px;
     cursor: pointer;
     z-index: 2;
-    font-size: 14px;
+    /* turman */
+    /*font-size: 14px;*/
+    font-size: x-large;
     text-decoration: none;
     color: #dddddd;
     background: #49505a;

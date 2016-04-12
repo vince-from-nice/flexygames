@@ -19,6 +19,21 @@
 				<h2><g:message code="informations" /></h2>
 				<g:render template="/player/profile" />
 			</td>
+		</tr>
+		<tr>
+			<td>
+				<h2><g:message code="skills" /></h2>
+				<div class="block" style="width: auto">
+					<g:if test="${playerInstance.skills.size() > 0}">
+						<g:each in="${playerInstance.skills}" var="s">
+							${s?.encodeAsHTML()}<br />
+						</g:each>
+					</g:if>
+					<g:else>
+						<i><g:message code="player.show.noSkills" /></i>
+					</g:else>
+				</div>
+			</td>
 			<td style="">
 				<h2><g:message code="statistics" /></h2>
 				<div class="block" style="width: auto">
@@ -51,22 +66,9 @@
 				<h2><g:message code="teams" /></h2>
 				<g:render template="memberships" />
 			</td>
-			<td>
-				<h2><g:message code="skills" /></h2>
-				<div class="block" style="width: auto">
-					<g:if test="${playerInstance.skills.size() > 0}">
-							<g:each in="${playerInstance.skills}" var="s">
-								${s?.encodeAsHTML()}<br />
-							</g:each>
-					</g:if>
-					<g:else>
-						<i><g:message code="player.show.noSkills" /></i>
-					</g:else>
-				</div>
-			</td>
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td colspan="2">
 				<h2><g:message code="player.show.activity" /></h2>
 				<g:set var="userParticipations" value="${playerInstance.getActiveParticipations(['max': (params.max ? params.max : 10), 'offset': params.offset])}" />
 				<g:if test="${userParticipations.size() > 0}">
@@ -76,13 +78,8 @@
 							<th valign="top" rowspan="1"><g:message code="team" /></th>
 							<th valign="top" rowspan="1"><g:message code="group" /></th>
 							<th valign="top" rowspan="1"><g:message code="player.show.status" /></th>
-							<th style="font-size: 14px; text-align: right; vertical-align: middle;"><g:message code="wins" /></th>
-							<th style="font-size: 14px; text-align: right; vertical-align: middle;"><g:message code="draws" /></th>
-							<th style="font-size: 14px; text-align: right; vertical-align: middle;"><g:message code="defeats" /></th>
-							<th style="font-size: 14px; text-align: right; vertical-align: middle;"><g:message code="actions" /></th>
-							<th style="font-size: 14px; text-align: right; vertical-align: middle;"><g:message code="votes" /></th>
 						</tr>
-						<g:render template="/player/participations" model="['userParticipations': userParticipations, 'withTotals': false, 'withAllCols': true]" />
+						<g:render template="/player/participations" model="['userParticipations': userParticipations, 'withTotals': false, 'withAllCols':false]" />
 					</table>
 				</g:if>
 				<g:else>
