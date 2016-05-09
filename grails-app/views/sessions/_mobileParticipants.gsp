@@ -49,24 +49,16 @@
                 <g:set var="hidePendingPlayersByDefault" value="${true}" />
             </g:if>
             <g:render template="participantsList" />
-            <g:javascript>
-                function togglePendingParticipations() {
-                    for (var i = 0; i < pendingParticipationIds.length; i++) {
-                        var id = pendingParticipationIds[i];
-                        //console.log('toggling participation-' + id);
-                        var player = document.getElementById('participation-' + id);
-                        if (player.style.display == 'table-row') {
-                            player.style.display = 'none';
-                        } else {
-                            player.style.display = 'table-row';
-                        }
-                    }
-                }
-            </g:javascript>
-            <h3><g:message code="options"/></h3>
-            <g:checkBox name="hidePendingPlayers" value="${hidePendingPlayersByDefault}" checked="${hidePendingPlayersByDefault}"
-                        onclick="togglePendingParticipations(); return true; "/>
-            <g:message code="session.show.participants.hidePendingPlayers"/>
+            <form>
+                <input type="checkbox" data-role="flipswitch" name="hidePendingPlayers" id="flip-checkbox-4" checked="${hidePendingPlayersByDefault}" onchange="togglePendingParticipations(); return true; ">
+                <label for="hidePendingPlayers" style="display: inline;"><g:message code="session.show.participants.hidePendingPlayers"/></label>
+            </form>
+            <!--g:checkBox name="hidePendingPlayers" value="${hidePendingPlayersByDefault}" checked="${hidePendingPlayersByDefault}"
+                        onclick="togglePendingParticipations(); return true; " />
+            <div style="position: relative; left: 40px; top: -15px"><g:message code="session.show.participants.hidePendingPlayers"/></div-->
+            <g:if test="${sessionIsManagedByCurrentUser}">
+                <g:render template="participantsManagement" />
+            </g:if>
         </div>
     </div>
 </div>

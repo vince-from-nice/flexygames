@@ -36,6 +36,15 @@
                             <br>
                             <g:link controller="playgrounds" action="show" id="${sessionInstance?.playground?.id}"><g:message code="session.show.viewPlayground" /></g:link>
                         </div>
+                        <br>
+                        <g:message code="group" default="Group" />:
+                        <g:link controller="sessions" action="list" params="${['filteredSessionGroup':sessionInstance.group.id]}" >
+                            ${sessionInstance?.group?.encodeAsHTML()}
+                        </g:link>
+                        <g:if test="${sessionInstance.description}">
+                            <g:message code="session.description" default="Description" />:
+                            ${fieldValue(bean: sessionInstance, field: "description")}
+                        </g:if>
                     </td>
                     <td style="text-align: center; ">
                         <g:set var="defaultFirstTeam" value="${sessionInstance.group.defaultTeams?.first()}" scope="request" />
@@ -51,18 +60,6 @@
                             ${defaultFirstTeam}
                         </g:link>
                         <br>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <g:message code="group" default="Group" />:
-                        <g:link controller="sessions" action="list" params="${['filteredSessionGroup':sessionInstance.group.id]}" >
-                            ${sessionInstance?.group?.encodeAsHTML()}
-                        </g:link>
-                        <g:if test="${sessionInstance.description}">
-                            <g:message code="session.description" default="Description" />:
-                            ${fieldValue(bean: sessionInstance, field: "description")}
-                        </g:if>
                     </td>
                 </tr>
             </table>

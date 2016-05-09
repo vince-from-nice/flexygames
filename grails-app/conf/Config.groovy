@@ -111,7 +111,7 @@ environments {
 // URL
 environments {
 	development {
-		grails.serverURL="http://192.168.1.14:8080/flexygames"
+		grails.serverURL="http://192.168.1.22:8080/flexygames"
 	}
 	production {
 		//grails.serverURL="http://www.onlacherien.org/games"

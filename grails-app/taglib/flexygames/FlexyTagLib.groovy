@@ -71,6 +71,6 @@ class FlexyTagLib {
 			suffix = message(code:'date.futur.suffix')
 		}
 		
-		return prefix + '' + value + '' + suffix
+		return prefix + ' ' + value + ' ' + suffix
 	}
 }

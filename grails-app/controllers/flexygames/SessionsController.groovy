@@ -128,12 +128,11 @@ class SessionsController {
 		}
 
 		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes ])
-
 	}
 
 	// TODO remake the grails file uploader plugin
 	def showAvatar = {
-	def file = new File(params.path)
+		def file = new File(params.path)
 		if (file.exists()) {
 			log.debug "Serving file path=${params.path} to ${request.remoteAddr}"
 			response.setContentType("application/octet-stream")
@@ -226,7 +225,7 @@ class SessionsController {
 			flash.error = "${message(code: 'session.show.update.error', args: [e.message])}"
 			return redirect(action: "show", id:participation.session.id)
 		}
-		return redirect(action: "show", id:participation.session.id)
+		return redirect(action: "show", id: participation.session.id)
 	}
 
 	def vote = {
@@ -246,10 +245,10 @@ class SessionsController {
 			flash.votingMessage = "Your vote has been taken into account."
 		} catch (Exception e) {
 			flash.votingError = "${message(code: 'session.show.votes.update.error', args: [e.message])}"
-			return redirect(uri: "/sessions/show/" + session.id)
+			return redirect(action: "show", id: session.id, fragment: "votingArea")
 		}
 
-		redirect(uri: "/sessions/show/" + session.id + "#votingArea")
+		redirect(action: "show", id:session.id, fragment: "votingArea")
 	}
 
 	def post = {
@@ -270,9 +269,9 @@ class SessionsController {
 		} catch (Exception e) {
 			e.printStackTrace()
 			flash.error = "${message(code: 'session.show.comments.update.error', args: [e.message])}"
-			return redirect(uri: "/sessions/show/" + session.id)
+			return redirect(action: "show", id: session.id)
 		}
-		redirect(uri: "/sessions/show/" + session.id + "#comment" + comment.id)
+		redirect(action: "show", id:session.id, fragment: "comment" + comment.id)
 	}
 
 	def watch = {
@@ -297,7 +296,7 @@ class SessionsController {
 		} catch (Exception e) {
 			flash.error = e.message
 		}
-		redirect(uri: "/sessions/show/" + session.id)
+		redirect(action: "show", id: session.id)
 	}
 
 }

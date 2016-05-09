@@ -4,7 +4,7 @@ class VotingService {
 
 	def vote(Session session, User voter, params) throws Exception  {
 		if (!session.effectiveParticipants.contains(voter)) {
-			throw new Exception("You cannot vote if you don't have participated to the session !!")
+			throw new Exception("you cannot vote if you don't have participated to the session")
 		}
 		def existingVotes = Vote.findAllBySessionAndUser(session, voter)
 		vote(session, voter, params.firstChoiceBestPlayer, 3, existingVotes)
@@ -21,7 +21,7 @@ class VotingService {
 			player = User.findByUsername(playerName)
 		}
 		if (voter == player) {
-			throw new Exception("You cannot vote for yourself, it would be too easy !!")
+			throw new Exception("you cannot vote for yourself, it would be too easy ;p")
 		}
 		Vote existingVote = existingVotes.find{it.user == voter && it.score == score}
 		if (existingVote && existingVote.player != player) {
@@ -30,18 +30,18 @@ class VotingService {
 		if (player && player != existingVote?.player) {
 			def vote = new Vote(session: session, user: voter, player: player, score: score)
 			if (!vote.save()) {
-				throw new Exception("Error on saving a vote: " + vote.errors)
+				throw new Exception("error on saving a vote: " + vote.errors)
 			}
 		}
 	}
 
     def voteOld(User voter, User player, Session session, String voteString) throws Exception  {
 		if (voter == player) {
-			throw new Exception("You cannot vote for yourself, it would be too easy !!")
+			throw new Exception("you cannot vote for yourself, it would be too easy ;p")
 		}
 		
 		if (!session.effectiveParticipants.contains(voter)) {
-			throw new Exception("You cannot vote if you don't have participated to the session !!")
+			throw new Exception("you cannot vote if you don't have participated to the session")
 		}
 
 		def newScore = 0
@@ -68,7 +68,7 @@ class VotingService {
 		}
 		if (vote) {
 			if (vote.player == player) {
-				throw new Exception("You have already voted that !!")
+				throw new Exception("you have already voted that")
 			}
 			vote.setPlayer(player)
 		} else {
@@ -76,7 +76,7 @@ class VotingService {
 		}
 
 		if (!vote.save()) {
-			throw new Exception("Error on saving : " + vote.errors)
+			throw new Exception("error on saving : " + vote.errors)
 		}
     }
 }

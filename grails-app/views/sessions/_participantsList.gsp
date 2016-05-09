@@ -100,19 +100,21 @@
                 </g:else>
                 </tbody>
                 <thead>
-                <g:render template="counter" model="[]"/>
+                    <g:render template="counter" model="[]"/>
                 </thead>
-                <tbody>
-                <tr>
-                    <td colspan="6" style="text-align: center">
-                        <g:form controller="sessions" action="join">
-                            <g:hiddenField name="id" value="${sessionInstance?.id}"/>
-                            <g:actionSubmit class="create"
-                                            onclick="return confirm('${message(code: 'session.show.participants.join.alert')}');"
-                                            action="join"
-                                            value="${message(code: 'session.show.participants.join')}"/>
-                        </g:form>
-                    </td>
-                </tr>
-                </tbody>
+                <g:if test="${!currentUserParticipation}">
+                    <tbody>
+                        <tr>
+                            <td colspan="6" style="text-align: center">
+                                <g:form controller="sessions" action="join">
+                                    <g:hiddenField name="id" value="${sessionInstance?.id}"/>
+                                    <g:actionSubmit class="create"
+                                                    onclick="return confirm('${message(code: 'session.show.participants.join.alert')}');"
+                                                    action="join"
+                                                    value="${message(code: 'session.show.participants.join')}"/>
+                                </g:form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </g:if>
             </table>

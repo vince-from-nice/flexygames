@@ -25,6 +25,19 @@ function toggleRowDisplay(id) {
 	}
 }
 
+function togglePendingParticipations() {
+	for (var i = 0; i < pendingParticipationIds.length; i++) {
+		var id = pendingParticipationIds[i];
+		//console.log('toggling participation-' + id);
+		var player = document.getElementById('participation-' + id);
+		if (player.style.display == 'table-row') {
+			player.style.display = 'none';
+		} else {
+			player.style.display = 'table-row';
+		}
+	}
+}
+
 function detectBadBrowser() {
 	var ua = navigator.userAgent.toLowerCase();
 	return ua.indexOf("msie") > -1

@@ -30,7 +30,7 @@
 									<img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:team.logoName)}" alt="Team logo" />
 								</g:link>
 							</td>
-							<td style="font-size: 12px; vertical-align: middle; ">
+							<td style="vertical-align: middle; ">
 								<g:link controller="sessions" action="list" params="${['filteredSessionGroup':sessionInstance.group.id]}">
 									${fieldValue(bean: sessionInstance, field: "group")}
 								</g:link>

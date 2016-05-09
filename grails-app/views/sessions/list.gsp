@@ -49,11 +49,13 @@
 				<th><g:message code="teams" default="Teams" /></th>
 				<th><g:message code="players" default="Players" /></th>
 				<th><g:message code="myStatus" default="My Status" /></th>
-				<th><g:message code="playground" default="Playground" /></th>
-				<th><g:message code="rounds" default="Sets" /></th>
-				<th><g:message code="votes" default="Votes" /></th>
-				<th><g:message code="posts" default="Posts" /></th>
-				<th style="vertical-align: middle; font-size: 12px"><g:message code="home.lastComment" /></th>
+				<g:if test="${request.display == 'desktop'}">
+					<th><g:message code="playground" default="Playground" /></th>
+					<th><g:message code="rounds" default="Sets" /></th>
+					<th><g:message code="votes" default="Votes" /></th>
+					<th><g:message code="posts" default="Posts" /></th>
+					<th style="vertical-align: middle; font-size: 12px"><g:message code="home.lastComment" /></th>
+				</g:if>
 			</tr>
 		</thead>
 		<tbody>

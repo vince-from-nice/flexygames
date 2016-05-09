@@ -5,7 +5,7 @@
 					<g:if test="${sessionInstance.date.getTime() < now}">
 						<g:if test="${!past}">
 							<tr style="height: 5px;">
-								<td colspan="7" style="background-color: #FFB2B2; font-size: 12px; line-height: 10px; text-align: center; color: red">
+								<td colspan="7" style="background-color: #FFB2B2; line-height: 10px; text-align: center; color: red">
 									<g:message code="home.session.currentHour" /> :
 									<g:formatDate date="${new Date(now)}" format="EEEEEEE dd MMMM (HH:mm)" />	 
 								</td>
@@ -18,13 +18,13 @@
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						
 							<!-- Date -->
-							<td style="vertical-align: middle; font-size: 12px; cursor: pointer" onclick="document.location='${sessionLink}'">
+							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
 								<nobr><g:formatDate date="${sessionInstance.date}" format="EEEEEEE dd MMMM (HH:mm)" /></nobr>
 							</td>
 							
 							<!-- Name -->
 							<g:if test="${competition}">
-						        <td style="vertical-align: middle; font-size: 12px; cursor: pointer" onclick="document.location='${sessionLink}'">
+						        <td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
 										<nobr>${sessionInstance.name}</nobr>
 						        </td>
 					        </g:if>
@@ -50,7 +50,7 @@
 					        </g:if>
 
 					        <!-- Playground -->
-					        <td style="vertical-align: middle; font-size: 12px; cursor: pointer" onclick="document.location='${sessionLink}'">
+					        <td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
 					        	${sessionInstance.playground}
 					        </td>
 					        

@@ -3,12 +3,12 @@
 					<g:if test="${sessionInstance.group.isVisibleByUsername(username)}">
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}" style="height: 40px;">
-							<td style="vertical-align: middle; font-size: larger; cursor: pointer" onclick="document.location='${sessionLink}'">
+							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
 								<g:link controller="sessions" action="show" id="${sessionInstance.id}">
 									<nobr><g:formatDate date="${sessionInstance.date}" format="EEEEEEE dd MMMM (HH:mm)" /></nobr>
 								</g:link>
 							</td>
-							<td style="vertical-align: middle; font-size: 12px; cursor: pointer" onclick="document.location='${sessionLink}'">
+							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
 								${fieldValue(bean: sessionInstance, field: "group")}
 							</td>
 							<td style="vertical-align: middle; margin: 0px; padding: 0px; ">
@@ -24,29 +24,31 @@
 							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
 								<nobr>	
 					        	<span style="color: ${color}; font-weight:bold;">${sessionInstance.availableParticipants.size()} / ${sessionInstance.participations.size()}</span> 
-					        	<span style="font-size: 10px">(min: ${sessionInstance.group.defaultMinPlayerNbr})</span>
+					        	<span style="font-size: small">(min: ${sessionInstance.group.defaultMinPlayerNbr})</span>
 					        	</nobr>
 					        </td>
 					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': org.apache.shiro.SecurityUtils.subject.principal]" />
-							<td style="vertical-align: middle; font-size: 12px">${fieldValue(bean: sessionInstance, field: "playground")}</td>
-							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">${sessionInstance.rounds.size()}</td>
-							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">${sessionInstance.allVotes.size()}</td>
-							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">${sessionInstance.comments.size()}</td>
-							<td style="vertical-align: middle; font-size: 12px; cursor: pointer" onclick="document.location='${sessionLink}'" >
-								<g:if test="${sessionInstance.comments}">
-									<g:set var="lastComment" value="${sessionInstance.comments.first()}" />
-									<g:link controller="player" action="show" id="${lastComment.user.id}">
-										${lastComment.user}
-									</g:link>
-									<g:message code="session.show.comments.hasPosted" />
-									<g:link uri="/sessions/show/${sessionInstance.id}#comment${lastComment.id}">
-										<flexy:humanDate date="${lastComment.date.time}" />
-									</g:link>
-								</g:if>
-								<g:else>
-									<g:message code="noComment" />
-								</g:else>					
-							</td>
+							<g:if test="${request.display == 'desktop'}">
+								<td style="vertical-align: middle;">${fieldValue(bean: sessionInstance, field: "playground")}</td>
+								<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">${sessionInstance.rounds.size()}</td>
+								<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">${sessionInstance.allVotes.size()}</td>
+								<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">${sessionInstance.comments.size()}</td>
+								<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'" >
+									<g:if test="${sessionInstance.comments}">
+										<g:set var="lastComment" value="${sessionInstance.comments.first()}" />
+										<g:link controller="player" action="show" id="${lastComment.user.id}">
+											${lastComment.user}
+										</g:link>
+										<g:message code="session.show.comments.hasPosted" />
+										<g:link uri="/sessions/show/${sessionInstance.id}#comment${lastComment.id}">
+											<flexy:humanDate date="${lastComment.date.time}" />
+										</g:link>
+									</g:if>
+									<g:else>
+										<g:message code="noComment" />
+									</g:else>
+								</td>
+							</g:if>
 						</tr>
 					</g:if>
 				</g:each>

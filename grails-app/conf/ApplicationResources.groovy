@@ -4,7 +4,7 @@ modules = {
     }
 	
 	flexygames {
-		resource url:'js/flexygames.js'
+		resource url:'js/flexygames-20160508.js'
 	}
 	
 	flexycharts {

@@ -17,6 +17,8 @@
         <div class="errors">${flash.error}</div>
     </g:if>
 
+    <g:set var="sessionIsManagedByCurrentUser" value="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}" />
+
     <g:render template="mobileInfos" />
 
     <g:render template="mobileParticipants" />
@@ -27,7 +29,7 @@
 
     <g:render template="votes" />
 
-    <g:render template="comments" />
+    <g:render template="mobileComments" />
 
 </body>
 </html>
