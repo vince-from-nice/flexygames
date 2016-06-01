@@ -99,19 +99,19 @@ th:hover, tr:hover {
 
 .userBlogEntry {
 	margin: 10px;
-	border: 2px solid #00a400;
+	border: 1px solid #00a400;
 	padding: 10px;
 }
 
 .competitionBlogEntry {
 	margin: 10px;
-	border: 2px solid #ef4a3e;
+	border: 1px solid #ef4a3e;
 	padding: 10px;
 }
 
 .trainingBlogEntry {
 	margin: 10px;
-	border: 2px solid #6ea7ff;
+	border: 1px solid #6ea7ff;
 	padding: 10px;
 }
 

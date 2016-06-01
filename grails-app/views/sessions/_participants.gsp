@@ -13,7 +13,8 @@
     <div class="sessionZoneContent">
         <g:set var="defaultDisplayForSummaryZone" value="table"/>
         <g:set var="defaultDisplayForDetailedZone" value="none"/>
-        <g:if test="${sessionIsManagedByCurrentUser || currentUserParticipation?.statusCode == flexygames.Participation.Status.REQUESTED.code()}">
+        <!-- Display the participants table by default if session is in the future or if user can manage it -->
+        <g:if test="${sessionIsManagedByCurrentUser || sessionInstance?.date.getTime() > System.currentTimeMillis()}">
             <g:set var="defaultDisplayForSummaryZone" value="none"/>
             <g:set var="defaultDisplayForDetailedZone" value="table"/>
         </g:if>

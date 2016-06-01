@@ -32,7 +32,8 @@
 		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 		<g:javascript library="mobilemenu"/>
 		<g:javascript library="application"/>
-		<g:javascript library="flexygames" />
+		<!--g:javascript library="flexygames" /-->
+		<script type="text/javascript" src="${resource(dir:'js',file:'flexygames-20160508.js')}"></script>
 
 		<g:layoutHead/>
 		<r:layoutResources />

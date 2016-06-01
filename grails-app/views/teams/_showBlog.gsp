@@ -11,8 +11,14 @@
             <g:if test="blogEntry.session">
                 <g:if test="${blogEntry.session.group.competition}">
                     <div class="competitionBlogEntry">
-                        <g:link controller="sessions" action="show" id="${blogEntry.session.id}" ><b>${blogEntry.session.name}</b></g:link>
-                        <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEEEEE dd MMMM yyyy (HH:mm)" />
+                        <g:if test="${blogEntry.session.name}">
+                            <g:link controller="sessions" action="show" id="${blogEntry.session.id}" ><b>${blogEntry.session.name}</b></g:link>
+                            <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEEEEE dd MMMM yyyy (HH:mm)" />
+                        </g:if>
+                        <g:else>
+                            <g:link controller="sessions" action="show" id="${blogEntry.session.id}" ><b><g:message code="competition" />
+                            <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEEEEE dd MMMM yyyy (HH:mm)" /></b></g:link>
+                        </g:else>
                         <hr>
                         <g:render template="showBlogCommon" bean="${blogEntry}" var="blogEntry" />
                     </div>

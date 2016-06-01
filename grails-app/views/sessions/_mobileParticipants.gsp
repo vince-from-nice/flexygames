@@ -13,6 +13,7 @@
     <div class="sessionZoneContent">
         <g:set var="defaultDisplayForSummaryZone" value="table"/>
         <g:set var="defaultDisplayForDetailedZone" value="none"/>
+        <!-- Display the participants table by default if user is in pending status or can manage the session -->
         <g:if test="${sessionIsManagedByCurrentUser || currentUserParticipation?.statusCode == flexygames.Participation.Status.REQUESTED.code()}">
             <g:set var="defaultDisplayForSummaryZone" value="none"/>
             <g:set var="defaultDisplayForDetailedZone" value="block"/>

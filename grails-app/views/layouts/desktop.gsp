@@ -27,7 +27,8 @@
 		<link rel="stylesheet" href="${resource(dir:'css',file:'flexygames-20160303.css')}" />
 
 		<g:javascript library="application"/>
-		<g:javascript library="flexygames" />
+		<!--g:javascript library="flexygames" /-->
+		<script type="text/javascript" src="${resource(dir:'js',file:'flexygames-20160508.js')}"></script>
 
 		<g:layoutHead/>
         <r:layoutResources />

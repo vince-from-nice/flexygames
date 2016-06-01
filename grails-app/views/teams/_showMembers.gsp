@@ -6,7 +6,7 @@
 						<th style="vertical-align: middle; text-align: center;"><g:message code="statistics" /></th>
 						<th style="vertical-align: middle; text-align: center;"><g:message code="training" /></th>
 						<th style="vertical-align: middle; text-align: center;"><g:message code="competition" /></th>
-						<th style="vertical-align: middle" property="lastLogin" ><g:message code="lastLogin" /></th>
+						<th style="vertical-align: middle; text-align: center;"><g:message code="lastLogin" /></th>
 					</tr>
 					<g:each in="${teamInstance.memberships}" var="ms" status="i">
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
