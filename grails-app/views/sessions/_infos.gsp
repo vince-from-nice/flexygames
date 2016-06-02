@@ -2,14 +2,6 @@
 	<tr>
 		<td style="min-width: 400px; width: 40%">
 			<table style="width: auto;">
-				<tr>
-					<td style="vertical-align: top; " ><g:message code="group" default="Group" /></td>
-					<td style="vertical-align: top; " >
-						<g:link controller="sessions" action="list" params="${['filteredSessionGroup':sessionInstance.group.id]}">
-							${sessionInstance?.group?.encodeAsHTML()}
-						</g:link>
-					</td>
-				</tr>
 				<g:if test="${sessionInstance.description}">
 					<tr >
 						<td style="vertical-align: top; ">
@@ -76,26 +68,18 @@
 						</g:each>
 					</td>
 				</tr>
+				<g:each in="${sessionInstance.tasks}" var="task" >
+					<tr >
+						<td style="vertical-align: top; ">
+							<g:message code="task.${task.type.code}.label" />
+						</td>
+						<td style="vertical-align: top; ">
+							<g:link controller="player" action="show" id="${task.user.id}" >${task.user}</g:link>
+						</td>
+					</tr>
+				</g:each>
 			</table>
 		</td>
-		<g:if test="${sessionInstance.imageUrl}">
-			<td style="text-align: center; vertical-align: top;">
-				<h3 style="margin-top: 0px"><g:message code="session.show.gallery" /></h3>
-				<a href="${sessionInstance.imageUrl}"><img style="max-width: 200px; max-height:120px;" src="${sessionInstance.imageUrl}" alt="Image"></a><br />
-				<g:if test="${sessionInstance.galleryUrl}">
-					<a href="${sessionInstance.galleryUrl}"><g:message code="session.show.viewGallery" /></a>
-				</g:if>
-            </td>
-		</g:if>
-		<g:set var="forecastToken" value="${sessionInstance.playground.computeForecastToken(sessionInstance.date)}" />
-		<g:if test="${forecastToken}">
-			<td style="text-align: left; vertical-align: top;">
-				<h3 style="margin-top: 0px"><g:message code="forecast" default="Forecast" /></h3>
-				<div style="width: 70px; text-align: left">
-					<g:render template="/common/forecast" model="[token: forecastToken, city: sessionInstance.playground.city]" />
-				</div>
-			</td>
-		</g:if>
 		<td style="text-align: center; vertical-align: top;">
 			<g:set var="defaultFirstTeam" value="${sessionInstance.group.defaultTeams?.first()}" scope="request" />
 			<h3 style="margin-top: 0px"><g:message code="session.show.relatedTeams" /></h3>
@@ -106,9 +90,33 @@
 				<g:else>
 					<img style="max-width: 200px; max-height:120px;" src="${resource(dir:'images/team',file:'no-logo.png')}" alt="Team logo" />
 				</g:else><br />
-				${defaultFirstTeam}<br />
+				${defaultFirstTeam}
+			</g:link>
+			<br />
+			<br />
+			<g:message code="group" default="Group" />:
+			<g:link controller="sessions" action="list" params="${['filteredSessionGroup':sessionInstance.group.id]}">
+				${sessionInstance?.group?.encodeAsHTML()}
 			</g:link>
 		</td>
+		<g:set var="forecastToken" value="${sessionInstance.playground.computeForecastToken(sessionInstance.date)}" />
+		<g:if test="${forecastToken}">
+			<td style="text-align: left; vertical-align: top;">
+				<h3 style="margin-top: 0px"><g:message code="forecast" default="Forecast" /></h3>
+				<div style="width: 70px; text-align: left">
+					<g:render template="/common/forecast" model="[token: forecastToken, city: sessionInstance.playground.city]" />
+				</div>
+			</td>
+		</g:if>
+		<g:if test="${sessionInstance.imageUrl}">
+			<td style="text-align: center; vertical-align: top;">
+				<h3 style="margin-top: 0px"><g:message code="session.show.gallery" /></h3>
+				<a href="${sessionInstance.imageUrl}"><img style="max-width: 200px; max-height:120px;" src="${sessionInstance.imageUrl}" alt="Image"></a><br />
+				<g:if test="${sessionInstance.galleryUrl}">
+					<a href="${sessionInstance.galleryUrl}"><g:message code="session.show.viewGallery" /></a>
+				</g:if>
+			</td>
+		</g:if>
 	</tr>
 </table>
 

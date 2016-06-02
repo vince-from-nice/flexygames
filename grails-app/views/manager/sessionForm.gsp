@@ -173,7 +173,8 @@
                                 	<g:message code="session.galleryUrl.infos" />
                                 </td>
                             </tr>
-                            
+
+                        <!--
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="extraFieldName"><g:message code="session.extraFieldName" default="Extra field name" /></label>
@@ -197,7 +198,44 @@
                                 	<g:message code="session.extraFieldValue.infos" />
                                 </td>
                             </tr>
-                            
+                            -->
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="tasks"><g:message code="session.tasks" default="Tasks" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'tasks', 'errors')}">
+                                    <g:if test="${sessionInstance?.tasks?.size() > 0}">
+                                        <ul>
+                                            <g:each in="${sessionInstance.tasks}" var="task" >
+                                                <li>
+                                                    <b><g:message code="task.${task.type.code}.label" /></b>
+                                                    <g:link controller="player" action="show" id="${task.user.id}" >${task.user}</g:link>
+                                                    <g:link controller="manager" action="deleteTask" id="${task.id}" >
+                                                        <img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />
+                                                    </g:link>
+                                                </li>
+                                            </g:each>
+                                        </ul>
+                                    </g:if>
+                                    <g:else>
+                                        <i><g:message code="session.tasks.nothing" /></i>
+                                        <br />
+                                    </g:else>
+                                    <br />
+                                    <g:message code="session.tasks.add" />:
+                                    <g:select name="taskTypeId"
+                                              from="${flexygames.TaskType.list()}"
+                                              optionKey="id" optionValue="code" noSelection="['': '']"/>
+                                    <g:message code="to" />
+                                    <g:select name="taskUserId"
+                                              from="${sessionInstance.group.defaultTeams.first().members}"
+                                              optionKey="id" noSelection="['': '']"/>
+                                </td>
+                                <td style="font-size: 12px">
+                                    <g:message code="session.tasks.infos" />
+                                </td>
+                            </tr>
+
 							<g:if test="${params.create != '1'}">
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -222,7 +260,7 @@
                                 	</g:else>
                                 	<br />
                                 	<g:message code="session.reminders.add" />
-                                	<g:field type="number" name="minutesForNewReminder" value="" />
+                                	<g:field type="number" name="minutesForNewReminder" value="" size="4" />
                                 </td>
                                 <td style="font-size: 12px">
                                 	<g:message code="session.reminders.infos" />

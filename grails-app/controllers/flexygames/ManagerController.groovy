@@ -103,7 +103,14 @@ class ManagerController {
 			}
 		}
 		sessionInstance.properties = params
-		// Eventuellement on ajoute un reminder
+		// Need to add new task ?
+		if (params.taskTypeId && params.taskUserId) {
+			TaskType taskType = TaskType.get(params.taskTypeId)
+			User taskUser = User.get(params.taskUserId)
+			Task task = new Task(user: taskUser, session: sessionInstance, type: taskType)
+			sessionInstance.addToTasks(task)
+		}
+		// Need to add new reminder ?
 		if (params.minutesForNewReminder) {
 			def reminder = new Reminder(minutesBeforeSession: 60 * Integer.parseInt(params.minutesForNewReminder), session: sessionInstance)
 			sessionInstance.reminders.add(reminder)
@@ -131,6 +138,23 @@ class ManagerController {
 		}
 		reminder.delete(flush: true)
 		flash.message = "Ok reminder has been deleted !"
+		render(view: "sessionForm", model: [sessionInstance: sessionInstance])
+	}
+
+	def deleteTask = {
+		def task = Task.get(params.id)
+		if (!task) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'task.label', default: 'Task'), params.id])}"
+			return redirect(controller: "sessions", action: "list")
+		}
+		def sessionInstance = task.session
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!sessionInstance.isManagedBy(user.username)) {
+			flash.error = "You cannot manage that session since you're not a manager !"
+			return redirect(controller: "sessions", action: "show", params: [id: sessionInstance.id])
+		}
+		task.delete(flush: true)
+		flash.message = "Ok task has been deleted !"
 		render(view: "sessionForm", model: [sessionInstance: sessionInstance])
 	}
 
@@ -210,7 +234,7 @@ class ManagerController {
 			redirect(controller:"sessions", action: "show", id: sessionInstance.id)
 		}
 	}
-	
+
 	/*********************************************************************************************
 	 * Session participations management
 	 *********************************************************************************************/
