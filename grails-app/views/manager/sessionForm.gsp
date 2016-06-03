@@ -63,7 +63,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="group"><nobr><g:message code="session.group" default="Group" /><font color="red">*</font></nobr></label>
+                                  <label for="group"><nobr><g:message code="session.group" default="Group" /> <font color="red">*</font></nobr></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'group', 'errors')}">
 									<g:select name="group.id" from="${sessionInstance.group.defaultTeams.first().sessionGroups}"
@@ -119,7 +119,7 @@
                                   <label for="duration"><nobr><g:message code="session.duration" default="Duration" /></nobr></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'duration', 'errors')}">
-                                    <g:field type="number" name="duration" min="1" value="${fieldValue(bean: sessionInstance, field: 'duration')}"/>
+                                    <g:field type="number" name="duration" min="1" size="2" value="${fieldValue(bean: sessionInstance, field: 'duration')}"/>
                                 </td>
                                 <td style="font-size: 12px">
                                 	<g:message code="session.duration.infos" />
@@ -208,7 +208,7 @@
                                         <ul>
                                             <g:each in="${sessionInstance.tasks}" var="task" >
                                                 <li>
-                                                    <b><g:message code="task.${task.type.code}.label" /></b>
+                                                    <b><g:message code="task.${task.type.code}" /></b>
                                                     <g:link controller="player" action="show" id="${task.user.id}" >${task.user}</g:link>
                                                     <g:link controller="manager" action="deleteTask" id="${task.id}" >
                                                         <img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />
@@ -223,9 +223,9 @@
                                     </g:else>
                                     <br />
                                     <g:message code="session.tasks.add" />:
-                                    <g:select name="taskTypeId"
-                                              from="${flexygames.TaskType.list()}"
-                                              optionKey="id" optionValue="code" noSelection="['': '']"/>
+                                    <br />
+                                    <g:select name="taskTypeId" from="${flexygames.TaskType.list()}"
+                                              optionKey="id" optionValue="code" valueMessagePrefix="task" noSelection="['': '']"/>
                                     <g:message code="to" />
                                     <g:select name="taskUserId"
                                               from="${sessionInstance.group.defaultTeams.first().members}"

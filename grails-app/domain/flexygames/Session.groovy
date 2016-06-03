@@ -25,7 +25,7 @@ class Session implements Comparable {
 	String extraFieldName
 	String extraFieldValue
 	SortedSet<Composition> compositions
-	Set<Task> tasks
+	SortedSet<Task> tasks
 
 	///////////////////////////////////////////////////////////////////////////
 	// Grails stuff

@@ -68,16 +68,29 @@
 						</g:each>
 					</td>
 				</tr>
-				<g:each in="${sessionInstance.tasks}" var="task" >
-					<tr >
-						<td style="vertical-align: top; ">
-							<g:message code="task.${task.type.code}.label" />
-						</td>
-						<td style="vertical-align: top; ">
+				<g:if test="${sessionInstance.tasks.size() > 0}">
+					<g:set var="lastTaskType" />
+					<g:each in="${sessionInstance.tasks}" var="task" >
+						<g:if test="${task.type != lastTaskType}">
+							<g:if test="${lastTaskType}">
+								</td>
+								</tr>
+							</g:if>
+							<tr >
+								<td style="vertical-align: top; ">
+									<g:message code="task.${task.type.code}" />
+								</td>
+								<td style="vertical-align: top; ">
+									<g:link controller="player" action="show" id="${task.user.id}" >${task.user}</g:link>
+						</g:if>
+						<g:else>
 							<g:link controller="player" action="show" id="${task.user.id}" >${task.user}</g:link>
-						</td>
+						</g:else>
+						<g:set var="lastTaskType" value="${task.type}" />
+					</g:each>
+					</td>
 					</tr>
-				</g:each>
+				</g:if>
 			</table>
 		</td>
 		<td style="text-align: center; vertical-align: top;">
