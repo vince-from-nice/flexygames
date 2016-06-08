@@ -1,6 +1,6 @@
 <div class="sessionZone">
     <div class="sessionZoneHeader" onclick="toggleTableDisplay('participantsSummaryZone');
-    toggleTableDisplay('participantsDetailedZone');
+    toggleDisplay('participantsDetailedZone');
     return false">
         <h2 style="vertical-align: top; display: inline;">
             <g:message code="session.show.participants"/>
