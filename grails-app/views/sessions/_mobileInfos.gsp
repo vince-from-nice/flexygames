@@ -45,6 +45,23 @@
                             <g:message code="session.description" default="Description" />:
                             ${fieldValue(bean: sessionInstance, field: "description")}
                         </g:if>
+                        <br>
+                        <g:if test="${sessionInstance.tasks.size() > 0}">
+                            <g:set var="lastTaskType" />
+                            <g:each in="${sessionInstance.tasks}" var="task" >
+                                <g:if test="${task.type != lastTaskType}">
+                                    <g:if test="${lastTaskType}">
+                                        <br>
+                                    </g:if>
+                                    <g:message code="task.${task.type.code}" />
+                                    <g:link controller="player" action="show" id="${task.user.id}" >${task.user}</g:link>
+                                </g:if>
+                                <g:else>
+                                    <g:link controller="player" action="show" id="${task.user.id}" >${task.user}</g:link>
+                                </g:else>
+                                <g:set var="lastTaskType" value="${task.type}" />
+                            </g:each>
+                        </g:if>
                     </td>
                     <td style="text-align: center; ">
                         <g:set var="defaultFirstTeam" value="${sessionInstance.group.defaultTeams?.first()}" scope="request" />
