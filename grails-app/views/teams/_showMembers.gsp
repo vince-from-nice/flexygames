@@ -129,6 +129,11 @@
 							</select>
 							<g:actionSubmit class="edit" action="updateAllMemberships" value="${message(code:'management.membership.updateAllMembers')}" />
 						</g:form>
+
+						<br>
+						<div style="text-align: center;">
+							<g:link controller="manager" action="showAttendanceSheet" id="${teamInstance.id}"><g:message code="management.attendenceSheets.showAttendanceSheets" /></g:link>
+						</div>
 						
 					</div>
 					

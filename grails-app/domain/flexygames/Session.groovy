@@ -171,6 +171,17 @@ class Session implements Comparable {
 		}
 		return result
 	}
+
+	List<User> getParticipantsEligibleForAttendanceSheet() {
+		def result = []
+		participations.each { p ->
+			if (p.statusCode == Participation.Status.UNDONE.code || p.statusCode == Participation.Status.APPROVED.code
+					|| p.statusCode == Participation.Status.DONE_GOOD.code || p.statusCode == Participation.Status.DONE_BAD.code) {
+				result << p.player
+			}
+		}
+		return result
+	}
 	
 	Participation getParticipationOf(String playerName) {
 		if (!playerName) return null

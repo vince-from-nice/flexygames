@@ -10,6 +10,9 @@
 	<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
 	</g:if>
+	<g:if test="${flash.error}">
+		<div class="errors">${flash.error}</div>
+	</g:if>
 	<table style="width: 100%; border: 0px">
 		<tr>
 			<td style="text-align: center; vertical-align: middle; ">

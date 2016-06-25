@@ -818,4 +818,59 @@ class ManagerController {
 		}
 	}
 
+	def showAttendanceSheet() {
+		def STOUFIX_MAGIC_NUMBER = 6
+		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		Team team = Team.get(params.id)
+		if (!team) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team', default: 'Team'), params.id])}"
+			return redirect(controller:"teams", action: "list")
+		}
+		if (!team.isManagedBy(user.username)) {
+			flash.error = "You cannot manage that team since you're not a manager !"
+			return redirect(controller:"teams", action: "show", id: team.id)
+		}
+		if (!params.valueToDispatch) {
+			params.valueToDispatch = STOUFIX_MAGIC_NUMBER
+		}
+		def data = [:]
+		def sessions = []
+		SessionGroup group = SessionGroup.get(params.groupId)
+		if (group) {
+			sessions = group.sessions
+			def players = team.members
+			def totalByPlayer = [:]
+			for (Session s : sessions) {
+				def participants = s.getParticipantsEligibleForAttendanceSheet()
+				for (User player : players) {
+					def playerValues = data[player.username]
+					if (!playerValues) {
+						playerValues = []
+						data[player.username] = playerValues
+					}
+					if (!totalByPlayer[player.username]) {
+						totalByPlayer[player.username] = 0
+					}
+					def playerValueToDisplay = ""
+					if (player in participants) {
+						def playerValue = Integer.parseInt(params.valueToDispatch) / participants.size()
+						def status = message(code: "participation.status." + s.getParticipationOf(player.username).statusCode)
+						playerValueToDisplay = "" + playerValue + " (" + status.getChars()[0] + ")"
+						totalByPlayer[player.username] = totalByPlayer[player.username] + 1
+					}
+					playerValues << playerValueToDisplay
+				}
+			}
+			for (User player : players) {
+				def playerValues = data[player.username]
+				def total = totalByPlayer[player.username]
+				if (total > 0) {
+					data[player.username] << total
+				} else {
+					data.remove(player.username)
+				}
+			}
+		}
+		render(view: 'attendanceSheet', model: [team: team, sessions: sessions, data: data])
+	}
 }
