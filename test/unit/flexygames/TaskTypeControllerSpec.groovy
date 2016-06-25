@@ -1,7 +1,6 @@
 package flexygames
 
-
-
+import flexygames.admin.TaskTypeController
 import grails.test.mixin.*
 import spock.lang.*
 
