@@ -819,7 +819,7 @@ class ManagerController {
 	}
 
 	def showAttendanceSheet() {
-		def STOUFIX_MAGIC_NUMBER = 6
+		def STOUFIX_MAGIC_NUMBER = "6"
 		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
 		Team team = Team.get(params.id)
 		if (!team) {

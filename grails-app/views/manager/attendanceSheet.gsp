@@ -12,7 +12,7 @@
     <g:hiddenField name="id" value="${team.id}" />
     <g:message code="management.attendenceSheets.selectSessionGroup" />
     <g:select name='groupId' from="${team.sessionGroups}"
-              optionKey="id" value="${flexygames.SessionGroup.get(params.groupId).id}"
+              optionKey="id" value="${flexygames.SessionGroup.get(params.groupId)?.id}"
               noSelection="${['':'']}"
     />
     <br />
