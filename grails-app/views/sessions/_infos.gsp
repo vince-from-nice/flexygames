@@ -139,9 +139,14 @@
 	    <g:hiddenField name="id" value="${sessionInstance?.id}" />
 	    <div class="buttons">
             <g:actionSubmit class="edit" action="editSession" value="${message(code:'management.session.edit')}" />
-            <g:actionSubmit class="create" action="duplicateSession" value="${message(code:'management.session.duplicate')}" />
+            <g:actionSubmit class="create" action="duplicateSession" value="${message(code:'management.session.duplicate')}" onclick="toggleDisplay('duplicationForm'); return false; " />
             <g:actionSubmit class="delete" onclick="return confirm('${message(code:'management.session.areYouSureToDelete')}')" action="deleteSession" value="${message(code:'management.session.delete')}" />
 	    </div>
+		<div id="duplicationForm" style="display: none; ">
+			<g:message code="management.session.duplicationOffset" />:
+			<g:field type="numeric" with="2" name="duplicationOffset" value="7" />
+			<g:actionSubmit class="create" value="Go" action="duplicateSession" />
+		</div>
 	</g:form>
 </g:if>
 

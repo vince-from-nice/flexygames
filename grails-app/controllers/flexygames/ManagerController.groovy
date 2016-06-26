@@ -169,12 +169,13 @@ class ManagerController {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: oldSession.id])
 		}
-		if (Session.findByGroupAndDate(oldSession.group, oldSession.date + 7)) {
-			flash.error = "Hey a session already exists in the same group for the next week !!"
+		def duplicationOffset = Integer.parseInt(params.duplicationOffset)
+		if (Session.findByGroupAndDate(oldSession.group, oldSession.date + duplicationOffset)) {
+			flash.error = "Unable to do the duplication because a session already exists in $duplicationOffset days !!"
 			return redirect(controller:"sessions", action: "show", id: oldSession.id)
 		}
 		Session newSession = new Session(group: oldSession.group, type: oldSession.type, playground: oldSession.playground,
-		date: oldSession.date + 7, duration: oldSession.duration, rdvBeforeStart: oldSession.rdvBeforeStart,
+		date: oldSession.date + duplicationOffset, duration: oldSession.duration, rdvBeforeStart: oldSession.rdvBeforeStart,
 		creation: new Date(), creator: user)
 		if (!newSession.hasErrors() && newSession.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'session.label', default: 'Session'), newSession.id])}"
