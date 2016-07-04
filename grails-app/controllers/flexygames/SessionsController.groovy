@@ -40,7 +40,7 @@ class SessionsController {
 
 		// Prepare data for the view
 		def sessionList
-		def sessionListSize
+		def sessionListSize = 0
 		def sessionGroups
 		//SessionGroupForSelectTag currentSessionGroupForSelectTag = new SessionGroupForSelectTag()
 		if (session.filteredSessionGroup > 0) {
@@ -51,8 +51,10 @@ class SessionsController {
 			sessionListSize = Session.countByGroup(currentSessionGroup)
 		} else if (session.filteredTeam > 0) {
 			sessionGroups = Team.get(session.filteredTeam).sessionGroups
-			sessionList = Session.findAllByGroupInList(sessionGroups, [max: params.max, offset: params.offset])
-			sessionListSize = Session.countByGroupInList(sessionGroups)
+			if (sessionGroups.size() > 0) {
+				sessionList = Session.findAllByGroupInList(sessionGroups, [max: params.max, offset: params.offset])
+				sessionListSize = Session.countByGroupInList(sessionGroups)
+			}
 		} else {
 			sessionGroups = SessionGroup.list()
 			sessionList = Session.list([max: params.max, offset: params.offset])
