@@ -2,7 +2,7 @@ package flexygames.admin
 
 import org.springframework.dao.DataIntegrityViolationException
 
-import flexygames.SessionWatch;
+import flexygames.SessionWatcher;
 
 class SessionWatchController {
 
@@ -14,15 +14,15 @@ class SessionWatchController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [sessionWatchInstanceList: SessionWatch.list(params), sessionWatchInstanceTotal: SessionWatch.count()]
+        [sessionWatchInstanceList: SessionWatcher.list(params), sessionWatchInstanceTotal: SessionWatcher.count()]
     }
 
     def create() {
-        [sessionWatchInstance: new SessionWatch(params)]
+        [sessionWatchInstance: new SessionWatcher(params)]
     }
 
     def save() {
-        def sessionWatchInstance = new SessionWatch(params)
+        def sessionWatchInstance = new SessionWatcher(params)
         if (!sessionWatchInstance.save(flush: true)) {
             render(view: "create", model: [sessionWatchInstance: sessionWatchInstance])
             return
@@ -33,7 +33,7 @@ class SessionWatchController {
     }
 
     def show(Long id) {
-        def sessionWatchInstance = SessionWatch.get(id)
+        def sessionWatchInstance = SessionWatcher.get(id)
         if (!sessionWatchInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'sessionWatch.label', default: 'SessionWatch'), id])
             redirect(action: "list")
@@ -44,7 +44,7 @@ class SessionWatchController {
     }
 
     def edit(Long id) {
-        def sessionWatchInstance = SessionWatch.get(id)
+        def sessionWatchInstance = SessionWatcher.get(id)
         if (!sessionWatchInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'sessionWatch.label', default: 'SessionWatch'), id])
             redirect(action: "list")
@@ -55,7 +55,7 @@ class SessionWatchController {
     }
 
     def update(Long id, Long version) {
-        def sessionWatchInstance = SessionWatch.get(id)
+        def sessionWatchInstance = SessionWatcher.get(id)
         if (!sessionWatchInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'sessionWatch.label', default: 'SessionWatch'), id])
             redirect(action: "list")
@@ -84,7 +84,7 @@ class SessionWatchController {
     }
 
     def delete(Long id) {
-        def sessionWatchInstance = SessionWatch.get(id)
+        def sessionWatchInstance = SessionWatcher.get(id)
         if (!sessionWatchInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'sessionWatch.label', default: 'SessionWatch'), id])
             redirect(action: "list")

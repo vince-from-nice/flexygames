@@ -20,7 +20,7 @@ class ForumService {
 		comment.text = new Jsoup().clean(comment.text, Whitelist.basicWithImages())
 		if (comment.save(flush: true) && user.updateCommentCounter(1)) {
 			// notify by email users who are watching that session
-			def watches = SessionWatch.findAllBySession(session)
+			def watches = SessionWatcher.findAllBySession(session)
 			def emails = watches*.user.email
 			if (emails.size() > 0) {
 				// TODO get Locale from user profile
@@ -45,14 +45,14 @@ class ForumService {
 				if (alreadyWatched) {
 					throw new Exception("Hey you're already watching that session")
 				} else {
-					SessionWatch watch = new SessionWatch(user: user, session: session)
+					SessionWatcher watch = new SessionWatcher(user: user, session: session)
 					if (!watch.save()) {
 						throw new Exception(watch.errors)
 					}
 				}
 		} else {
 			if (alreadyWatched) {
-				SessionWatch watch = SessionWatch.findByUserAndSession(user, session)
+				SessionWatcher watch = SessionWatcher.findByUserAndSession(user, session)
 				watch.delete()
 			} else {
 				throw new Exception("Hey you cannot unwatch that session because you're not watching it ! :)")

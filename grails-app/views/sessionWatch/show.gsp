@@ -1,5 +1,5 @@
 
-<%@ page import="flexygames.SessionWatch" %>
+<%@ page import="flexygames.SessionWatcher" %>
 <!DOCTYPE html>
 <html>
 	<head>

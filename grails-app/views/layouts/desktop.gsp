@@ -86,7 +86,7 @@
 				<br /> <br />
 				<shiro:hasRole name="Administrator">
 					<div class="block">
-						<h3><g:message code="layout.adminMenu" /></h3>
+						<h3 style="margin-top: 0.2em"><g:message code="layout.adminMenu" /></h3>
 						<ul style="margin-left: 20px;">
 							<!--li><g:link controller="admin" action="index"><g:message code="mainMenu.admin" default="Admin" /></g:link></li-->
 							<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.logicalPropertyName } }">

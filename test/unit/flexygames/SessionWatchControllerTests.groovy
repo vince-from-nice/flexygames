@@ -1,14 +1,10 @@
 package flexygames
 
-
-
-import org.junit.*
-
 import flexygames.admin.SessionWatchController;
 import grails.test.mixin.*
 
 @TestFor(SessionWatchController)
-@Mock(SessionWatch)
+@Mock(SessionWatcher)
 class SessionWatchControllerTests {
 
     def populateValidParams(params) {
@@ -49,7 +45,7 @@ class SessionWatchControllerTests {
 
         assert response.redirectedUrl == '/sessionWatch/show/1'
         assert controller.flash.message != null
-        assert SessionWatch.count() == 1
+        assert SessionWatcher.count() == 1
     }
 
     void testShow() {
@@ -59,7 +55,7 @@ class SessionWatchControllerTests {
         assert response.redirectedUrl == '/sessionWatch/list'
 
         populateValidParams(params)
-        def sessionWatch = new SessionWatch(params)
+        def sessionWatch = new SessionWatcher(params)
 
         assert sessionWatch.save() != null
 
@@ -77,7 +73,7 @@ class SessionWatchControllerTests {
         assert response.redirectedUrl == '/sessionWatch/list'
 
         populateValidParams(params)
-        def sessionWatch = new SessionWatch(params)
+        def sessionWatch = new SessionWatcher(params)
 
         assert sessionWatch.save() != null
 
@@ -97,7 +93,7 @@ class SessionWatchControllerTests {
         response.reset()
 
         populateValidParams(params)
-        def sessionWatch = new SessionWatch(params)
+        def sessionWatch = new SessionWatcher(params)
 
         assert sessionWatch.save() != null
 
@@ -141,17 +137,17 @@ class SessionWatchControllerTests {
         response.reset()
 
         populateValidParams(params)
-        def sessionWatch = new SessionWatch(params)
+        def sessionWatch = new SessionWatcher(params)
 
         assert sessionWatch.save() != null
-        assert SessionWatch.count() == 1
+        assert SessionWatcher.count() == 1
 
         params.id = sessionWatch.id
 
         controller.delete()
 
-        assert SessionWatch.count() == 0
-        assert SessionWatch.get(sessionWatch.id) == null
+        assert SessionWatcher.count() == 0
+        assert SessionWatcher.get(sessionWatch.id) == null
         assert response.redirectedUrl == '/sessionWatch/list'
     }
 }

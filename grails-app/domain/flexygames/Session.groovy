@@ -26,13 +26,14 @@ class Session implements Comparable {
 	String extraFieldValue
 	SortedSet<Composition> compositions
 	SortedSet<Task> tasks
+	Set<SessionWatcher> watchers
 
 	///////////////////////////////////////////////////////////////////////////
 	// Grails stuff
 	///////////////////////////////////////////////////////////////////////////
 	
     static hasMany = [participations: Participation, reminders: Reminder, rounds: SessionRound, 
-			votes: Vote, comments: SessionComment, compositions: Composition, tasks: Task]
+			votes: Vote, comments: SessionComment, compositions: Composition, tasks: Task, watchers: SessionWatcher]
 
     static constraints = {
 		date(nullable: false)
@@ -78,7 +79,8 @@ class Session implements Comparable {
 		rounds lazy: true, batchSize: 50
 		votes lazy: true, batchSize: 50
 		comments lazy: true, batchSize: 50
-		compositions lazy: true, batchSize:50
+		compositions lazy: true, batchSize: 50
+		watchers lazy: true, batchSize: 50
 	}
 	
 	///////////////////////////////////////////////////////////////////////////

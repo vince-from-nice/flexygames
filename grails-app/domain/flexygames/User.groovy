@@ -170,7 +170,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	}
 	
 	boolean isWatchingSession(Session s) {
-		return SessionWatch.findByUserAndSession(this, s) != null
+		return SessionWatcher.findByUserAndSession(this, s) != null
 	}
 
 	List<Participation> getParticipationsVisibleInCalendar() {
