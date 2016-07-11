@@ -19,19 +19,22 @@ grails.project.dependency.resolution = {
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
 
+    // Usefull for plugins with dependencing issues
+    // https://objectpartners.com/2013/02/13/grails-2-2-publishing-your-plugins-as-maven-artifacts-to-resolve-dependency-resolution-issues/
+    legacyResolve true
+
     repositories {
         inherits true // Whether to inherit repository definitions from plugins
         grailsPlugins()
         grailsHome()
         grailsCentral()
+        mavenLocal()
         mavenCentral()
-		
+        mavenRepo "http://guice-maven.googlecode.com/svn/trunk"
+        mavenRepo  "https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads/"
 		// Vinz : https://groups.google.com/forum/#!topic/grails-dev-discuss/LI0coUwaFgk
 		//mavenRepo "http://repo.grails.org/grails/plugins/"
-
-        // uncomment these to enable remote dependency resolution from public Maven repositories
-        //mavenCentral()
-        //mavenLocal()
+        // Uncomment these to enable remote dependency resolution from public Maven repositories
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
@@ -68,14 +71,17 @@ grails.project.dependency.resolution = {
 		//runtime ":jquery:1.11.1"
 		
 		// turman : depuis grails 2.3 on ne peut plus utiliser le plugin manager et il faut rajouter toutes les dépendances à  la main !
-		compile "org.grails.plugins:mail:1.0.7"
-        compile "org.grails.plugins:quartz:1.0.2"
-		compile ("org.grails.plugins:shiro:1.2.1") {excludes([name: 'quartz', group: 'org.opensymphony.quartz'])}
+		compile ":mail:1.0.7"
+        compile ":quartz:1.0.2"
+        //compile ":shiro:1.2.1"
+		compile (":shiro:1.2.1") {excludes([name: 'quartz', group: 'org.opensymphony.quartz'])}
 		//compile ":file-uploader:1.2.1"
-		compile "org.grails.plugins:ic-alendar:0.4.6"
-        compile "org.grails.plugins:spring-mobile:1.1.3"
-        //compile "org.grails.plugins:resources:1.2.14"
-        //compile "org.grails.plugins:jquery-mobile:1.1.0.5"
+		compile ":ic-alendar:0.4.6"
+        compile ":spring-mobile:1.1.3"
+        compile ":resources:1.2.14"
+        compile ":jquery-mobile:1.1.0.5"
+        compile ":shiro-openid:0.7"
+        //compile (":shiro-openid:0.7") {excludes([name: 'shiro'])}
     }
 }
 
