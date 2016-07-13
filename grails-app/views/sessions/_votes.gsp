@@ -3,7 +3,7 @@
 		<h2 style="vertical-align: top; display: inline;">
 			<g:message code="session.show.votes" />
 		</h2>
-		<span style="float:right; font-size: small;"><g:message code="clickForDetails" /></span>
+		<span style="float:right; font-size: small;"><g:message code="clickForShowOrHideDetails" /></span>
 	</div>
 	<g:set var="defaultDisplayForSummaryZone" value="block" />
 	<g:set var="defaultDisplayForDetailedZone" value="none" />

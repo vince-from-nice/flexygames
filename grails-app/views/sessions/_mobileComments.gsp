@@ -3,7 +3,7 @@
 		<h2 style="vertical-align: top; display: inline;">
 			<g:message code="session.show.comments" />
 		</h2>
-		<span style="float:right; font-size: small;"><g:message code="clickForDetails" /></span>
+		<span style="float:right; font-size: small;"><g:message code="clickForShowOrHideDetails" /></span>
 	</div>
 	<div class="sessionZoneContent">
 		<shiro:notUser>

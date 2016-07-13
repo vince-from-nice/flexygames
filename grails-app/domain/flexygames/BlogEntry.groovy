@@ -3,6 +3,8 @@ package flexygames
 class BlogEntry implements Comparable {
 
     Date date
+    Date lastUpdate
+    User lastUpdater
     String title
     String body
     Session session // transient field for automatic blog entries related to sessions
@@ -12,10 +14,14 @@ class BlogEntry implements Comparable {
     static transients = ['session']
 
     static constraints = {
-        date(nullable:false)
-        title(blank:false, maxSize:100)
-        body(blank:false, maxSize:10000)
-        session(nullable:true)
+        date(nullable: false)
+        title(blank: false, maxSize: 64)
+        body(blank: false, maxSize: 10000)
+        team(nullable: false)
+        user(nullable: false)
+        session(nullable: true)
+        lastUpdate(nullable: true)
+        lastUpdater(nullable: true)
     }
 
     int compareTo(Object o) {

@@ -5,7 +5,7 @@
         <h2 style="vertical-align: top; display: inline;">
             <g:message code="session.show.participants"/>
         </h2>
-        <span style="float:right; font-size: small;"><g:message code="clickForDetails"/></span>
+        <span style="float:right; font-size: small;"><g:message code="clickForShowOrHideDetails"/></span>
     </div>
 
     <g:set var="currentUserParticipation" value="${sessionInstance.getParticipationOf(session.currentUser?.username)}"/>

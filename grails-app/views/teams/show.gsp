@@ -110,17 +110,17 @@
 			<g:set var="classForMembersTab" value="tabNotSelected" />
 			<g:set var="classForRankingTab" value="tabNotSelected" />
 		</g:if>
-		<g:if test="${params.mode=='competition' }">
-			<g:set var="classForblogTab" value="tabNotSelected" />
-			<g:set var="classForCompetitionTab" value="tabSelected" />
-			<g:set var="classForTrainingTab" value="tabNotSelected" />	
-			<g:set var="classForMembersTab" value="tabNotSelected" />
-			<g:set var="classForRankingTab" value="tabNotSelected" />
-		</g:if>
 		<g:if test="${params.mode=='training' }">
 			<g:set var="classForblogTab" value="tabNotSelected" />
 			<g:set var="classForCompetitionTab" value="tabNotSelected" />
 			<g:set var="classForTrainingTab" value="tabSelected" />	
+			<g:set var="classForMembersTab" value="tabNotSelected" />
+			<g:set var="classForRankingTab" value="tabNotSelected" />
+		</g:if>
+		<g:if test="${params.mode=='competition' }">
+			<g:set var="classForblogTab" value="tabNotSelected" />
+			<g:set var="classForCompetitionTab" value="tabSelected" />
+			<g:set var="classForTrainingTab" value="tabNotSelected" />
 			<g:set var="classForMembersTab" value="tabNotSelected" />
 			<g:set var="classForRankingTab" value="tabNotSelected" />
 		</g:if>
@@ -140,8 +140,8 @@
 		</g:if>
 
 		<g:set var="blogLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'blog'])}" />
-		<g:set var="competitionLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'competition'])}" />
 		<g:set var="trainingLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'training'])}" />
+		<g:set var="competitionLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'competition'])}" />
 		<g:set var="membersLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'members'])}" />
 		<g:set var="rankingLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'ranking'])}" />
 
@@ -149,11 +149,11 @@
 			<td class="${classForblogTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${blogLink}'">
 				<b><g:message code="blog"/></b>
 			</td>
-			<td class="${classForCompetitionTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${competitionLink}'">
-				<b><g:message code="competitions"/></b>
-			</td>
 			<td class="${classForTrainingTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${trainingLink}'">
 				<b><g:message code="trainings"/></b>
+			</td>
+			<td class="${classForCompetitionTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${competitionLink}'">
+				<b><g:message code="competitions"/></b>
 			</td>
 			<td class="${classForMembersTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${membersLink}'">
 				<b><g:message code="members"/></b>

@@ -68,14 +68,15 @@ grails.project.dependency.resolution = {
 		//runtime ":jquery:1.11.1"
 		
 		// turman : depuis grails 2.3 on ne peut plus utiliser le plugin manager et il faut rajouter toutes les dépendances à  la main !
-		compile "org.grails.plugins:mail:1.0.7"
-        compile "org.grails.plugins:quartz:1.0.2"
-		compile ("org.grails.plugins:shiro:1.2.1") {excludes([name: 'quartz', group: 'org.opensymphony.quartz'])}
+		compile ":mail:1.0.7"
+        compile ":quartz:1.0.2"
+		compile (":shiro:1.2.1") {excludes([name: 'quartz', group: 'org.opensymphony.quartz'])}
 		//compile ":file-uploader:1.2.1"
-		compile "org.grails.plugins:ic-alendar:0.4.6"
-        compile "org.grails.plugins:spring-mobile:1.1.3"
-        //compile "org.grails.plugins:resources:1.2.14"
-        //compile "org.grails.plugins:jquery-mobile:1.1.0.5"
+		compile ":ic-alendar:0.4.6"
+        compile ":spring-mobile:1.1.3"
+        //compile ":resources:1.2.14"
+        //compile ":jquery-mobile:1.1.0.5"
+        compile ":ckeditor:4.5.4.1"
     }
 }
 

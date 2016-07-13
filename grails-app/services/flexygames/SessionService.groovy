@@ -13,7 +13,7 @@ class SessionService {
 	
 	def mailerService
 
-	def static final USER_LOG_MAX_SIZE = 256
+
 
 	def join(User user, Session session) throws Exception {
 		// Check if the session isn't entered into locking mode (and is not in the past btw)

@@ -6,7 +6,9 @@ class Participation implements Comparable<Participation> {
 	String userLog
 	Date lastUpdate
 	String lastUpdater
-	
+
+	static final USER_LOG_MAX_SIZE = 256
+
 	public enum Status {
 //		REQUESTED ("REQUESTED", "#FF7977"),
 //		AVAILABLE("AVAILABLE", "#AAFF95"),
@@ -56,7 +58,7 @@ class Participation implements Comparable<Participation> {
 		player(unique:'session')
 		session()
 		statusCode(inList: Status.values().collect{it.code()})
-		userLog(nullable: true, blank:true, maxSize:100)
+		userLog(nullable: true, blank: true, maxSize: USER_LOG_MAX_SIZE)
 		lastUpdate(nullable: true)
 		lastUpdater(nullable: true, blank:false)
 	}

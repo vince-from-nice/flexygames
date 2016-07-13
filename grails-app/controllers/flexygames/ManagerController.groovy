@@ -1,5 +1,6 @@
 package flexygames
 
+import grails.transaction.Transactional
 import groovy.json.JsonSlurper;
 
 import java.text.SimpleDateFormat
@@ -753,9 +754,9 @@ class ManagerController {
 		ms.regularForTraining = 'Regular' == params.regularForTraining
 		ms.regularForCompetition = 'Regular' == params.regularForCompetition
 		if (!ms.save()) {
-			flash.message = "Sorry, unable to update membership !<br><br>$ms.errors"
+			flash.error = "Sorry, unable to update membership !<br><br>$ms.errors"
 		} else {
-			flash.error = "Ok membership has been updated !"
+			flash.message = "Ok membership has been updated !"
 		}
 		redirect(controller:"teams", action: "show", id: ms.team.id)
 	}
@@ -812,11 +813,10 @@ class ManagerController {
 			mailerService.mail(player.email, message(code:'management.membership.remove.mail.title'),
 			message(code:'management.membership.remove.mail.body', args: [user.username, team.name]))
 			flash.message = "Ok membership has been removed"
-			redirect(controller:"teams", action: "show", id: teamId)
 		} catch (Exception e) {
 			flash.error ="Ooops sorry, unable to remove membership : " + e.getMessage()
-			redirect(controller:"teams", action: "show", id: teamId)
 		}
+		redirect(controller:"teams", action: "show", id: teamId)
 	}
 
 	def showAttendanceSheet() {
@@ -873,5 +873,80 @@ class ManagerController {
 			}
 		}
 		render(view: 'attendanceSheet', model: [team: team, sessions: sessions, data: data])
+	}
+
+	def editBlogEntry = {
+		Team team = Team.get(params.teamId)
+		if (!team) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team')])}"
+			return redirect(controller: "teams", action: "list")
+		}
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!team.isManagedBy(user.username)) {
+			flash.error = "You cannot manage that team since you're not a manager !"
+			redirect(controller:"teams", action: "show", id: team.id)
+		}
+		render(view: '/manager/blogEntryform', model: [team: team, blogEntry: params.id ? BlogEntry.get(params.id) : null])
+	}
+
+	@Transactional
+	def saveBlogEntry() {
+		Team team = Team.get(params.teamId)
+		if (!team) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team')])}"
+			return redirect(controller: "teams", action: "list")
+		}
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!team.isManagedBy(user.username)) {
+			flash.error = "You cannot manage that team since you're not a manager !"
+			redirect(controller:"teams", action: "show", id: team.id)
+		}
+		BlogEntry be
+		// Update an existing blog entry
+		if (params.id) {
+			be = BlogEntry.get(params.id)
+			be.lastUpdater = user
+			be.lastUpdate = new Date()
+		}
+		// Create a new blog entry
+		else {
+			be = new BlogEntry(user: user, team: team, date: new Date())
+			def addresses = []
+		}
+		be.title = params.title
+		// TODO need to clean user input ?
+		be.body = params.body
+		if (!be.save()) {
+			flash.error = "Sorry, unable to save blog entry<br><br>$be.errors"
+			redirect(controller:"teams", action: "show", id: team.id)
+		} else {
+			flash.message = "Ok blog entry has been saved !"
+		}
+		// If the save was a creation and the user wants to mail members...
+		if (!params.id && params.mailAllMembers) {
+			def addresses = team.getMembers()*.email
+			def link = createLink(controller: 'teams', action: 'displayBlogEntry', id: be.id)
+			def body = message(code:'mails.newBlogEntry.body', args:[user.username, team, link])
+			mailerService.mail(addresses, be.title, body)
+			flash.message = "Ok blog entry has been saved and " + addresses.size() + " members has been alerted by email"
+		}
+		redirect(controller:"teams", action: "show", id: team.id)
+	}
+
+	def deleteBlogEntry = {
+		BlogEntry be = BlogEntry.get(params.id)
+		if (!be) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'blogEntry')])}"
+			return redirect(controller: "teams", action: "list")
+		}
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def team = be.getTeam()
+		if (!team.isManagedBy(user.username)) {
+			flash.error = "You cannot manage that team since you're not a manager !"
+			redirect(controller:"teams", action: "show", id: team.id)
+		}
+		be.delete()
+		flash.message = "Ok blog entry has been deleted !"
+		redirect(controller:"teams", action: "show", id: team.id)
 	}
 }
