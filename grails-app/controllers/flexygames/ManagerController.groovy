@@ -116,6 +116,8 @@ class ManagerController {
 			def reminder = new Reminder(minutesBeforeSession: 60 * Integer.parseInt(params.minutesForNewReminder), session: sessionInstance)
 			sessionInstance.reminders.add(reminder)
 		}
+		sessionInstance.lastUpdate = new Date()
+		sessionInstance.lastUpdater = user
 		if (!sessionInstance.hasErrors() && sessionInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'session.label', default: 'Session'), sessionInstance.id])}"
 			redirect(controller:"sessions", action: "show", id: sessionInstance.id)

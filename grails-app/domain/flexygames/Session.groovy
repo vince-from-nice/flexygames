@@ -22,6 +22,8 @@ class Session implements Comparable {
 	String galleryUrl
 	Date creation
 	User creator
+	Date lastUpdate
+	User lastUpdater
 	String extraFieldName
 	String extraFieldValue
 	SortedSet<Composition> compositions
@@ -56,6 +58,8 @@ class Session implements Comparable {
 		extraFieldName(nullable: true)
 		extraFieldValue(nullable: true)
 		compositions(nullable: true)
+		lastUpdate(nullable: true)
+		lastUpdater(nullable: true)
     }
 	
     static transients = [

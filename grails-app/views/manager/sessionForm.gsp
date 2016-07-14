@@ -40,13 +40,27 @@
 	                                <td valign="top" class="name">
 	                                  <g:message code="session.creation" default="Creation" />
 	                                </td>
-	                                <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'type', 'errors')}">
+	                                <td valign="top" class="value">
 	                                    <g:message code="session.creation.value" args="[sessionInstance.creation, sessionInstance.creator]" />
 	                                </td>
 	                                <td style="font-size: 12px">
 	                                	<g:message code="session.creation.infos" />
 	                                </td>
 	                            </tr>
+                            </g:if>
+
+                            <g:if test="${sessionInstance.lastUpdater}">
+                                <tr class="prop">
+                                    <td valign="top" class="name">
+                                        <g:message code="session.update" default="Update" />
+                                    </td>
+                                    <td valign="top" class="value">
+                                        <g:message code="session.update.value" args="[sessionInstance.lastUpdate, sessionInstance.lastUpdater]" />
+                                    </td>
+                                    <td style="font-size: 12px">
+                                        <g:message code="session.update.infos" />
+                                    </td>
+                                </tr>
                             </g:if>
                             
                             <tr class="prop">
