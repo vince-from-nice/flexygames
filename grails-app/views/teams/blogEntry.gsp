@@ -6,26 +6,31 @@
 	<g:render template="/common/layout" />
 </head>
 <body>
-	<h1>
-		<g:message code="team.show.blog.blogEntryOf" />
-		<g:link controller="teams" action="show" id="${blogEntry.team.id}">${blogEntry.team}</g:link>
-	</h1>
+	<div style="border: solid green 1px; padding: 10px; width: auto">
+		<h2 style="margin-top: 0px;">
+			<g:message code="team.show.blog.blogEntryOf" />
+			<g:link controller="teams" action="show" id="${blogEntry.team.id}">${blogEntry.team}</g:link>
+		</h2>
+	</div>
 	<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
 	</g:if>
-	<g:message code="team.show.blog.postedBy" />
-	<g:link controller="player" action="show" id="${blogEntry.user.id}">${blogEntry.user}</g:link>
-	<flexy:humanDate date="${blogEntry.date.time}" />
-	<br>
-	<g:if test="${blogEntry.lastUpdater}">
-		<g:message code="team.show.blog.updatedBy" />
-		<g:link controller="player" action="show" id="${blogEntry.lastUpdater.id}">${blogEntry.lastUpdater}</g:link>
-		<flexy:humanDate date="${blogEntry.lastUpdate.time}" />
-		<br>
-	</g:if>
-	<div class="userBlogEntry">
-		<h2 style="margin-top: 0px;">${blogEntry?.title}</h2>
+	<div class="userBlogEntryzzz">
+		<h1 style="margin-top: 10px;">${blogEntry?.title}</h1>
 		${blogEntry.body}
+	</div>
+	<br>
+	<div style="border: solid green 1px; padding: 10px; width: auto">
+		<g:message code="team.show.blog.postedBy" />
+		<g:link controller="player" action="show" id="${blogEntry.user.id}">${blogEntry.user}</g:link>
+		<flexy:humanDate date="${blogEntry.date.time}" />
+		<g:if test="${blogEntry.lastUpdater}">
+			|
+			<g:message code="team.show.blog.updatedBy" />
+			<g:link controller="player" action="show" id="${blogEntry.lastUpdater.id}">${blogEntry.lastUpdater}</g:link>
+			<flexy:humanDate date="${blogEntry.lastUpdate.time}" />
+			<br>
+		</g:if>
 	</div>
 	<g:render template="/common/backLinks" />
   </body>

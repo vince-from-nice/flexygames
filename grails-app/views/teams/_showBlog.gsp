@@ -78,10 +78,11 @@
     </div>
     <br>
     <g:if test="${teamIsManagedByCurrentUser}">
-        <g:form controller="manager" method="post" style="text-align: center">
+        <g:form controller="manager" action="editBlogEntry" method="post" style="text-align: center">
             <g:hiddenField name="teamId" value="${teamInstance.id}" />
+            <!--g:submitButton name="create" value="${message(code:'team.show.blog.create')}" /-->
             <div class="buttons" style="text-align: center">
-                <g:actionSubmit class="create" action="editBlogEntry" value="${message(code:'team.show.blog.create')}" onclick="toggleDisplay('blogEntryCreation'); return false;" />
+                <g:actionSubmit class="create" action="editBlogEntry" value="${message(code:'team.show.blog.create')}" />
             </div>
         </g:form>
     </g:if>

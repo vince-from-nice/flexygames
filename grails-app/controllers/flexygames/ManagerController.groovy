@@ -878,7 +878,7 @@ class ManagerController {
 	def editBlogEntry = {
 		Team team = Team.get(params.teamId)
 		if (!team) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team')])}"
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team'), params.teamId])}"
 			return redirect(controller: "teams", action: "list")
 		}
 		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
@@ -886,14 +886,14 @@ class ManagerController {
 			flash.error = "You cannot manage that team since you're not a manager !"
 			redirect(controller:"teams", action: "show", id: team.id)
 		}
-		render(view: '/manager/blogEntryform', model: [team: team, blogEntry: params.id ? BlogEntry.get(params.id) : null])
+		render(view: '../manager/blogEntryForm', model: [team: team, blogEntry: params.id ? BlogEntry.get(params.id) : null])
 	}
 
 	@Transactional
 	def saveBlogEntry() {
 		Team team = Team.get(params.teamId)
 		if (!team) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team')])}"
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team'), params.teamId])}"
 			return redirect(controller: "teams", action: "list")
 		}
 		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
@@ -936,7 +936,7 @@ class ManagerController {
 	def deleteBlogEntry = {
 		BlogEntry be = BlogEntry.get(params.id)
 		if (!be) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'blogEntry')])}"
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'blogEntry'), params.id])}"
 			return redirect(controller: "teams", action: "list")
 		}
 		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())

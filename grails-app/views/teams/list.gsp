@@ -17,7 +17,7 @@
 			</div>
 		</g:if>
 		<g:if test="${flash.error}">
-			<div class="error">
+			<div class="errors">
 				${flash.error}
 			</div>
 		</g:if>

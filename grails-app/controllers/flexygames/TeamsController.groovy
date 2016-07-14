@@ -76,6 +76,7 @@ class TeamsController {
 		// TODO merge the pagination between userBlogEntries and sessionBlogEntries
 		def blogEntriesTotal = team.countSessions()
 		def allBlogEntries = userBlogEntries + sessionBlogEntries
+		allBlogEntries.sort()
 		return [teamInstance: team, allBlogEntries: allBlogEntries, blogEntriesTotal: blogEntriesTotal, params: params]
 	}
 
