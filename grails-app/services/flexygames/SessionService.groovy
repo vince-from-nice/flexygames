@@ -84,7 +84,7 @@ class SessionService {
 			userLog = ''
 		}
 		userLog = new Jsoup().clean(userLog, Whitelist.relaxed()) // damned <img> tags are not cleaned !
-		userLog = userLog.substring(0, (userLog.length() > USER_LOG_MAX_SIZE ? USER_LOG_MAX_SIZE : userLog.length()))
+		userLog = userLog.substring(0, (userLog.length() > Participation.USER_LOG_MAX_SIZE ? Participation.USER_LOG_MAX_SIZE : userLog.length()))
 		participation.setUserLog(userLog)
 		if (participation.save()) {
 			//flash.message = "Participation status for <b>$participation.player</b> has been successfuly updated !"
