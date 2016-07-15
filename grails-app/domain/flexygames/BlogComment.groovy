@@ -8,9 +8,9 @@ class BlogComment implements Comparable<BlogComment> {
     static belongsTo = [user: User, blogEntry: BlogEntry]
     
     static constraints = {
-        user()
-        blogEntry()
-        date()
+        user(nullable: false)
+        blogEntry(nullable: false)
+        date(nullable: false)
         text(blank:false, maxSize:10000)
     }
 

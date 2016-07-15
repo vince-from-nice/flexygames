@@ -266,7 +266,7 @@ class SessionsController {
 		}
 		def comment
 		try {
-			comment = forumService.postComment(user, session, params.comment)
+			comment = forumService.postSessionComment(user, session, params.comment)
 			flash.message = "Ok comment has been posted !!"
 		} catch (Exception e) {
 			e.printStackTrace()

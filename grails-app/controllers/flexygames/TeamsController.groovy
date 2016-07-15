@@ -1,8 +1,12 @@
 package flexygames
 
+import org.apache.shiro.SecurityUtils
+
 class TeamsController {
 
 	def statsService
+
+	def forumService
 	
 	def index = { redirect(action:"list") }
 
@@ -89,4 +93,22 @@ class TeamsController {
 		render(view: 'blogEntry', model: ['blogEntry': be])
 	}
 
+	def postCommentOnBlogEntry = {
+		BlogEntry be = BlogEntry.get(params.id)
+		if (!be) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'blogEntry'), params.id])}"
+			return redirect(action: "list")
+		}
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def comment
+		try {
+			comment = forumService.postBlogComment(user, be, params.comment)
+			flash.message = "Ok comment has been posted !!"
+		} catch (Exception e) {
+			e.printStackTrace()
+			flash.error = "${message(code: 'team.show.blog.comments.update.error', args: [e.message])}"
+			return redirect(action: "displayBlogEntry", id: be.id)
+		}
+		redirect(action: "displayBlogEntry", id: be.id, fragment: "comment" + comment.id)
+	}
 }

@@ -7,9 +7,12 @@ class BlogEntry implements Comparable {
     User lastUpdater
     String title
     String body
+    SortedSet<BlogComment> comments
     Session session // transient field for automatic blog entries related to sessions
 
-    static belongsTo = [user: User, team:Team]
+    static belongsTo = [user: User, team: Team]
+
+    static hasMany = [comments: BlogComment]
 
     static transients = ['session']
 

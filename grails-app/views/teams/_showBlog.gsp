@@ -30,7 +30,6 @@
                         <g:render template="showSessionBlogEntry" bean="${blogEntry}" var="blogEntry" />
                     </div>
                 </g:else>
-
             </g:if>
             <g:else>
                 <div class="userBlogEntry">
@@ -48,14 +47,21 @@
                     <g:else>
                         ${blogEntry.body}
                     </g:else>
+                    <br>
+                    <hr>
+                    <span style="float: left">
+                        <g:link controller="teams" action="displayBlogEntry" id="${blogEntry.id}">
+                            <g:message code="team.show.blog.numberOfComments" args="[blogEntry.comments.size()]" />
+                        </g:link>
+                    </span>
                     <g:if test="${blogEntry.lastUpdater}">
-                        <hr>
-                        <div style="font-style: italic">
+                        <span style="font-style: italic; float: right">
                             <g:message code="team.show.blog.updatedBy" />
                             <g:link controller="player" action="show" id="${blogEntry.lastUpdater.id}">${blogEntry.lastUpdater}</g:link>
                             <flexy:humanDate date="${blogEntry.lastUpdate.time}" />
-                        </div>
+                        </span>
                     </g:if>
+                    <br>
                     <g:if test="${teamIsManagedByCurrentUser}">
                         <g:form controller="manager" method="post">
                             <g:hiddenField name="id" value="${blogEntry.id}" />
@@ -80,7 +86,6 @@
     <g:if test="${teamIsManagedByCurrentUser}">
         <g:form controller="manager" action="editBlogEntry" method="post" style="text-align: center">
             <g:hiddenField name="teamId" value="${teamInstance.id}" />
-            <!--g:submitButton name="create" value="${message(code:'team.show.blog.create')}" /-->
             <div class="buttons" style="text-align: center">
                 <g:actionSubmit class="create" action="editBlogEntry" value="${message(code:'team.show.blog.create')}" />
             </div>

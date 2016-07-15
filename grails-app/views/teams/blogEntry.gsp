@@ -6,18 +6,16 @@
 	<g:render template="/common/layout" />
 </head>
 <body>
-	<div style="border: solid green 1px; padding: 10px; width: auto">
-		<h2 style="margin-top: 0px;">
-			<g:message code="team.show.blog.blogEntryOf" />
-			<g:link controller="teams" action="show" id="${blogEntry.team.id}">${blogEntry.team}</g:link>
-		</h2>
-	</div>
+	<h1 style="margin-top: 10px;">${blogEntry?.title}</h1>
 	<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
 	</g:if>
-	<div class="userBlogEntryzzz">
-		<h1 style="margin-top: 10px;">${blogEntry?.title}</h1>
-		${blogEntry.body}
+	<g:if test="${flash.error}">
+		<div class="errors">${flash.error}</div>
+	</g:if>
+	<div stylezzz="border: solid green 1px; padding: 10px; width: auto">
+		<g:message code="team.show.blog.blogEntryOf" />
+		<g:link controller="teams" action="show" id="${blogEntry.team.id}">${blogEntry.team}</g:link>
 	</div>
 	<br>
 	<div style="border: solid green 1px; padding: 10px; width: auto">
@@ -32,6 +30,46 @@
 			<br>
 		</g:if>
 	</div>
+	<br>
+	${blogEntry.body}
+	<br>
+	<h2><g:message code="team.show.blog.comments" /></h2>
+	<shiro:notUser>
+		<p><b><g:message code="team.show.blog.comments.needLogin" /></b></p>
+	</shiro:notUser>
+	<shiro:user>
+		<div style="text-align: left;">
+			<g:form action="teams">
+				<g:hiddenField name="id" value="${blogEntry.id}" />
+				<g:textArea name="comment" value="" rows="4" cols="140" style="width: 600px; height: 100px" />
+				<br />
+				<g:actionSubmit class="save" action="postCommentOnBlogEntry" value="${message(code:'team.show.blog.comments.postComment')}" />
+			</g:form>
+		</div>
+	</shiro:user>
+	<br />
+	<g:if test="${blogEntry.comments.size() > 0}">
+		<g:each var="c" in="${blogEntry.comments}">
+			<table style="width: auto;">
+				<tr>
+					<td>
+						<a id="comment${c.id}"></a>
+						<g:render template="/common/avatar" model="[player:c.user]" />
+					</td>
+					<td>
+						<g:link controller="player" action="show" id="${c.user.id}"><i>${c.user}</i></g:link>
+						<i> <g:message code="team.show.blog.comments.hasPosted" /> <flexy:humanDate date="${c.date.time}" />:</i><br />
+						<br />
+						${c.text}
+					</td>
+				</tr>
+			</table>
+			<br />
+		</g:each>
+	</g:if>
+	<g:else>
+		<i><g:message code="team.show.blog.comments.noComment" /></i><br />
+	</g:else>
 	<g:render template="/common/backLinks" />
   </body>
 </html>
