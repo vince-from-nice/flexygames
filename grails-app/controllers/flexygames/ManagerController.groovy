@@ -935,7 +935,8 @@ class ManagerController {
 		redirect(controller:"teams", action: "show", id: team.id)
 	}
 
-	def deleteBlogEntry = {
+	@Transactional
+	def deleteBlogEntry() {
 		BlogEntry be = BlogEntry.get(params.id)
 		if (!be) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'blogEntry'), params.id])}"
@@ -948,6 +949,10 @@ class ManagerController {
 			redirect(controller:"teams", action: "show", id: team.id)
 		}
 		be.delete()
+		// Decrement posts counters for participants
+		for (BlogComment comment : be.comments) {
+			comment.user.updateCommentCounter(-1)
+		}
 		flash.message = "Ok blog entry has been deleted !"
 		redirect(controller:"teams", action: "show", id: team.id)
 	}
