@@ -1,7 +1,5 @@
 package flexygames
 
-import java.util.Set;
-
 import org.apache.shiro.SecurityUtils
 
 class SessionGroup implements Comparable<SessionGroup> {
@@ -16,7 +14,8 @@ class SessionGroup implements Comparable<SessionGroup> {
     int defaultMinPlayerNbr
     int defaultMaxPlayerNbr
     int defaultPreferredPlayerNbr
-	int lockingTime // Time in minutes before the session start while session is locked (ie. user cannot update their status)
+	Integer defaultDuration
+	Integer defaultLockingTime
 	
 	SortedSet<Session> sessions
 	SortedSet<Team> defaultTeams
@@ -43,7 +42,8 @@ class SessionGroup implements Comparable<SessionGroup> {
         defaultMinPlayerNbr(min:1)
         defaultMaxPlayerNbr(min:1)
         defaultPreferredPlayerNbr(min:1)
-		lockingTime(min:0)
+		defaultDuration(min:0)
+		defaultLockingTime(min:0)
     }
 	
 	static mappedBy = [ defaultTeams: 'sessionGroups' ]

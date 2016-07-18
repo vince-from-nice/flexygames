@@ -16,9 +16,9 @@ class SessionService {
 
 
 	def join(User user, Session session) throws Exception {
-		// Check if the session isn't entered into locking mode (and is not in the past btw)
-		if (new Date(session.date.time - session.group.lockingTime* 60 * 1000) < new Date()) {
-			throw new Exception("Sorry, it's too late to join the session !!")
+		// Check if the session is not in the past
+		if (session.date < new Date()) {
+			throw new Exception("Sorry, it's too late to join the session, it has already started !!")
 		}
 		// Check if the user is not already a participant
 		Participation oldParticipation = Participation.findByPlayerAndSession(user, session)
@@ -49,9 +49,13 @@ class SessionService {
 			newStatus != Participation.Status.DECLINED.code) {
 				throw new Exception("Hey you're not a manager, you cannot set such status !!")
 			}
-			// Check that session isn't entered into locking mode (and is not in the past btw)
-			if (new Date(participation.session.date.time - participation.session.group.lockingTime * 60 * 1000) < new Date()) {
-				throw new Exception("Sorry, it's too late to update your status !!")
+			// Check if the session is not in the past
+			if (participation.session.date < new Date()) {
+				throw new Exception("Sorry, it's too late to join the session, it has already started !!")
+			}
+			// Check that session isn't entered into locking mode if the new status is DECLINED
+			if (newStatus == Participation.Status.DECLINED.code && participation.session.lockingDate < new Date()) {
+				throw new Exception("Sorry, it's too late to update your status because the locking time of that session is " + participation.session.lockingDate)
 			}
 			// Check user is changing his own status
 			if (user != participation.player) {

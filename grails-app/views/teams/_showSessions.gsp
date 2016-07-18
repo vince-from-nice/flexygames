@@ -58,7 +58,7 @@
 							<g:form controller="manager" method="post">
 							    <g:hiddenField name="id" value="${group?.id}" />
 							    <g:hiddenField name="create" value="1" />
-							    <div class="buttons">
+							    <div class="buttons" style="text-align: center">
 						            <g:actionSubmit class="create" action="createSession" value="${message(code:'management.session.add')}" />
 							    </div>
 							</g:form>

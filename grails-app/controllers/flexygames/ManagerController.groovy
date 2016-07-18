@@ -32,6 +32,9 @@ class ManagerController {
 		Session sessionInstance = new Session()
 		sessionInstance.setGroup(groupInstance)
 		sessionInstance.setDate(new Date() + 2)
+		sessionInstance.setRdvBeforeStart(10)
+		sessionInstance.setDuration(groupInstance.getDefaultDuration())
+		sessionInstance.setLockingTime(groupInstance.defaultLockingTime)
 		sessionInstance.setType(groupInstance.getDefaultType())
 		sessionInstance.setPlayground(groupInstance.getDefaultPlayground())
 		render(view: "sessionForm", model: [sessionInstance: sessionInstance])
@@ -59,6 +62,13 @@ class ManagerController {
 				flash.message = "Ok session $sessionInstance.id has been created !"
 			} else {
 				flash.message = "Ok session $sessionInstance.id has been created.. but not its default reminders !"
+			}
+			// Need to add new task ?
+			if (params.taskTypeId && params.taskUserId) {
+				TaskType taskType = TaskType.get(params.taskTypeId)
+				User taskUser = User.get(params.taskUserId)
+				Task task = new Task(user: taskUser, session: sessionInstance, type: taskType)
+				sessionInstance.addToTasks(task)
 			}
 			redirect(controller:"sessions", action: "show", id: sessionInstance.id)
 		}
@@ -229,7 +239,7 @@ class ManagerController {
 				message(code: 'session.label', default: 'Session'),
 				params.id
 			])
-			return redirect(controller: "sessions", action: "list")
+			return redirect(controller: "teams", action: "show", id: sessionInstance.group.defaultTeams[0].id)
 		} catch (DataIntegrityViolationException e) {
 			flash.error = message(code: 'default.not.deleted.message', args: [
 				message(code: 'session.label', default: 'Session'),

@@ -135,11 +135,11 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${sessionGroupInstance?.lockingTime}">
+				<g:if test="${sessionGroupInstance?.defaultLockingTime}">
 				<li class="fieldcontain">
 					<span id="lockingTime-label" class="property-label"><g:message code="sessionGroup.lockingTime.label" default="Locking Time" /></span>
 					
-						<span class="property-value" aria-labelledby="lockingTime-label"><g:fieldValue bean="${sessionGroupInstance}" field="lockingTime"/></span>
+						<span class="property-value" aria-labelledby="lockingTime-label"><g:fieldValue bean="${sessionGroupInstance}" field="defaultLockingTime"/></span>
 					
 				</li>
 				</g:if>

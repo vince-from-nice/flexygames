@@ -65,7 +65,7 @@
                             
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="type"><nobr><g:message code="session.type" default="Type" /></label>
+                                  <label for="type"><nobr /><g:message code="session.type" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'type', 'errors')}">
                                     <g:select id="type" name="type.id" from="${flexygames.GameType.list()}" optionKey="id" required="" value="${sessionInstance?.type?.id}" class="many-to-one"/>
@@ -127,7 +127,7 @@
                                 	<g:message code="session.date.infos" />
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="duration"><nobr><g:message code="session.duration" default="Duration" /></nobr></label>
@@ -139,7 +139,7 @@
                                 	<g:message code="session.duration.infos" />
                                 </td>
                             </tr>
-                            
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="rdvBeforeStart"><nobr><g:message code="session.rdvBeforeStart" default="rdvBeforeStart" /></nobr></label>
@@ -151,7 +151,19 @@
                                 	<g:message code="session.rdvBeforeStart.infos" />
                                 </td>
                             </tr>
-                            
+
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="lockingTime"><nobr><g:message code="session.lockingTime" default="lockingTime" /></nobr></label>
+                            </td>
+                                <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'lockingTime', 'errors')}">
+                                    <g:field type="number" name="lockingTime" min="1" size="3" value="${fieldValue(bean: sessionInstance, field: 'lockingTime')}"/>
+                                </td>
+                                <td style="font-size: 12px">
+                                    <g:message code="session.lockingTime.infos" />
+                                </td>
+                            </tr>
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="playground"><nobr><g:message code="session.playground" default="Playground" /> <font color="red">*</font></nobr></label>

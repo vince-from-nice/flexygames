@@ -8,8 +8,9 @@ class Session implements Comparable {
     String name
     String description
     Date date // session start (not RDV)
-	Integer duration // time beetween session start and session end
-	Integer rdvBeforeStart // time beetween rdv and session start
+	Integer duration // time in minutes beetween session start and session end
+	Integer rdvBeforeStart // time in minutes beetween rdv and session start
+	Integer lockingTime // time in minutes before the session start while session is locked (ie. user cannot update their status)
     Playground playground
     GameType type
     SessionGroup group
@@ -41,6 +42,7 @@ class Session implements Comparable {
 		date(nullable: false)
 		duration(nullable: true, min: 1)
 		rdvBeforeStart(nullable: true, min: 0)
+		lockingTime(nullable: true, min: 0)
         name(nullable: true, blank: true)
         description(nullable: true, blank: true, maxSize:100)
         playground(nullable: false)
@@ -90,12 +92,6 @@ class Session implements Comparable {
 	///////////////////////////////////////////////////////////////////////////
 	// Business methods
 	///////////////////////////////////////////////////////////////////////////
-
-	Date getLockingDate() {
-		use(TimeCategory) {
-			return date - group.lockingTime.minutes
-		}
-	}
 
     boolean isManagedBy(String username) {
 		//println "checking management of $this for user $username"
@@ -222,8 +218,18 @@ class Session implements Comparable {
 	}
 	
 	Date getEndDate() {
-		// If no duration is defined for that session, we default to 90 min
-		return (duration ? new Date(date.time + duration * 60 * 1000) : new Date(date.time + 90 * 60 * 1000))
+		// If no duration is defined for that session, we default to 60 min
+		return (duration ? new Date(date.time + duration * 60 * 1000) : new Date(date.time + 60 * 60 * 1000))
+	}
+
+	Date getLockingDate() {
+		def lock = lockingTime
+		if (!lock) {
+			lock = group.defaultLockingTime
+		}
+		use(TimeCategory) {
+			return date - lock.minutes
+		}
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
