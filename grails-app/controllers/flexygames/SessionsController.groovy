@@ -129,6 +129,11 @@ class SessionsController {
 			}
 		}
 
+		// Enhance texts of comments
+		session.comments.each { comment ->
+			forumService.enhanceText(comment)
+		}
+
 		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes ])
 	}
 

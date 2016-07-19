@@ -11,7 +11,15 @@ class ForumService {
 	MessageSource messageSource
 	
 	def mailerService
-	
+
+	def static URL_START_TOKENS = ['http:', 'https:']
+
+	// Don't success to add to char list a range of chars even with ['a'..'z'].collect() ! :(
+	def char[] URL_VALID_CHARS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+						   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+						   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+						   '-', '.', '_', '~', ':', '/', '?', '#', '[', ']', '@', '!', '$', '&', '\'', '(', ')', '*', '+', ',', ';', '=', '%']
+
     def SessionComment postSessionComment(User user, Session session, String text) throws Exception  {
 		def comment = new SessionComment(user: user, session: session, date: new Date(), text: text)
 		if (!text) throw new Exception("message is empty")
@@ -70,5 +78,30 @@ class ForumService {
 			throw new Exception(comment.errors)
 		}
 		return comment;
+	}
+
+	/**
+	 * Enhance text of session comments by replacing parts which look like an URL by a real HTML tag (ie. <a href="">...</a>).
+	 */
+	def enhanceText(SessionComment comment) {
+		def text = new String(comment.text)
+		for (String token in URL_START_TOKENS) {
+			def i = text.indexOf(token)
+			if (i >= 0) {
+				def chars = text.getChars()
+				def j = i
+				for (; j < text.length(); j++) {
+					println "gluar " + chars[j]
+					if (!URL_VALID_CHARS.contains(chars[j])) {
+						break;
+					}
+				}
+				String url = text.substring(i, j)
+				String link = '<a href="' + url + '">' + url + '</a>'
+				//text.replace(url, link)
+				text = text.substring(0, i) + link + text.substring(j)
+			}
+		}
+		comment.enhancedText = text
 	}
 }

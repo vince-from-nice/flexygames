@@ -55,7 +55,7 @@
 									<g:link controller="player" action="show" id="${c.user.id}"><i>${c.user}</i></g:link>
 									<i> <g:message code="session.show.comments.hasPosted" /> <flexy:humanDate date="${c.date.time}" />:</i><br />
 									<br />
-									${c.text}
+									${c.enhancedText}
 								</td>
 								<!--td style="text-align: right; vertical-align: bottom;">
 									<div class="buttons">

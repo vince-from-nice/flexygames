@@ -4,8 +4,11 @@ class SessionComment implements Comparable<SessionComment> {
     
     Date date
     String text
+    String enhancedText
     
     static belongsTo = [user: User, session: Session]
+
+    static transients = ['enhancedText']
     
     static constraints = {
         user()
