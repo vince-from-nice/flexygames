@@ -84,22 +84,22 @@ class ForumService {
 	 * Enhance text of session comments by replacing parts which look like an URL by a real HTML tag (ie. <a href="">...</a>).
 	 */
 	def enhanceText(SessionComment comment) {
-		def text = new String(comment.text)
+		String text = new String(comment.text)
 		for (String token in URL_START_TOKENS) {
-			def i = text.indexOf(token)
-			if (i >= 0) {
+			def i = 0, j = 0;
+			while (text.indexOf(token, j) > 0) {
 				def chars = text.getChars()
-				def j = i
-				for (; j < text.length(); j++) {
-					println "gluar " + chars[j]
+				i = text.indexOf(token, j)
+				for (j = i; j < text.length(); j++) {
 					if (!URL_VALID_CHARS.contains(chars[j])) {
 						break;
 					}
 				}
 				String url = text.substring(i, j)
 				String link = '<a href="' + url + '">' + url + '</a>'
-				//text.replace(url, link)
+				//text.replace(url, link) // doesn't work
 				text = text.substring(0, i) + link + text.substring(j)
+				j = i + link.length()
 			}
 		}
 		comment.enhancedText = text
