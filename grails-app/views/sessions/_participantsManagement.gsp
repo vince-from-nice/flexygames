@@ -67,7 +67,7 @@
                         </td>
                         <td>
                             <g:textArea name="message" rows="2" cols="40"
-                                        style="width: 450px; height: 70px;">Enter a customized message here..</g:textArea><br/>
+                                        style="width: 450px; height: 70px;"></g:textArea><br/>
                         </td>
                         <td style="vertical-align: middle;">
                             <g:actionSubmit class="save" action="sendMessage"

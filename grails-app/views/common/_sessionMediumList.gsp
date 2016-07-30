@@ -24,16 +24,16 @@
 						</g:if>
 						<g:set var="lastDate" value="${sessionInstance.date.toString().substring(0, sessionInstance.date.toString().length() - 10)}" />
 						<tr style="height: 40px; vertical-align: middle;" class="${(i % 2) == 0 ? 'odd' : 'even'}">
-							<td style="text-align: center; vertical-align: middle; margin: 0px; padding: 0px;" >
+							<td style="text-align: center;  cursor: pointer; vertical-align: middle; margin: 0px; padding: 0px;" onclick="document.location='${sessionLink}'">
 								<g:set var="team" value="${sessionInstance.group.defaultTeams.first()}" />
 								<g:link controller="teams" action="show" id="${team.id}">
 									<img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:team.logoName)}" alt="Team logo" />
 								</g:link>
 							</td>
-							<td style="vertical-align: middle; ">
+							<td style="vertical-align: middle; cursor: pointer;" onclick="document.location='${sessionLink}'">
 								<g:link controller="sessions" action="list" params="${['filteredSessionGroup':sessionInstance.group.id]}">
-									${fieldValue(bean: sessionInstance, field: "group")}
 								</g:link>
+								${fieldValue(bean: sessionInstance, field: "group")}
 							</td>
 							<td style="vertical-align: middle; cursor: pointer;" onclick="document.location='${sessionLink}'">
 								<nobr><g:formatDate date="${sessionInstance.date}" format="HH:mm" /></nobr>
