@@ -1,9 +1,5 @@
 package flexygames
 
-
-
-import org.junit.*
-
 import flexygames.admin.SessionGroupController;
 import grails.test.mixin.*
 

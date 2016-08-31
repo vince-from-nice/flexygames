@@ -9,21 +9,21 @@
 	<head>
 		<title><g:layoutTitle default="FlexyGames"/></title>
 		
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=1280, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=1280, initial-scale=1.0" />
 		
 		<!--  Avoid HTTP caching from clients (and proxies) -->
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta http-equiv="Expires" content="0" />
 		
-		<link rel="shortcut icon" href="${resource(dir: 'images', file: 'flexygames-icon-32x32.png')}" type="image/png">
+		<link rel="shortcut icon" href="${resource(dir: 'images', file: 'flexygames-icon-32x32.png')}" type="image/png" />
 		<link rel="apple-touch-icon" href="${resource(dir: 'images', file: 'flexygames-icon-32x32.png')}">
-		<link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'flexygames-icon-114x114.png')}">
+		<link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'flexygames-icon-114x114.png')}" />
 
-		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main-20160208.css')}">
-		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile-20160208.css')}">
+		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main-20160208.css')}" />
+		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile-20160208.css')}" />
 		<link rel="stylesheet" href="${resource(dir:'css',file:'flexygames-20160303.css')}" />
 
 		<g:javascript library="application"/>

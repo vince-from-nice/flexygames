@@ -93,7 +93,7 @@ class TeamsController {
 		render(view: 'blogEntry', model: ['blogEntry': be])
 	}
 
-	def postCommentOnBlogEntry = {
+	def postBlogComment = {
 		BlogEntry be = BlogEntry.get(params.id)
 		if (!be) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'blogEntry'), params.id])}"

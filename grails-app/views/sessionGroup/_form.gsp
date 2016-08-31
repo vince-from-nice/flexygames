@@ -2,12 +2,13 @@
 
 
 
-<div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'name', 'error')} ">
+<div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'name', 'error')} required">
 	<label for="name">
 		<g:message code="sessionGroup.name.label" default="Name" />
-		
+		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="name" value="${sessionGroupInstance?.name}"/>
+	<g:textField name="name" required="" value="${sessionGroupInstance?.name}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'description', 'error')} ">
@@ -16,6 +17,7 @@
 		
 	</label>
 	<g:textField name="description" maxlength="100" value="${sessionGroupInstance?.description}"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'competition', 'error')} ">
@@ -24,6 +26,7 @@
 		
 	</label>
 	<g:checkBox name="competition" value="${sessionGroupInstance?.competition}" />
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'visible', 'error')} ">
@@ -32,6 +35,7 @@
 		
 	</label>
 	<g:checkBox name="visible" value="${sessionGroupInstance?.visible}" />
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'sessions', 'error')} ">
@@ -49,6 +53,7 @@
 </li>
 </ul>
 
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'defaultType', 'error')} required">
@@ -57,6 +62,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="defaultType" name="defaultType.id" from="${flexygames.GameType.list()}" optionKey="id" required="" value="${sessionGroupInstance?.defaultType?.id}" class="many-to-one"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'defaultTeams', 'error')} ">
@@ -65,6 +71,7 @@
 		
 	</label>
 	
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'defaultPlayground', 'error')} ">
@@ -73,6 +80,7 @@
 		
 	</label>
 	<g:select id="defaultPlayground" name="defaultPlayground.id" from="${flexygames.Playground.list()}" optionKey="id" value="${sessionGroupInstance?.defaultPlayground?.id}" class="many-to-one" noSelection="['null': '']"/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'defaultDayOfWeek', 'error')} required">
@@ -81,6 +89,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:field name="defaultDayOfWeek" type="number" value="${sessionGroupInstance.defaultDayOfWeek}" required=""/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'defaultMinPlayerNbr', 'error')} required">
@@ -89,6 +98,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:field name="defaultMinPlayerNbr" type="number" min="1" value="${sessionGroupInstance.defaultMinPlayerNbr}" required=""/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'defaultMaxPlayerNbr', 'error')} required">
@@ -97,6 +107,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:field name="defaultMaxPlayerNbr" type="number" min="1" value="${sessionGroupInstance.defaultMaxPlayerNbr}" required=""/>
+
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'defaultPreferredPlayerNbr', 'error')} required">
@@ -105,13 +116,24 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:field name="defaultPreferredPlayerNbr" type="number" min="1" value="${sessionGroupInstance.defaultPreferredPlayerNbr}" required=""/>
+
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'lockingTime', 'error')} required">
-	<label for="lockingTime">
-		<g:message code="sessionGroup.lockingTime.label" default="Locking Time" />
+<div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'defaultDuration', 'error')} required">
+	<label for="defaultDuration">
+		<g:message code="sessionGroup.defaultDuration.label" default="Default Duration" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:field name="lockingTime" type="number" min="0" value="${sessionGroupInstance.lockingTime}" required=""/>
+	<g:field name="defaultDuration" type="number" min="0" value="${sessionGroupInstance.defaultDuration}" required=""/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'defaultLockingTime', 'error')} required">
+	<label for="defaultLockingTime">
+		<g:message code="sessionGroup.defaultLockingTime.label" default="Default Locking Time" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="defaultLockingTime" type="number" min="0" value="${sessionGroupInstance.defaultLockingTime}" required=""/>
+
 </div>
 

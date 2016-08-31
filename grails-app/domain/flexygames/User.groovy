@@ -36,7 +36,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	SortedSet<Team> teamsInCurrentSession = new TreeSet<Team>() // transient
 
 	SortedSet<Role> roles
-	SortedSet<Membership> memberships
+	Set<Membership> memberships // Set instead of SortedSet to avoid a NPE on ManagerController.removeMembership()
     SortedSet<GameSkill> skills
 	SortedSet<Participation> participations
 	Set<GameAction> actions

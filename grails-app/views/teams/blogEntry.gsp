@@ -43,7 +43,7 @@
 				<g:hiddenField name="id" value="${blogEntry.id}" />
 				<g:textArea name="comment" value="" rows="4" cols="140" style="width: 600px; height: 100px" />
 				<br />
-				<g:actionSubmit class="save" action="postCommentOnBlogEntry" value="${message(code:'team.show.blog.comments.postComment')}" />
+				<g:actionSubmit class="save" action="postBlogComment" value="${message(code:'team.show.blog.comments.postComment')}" />
 			</g:form>
 		</div>
 	</shiro:user>

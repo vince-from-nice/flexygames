@@ -1,104 +1,104 @@
 package flexygames.admin
 
-import org.springframework.dao.DataIntegrityViolationException
+import flexygames.SessionGroup
 
-import flexygames.SessionGroup;
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
 
+@Transactional(readOnly = true)
 class SessionGroupController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() {
-        redirect(action: "list", params: params)
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond SessionGroup.list(params), model:[sessionGroupInstanceCount: SessionGroup.count()]
     }
 
-    def list(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        [sessionGroupInstanceList: SessionGroup.list(params), sessionGroupInstanceTotal: SessionGroup.count()]
+    def show(SessionGroup sessionGroupInstance) {
+        respond sessionGroupInstance
     }
 
     def create() {
-        [sessionGroupInstance: new SessionGroup(params)]
+        respond new SessionGroup(params)
     }
 
-    def save() {
-        def sessionGroupInstance = new SessionGroup(params)
-        if (!sessionGroupInstance.save(flush: true)) {
-            render(view: "create", model: [sessionGroupInstance: sessionGroupInstance])
+    @Transactional
+    def save(SessionGroup sessionGroupInstance) {
+        if (sessionGroupInstance == null) {
+            notFound()
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), sessionGroupInstance.id])
-        redirect(action: "show", id: sessionGroupInstance.id)
-    }
-
-    def show(Long id) {
-        def sessionGroupInstance = SessionGroup.get(id)
-        if (!sessionGroupInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), id])
-            redirect(action: "list")
+        if (sessionGroupInstance.hasErrors()) {
+            respond sessionGroupInstance.errors, view:'create'
             return
         }
 
-        [sessionGroupInstance: sessionGroupInstance]
-    }
+        sessionGroupInstance.save flush:true
 
-    def edit(Long id) {
-        def sessionGroupInstance = SessionGroup.get(id)
-        if (!sessionGroupInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [sessionGroupInstance: sessionGroupInstance]
-    }
-
-    def update(Long id, Long version) {
-        def sessionGroupInstance = SessionGroup.get(id)
-        if (!sessionGroupInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (sessionGroupInstance.version > version) {
-                sessionGroupInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'sessionGroup.label', default: 'SessionGroup')] as Object[],
-                          "Another user has updated this SessionGroup while you were editing")
-                render(view: "edit", model: [sessionGroupInstance: sessionGroupInstance])
-                return
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), sessionGroupInstance.id])
+                redirect sessionGroupInstance
             }
+            '*' { respond sessionGroupInstance, [status: CREATED] }
         }
-
-        sessionGroupInstance.properties = params
-
-        if (!sessionGroupInstance.save(flush: true)) {
-            render(view: "edit", model: [sessionGroupInstance: sessionGroupInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), sessionGroupInstance.id])
-        redirect(action: "show", id: sessionGroupInstance.id)
     }
 
-    def delete(Long id) {
-        def sessionGroupInstance = SessionGroup.get(id)
-        if (!sessionGroupInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), id])
-            redirect(action: "list")
+    def edit(SessionGroup sessionGroupInstance) {
+        respond sessionGroupInstance
+    }
+
+    @Transactional
+    def update(SessionGroup sessionGroupInstance) {
+        if (sessionGroupInstance == null) {
+            notFound()
             return
         }
 
-        try {
-            sessionGroupInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), id])
-            redirect(action: "list")
+        if (sessionGroupInstance.hasErrors()) {
+            respond sessionGroupInstance.errors, view:'edit'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), id])
-            redirect(action: "show", id: id)
+
+        sessionGroupInstance.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'SessionGroup.label', default: 'SessionGroup'), sessionGroupInstance.id])
+                redirect sessionGroupInstance
+            }
+            '*'{ respond sessionGroupInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(SessionGroup sessionGroupInstance) {
+
+        if (sessionGroupInstance == null) {
+            notFound()
+            return
+        }
+
+        sessionGroupInstance.delete flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'SessionGroup.label', default: 'SessionGroup'), sessionGroupInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

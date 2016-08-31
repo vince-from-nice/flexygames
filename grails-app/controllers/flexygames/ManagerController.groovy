@@ -770,7 +770,7 @@ class ManagerController {
 		} else {
 			flash.message = "Ok membership has been updated !"
 		}
-		redirect(controller:"teams", action: "show", id: ms.team.id)
+		redirect(controller:"teams", action: "show", id: ms.team.id, params: [mode: 'members'])
 	}
 
 	def updateAllMemberships = {
@@ -797,7 +797,7 @@ class ManagerController {
 			}
 		}
 		flash.message = "Ok all memberships has been updated !"
-		redirect(controller:"teams", action: "show", id: team.id)
+		redirect(controller:"teams", action: "show", id: team.id, params: [mode: 'members'])
 	}
 
 	def removeMembership = {
@@ -828,7 +828,7 @@ class ManagerController {
 		} catch (Exception e) {
 			flash.error ="Ooops sorry, unable to remove membership : " + e.getMessage()
 		}
-		redirect(controller:"teams", action: "show", id: teamId)
+		redirect(controller:"teams", action: "show", id: teamId, params: [mode: 'members'])
 	}
 
 	def showAttendanceSheet() {

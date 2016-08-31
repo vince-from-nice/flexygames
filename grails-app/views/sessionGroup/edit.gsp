@@ -1,8 +1,7 @@
 <%@ page import="flexygames.SessionGroup" %>
-<!DOCTYPE html>
 <html>
 	<head>
-		<meta name="layout" content="desktop">
+		<meta name="layout" content="desktop" />
 		<g:set var="entityName" value="${message(code: 'sessionGroup.label', default: 'SessionGroup')}" />
 		<title><g:message code="default.edit.label" args="[entityName]" /></title>
 	</head>
@@ -11,7 +10,7 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
+				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
 				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 			</ul>
 		</div>
@@ -27,15 +26,13 @@
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:form method="post" >
-				<g:hiddenField name="id" value="${sessionGroupInstance?.id}" />
+			<g:form url="[resource:sessionGroupInstance, action:'update']" method="PUT" >
 				<g:hiddenField name="version" value="${sessionGroupInstance?.version}" />
 				<fieldset class="form">
 					<g:render template="form"/>
 				</fieldset>
 				<fieldset class="buttons">
 					<g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 				</fieldset>
 			</g:form>
 		</div>
