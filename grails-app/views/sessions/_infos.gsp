@@ -103,7 +103,7 @@
 				<g:else>
 					<img style="max-width: 200px; max-height:120px;" src="${resource(dir:'images/team',file:'no-logo.png')}" alt="Team logo" />
 				</g:else><br />
-				${defaultFirstTeam}
+				<!--${defaultFirstTeam}-->
 			</g:link>
 			<br />
 			<br />

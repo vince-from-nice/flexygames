@@ -193,8 +193,10 @@ ckeditor {
         overwrite = false
         link {
             browser = true
-            upload = false
-            allowed = []
+            //upload = false
+            upload = true
+            //allowed = []
+            allowed = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'pwt', 'pwtx', 'odt', 'ods', 'odp', 'odb', 'odg', 'odf']
             denied = ['html', 'htm', 'php', 'php2', 'php3', 'php4', 'php5',
                       'phtml', 'pwml', 'inc', 'asp', 'aspx', 'ascx', 'jsp',
                       'cfm', 'cfc', 'pl', 'bat', 'exe', 'com', 'dll', 'vbs', 'js', 'reg',
