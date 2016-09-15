@@ -46,7 +46,7 @@ class TeamsController {
 			[teamInstance: team]
 		}
 	}
-	def showRanking(params, team) {
+	def showRanking(params, Team team) {
 		def criteria = (params.criteria ? params.criteria : 'statuses.doneGood')
 		def sessionGroupId = (params.sessionGroupId ? Integer.parseInt(params.sessionGroupId) : 0)
 		SessionGroup sessionGroup = (sessionGroupId > 0 ? SessionGroup.get(sessionGroupId) : null)
@@ -54,14 +54,16 @@ class TeamsController {
 		return [teamInstance: team, membersRanking: membersRanking, currentCriteria: criteria, currentSessionGroupId: sessionGroupId]
 	}
 	
-	def showBlog(params, team) {
+	def showBlog(params, Team team) {
 		params.teamId = team.id
 		params.max = Math.min(params.max ? params.int('max') : 10, 30)
 		if(!params.offset) params.offset = 0
 		if(!params.sort) params.sort = "date"
 		if(!params.order) params.order = "desc"
-		// Get blog entries for all users of the team
-		def userBlogEntries = team.getBlogEntries(params)
+		// Get blog entries for all users of the team which are sticky
+		def stickyUserBlogEntries = team.getBlogEntries(params, true)
+		// Get blog entries for all users of the team which are not sticky
+		def userBlogEntries = team.getBlogEntries(params, false)
 		// Create implicit blog entries from the sessions of the team
 		def sessions = team.getSessions(params)
 		def sessionBlogEntries = []
@@ -81,7 +83,8 @@ class TeamsController {
 		def blogEntriesTotal = team.countSessions()
 		def allBlogEntries = userBlogEntries + sessionBlogEntries
 		allBlogEntries.sort()
-		return [teamInstance: team, allBlogEntries: allBlogEntries, blogEntriesTotal: blogEntriesTotal, params: params]
+		return [teamInstance: team, allBlogEntries: allBlogEntries, blogEntriesTotal: blogEntriesTotal,
+				stickyUserBlogEntries: stickyUserBlogEntries, params: params]
 	}
 
 	def displayBlogEntry = {

@@ -104,8 +104,13 @@ class Team implements Comparable {
 		BlogEntry.findAllByUserInList(members, params)
 	}
 
-	def getBlogEntries(params) {
-		BlogEntry.findAllByTeam(this, params)
+	def getBlogEntries(params, sticky) {
+		//BlogEntry.findAllByTeamAndSticky(this, sticky, params)
+		if (sticky) {
+			BlogEntry.findAllStickyByTeam(this, sticky, params)
+		} else {
+			BlogEntry.findAllNotStickyByTeam(this, sticky, params)
+		}
 	}
 
 	List<Session> getSessionGroups(competition) {

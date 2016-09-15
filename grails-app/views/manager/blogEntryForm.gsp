@@ -1,4 +1,4 @@
-<g>
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <g:render template="/common/layout" />
@@ -19,6 +19,10 @@
         <br>
         <br>
         <ckeditor:editor name="body" height="400px" width="90%">${blogEntry?.body}</ckeditor:editor>
+        <br>
+        <g:checkBox name="sticky" value="${blogEntry?.sticky}" />
+        <label><g:message code="management.blogEntry.sticky" /></label>
+        <br>
         <br>
         <g:if test="${blogEntry}" >
             <div class="buttons">

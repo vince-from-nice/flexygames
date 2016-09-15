@@ -926,6 +926,7 @@ class ManagerController {
 			def addresses = []
 		}
 		be.title = params.title
+		be.sticky = (params.sticky ? true : false)
 		// TODO need to clean user input ?
 		be.body = params.body
 		if (!be.save()) {
@@ -937,7 +938,7 @@ class ManagerController {
 		// If the save was a creation and the user wants to mail members...
 		if (!params.id && params.mailAllMembers) {
 			def addresses = team.getMembers()*.email
-			def link = createLink(controller: 'teams', action: 'displayBlogEntry', id: be.id)
+			def link = createLink(controller: 'teams', action: 'displayBlogEntry', id: be.id, absolute: true)
 			def body = message(code:'mails.newBlogEntry.body', args:[user.username, team, link])
 			mailerService.mail(addresses, be.title, body)
 			flash.message = "Ok blog entry has been saved and " + addresses.size() + " members has been alerted by email"

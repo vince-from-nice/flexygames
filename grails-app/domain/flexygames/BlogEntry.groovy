@@ -9,6 +9,7 @@ class BlogEntry implements Comparable {
     String body
     SortedSet<BlogComment> comments
     Session session // transient field for automatic blog entries related to sessions
+    Boolean sticky
 
     static belongsTo = [user: User, team: Team]
 
@@ -25,6 +26,7 @@ class BlogEntry implements Comparable {
         session(nullable: true)
         lastUpdate(nullable: true)
         lastUpdater(nullable: true)
+        sticky(nullable: true)
     }
 
     int compareTo(Object o) {
