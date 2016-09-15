@@ -112,15 +112,12 @@
 				${sessionInstance?.group?.encodeAsHTML()}
 			</g:link>
 		</td>
-		<g:set var="forecastToken" value="${sessionInstance.playground.computeForecastToken(sessionInstance.date)}" />
-		<g:if test="${forecastToken}">
-			<td style="text-align: left; vertical-align: top;">
-				<h3 style="margin-top: 0px"><g:message code="forecast" default="Forecast" /></h3>
-				<div style="width: 70px; text-align: left">
-					<g:render template="/common/forecast" model="[token: forecastToken, city: sessionInstance.playground.city]" />
-				</div>
-			</td>
-		</g:if>
+		<td style="text-align: left; vertical-align: top;">
+			<h3 style="margin-top: 0px"><g:message code="forecast" default="Forecast" /></h3>
+			<div style="width: 70px; text-align: left">
+				<g:render template="/common/forecast" model="[session: sessionInstance]" />
+			</div>
+		</td>
 		<g:if test="${sessionInstance.imageUrl}">
 			<td style="text-align: center; vertical-align: top;">
 				<h3 style="margin-top: 0px"><g:message code="session.show.gallery" /></h3>
