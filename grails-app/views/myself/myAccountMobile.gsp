@@ -86,7 +86,7 @@
 			<tr>
 				<td colspan="2">
 					<h2><g:message code="myAccount.myTeams" /></h2>
-					<g:render template="participations" />
+					<g:render template="memberships" />
 				</td>
 			</tr>
 		</table>

@@ -65,7 +65,7 @@
 			<tr>
 				<td>
 					<h2><g:message code="myAccount.myTeams" /></h2>
-					<g:render template="participations" />
+					<g:render template="memberships" />
 				</td>
 				<td>
 					<h2><g:message code="myAccount.mySkills" /></h2>

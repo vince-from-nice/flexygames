@@ -4,7 +4,7 @@
         <th><g:message code="training" />?</th>
         <th><g:message code="competition" />?</th>
     </tr>
-    <g:each in="${playerInstance.memberships}" var="m">
+    <g:each in="${playerInstance.getSortedMemberships()}" var="m">
         <g:form>
             <g:hiddenField name="id" value="${m.id}" />
             <tr style="height: 40px; border: solid black 0px;">

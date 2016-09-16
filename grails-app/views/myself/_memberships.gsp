@@ -8,7 +8,7 @@
         <th></th>
     </tr>
     <g:if test="${playerInstance.memberships.size() > 0}">
-        <g:each in="${playerInstance.memberships}" var="m">
+        <g:each in="${playerInstance.getSortedMemberships()}" var="m">
             <g:form>
                 <g:hiddenField name="id" value="${m.id}" />
                 <tr>

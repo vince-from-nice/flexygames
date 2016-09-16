@@ -111,6 +111,10 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	// Business methods
 	///////////////////////////////////////////////////////////////////////////
 
+	def getSortedMemberships = {
+		return memberships.sort{it.team.name}
+	}
+
 	def getEffectiveParticipations = {
 		return participations.grep{it.isEffective()}
 	}
