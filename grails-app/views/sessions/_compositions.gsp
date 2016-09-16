@@ -173,12 +173,12 @@ var forceRedraw = function(element){
 													<td style="width: 400px; height: 540px; padding: 0px; margin: 0px; " background="${resource(dir: 'images/composition',file: sessionInstance.type.name + 'Background.png')}"> </td>
 												</tr>
 												<tr>
-													<td style="width: 400px; padding: 0px; margin: 0px; text-align: center; ">
+													<td style="width: 400px; padding: 0px; margin: 0px; text-align: center; background-color: #EFEFEF">
 														<h3><g:message code="session.show.compositions.bench" /> :</h3>
 														<div >
 															<g:each in="${composition.allPlayersIncludingEligibleNotYetPresent}" var="item">
 																<div id="compo-${composition.id}-player-${item.player.id}" class="draggableCompoPlayer" style="width: 60px; " >
-																	<img style="width:45px; vertical-align: middle;" src="${resource(dir:'images/user',file:item.player.avatarName)}" alt="Player avatar" />
+																	<img style="max-width:45px; max-height: 45px; vertical-align: middle; " src="${resource(dir:'images/user',file:item.player.avatarName)}" alt="Player avatar" />
 																	<g:set var="username" value="${item.player.username}" />
 																	<g:if test="${username.length() > 8}">
 																	      <g:set var="username" value="${username.substring(0, 7)}.." />
@@ -208,7 +208,7 @@ forceRedraw(el);
 										</td>
 									</tr>
 									<tr>
-										<td>
+										<td style="font-size: small; text-align: center">
 											<g:message code="session.show.compositions.lastUpdateBy" 
 											args="[composition.lastUpdater, grailsApplication.mainContext.getBean('flexygames.FlexyTagLib').formatDate(composition.lastUpdate.time, true)]"/>
 										</td>
