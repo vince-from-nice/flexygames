@@ -37,15 +37,16 @@
                             <g:link controller="playgrounds" action="show" id="${sessionInstance?.playground?.id}"><g:message code="session.show.viewPlayground" /></g:link>
                         </div>
                         <br>
+                        <br>
+                        <g:if test="${sessionInstance.description}">
+                            <g:message code="session.description" default="Description" />:
+                            ${fieldValue(bean: sessionInstance, field: "description")}
+                            <br>
+                        </g:if>
                         <g:message code="group" default="Group" />:
                         <g:link controller="sessions" action="list" params="${['filteredSessionGroup':sessionInstance.group.id]}" >
                             ${sessionInstance?.group?.encodeAsHTML()}
                         </g:link>
-                        <g:if test="${sessionInstance.description}">
-                            <g:message code="session.description" default="Description" />:
-                            ${fieldValue(bean: sessionInstance, field: "description")}
-                        </g:if>
-                        <br>
                         <g:if test="${sessionInstance.tasks.size() > 0}">
                             <g:set var="lastTaskType" />
                             <g:each in="${sessionInstance.tasks}" var="task" >

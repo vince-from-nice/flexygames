@@ -1,6 +1,7 @@
 package flexygames
 
-import flexygames.admin.SessionGroupController
+
+
 import grails.test.mixin.*
 import spock.lang.*
 
