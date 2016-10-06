@@ -9,7 +9,7 @@
 	      body { height: 100%; margin: 0; padding: 0 }
 	      #map_canvas { height: 100% }
 	    </style>
-	    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.google.api.key}&sensor=true">
+	    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.google.api.key}&sensor=true">
 	    </script>
 	    <script type="text/javascript">
 	      function initializeGMap(lat, lon) {

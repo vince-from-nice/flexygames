@@ -20,7 +20,7 @@
 		</style>
 	</g:if>
 	<script type="text/javascript"
-			src="http://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.google.api.key}&sensor=true">
+			src="https://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.google.api.key}&sensor=true">
 	</script>
 	<script type="text/javascript">
 		function initializeGMap(lat, lon) {
