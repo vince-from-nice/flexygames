@@ -42,15 +42,12 @@
 		<thead>
 			<tr>
 				<g:sortableColumn property="date" title="${message(code: 'date', default: 'Date')}" />
-				<th style="text-align: left"><g:message code="groups" default="Groups" /></th>
 				<th style="text-align: left; padding-left: 0px"><g:message code="teams" default="Teams" /></th>
+				<th style="text-align: left"><g:message code="groups" default="Groups" /></th>
 				<th style="text-align: left"><g:message code="players" default="Players" /></th>
 				<th style="text-align: center"><g:message code="myStatus" default="My Status" /></th>
 				<g:if test="${request.display == 'desktop'}">
 					<th style="text-align: left"><g:message code="playground" default="Playground" /></th>
-					<th style="text-align: left"><g:message code="rounds" default="Sets" /></th>
-					<th style="text-align: left"><g:message code="votes" default="Votes" /></th>
-					<th style="text-align: left"><g:message code="posts" default="Posts" /></th>
 					<th style="text-align: left; vertical-align: middle; font-size: 12px"><g:message code="home.lastComment" /></th>
 				</g:if>
 			</tr>
