@@ -30,6 +30,8 @@
 		<!--g:javascript library="flexygames" /-->
 		<script type="text/javascript" src="${resource(dir:'js',file:'flexygames-20160508.js')}"></script>
 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		
 		<g:layoutHead/>
         <r:layoutResources />
 	</head>

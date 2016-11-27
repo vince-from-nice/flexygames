@@ -1,7 +1,6 @@
-package flexygames
+package flexygames.admin
 
-
-
+import flexygames.SessionGroup
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 

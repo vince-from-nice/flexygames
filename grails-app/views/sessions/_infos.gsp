@@ -114,7 +114,7 @@
 		</td>
 		<td style="text-align: left; vertical-align: top;">
 			<h3 style="margin-top: 0px"><g:message code="forecast" default="Forecast" /></h3>
-			<div style="width: 70px; text-align: left">
+			<div style="text-align: left">
 				<g:render template="/common/forecast" model="[session: sessionInstance]" />
 			</div>
 		</td>

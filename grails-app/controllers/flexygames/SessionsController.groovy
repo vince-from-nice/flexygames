@@ -11,6 +11,8 @@ class SessionsController {
 	def votingService
 
 	def forumService
+	
+	def forecastService
 
 	def index = { redirect(action:"list") }
 
@@ -133,8 +135,11 @@ class SessionsController {
 		session.comments.each { comment ->
 			forumService.enhanceText(comment)
 		}
+		
+		// Prepare forecast data
+		def weatherData = forecastService.getWeatherData(session)
 
-		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes ])
+		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes, weatherData: weatherData])
 	}
 
 	// TODO remake the grails file uploader plugin

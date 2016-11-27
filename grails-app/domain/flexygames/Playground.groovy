@@ -40,7 +40,7 @@ class Playground implements Comparable<Playground> {
 		forecastToken(nullable: true)
     }
 
-	def forecastService
+	// def forecastService
 	
 	///////////////////////////////////////////////////////////////////////////
 	// Business methods
@@ -50,6 +50,9 @@ class Playground implements Comparable<Playground> {
 		return (street?street+", ":"") + (zip?zip+", ":"") + (city?city+", ":"") + (country?country:"France")
 	}
 	
+	/* Obsolete methods (they ware useful for the Meteocity service) */
+	
+	/*
 	public String computeForecastToken(Date sessionDate) {
 		return forecastService.computeForecastToken(sessionDate, this)
 	}
@@ -57,7 +60,7 @@ class Playground implements Comparable<Playground> {
 	public String generateForecastScript(String token) {
 		return forecastService.generateForecastScript(token)
 	}
-
+	*/
 	    
 	///////////////////////////////////////////////////////////////////////////
 	// System methods

@@ -77,6 +77,7 @@ grails.project.dependency.resolution = {
         //compile ":resources:1.2.14"
         //compile ":jquery-mobile:1.1.0.5"
         compile ":ckeditor:4.5.4.1"
+		compile ":rest-client-builder:2.1.1"
     }
 }
 
