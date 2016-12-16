@@ -108,7 +108,11 @@
 			<br />
 			<br />
 			<g:message code="group" default="Group" />:
-			<g:link controller="sessions" action="list" params="${['filteredSessionGroup':sessionInstance.group.id]}">
+			<g:set var="mode" value="training" />
+			<g:if test="${sessionInstance.group.competition}">
+				<g:set var="mode" value="competition" />
+			</g:if>
+			<g:link controller="teams" action="show" id="${sessionInstance.group.defaultTeams?.first().id}" params="${['mode':mode, 'group':sessionInstance.group.id]}">
 				${sessionInstance?.group?.encodeAsHTML()}
 			</g:link>
 		</td>

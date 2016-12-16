@@ -8,14 +8,14 @@
 		<g:message code="admin.title" default="Administration" />
 	</h1>
 	<br />
-	<g:if test="${flash.message}">
+	<g:if test="${message}">
 		<div class="message">
-			${flash.message}
+			${message}
 		</div>
 	</g:if>
-	<g:if test="${flash.error}">
+	<g:if test="${error}">
 		<div class="errors">
-			${flash.error}
+			${error}
 		</div>
 	</g:if>
 	<g:message code="admin.refreshAllPlayersCounters" />

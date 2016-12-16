@@ -23,7 +23,6 @@ class AdminController {
 	def findPlayer = {
 		def t = '%' + params.playerToken + '%'
 		def users = User.findAllByUsernameIlikeOrFirstNameIlikeOrLastNameIlikeOrEmailIlike(t, t, t, t)
-		flash.message = "" + users.size() + " user(s) has been found."
-		render (view: "index", model: [users: users])
+		render (view: "index", model: [users: users, message: "" + users.size() + " user(s) has been found."])
 	}
 }
