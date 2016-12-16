@@ -856,31 +856,31 @@ class ManagerController {
 			for (Session s : sessions) {
 				def participants = s.getParticipantsEligibleForAttendanceSheet()
 				for (User player : players) {
-					def playerValues = data[player.username]
+					def playerValues = data[player.name]
 					if (!playerValues) {
 						playerValues = []
-						data[player.username] = playerValues
+						data[player.name] = playerValues
 					}
-					if (!totalByPlayer[player.username]) {
-						totalByPlayer[player.username] = 0
+					if (!totalByPlayer[player.name]) {
+						totalByPlayer[player.name] = 0
 					}
 					def playerValueToDisplay = ""
 					if (player in participants) {
-						def playerValue = Integer.parseInt(params.valueToDispatch) / participants.size()
+						def playerValue = ((Float)(Integer.parseInt(params.valueToDispatch) / participants.size())).round(2)
 						def status = message(code: "participation.status." + s.getParticipationOf(player.username).statusCode)
-						playerValueToDisplay = "" + playerValue + " (" + status.getChars()[0] + ")"
-						totalByPlayer[player.username] = totalByPlayer[player.username] + 1
+						playerValueToDisplay = "" + playerValue.toString() + " (" + status.getChars()[0] + ")"
+						totalByPlayer[player.name] = totalByPlayer[player.name] + 1
 					}
 					playerValues << playerValueToDisplay
 				}
 			}
 			for (User player : players) {
-				def playerValues = data[player.username]
-				def total = totalByPlayer[player.username]
+				def playerValues = data[player.name]
+				def total = totalByPlayer[player.name]
 				if (total > 0) {
-					data[player.username] << total
+					data[player.name] << total
 				} else {
-					data.remove(player.username)
+					data.remove(player.name)
 				}
 			}
 		}

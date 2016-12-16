@@ -66,7 +66,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		receivedVotes lazy: true, batchSize: 50
 	}
 
-	static transients = [ 'scoreInCurrentSession', 'membershipInCurrentSession', 'teamsInCurrentSession',
+	static transients = [ 'name', 'scoreInCurrentSession', 'membershipInCurrentSession', 'teamsInCurrentSession',
 						  'allSubscribedTeams', 'allSubscribedSessionGroups', 'allSessions',
 						  'wins', 'defeats', 'draws', 'rounds', 'votingScore', 'actionScore', 'effectiveParticipations' ]
 
@@ -110,6 +110,10 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	///////////////////////////////////////////////////////////////////////////
 	// Business methods
 	///////////////////////////////////////////////////////////////////////////
+
+	def getName() {
+		return (firstName?firstName + " ":"") + (lastName?lastName + " ":"") + "[" + username + "]"
+	}
 
 	def getSortedMemberships = {
 		return memberships.sort{it.team.name}
