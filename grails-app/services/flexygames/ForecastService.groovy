@@ -34,7 +34,11 @@ class ForecastService {
 			System.out.println("Unable to fetch weather data: " + e.getMessage())
 			return null
 		}
-		resp.json instanceof JSONObject
+		//println "resp.json: " + resp.json
+		def results = resp?.json?.query?.results
+		if (results == null || results instanceof org.codehaus.groovy.grails.web.json.JSONObject.Null || !resp.json.query.results.has('channel')) {
+			return null
+		}
 		def channel = resp.json.query.results.channel
 		long t2 = System.currentTimeMillis();
 		System.out.println("Weather data has been fetched from Yahoo in " + (t2 -t1) + " ms")
