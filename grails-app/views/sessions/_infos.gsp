@@ -119,7 +119,9 @@
 		<td style="text-align: left; vertical-align: top;">
 			<h3 style="margin-top: 0px"><g:message code="forecast" default="Forecast" /></h3>
 			<div style="text-align: left">
-				<g:render template="/common/forecast" model="[session: sessionInstance]" />
+				<iframe src="${createLink(controller: 'sessions', action: 'forecast', id: sessionInstance.id)}" id="forecastFrame" style="border: 0px;">
+					<!--g:render template="/common/forecast" model="[session: sessionInstance]" /-->
+				</iframe>
 			</div>
 		</td>
 		<g:if test="${sessionInstance.imageUrl}">

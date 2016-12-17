@@ -137,9 +137,15 @@ class SessionsController {
 		}
 		
 		// Prepare forecast data
-		def weatherData = forecastService.getWeatherData(session)
+		//def weatherData = forecastService.getWeatherData(session)
 
-		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes, weatherData: weatherData])
+		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes])
+	}
+
+	def forecast = {
+		Session session = Session.get(params.id)
+		def weatherData = forecastService.getWeatherData(session)
+		render(view: '/common/_forecast', model: [weatherData: weatherData])
 	}
 
 	// TODO remake the grails file uploader plugin
