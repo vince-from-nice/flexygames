@@ -83,6 +83,10 @@ table { //
 	border: 1px solid #DFDFDF;
 }
 
+.flexyTab td {
+	vertical-align: middle;
+}
+
 /* le style FlexTab fournit un effet de style : changement de couleur quand curseur passe sur la ligne */
 .flexyTab tr:hover {
 	background: #E1F2B6;

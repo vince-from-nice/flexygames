@@ -135,9 +135,6 @@ class SessionsController {
 		session.comments.each { comment ->
 			forumService.enhanceText(comment)
 		}
-		
-		// Prepare forecast data
-		//def weatherData = forecastService.getWeatherData(session)
 
 		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes])
 	}

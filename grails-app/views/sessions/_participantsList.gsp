@@ -21,10 +21,10 @@
                         </g:if>
                         <tr id="participation-${p.id}" class="${(i % 2) == 0 ? 'odd' : 'even'}"
                             style="display: ${display}; border: solid grey 1px">
-                            <td style="vertical-align: middle; text-align: right; height: 50px; padding-left: 0px">
+                            <td style="text-align: right; height: 50px; padding-left: 0px">
                                 <g:render template="/common/avatar" model="[player: p.player]"/>
                             </td>
-                            <td style="vertical-align: middle; padding-left: 0px; border: solid grey 0px">
+                            <td style="padding-left: 0px; border: solid grey 0px">
                                 <g:link controller="player" action="show" id="${p.player.id}">
                                     ${p.player}
                                 </g:link><br/>
@@ -39,7 +39,7 @@
                                     </g:else>
                                 </nobr>
                             </td>
-                            <td style="vertical-align: middle; font-size: 10px; border: solid grey 0px">
+                            <td style="font-size: 10px; border: solid grey 0px">
                                 <nobr>
                                     <b>${p.player.countParticipations()}</b>
                                     <g:if test="${p.player.countParticipations() > 1}"><g:message
@@ -69,13 +69,13 @@
                                     </g:link>
                                 </nobr>
                             </td>
-                            <td style="vertical-align: middle; font-size: 10px; line-height: 10px; border: solid grey 1px">
+                            <td style="font-size: 10px; line-height: 10px; border: solid grey 1px">
                                 <g:each in="${p.player.teamsInCurrentSession}" var="t">
                                     <g:link controller="teams" action="show" id="${t.id}">${t}</g:link><br/>
                                 </g:each>
                             </td>
                             <g:render template="/common/status" model="['part': p, 'allStatusesArePossible':sessionIsManagedByCurrentUser]"/>
-                            <td style="vertical-align: middle; background-color: ${flexygames.Participation.Status.color(p.statusCode)}; font-size: 12px; border: solid black 1px">
+                            <td style="background-color: ${flexygames.Participation.Status.color(p.statusCode)}; font-size: 12px; border: solid black 1px">
                                 <g:if test="${p.lastUpdate}">
                                     <g:message code="session.show.participants.lastUpdate" args="[]"/>
                                     <b><flexy:humanDate date="${p.lastUpdate.time}"/></b>
@@ -91,7 +91,7 @@
                 </g:if>
                 <g:else>
                     <tr>
-                        <td colspan="6" style="text-align: center ;vertical-align: middle;">
+                        <td colspan="6" style="text-align: center; ">
                             <br/><br/><br/><br/><br/><br/>
                             <g:message code="session.show.participants.empty"/>
                             <br/><br/><br/><br/><br/><br/>

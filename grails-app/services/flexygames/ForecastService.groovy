@@ -25,7 +25,7 @@ class ForecastService {
 		
 		// Fetch data from Yahoo Weather API
 		long t1 = System.currentTimeMillis();
-		def rest = new RestBuilder(connectTimeout:3000, readTimeout:3000)
+		def rest = new RestBuilder(connectTimeout:5000, readTimeout:5000)
 		def query = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + session.playground.city + "') and u='c'&format=json"
 		def resp = null
 		try {
