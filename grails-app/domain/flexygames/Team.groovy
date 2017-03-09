@@ -107,16 +107,24 @@ class Team implements Comparable {
 	def getBlogEntries(params, sticky) {
 		//BlogEntry.findAllByTeamAndSticky(this, sticky, params)
 		if (sticky) {
-			BlogEntry.findAllStickyByTeam(this, sticky, params)
+			BlogEntry.findAllStickyByTeam(this, params)
 		} else {
-			BlogEntry.findAllNotStickyByTeam(this, sticky, params)
+			BlogEntry.findAllNotStickyByTeam(this, params)
+		}
+	}
+
+	def countBlogEntries(sticky) {
+		if (sticky) {
+			BlogEntry.findAllStickyByTeam(this).size()
+		} else {
+			BlogEntry.findAllNotStickyByTeam(this).size()
 		}
 	}
 
 	List<Session> getSessionGroups(competition) {
 		def result = []
 		sessionGroups.each{ g ->
-			if ( (competition && g.competition) || (!competition && !g.competition) )
+			if ( (competition == g.competition) )
 				result << g
 		}
 		return result
@@ -160,6 +168,12 @@ class Team implements Comparable {
 		}
 		if (sessionGroups && sessionGroups.size() > 0) { return sessionGroups.last() }
 		else return null
+	}
+
+	Session getNextSession(boolean competition) {
+		def sessions = Session.findAllByGroupInList(this.sessionGroups.grep{it.competition == competition}, [max: 1, sort: "date", order: "desc"])
+		if (sessions.isEmpty()) return null
+		return sessions.first()
 	}
 	
 	///////////////////////////////////////////////////////////////////////////

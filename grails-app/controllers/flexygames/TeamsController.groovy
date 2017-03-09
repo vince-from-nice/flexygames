@@ -56,34 +56,18 @@ class TeamsController {
 	
 	def showBlog(params, Team team) {
 		params.teamId = team.id
-		params.max = Math.min(params.max ? params.int('max') : 10, 30)
+		params.max = Math.min(params.max ? params.int('max') : 5, 30)
 		if(!params.offset) params.offset = 0
 		if(!params.sort) params.sort = "date"
 		if(!params.order) params.order = "desc"
 		// Get blog entries for all users of the team which are sticky
-		def stickyUserBlogEntries = team.getBlogEntries(params, true)
+		def stickyUserBlogEntries = team.getBlogEntries([sort: 'date', order: 'desc'], true)
 		// Get blog entries for all users of the team which are not sticky
-		def userBlogEntries = team.getBlogEntries(params, false)
-		// Create implicit blog entries from the sessions of the team
-		def sessions = team.getSessions(params)
-		def sessionBlogEntries = []
-		sessions.each { session ->
-			BlogEntry blogEntry = new BlogEntry()
-			blogEntry.date = session.date
-			blogEntry.team = session.group.defaultTeams[0]
-			blogEntry.session = session
-			if (session.name) {
-				blogEntry.title = session.name + " (" + session.date + ")"
-			} else {
-				blogEntry.title = session.group.competition
-			}
-			sessionBlogEntries << blogEntry
-		}
-		// TODO merge the pagination between userBlogEntries and sessionBlogEntries
-		def blogEntriesTotal = team.countSessions()
-		def allBlogEntries = userBlogEntries + sessionBlogEntries
-		allBlogEntries.sort()
-		return [teamInstance: team, allBlogEntries: allBlogEntries, blogEntriesTotal: blogEntriesTotal,
+		def normalUserBlogEntries = team.getBlogEntries(params, false)
+		// Get next sessions
+		def nextTraining = team.getNextSession(false)
+		def nextCompetition = team.getNextSession(true)
+		return [teamInstance: team, nextTraining: nextTraining, nextCompetition: nextCompetition, normalBlogEntriesTotal: team.countBlogEntries(false), normalUserBlogEntries: normalUserBlogEntries,
 				stickyUserBlogEntries: stickyUserBlogEntries, params: params]
 	}
 

@@ -1,8 +1,9 @@
 <span style="font-size: x-large; font-weight: bold" ><g:link controller="teams" action="displayBlogEntry" id="${blogEntry.id}">${blogEntry.title}</g:link></span>
+&nbsp;&nbsp;&nbsp;
 <g:message code="team.show.blog.postedBy" />
 <g:link controller="player" action="show" id="${blogEntry.user.id}">${blogEntry.user}</g:link>
 <flexy:humanDate date="${blogEntry.date.time}" />
-<hr>
+<hr style="margin-bottom: 0.7em;">
 <g:if test="${blogEntry.body.length() > 10000}">
     <div>
         ${blogEntry.body.substring(0, 10000)}...

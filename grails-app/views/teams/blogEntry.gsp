@@ -13,10 +13,14 @@
 	<g:if test="${flash.error}">
 		<div class="errors">${flash.error}</div>
 	</g:if>
-	<div style="border: solid 1px; margin: 10px; padding: 10px; width: auto">
+	<div style="border: solid 1px; margin: 10px; padding: 10px; width: 500px;">
 		<g:message code="team.show.blog.blogEntryOf" />
 		<g:link controller="teams" action="show" id="${blogEntry.team.id}">${blogEntry.team}</g:link>
-		<br>
+	</div>
+	<div class="userBlogEntry">
+		${blogEntry.body}
+	</div>
+	<div style="border: solid 1px; margin: 10px; padding: 10px; width: 500px;">
 		<g:message code="team.show.blog.postedBy" />
 		<g:link controller="player" action="show" id="${blogEntry.user.id}">${blogEntry.user}</g:link>
 		<flexy:humanDate date="${blogEntry.date.time}" />
@@ -28,10 +32,6 @@
 			<br>
 		</g:if>
 	</div>
-	<div class="userBlogEntry">
-		${blogEntry.body}
-	</div>
-	<br>
 	<h2><g:message code="team.show.blog.comments" /></h2>
 	<shiro:notUser>
 		<p><b><g:message code="team.show.blog.comments.needLogin" /></b></p>
