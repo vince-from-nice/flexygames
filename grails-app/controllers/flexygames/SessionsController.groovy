@@ -146,7 +146,7 @@ class SessionsController {
 	}
 
 	// TODO remake the grails file uploader plugin
-	def showAvatar = {
+	/*def showAvatar = {
 		def file = new File(params.path)
 		if (file.exists()) {
 			log.debug "Serving file path=${params.path} to ${request.remoteAddr}"
@@ -161,7 +161,7 @@ class SessionsController {
 			redirect controller: params.errorController, action: params.errorAction
 			return
 		}
-	}
+	}*/
 
 	def update = {
 		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
@@ -225,7 +225,7 @@ class SessionsController {
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
-			redirect(action: "list")
+			return redirect(action: "list")
 		}
 		Participation participation = Participation.findBySessionAndPlayer(session, user)
 		if (!participation) {
@@ -247,7 +247,7 @@ class SessionsController {
 		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
 		if (!user) {
 			flash.error = "You need to be authenticated in order to vote !!"
-			redirect(action: "show", id: session.id)
+			return redirect(action: "show", id: session.id)
 		}
 		def session = Session.get(params.id)
 		if (!session) {
@@ -270,7 +270,7 @@ class SessionsController {
 		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
 		if (!user) {
 			flash.error = "You need to be authenticated in order to post a comment !!"
-			redirect(action: "show", id: session.id)
+			return redirect(action: "show", id: session.id)
 		}
 		def session = Session.get(params.id)
 		if (!session) {
@@ -293,7 +293,7 @@ class SessionsController {
 		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
 		if (!user) {
 			flash.error = "You need to be authenticated in order to post a comment !!"
-			redirect(action: "show", id: session.id)
+			return redirect(action: "show", id: session.id)
 		}
 		def session = Session.get(params.id)
 		if (!session) {
@@ -314,4 +314,76 @@ class SessionsController {
 		redirect(action: "show", id: session.id)
 	}
 
+	def addCarpoolProposal = {
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!user) {
+			flash.error = "You need to be authenticated in order to propose a carpool !!"
+			redirect(action: "show", id: session.id)
+		}
+		def session = Session.get(params.id)
+		if (!session) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
+			return redirect(action: "list")
+		}
+		CarpoolProposal proposal = new CarpoolProposal(session: session, driver: user, freePlaceNbr: params.freePlaceNbr,
+				carDescription: params.carDescription, rdvDescription: params.rdvDescription)
+		if (!proposal.save()) {
+			flash.error = "Unable to save your carpool proposal: " + proposal.errors
+		} else {
+			flash.message = "Ok your carpool proposal has been saved"
+		}
+		redirect(action: "show", id: session.id)
+	}
+
+	def addCarpoolRequest = {
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!user) {
+			flash.error = "You need to be authenticated in order to request a carpool !!"
+			return redirect(action: "show", id: session.id)
+		}
+		def session = Session.get(params.id)
+		if (!session) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
+			return redirect(action: "list")
+		}
+		CarpoolRequest request = new CarpoolRequest(session: session, enquirer: user)
+		if (!request.save()) {
+			flash.error = "Unable to save your carpool request: " + request.errors
+		} else {
+			flash.message = "Ok your carpool request has been saved"
+		}
+		redirect(action: "show", id: session.id)
+	}
+
+	def removeCarpoolProposal = {
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!user) {
+			flash.error = "You need to be authenticated in order to remove a carpool proposal !!"
+			return redirect(action: "show", id: session.id)
+		}
+		def proposal = CarpoolProposal.get(params.id)
+		if (proposal.driver != user && !proposal.session.isManagedBy(user.username)) {
+			flash.error = "You cannot remove this carpool proposal because you are not the driver (neither a manager of the team)"
+			return redirect(action: "show", id: proposal.session.id)
+		}
+		proposal.delete()
+		flash.message = "Ok carpool proposal has been removed !"
+		redirect(action: "show", id: proposal.session.id)
+	}
+
+	def removeCarpoolRequest = {
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!user) {
+			flash.error = "You need to be authenticated in order to remove a carpool proposal !!"
+			return redirect(action: "show", id: session.id)
+		}
+		def request = CarpoolRequest.get(params.id)
+		if (request.enquirer != user && !request.session.isManagedBy(user.username)) {
+			flash.error = "You cannot remove this carpool request because you are not the enquirer (neither a manager of the team)"
+			return redirect(action: "show", id: request.session.id)
+		}
+		request.delete()
+		flash.message = "Ok carpool request has been removed !"
+		redirect(action: "show", id: request.session.id)
+	}
 }

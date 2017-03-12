@@ -34,9 +34,10 @@ class Session implements Comparable {
 	///////////////////////////////////////////////////////////////////////////
 	// Grails stuff
 	///////////////////////////////////////////////////////////////////////////
-	
-    static hasMany = [participations: Participation, reminders: Reminder, rounds: SessionRound, 
-			votes: Vote, comments: SessionComment, compositions: Composition, tasks: Task, watchers: SessionWatcher]
+
+	static hasMany = [participations: Participation, reminders: Reminder, rounds: SessionRound, votes: Vote,
+					  comments: SessionComment, compositions: Composition, tasks: Task, watchers: SessionWatcher,
+					  carpoolRequests: CarpoolRequest, carpoolProposals: CarpoolProposal]
 
     static constraints = {
 		date(nullable: false)
