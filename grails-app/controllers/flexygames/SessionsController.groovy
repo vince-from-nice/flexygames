@@ -386,4 +386,28 @@ class SessionsController {
 		flash.message = "Ok carpool request has been removed !"
 		redirect(action: "show", id: request.session.id)
 	}
+
+	def updateCarpoolProposal = {
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!user) {
+			flash.error = "You need to be authenticated in order to update a carpool proposal !!"
+			return redirect(action: "show", id: session.id)
+		}
+		CarpoolProposal proposal = CarpoolProposal.get(params.id)
+		if (proposal.driver != user && !proposal.session.isManagedBy(user.username)) {
+			flash.error = "You cannot update this carpool proposal because you are not the driver (neither a manager of the team)"
+			return redirect(action: "show", id: proposal.session.id)
+		}
+		proposal.approvedRequests.clear()
+		def approvedRequestIds = params.approvedRequestIds.split(',')
+		approvedRequestIds.each{
+			proposal.addToApprovedRequests(CarpoolRequest.get(it))
+		}
+		if (proposal.save()) {
+			flash.message = "Ok carpool requests has been approved !"
+		} else {
+			flash.error = "Unable to update carpool proposal: " + proposal.errors
+		}
+		redirect(action: "show", id: proposal.session.id)
+	}
 }

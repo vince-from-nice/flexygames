@@ -7,7 +7,7 @@ class CarpoolProposal {
     String rdvDescription
     Session session
     User driver
-    SortedSet<CarpoolRequest>  approvedRequests
+    Set<CarpoolRequest>  approvedRequests
 
     static belongsTo = [session: Session]
 

@@ -109,7 +109,7 @@ function saveComposition(compositionId) {
     	//ids = eligiblePlayer.id.substring('compo-player-'.length);
     	//playerId = ids.substring(ids.indexOf('-') + 1);
     	playerId = eligiblePlayer.id.substring(idPattern.length + 1);
-    	//compoForm['compo-player-' + playerId + '-x'].value = x;
+    	//compoForm['compo-player-' + playerId + '-x'].value = x;0000
     	//compoForm['compo-player-' + playerId + '-y'].value = y;
     	data += '{"id": '+ playerId + ', "x": ' + x + ', "y": ' + y + '}';
     	if (i < eligiblePlayers.length - 1) {
