@@ -203,27 +203,39 @@ div.sessionZoneHeader:hover {
 /* Carpool drag'n drop */
 /********************************/
 
-/*
-.dropzone {
-	background-color: #ccc;
-	border: dashed 4px transparent;
-	border-radius: 4px;
-	margin: 10px auto 30px;
-	padding: 10px;
-	width: 80%;
+.carpoolProposalDropZone {
+	background-color: lightgrey;
+	border: dashed lightskyblue 4px transparent;
+	border-radius: 5px;
+	margin: auto;
+	padding: 0px;
 	transition: background-color 0.3s;
+	width: 80px;
+	height: 100px;
+	display: inline-block;
+	text-align: center;
+}
+
+.carpoolRequestDropZone {
+	/*background-color: salmon;*/
+	border: dashed lightsalmon 4px transparent;
+	border-radius: 4px;
+	margin: auto;
+	padding: 10px;
+	transition: background-color 0.3s;
+	border: dashed lightsalmon 1px;
+	min-height: 200px;
 }
 
 .drop-active {
 	border-color: #aaa;
 }
 
-.drop-target {
-	background-color: #29e;
-	border-color: #fff;
-	border-style: solid;
-}
-*/
+/*.drop-target {*/
+	/*background-color: #29e;*/
+	/*border-color: #fff;*/
+	/*border-style: solid;*/
+/*}*/
 
 .drag-drop {
 	display: inline-block;

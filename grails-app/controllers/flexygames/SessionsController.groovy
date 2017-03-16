@@ -102,7 +102,24 @@ class SessionsController {
 			player.teamsInCurrentSession << membership.team
 		}
 
-		// Prepare data about votes of participants (move it to the Vote domain class) ?
+        // Prepare data about carpooling
+        def approvedCarpoolRequestIds = '['
+        def approvedCarpoolProposalIds = '['
+        session.carpoolRequests.each{ request ->
+            if (request.driver) {
+                approvedCarpoolRequestIds += request.id + ', '
+                approvedCarpoolProposalIds += request.driver.id + ', '
+            }
+        }
+        if (approvedCarpoolRequestIds.endsWith(', '))
+            approvedCarpoolRequestIds = approvedCarpoolRequestIds.substring(0, approvedCarpoolRequestIds.length() - 2)
+        approvedCarpoolRequestIds += ']'
+        if (approvedCarpoolProposalIds.endsWith(', '))
+            approvedCarpoolProposalIds = approvedCarpoolProposalIds.substring(0, approvedCarpoolProposalIds.length() - 2)
+        approvedCarpoolProposalIds += ']'
+
+
+        // Prepare data about votes of participants (move it to the Vote domain class) ?
 		def participantsByScore = []
 		def effectivePlayers = session.getEffectiveParticipants()
 		// Fetch all relevant votes in one query
@@ -136,7 +153,9 @@ class SessionsController {
 			forumService.enhanceText(comment)
 		}
 
-		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes])
+		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'),
+                model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes,
+                        approvedCarpoolRequestIds: approvedCarpoolRequestIds, approvedCarpoolProposalIds: approvedCarpoolProposalIds])
 	}
 
 	def forecast = {
@@ -366,10 +385,29 @@ class SessionsController {
 			flash.error = "You cannot remove this carpool proposal because you are not the driver (neither a manager of the team)"
 			return redirect(action: "show", id: proposal.session.id)
 		}
+		proposal.approvedRequests.toArray().each{proposal.removeFromApprovedRequests(it)}
+        proposal.save()
 		proposal.delete()
 		flash.message = "Ok carpool proposal has been removed !"
 		redirect(action: "show", id: proposal.session.id)
 	}
+
+    def cancelAllCarpoolAcceptances = {
+        def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+        if (!user) {
+            flash.error = "You need to be authenticated in order to reset a carpool proposal !!"
+            return redirect(action: "show", id: session.id)
+        }
+        def proposal = CarpoolProposal.get(params.id)
+        if (proposal.driver != user && !proposal.session.isManagedBy(user.username)) {
+            flash.error = "You cannot reset this carpool proposal because you are not the driver (neither a manager of the team)"
+            return redirect(action: "show", id: proposal.session.id)
+        }
+		proposal.approvedRequests.toArray().each{proposal.removeFromApprovedRequests(it)}
+        proposal.save()
+        flash.message = "Ok carpool proposal has been reset !"
+        redirect(action: "show", id: proposal.session.id)
+    }
 
 	def removeCarpoolRequest = {
 		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())

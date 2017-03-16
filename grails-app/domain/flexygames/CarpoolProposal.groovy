@@ -1,13 +1,13 @@
 package flexygames
 
-class CarpoolProposal {
+class CarpoolProposal implements Comparable<CarpoolProposal> {
 
     Integer freePlaceNbr
     String carDescription
     String rdvDescription
     Session session
     User driver
-    Set<CarpoolRequest>  approvedRequests
+    SortedSet<CarpoolRequest>  approvedRequests
 
     static belongsTo = [session: Session]
 
@@ -15,5 +15,12 @@ class CarpoolProposal {
 
     static constraints = {
         driver nullable: false, unique: 'session'
+        freePlaceNbr min: 1, max: 9
+        carDescription maxSize: 100
+        rdvDescription maxSize: 100
+    }
+
+    int compareTo(CarpoolProposal o) {
+        return driver.username.compareTo(o.driver.username)
     }
 }

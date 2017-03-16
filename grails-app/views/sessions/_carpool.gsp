@@ -5,8 +5,30 @@
 			document.addEventListener("DOMContentLoaded", function(event) {
 				//console.log("DOM fully loaded and parsed, adding restriction for composition drag and drop");
 				initCarpoolRequestDragging();
-				//translateCompositionPlayers();
+				initApprovedCarpoolRequestsPositions(${approvedCarpoolRequestIds}, ${approvedCarpoolProposalIds});
 			});
+
+			function initApprovedCarpoolRequestsPositions(approvedCarpoolRequestIds, approvedCarpoolProposalIds) {
+			    var nextFreeSeatNbr = new Map()
+			    for (var i = 0; i < approvedCarpoolRequestIds.length; i++) {
+					var approvedCarpoolRequestId = approvedCarpoolRequestIds[i];
+					var approvedCarpoolRequestElement = document.getElementById('carpoolRequestOf' + approvedCarpoolRequestId);
+					var initialPosition = approvedCarpoolRequestElement.getBoundingClientRect();
+					//console.log('position of carpool request ' + approvedCarpoolRequestId + ': ', initialPosition.top, initialPosition.right, initialPosition.bottom, initialPosition.left);
+					var approvedCarpoolProposalId = approvedCarpoolProposalIds[i];
+					if (nextFreeSeatNbr.get(approvedCarpoolProposalId)) {
+					    nextFreeSeatNbr.set(approvedCarpoolProposalId, nextFreeSeatNbr.get(approvedCarpoolProposalId) + 1);
+					} else {
+					    nextFreeSeatNbr.set(approvedCarpoolProposalId, 1);
+					}
+					var seatNbr = nextFreeSeatNbr.get(approvedCarpoolProposalId);
+					var seatElement = document.getElementById('dropZoneForProposal' + approvedCarpoolProposalId + 'Seat' + seatNbr);
+					var seatPosition = seatElement.getBoundingClientRect();
+					//console.log('position of seat ' + seatNbr + ' of carpool approval ' + approvedCarpoolProposalId + ': ', seatPosition.top, seatPosition.right, seatPosition.bottom, seatPosition.left);
+					moveCarpoolRequestElement(approvedCarpoolRequestElement, seatPosition.left - initialPosition.left + 10, seatPosition.top - initialPosition.top + 10)
+					approvedCarpoolRequestElement.classList.remove('draggableCarpoolRequest');
+				}
+			}
 
 			function initCarpoolRequestDragging() {
 				interact('.draggableCarpoolRequest')
@@ -31,49 +53,40 @@
 			function moveCarpoolRequestElement(target, x, y) {
 				var x = (parseFloat(target.getAttribute('data-x')) || 0) + x;
 				var y = (parseFloat(target.getAttribute('data-y')) || 0) + y;
-				target.style.webkitTransform =
-						target.style.transform =
-								'translate(' + x + 'px, ' + y + 'px)';
+				target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
 				target.setAttribute('data-x', x);
 				target.setAttribute('data-y', y);
-				//console.log('CarpoolRequest has been translated of [' + x + ', ' + y + ']');
 			}
 
-			interact('.carpoolDropZone').dropzone({
-				// only accept elements matching this CSS selector
+			interact('.carpoolProposalDropZone').dropzone({
 				accept: '.draggableCarpoolRequest',
 				overlap: 1.0,
 				ondropactivate: function (event) {
-					// add active dropzone feedback
 					event.target.classList.add('drop-active');
 				},
 				ondragenter: function (event) {
 					var draggableElement = event.relatedTarget,
 							dropzoneElement = event.target;
-					// feedback the possibility of a drop
 					dropzoneElement.classList.add('drop-target');
 					draggableElement.classList.add('can-drop');
-					//draggableElement.textContent = 'Dragged in';
 				},
 				ondragleave: function (event) {
-					// remove the drop feedback style
 					event.target.classList.remove('drop-target');
 					event.relatedTarget.classList.remove('can-drop');
-					//event.relatedTarget.textContent = 'Dragged out';
 				},
 				ondrop: function (event) {
-					//event.relatedTarget.textContent = 'Dropped';
 					var proposalId = event.target.id.substring('dropZoneForProposal'.length);
 					proposalId = proposalId.substring(0, proposalId.indexOf('Seat'))
 					var requestId = event.relatedTarget.id.substring('carpoolRequestOf'.length);
 					var proposalForm = document.forms['formOfCarpoolProposal' + proposalId];
+					// can be null if user drop on a non authorized proposal (button is not instancied)
+					if (proposalForm == null) return
 					var approvedRequestIds = proposalForm['approvedRequestIds'].value + requestId + ',';
 					proposalForm['approvedRequestIds'].value = approvedRequestIds;
 					//alert(event.target.id + ' ' + event.relatedTarget.id + ' ' + approvedRequestIds);
 					document.getElementById('updateButtonForProposal' + proposalId).style.display = "inline";;
 				},
 				ondropdeactivate: function (event) {
-					// remove active dropzone feedback
 					event.target.classList.remove('drop-active');
 					event.target.classList.remove('drop-target');
 				}
@@ -102,7 +115,7 @@
 	<div class="sessionZoneContent">
 		<g:set var="defaultDisplayForSummaryZone" value="block" />
 		<g:set var="defaultDisplayForDetailedZone" value="none" />
-		<g:if test="${sessionInstance.comments.size() > 0}">
+		<g:if test="${sessionInstance.carpoolProposals.size() > 0}">
 			<g:set var="defaultDisplayForSummaryZone" value="none" />
 			<g:set var="defaultDisplayForDetailedZone" value="block" />
 		</g:if>
@@ -147,16 +160,17 @@
 							<br>
 							<br>
 							<g:each in="${sessionInstance.carpoolProposals}" var="proposal">
-								<div style="border: solid lightblue 1px; padding: 10px;">
+								<div style="border: solid lightblue 2px; padding: 10px; border-radius: 5px;">
 									<g:render template="/common/avatar" model="[player:proposal.driver]" />
 									<g:message code="session.show.carpool.proposal.userXCanTakeY" args="[proposal.driver.username, proposal.freePlaceNbr]"/>:
-									<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
-										<div id="dropZoneForProposal${proposal.id}Seat${i}" class="carpoolDropZone"
-											 style="border: lightskyblue dashed 1px; width: 70px; height: 90px; display: inline-block; text-align: center;">
-											<g:message code="session.show.carpool.proposal.seatNbr" args="[i]"/>
-											<br>
-										</div>&nbsp;
-									</g:each>
+									<br>
+									<div style="text-align: center">
+										<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
+											<div id="dropZoneForProposal${proposal.id}Seat${i}" class="carpoolProposalDropZone">
+												<g:message code="session.show.carpool.proposal.seatNbr" args="[i]"/>
+											</div>&nbsp;
+										</g:each>
+									</div>
 									<g:if test="${proposal.rdvDescription}">
 										<br>
 										<g:message code="session.show.carpool.proposal.rdvDescription"/>:
@@ -173,9 +187,12 @@
 										<g:hiddenField name="id" value="${proposal.id}" />
 										<g:hiddenField name="approvedRequestIds" value="" />
 										<div class="buttons">
-											<g:actionSubmit class="save" id="updateButtonForProposal${proposal.id}" style="display: none"
+											<g:actionSubmit class="create" action="cancelAllCarpoolAcceptances" value="${message(code:'session.show.carpool.proposal.seatCancel')}"
+															onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToReset')}')"/>
+											<g:actionSubmit class="delete"  action="removeCarpoolProposal" value="${message(code:'delete')}"
+															onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToDelete')}')" />
+											<g:actionSubmit class="save" id="updateButtonForProposal${proposal.id}" style="display: none; text-align: right"
 															action="updateCarpoolProposal" value="${message(code:'update')}" />
-											<g:actionSubmit class="delete"  action="removeCarpoolProposal" value="${message(code:'delete')}" />
 										</div>
 									</g:form>
 								</g:if>
@@ -188,26 +205,30 @@
 					</td>
 					<td style="width: 50%">
 						<g:if test="${sessionInstance.carpoolRequests.size() > 0}" >
-							<g:message code="session.show.carpool.carpoolRequestsNbr" args="[sessionInstance.carpoolRequests.size()]"/> :
+							<g:message code="session.show.carpool.carpoolRequestsNbr"
+									   args="[sessionInstance.getNumberOfNonApprovedCarpoolRequest(), sessionInstance.carpoolRequests.size()]"/> :
 							<br>
 							<br>
-							<g:each in="${sessionInstance.carpoolRequests}" var="request">
-								<div id="carpoolRequestOf${request.id}" class="draggableCarpoolRequest drag-drop"
-									 style="border: solid lightsalmon 1px; padding: 5px; display: inline-block;">
-									<img style="max-width:45px; max-height: 45px; vertical-align: middle; " src="${resource(dir:'images/user',file:request.enquirer.avatarName)}" alt="Player avatar" />
-									<br>
-									<g:set var="username" value="${request.enquirer.username}" />
-									<g:if test="${username.length() > 8}">
-										<g:set var="username" value="${username.substring(0, 7)}.." />
-									</g:if>
-									<span style="font-size: x-small; vertical-align: top">${username}</span>
-									<g:if test="${sessionIsManagedByCurrentUser || request.enquirer == session.currentUser}">
-										<g:link action="removeCarpoolRequest" id="${request.id}" >
-											<img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />
-										</g:link>
-									</g:if>
-								</div>
-							</g:each>
+							<div class="carpoolRequestDropZone">
+								<g:each in="${sessionInstance.carpoolRequests}" var="request">
+									<div id="carpoolRequestOf${request.id}" class="draggableCarpoolRequest drag-drop"
+										 style="border: solid lightsalmon 1px; padding: 5px; display: inline-block;">
+										<img style="max-width:45px; max-height: 45px; vertical-align: middle; " src="${resource(dir:'images/user',file:request.enquirer.avatarName)}" alt="Player avatar" />
+										<br>
+										<g:set var="username" value="${request.enquirer.username}" />
+										<g:if test="${username.length() > 7}">
+											<g:set var="username" value="${username.substring(0, 6)}.." />
+										</g:if>
+										<span style="font-size: x-small; vertical-align: top">${username}</span>
+										<g:if test="${sessionIsManagedByCurrentUser || request.enquirer == session.currentUser}">
+											<g:link action="removeCarpoolRequest" id="${request.id}"
+													onclick="return confirm('${message(code:'session.show.carpool.request.areYouSureToDelete')}')" >
+												<img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />
+											</g:link>
+										</g:if>
+									</div>
+								</g:each>
+							</div>
 						</g:if>
 						<g:else>
 							<g:message code="session.show.carpool.noCarpoolRequest"/>
@@ -227,7 +248,7 @@
 								<g:form action="proposeCarpool">
 									<g:hiddenField name="id" value="${sessionInstance.id}" />
 									<g:message code="session.show.carpool.proposal.freePlaces.prefix" />
-									<g:field name="freePlaceNbr" type="number" value="3" required="" size="2" style="width: 2em;" />
+									<g:field name="freePlaceNbr" type="number" value="3" required="" size="2" min="1" max="9" style="width: 1.8em;" />
 									<g:message code="session.show.carpool.proposal.freePlaces.suffix" />
 									<br>
 									<g:message code="session.show.carpool.proposal.carDescription" />

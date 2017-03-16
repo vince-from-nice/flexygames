@@ -30,6 +30,8 @@ class Session implements Comparable {
 	SortedSet<Composition> compositions
 	SortedSet<Task> tasks
 	Set<SessionWatcher> watchers
+	SortedSet<CarpoolProposal> carpoolProposals
+	SortedSet<CarpoolRequest> carpoolRequests
 
 	///////////////////////////////////////////////////////////////////////////
 	// Grails stuff
@@ -231,6 +233,10 @@ class Session implements Comparable {
 		use(TimeCategory) {
 			return date - lock.minutes
 		}
+	}
+
+	int getNumberOfNonApprovedCarpoolRequest() {
+		return this.carpoolRequests.grep({!it.driver}).size()
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
