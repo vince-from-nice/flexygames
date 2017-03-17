@@ -19,13 +19,18 @@
 				<tr>
 					<td><g:message code="username" /></td>
 					<td><g:textField name="username"/></td>
+					<td style="font-size: small"><g:message code="remindPassword.usernameTips" args="[cr]"/></td>
+				</tr>
+				<tr>
+					<td colspan="3"><b><g:message code="or" /></b></td>
 				</tr>
 				<tr>
 					<td><g:message code="email" /></td>
 					<td><g:textField name="email"/></td>
+					<td></td>
 				</tr>
 				<tr>
-					<td colspan="2"><input type="submit" value="${message(code:'send')}"></td>
+					<td colspan="3"><input type="submit" value="${message(code:'send')}"></td>
 				</tr>
 			</table>
 		</g:form>
