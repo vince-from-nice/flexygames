@@ -218,12 +218,11 @@ div.sessionZoneHeader:hover {
 
 .carpoolRequestDropZone {
 	/*background-color: salmon;*/
-	border: dashed lightsalmon 4px transparent;
+	border: dashed lightsalmon 2px;
 	border-radius: 4px;
 	margin: auto;
 	padding: 10px;
 	transition: background-color 0.3s;
-	border: dashed lightsalmon 1px;
 	min-height: 200px;
 }
 
@@ -243,7 +242,7 @@ div.sessionZoneHeader:hover {
 	padding: 2em 0.5em;
 
 	color: #fff;
-	background-color: #29e;
+	background-color: #6a9fb5;
 	border: solid 2px #fff;
 
 	-webkit-transform: translate(0px, 0px);

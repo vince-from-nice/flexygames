@@ -24,7 +24,7 @@
 
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main-20160208.css')}" />
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile-20160208.css')}" />
-		<link rel="stylesheet" href="${resource(dir:'css',file:'flexygames-v3.css')}" />
+		<link rel="stylesheet" href="${resource(dir:'css',file:'flexygames-v4.css')}" />
 
 		<g:javascript library="application"/>
 		<!--g:javascript library="flexygames" /-->

@@ -106,7 +106,7 @@
                                   <label for="description"><g:message code="session.description" default="Description" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'description', 'errors')}">
-                                    <g:textField name="description" maxlength="100" value="${sessionInstance?.description}" />
+                                    <g:textField name="description" size="50" maxlength="100" value="${sessionInstance?.description}" />
                                 </td>
                                 <td style="font-size: 12px">
                                 	<g:message code="session.description.infos" />
@@ -132,7 +132,7 @@
                                   <label for="duration"><nobr><g:message code="session.duration" default="Duration" /></nobr></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'duration', 'errors')}">
-                                    <g:field type="number" name="duration" min="1" size="2" value="${fieldValue(bean: sessionInstance, field: 'duration')}"/>
+                                    <g:field type="number" name="duration" min="1" size="2"  style="width: 3em;" value="${fieldValue(bean: sessionInstance, field: 'duration')}"/>
                                 </td>
                                 <td style="font-size: 12px">
                                 	<g:message code="session.duration.infos" />
@@ -144,7 +144,7 @@
                                   <label for="rdvBeforeStart"><nobr><g:message code="session.rdvBeforeStart" default="rdvBeforeStart" /></nobr></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'rdvBeforeStart', 'errors')}">
-                                    <g:field type="number" name="rdvBeforeStart" min="0" value="${fieldValue(bean: sessionInstance, field: 'rdvBeforeStart')}"/>
+                                    <g:field type="number" name="rdvBeforeStart" min="0"  style="width: 3em;" value="${fieldValue(bean: sessionInstance, field: 'rdvBeforeStart')}"/>
                                 </td>
                                 <td style="font-size: 12px">
                                 	<g:message code="session.rdvBeforeStart.infos" />
@@ -156,7 +156,7 @@
                                     <label for="lockingTime"><nobr><g:message code="session.lockingTime" default="lockingTime" /></nobr></label>
                             </td>
                                 <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'lockingTime', 'errors')}">
-                                    <g:field type="number" name="lockingTime" min="1" size="3" value="${fieldValue(bean: sessionInstance, field: 'lockingTime')}"/>
+                                    <g:field type="number" name="lockingTime" min="1" size="3" style="width: 3em;" value="${fieldValue(bean: sessionInstance, field: 'lockingTime')}"/>
                                 </td>
                                 <td style="font-size: 12px">
                                     <g:message code="session.lockingTime.infos" />
@@ -285,7 +285,7 @@
                                 	</g:else>
                                 	<br />
                                 	<g:message code="session.reminders.add" />
-                                	<g:field type="number" name="minutesForNewReminder" value="" size="4" />
+                                	<g:field type="number" name="minutesForNewReminder" value="" size="4"  style="width: 4em;" />
                                 </td>
                                 <td style="font-size: 12px">
                                 	<g:message code="session.reminders.infos" />

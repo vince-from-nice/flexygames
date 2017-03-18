@@ -137,7 +137,7 @@
 					</td>
 					<td style="width: 50%">
 						<g:if test="${sessionInstance.carpoolRequests.size() > 0}" >
-							<g:message code="session.show.carpool.carpoolRequestsNbr" args="[sessionInstance.carpoolRequests.size()]"/>:
+							<g:message code="session.show.carpool.carpoolRequestsNbr" args="[sessionInstance.getNumberOfNonApprovedCarpoolRequest(), sessionInstance.carpoolRequests.size()]"/>:
 							<g:each in="${sessionInstance.carpoolRequests}" var="request">
 								<g:link controller="players">
 									${request.enquirer.username}
@@ -160,43 +160,53 @@
 							<br>
 							<br>
 							<g:each in="${sessionInstance.carpoolProposals}" var="proposal">
-								<div style="border: solid lightblue 2px; padding: 10px; border-radius: 5px;">
-									<g:render template="/common/avatar" model="[player:proposal.driver]" />
-									<g:message code="session.show.carpool.proposal.userXCanTakeY" args="[proposal.driver.username, proposal.freePlaceNbr]"/>:
-									<br>
-									<div style="text-align: center">
-										<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
-											<div id="dropZoneForProposal${proposal.id}Seat${i}" class="carpoolProposalDropZone">
-												<g:message code="session.show.carpool.proposal.seatNbr" args="[i]"/>
-											</div>&nbsp;
-										</g:each>
-									</div>
-									<g:if test="${proposal.rdvDescription}">
-										<br>
-										<g:message code="session.show.carpool.proposal.rdvDescription"/>:
-										<b>${proposal.rdvDescription}</b>
-									</g:if>
-									<g:if test="${proposal.carDescription}">
-										<br>
-										<g:message code="session.show.carpool.proposal.carDescription"/>:
-										<b>${proposal.carDescription}</b>
-									</g:if>
-								</div>
-								<g:if test="${sessionIsManagedByCurrentUser || proposal.driver == session.currentUser}">
-									<g:form name="formOfCarpoolProposal${proposal.id}">
-										<g:hiddenField name="id" value="${proposal.id}" />
-										<g:hiddenField name="approvedRequestIds" value="" />
-										<div class="buttons">
-											<g:actionSubmit class="create" action="cancelAllCarpoolAcceptances" value="${message(code:'session.show.carpool.proposal.seatCancel')}"
-															onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToReset')}')"/>
-											<g:actionSubmit class="delete"  action="removeCarpoolProposal" value="${message(code:'delete')}"
-															onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToDelete')}')" />
-											<g:actionSubmit class="save" id="updateButtonForProposal${proposal.id}" style="display: none; text-align: right"
-															action="updateCarpoolProposal" value="${message(code:'update')}" />
-										</div>
-									</g:form>
-								</g:if>
-								<br>
+								<table style="border: solid lightblue 2px; padding: 10px; border-radius: 5px;">
+									<tr>
+										<td colspan="2">
+											<g:render template="/common/avatar" model="[player:proposal.driver]" />
+											<g:message code="session.show.carpool.proposal.userXCanTakeY" args="[proposal.driver.username, proposal.freePlaceNbr]"/>:
+										</td>
+									</tr>
+									<tr>
+										<td style="font-size: small">
+											<g:if test="${proposal.rdvDescription}">
+												<br>
+												<g:message code="rdv"/>:
+												<b>${proposal.rdvDescription}</b>
+											</g:if>
+											<g:if test="${proposal.carDescription}">
+												<br>
+												<g:message code="car"/>:
+												<b>${proposal.carDescription}</b>
+											</g:if>
+										</td>
+										<td>
+											<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
+												<div id="dropZoneForProposal${proposal.id}Seat${i}" class="carpoolProposalDropZone">
+													<g:message code="session.show.carpool.proposal.seatNbr" args="[i]"/>
+												</div>&nbsp;
+											</g:each>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<g:if test="${sessionIsManagedByCurrentUser || proposal.driver == session.currentUser}">
+												<g:form name="formOfCarpoolProposal${proposal.id}">
+													<g:hiddenField name="id" value="${proposal.id}" />
+													<g:hiddenField name="approvedRequestIds" value="" />
+													<div class="buttons">
+														<g:actionSubmit class="create" action="cancelAllCarpoolAcceptances" value="${message(code:'session.show.carpool.proposal.seatCancel')}"
+																		onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToReset')}')"/>
+														<g:actionSubmit class="delete"  action="removeCarpoolProposal" value="${message(code:'delete')}"
+																		onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToDelete')}')" />
+														<g:actionSubmit class="save" id="updateButtonForProposal${proposal.id}" style="display: none; text-align: right"
+																		action="updateCarpoolProposal" value="${message(code:'update')}" />
+													</div>
+												</g:form>
+											</g:if>
+										</td>
+									</tr>
+								</table>
 							</g:each>
 						</g:if>
 						<g:else>
@@ -252,10 +262,10 @@
 									<g:message code="session.show.carpool.proposal.freePlaces.suffix" />
 									<br>
 									<g:message code="session.show.carpool.proposal.carDescription" />
-									<g:field name="carDescription" value="Lada vert bouteille" required=""/>
+									<g:field name="carDescription" value="ex: 307cc grise" required=""/>
 									<br>
 									<g:message code="session.show.carpool.proposal.rdvDescription" />
-									<g:field name="rdvDescription" value="Parking du LIDL à 23h" required="" size="30"/>
+									<g:field name="rdvDescription" value="ex: Devant AirFrance à 11h55" required="" size="30"/>
 									<br>
 									<br>
 									<g:actionSubmit class="save" action="addCarpoolProposal" value="${message(code:'session.show.carpool.proposal.validate')}"/>

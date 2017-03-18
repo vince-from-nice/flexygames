@@ -150,8 +150,9 @@
             <g:actionSubmit class="delete" onclick="return confirm('${message(code:'management.session.areYouSureToDelete')}')" action="deleteSession" value="${message(code:'management.session.delete')}" />
 	    </div>
 		<div id="duplicationForm" style="display: none; ">
+			<br>
 			<g:message code="management.session.duplicationOffset" />:
-			<g:field type="numeric" with="2" name="duplicationOffset" value="7" />
+			<g:field type="number" name="duplicationOffset" value="7" size="2" style="width: 3em;" />
 			<g:actionSubmit class="create" value="Go" action="duplicateSession" />
 		</div>
 	</g:form>
