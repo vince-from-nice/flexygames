@@ -1,7 +1,6 @@
 package flexygames
 
-
-
+import flexygames.admin.CarpoolProposalController
 import grails.test.mixin.*
 import spock.lang.*
 

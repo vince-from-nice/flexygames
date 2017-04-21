@@ -16,8 +16,8 @@ class CarpoolProposal implements Comparable<CarpoolProposal> {
     static constraints = {
         driver nullable: false, unique: 'session'
         freePlaceNbr min: 1, max: 9
-        carDescription maxSize: 100
-        rdvDescription maxSize: 100
+        carDescription nullable: false, maxSize: 30
+        rdvDescription nullable: true, maxSize: 100
     }
 
     int compareTo(CarpoolProposal o) {

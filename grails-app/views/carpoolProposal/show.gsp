@@ -32,13 +32,11 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${carpoolProposalInstance?.approvedRequests}">
+				<g:if test="${carpoolProposalInstance?.freePlaceNbr}">
 				<li class="fieldcontain">
-					<span id="approvedRequests-label" class="property-label"><g:message code="carpoolProposal.approvedRequests.label" default="Approved Requests" /></span>
+					<span id="freePlaceNbr-label" class="property-label"><g:message code="carpoolProposal.freePlaceNbr.label" default="Free Place Nbr" /></span>
 					
-						<g:each in="${carpoolProposalInstance.approvedRequests}" var="a">
-						<span class="property-value" aria-labelledby="approvedRequests-label"><g:link controller="carpoolRequest" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></span>
-						</g:each>
+						<span class="property-value" aria-labelledby="freePlaceNbr-label"><g:fieldValue bean="${carpoolProposalInstance}" field="freePlaceNbr"/></span>
 					
 				</li>
 				</g:if>
@@ -52,20 +50,22 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${carpoolProposalInstance?.freePlaceNbr}">
-				<li class="fieldcontain">
-					<span id="freePlaceNbr-label" class="property-label"><g:message code="carpoolProposal.freePlaceNbr.label" default="Free Place Nbr" /></span>
-					
-						<span class="property-value" aria-labelledby="freePlaceNbr-label"><g:fieldValue bean="${carpoolProposalInstance}" field="freePlaceNbr"/></span>
-					
-				</li>
-				</g:if>
-			
 				<g:if test="${carpoolProposalInstance?.rdvDescription}">
 				<li class="fieldcontain">
 					<span id="rdvDescription-label" class="property-label"><g:message code="carpoolProposal.rdvDescription.label" default="Rdv Description" /></span>
 					
 						<span class="property-value" aria-labelledby="rdvDescription-label"><g:fieldValue bean="${carpoolProposalInstance}" field="rdvDescription"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${carpoolProposalInstance?.approvedRequests}">
+				<li class="fieldcontain">
+					<span id="approvedRequests-label" class="property-label"><g:message code="carpoolProposal.approvedRequests.label" default="Approved Requests" /></span>
+					
+						<g:each in="${carpoolProposalInstance.approvedRequests}" var="a">
+						<span class="property-value" aria-labelledby="approvedRequests-label"><g:link controller="carpoolRequest" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></span>
+						</g:each>
 					
 				</li>
 				</g:if>

@@ -26,9 +26,9 @@
 					
 						<th><g:message code="carpoolProposal.driver.label" default="Driver" /></th>
 					
-						<g:sortableColumn property="carDescription" title="${message(code: 'carpoolProposal.carDescription.label', default: 'Car Description')}" />
-					
 						<g:sortableColumn property="freePlaceNbr" title="${message(code: 'carpoolProposal.freePlaceNbr.label', default: 'Free Place Nbr')}" />
+					
+						<g:sortableColumn property="carDescription" title="${message(code: 'carpoolProposal.carDescription.label', default: 'Car Description')}" />
 					
 						<g:sortableColumn property="rdvDescription" title="${message(code: 'carpoolProposal.rdvDescription.label', default: 'Rdv Description')}" />
 					
@@ -42,9 +42,9 @@
 					
 						<td><g:link action="show" id="${carpoolProposalInstance.id}">${fieldValue(bean: carpoolProposalInstance, field: "driver")}</g:link></td>
 					
-						<td>${fieldValue(bean: carpoolProposalInstance, field: "carDescription")}</td>
-					
 						<td>${fieldValue(bean: carpoolProposalInstance, field: "freePlaceNbr")}</td>
+					
+						<td>${fieldValue(bean: carpoolProposalInstance, field: "carDescription")}</td>
 					
 						<td>${fieldValue(bean: carpoolProposalInstance, field: "rdvDescription")}</td>
 					

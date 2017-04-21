@@ -1,6 +1,6 @@
-package flexygames
+package flexygames.admin
 
-
+import flexygames.CarpoolRequest
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional

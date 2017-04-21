@@ -210,8 +210,8 @@ div.sessionZoneHeader:hover {
 	margin: auto;
 	padding: 0px;
 	transition: background-color 0.3s;
-	width: 80px;
-	height: 100px;
+	width: 100px;
+	height: 150px;
 	display: inline-block;
 	text-align: center;
 }
@@ -223,18 +223,17 @@ div.sessionZoneHeader:hover {
 	margin: auto;
 	padding: 10px;
 	transition: background-color 0.3s;
-	min-height: 200px;
+	min-height: 300px;
+	font-size: xx-small;
 }
 
-.drop-active {
-	border-color: #aaa;
-}
+/*.drop-active {
+	border-color: greenyellow;
+}*/
 
-/*.drop-target {*/
-	/*background-color: #29e;*/
-	/*border-color: #fff;*/
-	/*border-style: solid;*/
-/*}*/
+.drop-target {
+	background-color: greenyellow;
+}
 
 .drag-drop {
 	display: inline-block;
@@ -251,10 +250,10 @@ div.sessionZoneHeader:hover {
 	transition: background-color 0.3s;
 }
 
-.drag-drop.can-drop {
+/*.drag-drop.can-drop {
 	color: #000;
 	background-color: #4e4;
-}
+}*/
 
 /********************************/
 /* Selectable tabs */

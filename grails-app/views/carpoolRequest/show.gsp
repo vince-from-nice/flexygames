@@ -41,6 +41,33 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${carpoolRequestInstance?.pickupLocation}">
+				<li class="fieldcontain">
+					<span id="pickupLocation-label" class="property-label"><g:message code="carpoolRequest.pickupLocation.label" default="Pickup Location" /></span>
+					
+						<span class="property-value" aria-labelledby="pickupLocation-label"><g:fieldValue bean="${carpoolRequestInstance}" field="pickupLocation"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${carpoolRequestInstance?.pickupTimeRange}">
+				<li class="fieldcontain">
+					<span id="pickupTimeRange-label" class="property-label"><g:message code="carpoolRequest.pickupTimeRange.label" default="Pickup Time Range" /></span>
+					
+						<span class="property-value" aria-labelledby="pickupTimeRange-label"><g:fieldValue bean="${carpoolRequestInstance}" field="pickupTimeRange"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${carpoolRequestInstance?.pickupTime}">
+				<li class="fieldcontain">
+					<span id="pickupTime-label" class="property-label"><g:message code="carpoolRequest.pickupTime.label" default="Pickup Time" /></span>
+					
+						<span class="property-value" aria-labelledby="pickupTime-label"><g:fieldValue bean="${carpoolRequestInstance}" field="pickupTime"/></span>
+					
+				</li>
+				</g:if>
+			
 				<g:if test="${carpoolRequestInstance?.session}">
 				<li class="fieldcontain">
 					<span id="session-label" class="property-label"><g:message code="carpoolRequest.session.label" default="Session" /></span>

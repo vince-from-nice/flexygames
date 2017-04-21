@@ -28,6 +28,12 @@
 					
 						<th><g:message code="carpoolRequest.driver.label" default="Driver" /></th>
 					
+						<g:sortableColumn property="pickupLocation" title="${message(code: 'carpoolRequest.pickupLocation.label', default: 'Pickup Location')}" />
+					
+						<g:sortableColumn property="pickupTimeRange" title="${message(code: 'carpoolRequest.pickupTimeRange.label', default: 'Pickup Time Range')}" />
+					
+						<g:sortableColumn property="pickupTime" title="${message(code: 'carpoolRequest.pickupTime.label', default: 'Pickup Time')}" />
+					
 						<th><g:message code="carpoolRequest.session.label" default="Session" /></th>
 					
 					</tr>
@@ -39,6 +45,12 @@
 						<td><g:link action="show" id="${carpoolRequestInstance.id}">${fieldValue(bean: carpoolRequestInstance, field: "enquirer")}</g:link></td>
 					
 						<td>${fieldValue(bean: carpoolRequestInstance, field: "driver")}</td>
+					
+						<td>${fieldValue(bean: carpoolRequestInstance, field: "pickupLocation")}</td>
+					
+						<td>${fieldValue(bean: carpoolRequestInstance, field: "pickupTimeRange")}</td>
+					
+						<td>${fieldValue(bean: carpoolRequestInstance, field: "pickupTime")}</td>
 					
 						<td>${fieldValue(bean: carpoolRequestInstance, field: "session")}</td>
 					

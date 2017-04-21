@@ -365,7 +365,7 @@ class SessionsController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
-		CarpoolRequest request = new CarpoolRequest(session: session, enquirer: user)
+		CarpoolRequest request = new CarpoolRequest(session: session, enquirer: user, pickupLocation: params.pickupLocation, pickupTimeRange: params.pickupTimeRange)
 		if (!request.save()) {
 			flash.error = "Unable to save your carpool request: " + request.errors
 		} else {

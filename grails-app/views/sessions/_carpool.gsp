@@ -115,7 +115,7 @@
 	<div class="sessionZoneContent">
 		<g:set var="defaultDisplayForSummaryZone" value="block" />
 		<g:set var="defaultDisplayForDetailedZone" value="none" />
-		<g:if test="${sessionInstance.carpoolProposals.size() > 0}">
+		<g:if test="${true || sessionInstance.carpoolProposals.size() > 0}">
 			<g:set var="defaultDisplayForSummaryZone" value="none" />
 			<g:set var="defaultDisplayForDetailedZone" value="block" />
 		</g:if>
@@ -161,40 +161,39 @@
 							<br>
 							<g:each in="${sessionInstance.carpoolProposals}" var="proposal">
 								<table style="border: solid lightblue 2px; padding: 10px; border-radius: 5px;">
-									<tr>
-										<td colspan="2">
+									<tr style="font-size: small">
+										<td style="vertical-align: top; width: 250px;">
 											<g:render template="/common/avatar" model="[player:proposal.driver]" />
-											<g:message code="session.show.carpool.proposal.userXCanTakeY" args="[proposal.driver.username, proposal.freePlaceNbr]"/>:
-										</td>
-									</tr>
-									<tr>
-										<td style="font-size: small">
-											<g:if test="${proposal.rdvDescription}">
-												<br>
-												<g:message code="rdv"/>:
-												<b>${proposal.rdvDescription}</b>
-											</g:if>
+											<g:message code="session.show.carpool.proposal.userXCanTakeY" args="[proposal.driver.username, proposal.freePlaceNbr]"/>
 											<g:if test="${proposal.carDescription}">
-												<br>
-												<g:message code="car"/>:
-												<b>${proposal.carDescription}</b>
+												(${proposal.carDescription})
 											</g:if>
 										</td>
-										<td>
-											<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
+										<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
+											<td style="text-align: center">
 												<div id="dropZoneForProposal${proposal.id}Seat${i}" class="carpoolProposalDropZone">
 													<g:message code="session.show.carpool.proposal.seatNbr" args="[i]"/>
-												</div>&nbsp;
-											</g:each>
+												</div>
+											</td>
+										</g:each>
+									</tr>
+									<tr style="font-size: small;">
+										<td style="padding-top: 0px;">
+											<g:message code="session.show.carpool.request.pickupTime"/> :
 										</td>
+										<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
+											<td style="text-align: center; padding: 0px;">
+												<g:field name="pickupTimeForProposal${proposal.id}Seat${i}" placeholder="" style="width: 60px" />
+											</td>
+										</g:each>
 									</tr>
 									<tr>
-										<td colspan="2">
+										<td colspan="${1 + proposal.freePlaceNbr}">
 											<g:if test="${sessionIsManagedByCurrentUser || proposal.driver == session.currentUser}">
 												<g:form name="formOfCarpoolProposal${proposal.id}">
 													<g:hiddenField name="id" value="${proposal.id}" />
 													<g:hiddenField name="approvedRequestIds" value="" />
-													<div class="buttons">
+													<div class="buttons" style="width: 100%">
 														<g:actionSubmit class="create" action="cancelAllCarpoolAcceptances" value="${message(code:'session.show.carpool.proposal.seatCancel')}"
 																		onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToReset')}')"/>
 														<g:actionSubmit class="delete"  action="removeCarpoolProposal" value="${message(code:'delete')}"
@@ -222,19 +221,23 @@
 							<div class="carpoolRequestDropZone">
 								<g:each in="${sessionInstance.carpoolRequests}" var="request">
 									<div id="carpoolRequestOf${request.id}" class="draggableCarpoolRequest drag-drop"
-										 style="border: solid lightsalmon 1px; padding: 5px; display: inline-block;">
-										<img style="max-width:45px; max-height: 45px; vertical-align: middle; " src="${resource(dir:'images/user',file:request.enquirer.avatarName)}" alt="Player avatar" />
-										<br>
+										 style="border: solid lightsalmon 1px; padding: 0px; display: inline-block; width: 80px; text-align: center">
+										<img style="max-width:60px; max-height: 60px; vertical-align: middle; " src="${resource(dir:'images/user',file:request.enquirer.avatarName)}" alt="Player avatar" />
 										<g:set var="username" value="${request.enquirer.username}" />
-										<g:if test="${username.length() > 7}">
-											<g:set var="username" value="${username.substring(0, 6)}.." />
+										<g:if test="${username.length() > 8}">
+											<g:set var="username" value="${username.substring(0, 7)}.." />
 										</g:if>
-										<span style="font-size: x-small; vertical-align: top">${username}</span>
+										<br>
+										<span style="font-size: x-small; color: lightsalmon">${username}</span>
 										<g:if test="${sessionIsManagedByCurrentUser || request.enquirer == session.currentUser}">
 											<g:link action="removeCarpoolRequest" id="${request.id}"
 													onclick="return confirm('${message(code:'session.show.carpool.request.areYouSureToDelete')}')" >
 												<img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />
 											</g:link>
+										</g:if>
+										<g:if test="${request.pickupLocation}">
+											<br>
+											<span style="font-size: xx-small; ">${request.pickupLocation}</span>
 										</g:if>
 									</div>
 								</g:each>
@@ -246,47 +249,54 @@
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td style="text-align: left; border: solid darkgray 1px; width: auto; background-color: lightblue; text-align: center; padding: 10px">
 						<shiro:notUser>
 							<p><b><g:message code="session.show.carpool.proposal.needLogin" /></b></p>
 						</shiro:notUser>
 						<shiro:user>
-							<div style="text-align: left; border: solid darkgray 1px; width: auto; background-color: lightblue; text-align: center; padding: 10px">
-								<b><g:message code="session.show.carpool.proposal.title" /></b>
-								<br>
-								<br>
-								<g:form action="proposeCarpool">
-									<g:hiddenField name="id" value="${sessionInstance.id}" />
-									<g:message code="session.show.carpool.proposal.freePlaces.prefix" />
-									<g:field name="freePlaceNbr" type="number" value="3" required="" size="2" min="1" max="9" style="width: 1.8em;" />
-									<g:message code="session.show.carpool.proposal.freePlaces.suffix" />
-									<br>
-									<g:message code="session.show.carpool.proposal.carDescription" />
-									<g:field name="carDescription" value="ex: 307cc grise" required=""/>
-									<br>
-									<g:message code="session.show.carpool.proposal.rdvDescription" />
-									<g:field name="rdvDescription" value="ex: Devant AirFrance à 11h55" required="" size="30"/>
-									<br>
-									<br>
-									<g:actionSubmit class="save" action="addCarpoolProposal" value="${message(code:'session.show.carpool.proposal.validate')}"/>
-								</g:form>
-							</div>
+						<b><g:message code="session.show.carpool.proposal.title" /></b>
+						<br>
+						<br>
+						<g:form action="proposeCarpool">
+							<g:hiddenField name="id" value="${sessionInstance.id}" />
+							<g:message code="session.show.carpool.proposal.freePlaces.prefix" />
+							<g:field name="freePlaceNbr" type="number" value="3" required="" size="2" min="1" max="9" style="width: 1.8em;" />
+							<g:message code="session.show.carpool.proposal.freePlaces.suffix" />
+							<br>
+							<g:message code="session.show.carpool.proposal.carDescription" />
+							<g:field name="carDescription" placeholder="ex: 307cc grise" required=""/>
+							<!--
+							<br>
+							<g:message code="session.show.carpool.proposal.rdvDescription" />
+							<g:field name="rdvDescription" placeholder="ex: Devant AirFrance à 11h55" required="" size="30"/>
+							-->
+							<br>
+							<br>
+							<g:actionSubmit class="save" action="addCarpoolProposal" value="${message(code:'session.show.carpool.proposal.validate')}"/>
+						</g:form>
 						</shiro:user>
 					</td>
-					<td>
+					<td style="text-align: left; border: solid darkgray 1px; width: auto; background-color: lightsalmon; text-align: center; padding: 10px">
 						<shiro:notUser>
 							<p><b><g:message code="session.show.carpool.request.needLogin" /></b></p>
 						</shiro:notUser>
 						<shiro:user>
-							<div style="text-align: left; border: solid darkgray 1px; width: auto; background-color: lightsalmon; text-align: center; padding: 10px">
-								<b><g:message code="session.show.carpool.request.title" /></b>
-								<br>
-								<g:form action="proposeCarpool">
-									<g:hiddenField name="id" value="${sessionInstance.id}" />
-									<br>
-									<g:actionSubmit class="save" action="addCarpoolRequest" value="${message(code:'session.show.carpool.request.validate')}" />
-								</g:form>
-							</div>
+						<g:form action="proposeCarpool">
+							<g:hiddenField name="id" value="${sessionInstance.id}" />
+							<b><g:message code="session.show.carpool.request.title" /></b>
+							<br>
+							<br>
+							<g:message code="session.show.carpool.request.pickupLocation" />
+							<g:field name="pickupLocation" placeholder="ex: Devant le portail d'Air France" required="" maxlength="30"/>
+							<!--
+							<br>
+							<g:message code="session.show.carpool.request.pickupTimeRange" />
+							<g:field name="pickupTime" placeholder="ex: 11h50-12h00" required=""/>
+							-->
+							<br>
+							<br>
+							<g:actionSubmit class="save" action="addCarpoolRequest" value="${message(code:'session.show.carpool.request.validate')}" />
+						</g:form>
 						</shiro:user>
 					</td>
 				</tr>

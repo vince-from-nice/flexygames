@@ -11,6 +11,33 @@
 
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: carpoolProposalInstance, field: 'freePlaceNbr', 'error')} required">
+	<label for="freePlaceNbr">
+		<g:message code="carpoolProposal.freePlaceNbr.label" default="Free Place Nbr" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="freePlaceNbr" type="number" min="1" max="9" value="${carpoolProposalInstance.freePlaceNbr}" required=""/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: carpoolProposalInstance, field: 'carDescription', 'error')} required">
+	<label for="carDescription">
+		<g:message code="carpoolProposal.carDescription.label" default="Car Description" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:textField name="carDescription" maxlength="100" required="" value="${carpoolProposalInstance?.carDescription}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: carpoolProposalInstance, field: 'rdvDescription', 'error')} required">
+	<label for="rdvDescription">
+		<g:message code="carpoolProposal.rdvDescription.label" default="Rdv Description" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:textField name="rdvDescription" maxlength="100" required="" value="${carpoolProposalInstance?.rdvDescription}"/>
+
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: carpoolProposalInstance, field: 'approvedRequests', 'error')} ">
 	<label for="approvedRequests">
 		<g:message code="carpoolProposal.approvedRequests.label" default="Approved Requests" />
@@ -26,33 +53,6 @@
 </li>
 </ul>
 
-
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: carpoolProposalInstance, field: 'carDescription', 'error')} required">
-	<label for="carDescription">
-		<g:message code="carpoolProposal.carDescription.label" default="Car Description" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:textField name="carDescription" required="" value="${carpoolProposalInstance?.carDescription}"/>
-
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: carpoolProposalInstance, field: 'freePlaceNbr', 'error')} required">
-	<label for="freePlaceNbr">
-		<g:message code="carpoolProposal.freePlaceNbr.label" default="Free Place Nbr" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:field name="freePlaceNbr" type="number" value="${carpoolProposalInstance.freePlaceNbr}" required=""/>
-
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: carpoolProposalInstance, field: 'rdvDescription', 'error')} required">
-	<label for="rdvDescription">
-		<g:message code="carpoolProposal.rdvDescription.label" default="Rdv Description" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:textField name="rdvDescription" required="" value="${carpoolProposalInstance?.rdvDescription}"/>
 
 </div>
 
