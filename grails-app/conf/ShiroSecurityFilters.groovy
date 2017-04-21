@@ -17,6 +17,7 @@ class ShiroSecurityFilters {
                 if ( 
                     (controllerName == 'sessions' && actionName == 'list') ||
                     (controllerName == 'sessions' && actionName == 'show') ||
+                    (controllerName == 'sessions' && actionName == 'forecast') ||
 					(controllerName == 'fileUploader' && actionName == 'show')
                 ) return true
                 
