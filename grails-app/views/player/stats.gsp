@@ -16,27 +16,35 @@
 	<tr>
 		<td>
 			<g:message code="player.stats.partCounter.present" /> :
-			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.DONE_GOOD.code)}</span>
+			<b>${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.DONE_GOOD.code)}</b>
 			<br />
 			<br />
 			<g:message code="player.stats.partCounter.absent" /> :
-			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.UNDONE.code)}</span>
+			<b>${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.UNDONE.code)}</b>
 			<br />
 			<br />
 			<g:message code="player.stats.partCounter.gateCrashed" /> :
-			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.DONE_BAD.code)}</span>
+			<b>${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.DONE_BAD.code)}</b>
+			<br />
+			<br />
+			<g:message code="player.stats.requestedCarpools" /> :
+			<b>${userStats.player.countRequestedCarpools()}</b>
 		</td>
 		<td>
 			<g:message code="player.stats.partCounter.refused" /> :
-			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.REMOVED.code)}</span>
+			<b>${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.REMOVED.code)}</b>
 			<br />
 			<br />
 			<g:message code="player.stats.partCounter.waitingList" /> :
-			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.WAITING_LIST.code)}</span>
+			<b>${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.WAITING_LIST.code)}</b>
 			<br />
 			<br />
 			<g:message code="player.stats.partCounter.pending" /> :
-			<span style="font-size: 20px; font-weight: bold;">${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.REQUESTED.code)}</span>
+			<b>${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.REQUESTED.code)}</b>
+			<br />
+			<br />
+			<g:message code="player.stats.approvedCarpools" /> :
+			<b>${userStats.player.countApprovedCarpools()}</b>
 		</td>
 	</tr>
 	</table>
@@ -108,7 +116,7 @@
 									<g:if test="${ratio == 1}">(100%)</g:if>
 									<g:if test="${0 < ratio && ratio < 1}">(${(100*ratio).toString().substring(0,2)}%)</g:if>
 							</g:if>
-						</span>
+						</b>
 						</nobr>
 					</td>
 					<td style="vertical-align: middle; ; text-align: center">
@@ -121,7 +129,7 @@
 									<g:if test="${ratio == 1}">(100%)</g:if>
 									<g:if test="${0 < ratio && ratio < 1}">(${(100*ratio).toString().substring(0,2)}%)</g:if>
 							</g:if>
-						</span>
+						</b>
 						</nobr>
 					</td>
 					<td style="vertical-align: middle; text-align: center">
@@ -134,7 +142,7 @@
 									<g:if test="${ratio == 1}">(100%)</g:if>
 									<g:if test="${0 < ratio && ratio < 1}">(${(100*ratio).toString().substring(0,2)}%)</g:if>
 							</g:if>
-						</span>
+						</b>
 						</nobr>
 					</td>
 					<td style="vertical-align: middle; text-align: center; border-left: black solid 1px">${actions}</td>

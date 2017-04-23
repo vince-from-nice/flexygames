@@ -25,6 +25,8 @@
 
     <g:render template="compositions" />
 
+    <g:render template="carpool" />
+
     <g:render template="scoresheet" />
 
     <g:render template="votes" />

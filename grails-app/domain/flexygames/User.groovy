@@ -206,6 +206,15 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	// Stats methods (need to move them)
 	///////////////////////////////////////////////////////////////////////////
 
+	def countRequestedCarpools() {
+		return CarpoolRequest.countByEnquirer(this)
+	}
+
+	def countApprovedCarpools() {
+		def q = CarpoolRequest.where {driver.driver == this}
+		return q.count()
+	}
+
 	def getActionsBySessionRound(SessionRound sr) {
 		def result = []
 		actions.each{ action ->

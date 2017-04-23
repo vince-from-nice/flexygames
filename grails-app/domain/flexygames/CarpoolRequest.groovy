@@ -9,7 +9,7 @@ class CarpoolRequest implements Comparable<flexygames.CarpoolRequest>{
     String pickupLocation
     String pickupTimeRange
 
-    static belongsTo = [session: Session]
+    static belongsTo = [session: Session, enquirer: User]
 
     static constraints = {
         enquirer nullable: false, unique: 'session'

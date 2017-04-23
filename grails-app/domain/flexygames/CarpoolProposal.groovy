@@ -9,7 +9,7 @@ class CarpoolProposal implements Comparable<CarpoolProposal> {
     User driver
     SortedSet<CarpoolRequest>  approvedRequests
 
-    static belongsTo = [session: Session]
+    static belongsTo = [session: Session, driver: User]
 
     static hasMany = [approvedRequests: CarpoolRequest]
 

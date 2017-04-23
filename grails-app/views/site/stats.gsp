@@ -28,6 +28,8 @@
 			        	<li><g:message code="statistics.global.voteNbr" /> : <b>${flexygames.Vote.count()}</b></li>
 			        	<li><g:message code="statistics.global.commentNbr" /> : <b>${flexygames.SessionComment.count()}</b></li>
 			        	<li><g:message code="statistics.global.compositionNbr" /> : <b>${flexygames.Composition.count()}</b></li>
+						<li><g:message code="statistics.global.carpoolRequestNbr" /> : <b>${flexygames.CarpoolRequest.count()}</b></li>
+						<li><g:message code="statistics.global.carpoolProposalNbr" /> : <b>${flexygames.CarpoolProposal.count()}</b></li>
 			        </ul>
         		</td>
         		<td>

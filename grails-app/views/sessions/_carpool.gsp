@@ -5,17 +5,21 @@
 			document.addEventListener("DOMContentLoaded", function(event) {
 				//console.log("DOM fully loaded and parsed, adding restriction for composition drag and drop");
 				initCarpoolRequestDragging();
-				initApprovedCarpoolRequestsPositions(${approvedCarpoolRequestIds}, ${approvedCarpoolProposalIds});
+				initApprovedCarpoolRequests(${approvedCarpoolRequestIds}, ${relatedCarpoolProposalIds}, ${relatedPickupTimes});
 			});
 
-			function initApprovedCarpoolRequestsPositions(approvedCarpoolRequestIds, approvedCarpoolProposalIds) {
+			function initApprovedCarpoolRequests(approvedCarpoolRequestIds, relatedCarpoolProposalIds, relatedPickupTimes) {
 			    var nextFreeSeatNbr = new Map()
 			    for (var i = 0; i < approvedCarpoolRequestIds.length; i++) {
 					var approvedCarpoolRequestId = approvedCarpoolRequestIds[i];
 					var approvedCarpoolRequestElement = document.getElementById('carpoolRequestOf' + approvedCarpoolRequestId);
-					var initialPosition = approvedCarpoolRequestElement.getBoundingClientRect();
-					//console.log('position of carpool request ' + approvedCarpoolRequestId + ': ', initialPosition.top, initialPosition.right, initialPosition.bottom, initialPosition.left);
-					var approvedCarpoolProposalId = approvedCarpoolProposalIds[i];
+					var approvedCarpoolProposalId = relatedCarpoolProposalIds[i];
+
+					// Reset the approved request id into the form
+					var proposalForm = document.forms['formOfCarpoolProposal' + approvedCarpoolProposalId];
+					proposalForm['approvedRequestIds'].value = proposalForm['approvedRequestIds'].value + approvedCarpoolRequestId + ',';
+
+					// Determine a seat for that approved request
 					if (nextFreeSeatNbr.get(approvedCarpoolProposalId)) {
 					    nextFreeSeatNbr.set(approvedCarpoolProposalId, nextFreeSeatNbr.get(approvedCarpoolProposalId) + 1);
 					} else {
@@ -23,10 +27,17 @@
 					}
 					var seatNbr = nextFreeSeatNbr.get(approvedCarpoolProposalId);
 					var seatElement = document.getElementById('dropZoneForProposal' + approvedCarpoolProposalId + 'Seat' + seatNbr);
+
+					// Set the approved request position by moving it to its related seat
+					var initialPosition = approvedCarpoolRequestElement.getBoundingClientRect();
+					//console.log('position of carpool request ' + approvedCarpoolRequestId + ': ', initialPosition.top, initialPosition.right, initialPosition.bottom, initialPosition.left);
 					var seatPosition = seatElement.getBoundingClientRect();
 					//console.log('position of seat ' + seatNbr + ' of carpool approval ' + approvedCarpoolProposalId + ': ', seatPosition.top, seatPosition.right, seatPosition.bottom, seatPosition.left);
-					moveCarpoolRequestElement(approvedCarpoolRequestElement, seatPosition.left - initialPosition.left + 10, seatPosition.top - initialPosition.top + 10)
+					moveCarpoolRequestElement(approvedCarpoolRequestElement, seatPosition.left - initialPosition.left + 9, seatPosition.top - initialPosition.top + 6)
 					approvedCarpoolRequestElement.classList.remove('draggableCarpoolRequest');
+
+					// Set the pickup time of the request inside the proposal form
+					proposalForm['pickupTimeForProposal' + approvedCarpoolProposalId + 'Seat' + seatNbr].value = relatedPickupTimes[i];
 				}
 			}
 
@@ -75,16 +86,16 @@
 					event.relatedTarget.classList.remove('can-drop');
 				},
 				ondrop: function (event) {
-					var proposalId = event.target.id.substring('dropZoneForProposal'.length);
-					proposalId = proposalId.substring(0, proposalId.indexOf('Seat'))
+					var temp = event.target.id.substring('dropZoneForProposal'.length);
+					var proposalId = temp.substring(0, temp.indexOf('Seat'))
+					var seatIndex = event.target.id.substring(event.target.id.length - 1, event.target.id.length);
 					var requestId = event.relatedTarget.id.substring('carpoolRequestOf'.length);
 					var proposalForm = document.forms['formOfCarpoolProposal' + proposalId];
 					// can be null if user drop on a non authorized proposal (button is not instancied)
 					if (proposalForm == null) return
-					var approvedRequestIds = proposalForm['approvedRequestIds'].value + requestId + ',';
-					proposalForm['approvedRequestIds'].value = approvedRequestIds;
-					//alert(event.target.id + ' ' + event.relatedTarget.id + ' ' + approvedRequestIds);
-					document.getElementById('updateButtonForProposal' + proposalId).style.display = "inline";;
+					proposalForm['approvedRequestIds'].value = proposalForm['approvedRequestIds'].value + requestId + ',';
+					proposalForm['seatIndexes'].value = proposalForm['seatIndexes'].value + seatIndex + ',';
+					//document.getElementById('updateButtonForProposal' + proposalId).style.display = "inline";;
 				},
 				ondropdeactivate: function (event) {
 					event.target.classList.remove('drop-active');
@@ -115,7 +126,7 @@
 	<div class="sessionZoneContent">
 		<g:set var="defaultDisplayForSummaryZone" value="block" />
 		<g:set var="defaultDisplayForDetailedZone" value="none" />
-		<g:if test="${true || sessionInstance.carpoolProposals.size() > 0}">
+		<g:if test="${sessionInstance.date.getTime() > System.currentTimeMillis() || sessionInstance.carpoolProposals.size() > 0}">
 			<g:set var="defaultDisplayForSummaryZone" value="none" />
 			<g:set var="defaultDisplayForDetailedZone" value="block" />
 		</g:if>
@@ -160,52 +171,53 @@
 							<br>
 							<br>
 							<g:each in="${sessionInstance.carpoolProposals}" var="proposal">
-								<table style="border: solid lightblue 2px; padding: 10px; border-radius: 5px;">
-									<tr style="font-size: small">
-										<td style="vertical-align: top; width: 250px;">
-											<g:render template="/common/avatar" model="[player:proposal.driver]" />
-											<g:message code="session.show.carpool.proposal.userXCanTakeY" args="[proposal.driver.username, proposal.freePlaceNbr]"/>
-											<g:if test="${proposal.carDescription}">
-												(${proposal.carDescription})
-											</g:if>
-										</td>
-										<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
-											<td style="text-align: center">
-												<div id="dropZoneForProposal${proposal.id}Seat${i}" class="carpoolProposalDropZone">
-													<g:message code="session.show.carpool.proposal.seatNbr" args="[i]"/>
-												</div>
+								<g:form name="formOfCarpoolProposal${proposal.id}">
+									<g:hiddenField name="id" value="${proposal.id}" />
+									<g:hiddenField name="approvedRequestIds" value="" />
+									<g:hiddenField name="seatIndexes" value="" />
+									<table style="border: solid lightblue 2px; padding: 10px; border-radius: 5px;">
+										<tr style="font-size: small">
+											<td style="vertical-align: top; width: 250px;">
+												<g:render template="/common/avatar" model="[player:proposal.driver]" />
+												<g:message code="session.show.carpool.proposal.userXCanTakeY" args="[proposal.driver.username, proposal.freePlaceNbr]"/>
+												<g:if test="${proposal.carDescription}">
+													(${proposal.carDescription})
+												</g:if>
 											</td>
-										</g:each>
-									</tr>
-									<tr style="font-size: small;">
-										<td style="padding-top: 0px;">
-											<g:message code="session.show.carpool.request.pickupTime"/> :
-										</td>
-										<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
-											<td style="text-align: center; padding: 0px;">
-												<g:field name="pickupTimeForProposal${proposal.id}Seat${i}" placeholder="" style="width: 60px" />
+											<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
+												<td style="text-align: center">
+													<div id="dropZoneForProposal${proposal.id}Seat${i}" class="carpoolProposalDropZone">
+														<g:message code="session.show.carpool.proposal.seatNbr" args="[i]"/>
+													</div>
+												</td>
+											</g:each>
+										</tr>
+										<tr style="font-size: small;">
+											<td style="padding-top: 0px;">
+												<g:message code="session.show.carpool.request.pickupTime"/> :
 											</td>
-										</g:each>
-									</tr>
-									<tr>
-										<td colspan="${1 + proposal.freePlaceNbr}">
-											<g:if test="${sessionIsManagedByCurrentUser || proposal.driver == session.currentUser}">
-												<g:form name="formOfCarpoolProposal${proposal.id}">
-													<g:hiddenField name="id" value="${proposal.id}" />
-													<g:hiddenField name="approvedRequestIds" value="" />
+											<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
+												<td style="text-align: center; padding: 0px;">
+													<g:field name="pickupTimeForProposal${proposal.id}Seat${i}" placeholder="" style="width: 60px" />
+												</td>
+											</g:each>
+										</tr>
+										<tr>
+											<td colspan="${1 + proposal.freePlaceNbr}">
+												<g:if test="${sessionIsManagedByCurrentUser || proposal.driver == session.currentUser}">
 													<div class="buttons" style="width: 100%">
+														<g:actionSubmit class="save" id="updateButtonForProposal${proposal.id}" style="display: inline; text-align: right"
+																		action="updateCarpoolProposal" value="${message(code:'update')}" />
 														<g:actionSubmit class="create" action="cancelAllCarpoolAcceptances" value="${message(code:'session.show.carpool.proposal.seatCancel')}"
 																		onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToReset')}')"/>
 														<g:actionSubmit class="delete"  action="removeCarpoolProposal" value="${message(code:'delete')}"
 																		onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToDelete')}')" />
-														<g:actionSubmit class="save" id="updateButtonForProposal${proposal.id}" style="display: none; text-align: right"
-																		action="updateCarpoolProposal" value="${message(code:'update')}" />
 													</div>
-												</g:form>
-											</g:if>
-										</td>
-									</tr>
-								</table>
+												</g:if>
+											</td>
+										</tr>
+									</table>
+								</g:form>
 							</g:each>
 						</g:if>
 						<g:else>
@@ -221,7 +233,7 @@
 							<div class="carpoolRequestDropZone">
 								<g:each in="${sessionInstance.carpoolRequests}" var="request">
 									<div id="carpoolRequestOf${request.id}" class="draggableCarpoolRequest drag-drop"
-										 style="border: solid lightsalmon 1px; padding: 0px; display: inline-block; width: 80px; text-align: center">
+										 style="border: solid lightsalmon 1px; padding: 5px; display: inline-block; width: 70px; height: 95px; text-align: center; line-height: 1.0; ">
 										<img style="max-width:60px; max-height: 60px; vertical-align: middle; " src="${resource(dir:'images/user',file:request.enquirer.avatarName)}" alt="Player avatar" />
 										<g:set var="username" value="${request.enquirer.username}" />
 										<g:if test="${username.length() > 8}">

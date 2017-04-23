@@ -104,19 +104,24 @@ class SessionsController {
 
         // Prepare data about carpooling
         def approvedCarpoolRequestIds = '['
-        def approvedCarpoolProposalIds = '['
+        def relatedCarpoolProposalIds = '['
+		def relatedPickupTimes = '['
         session.carpoolRequests.each{ request ->
             if (request.driver) {
                 approvedCarpoolRequestIds += request.id + ', '
-                approvedCarpoolProposalIds += request.driver.id + ', '
+                relatedCarpoolProposalIds += request.driver.id + ', '
+				relatedPickupTimes += '\'' + request.pickupTime + '\', '
             }
         }
         if (approvedCarpoolRequestIds.endsWith(', '))
             approvedCarpoolRequestIds = approvedCarpoolRequestIds.substring(0, approvedCarpoolRequestIds.length() - 2)
         approvedCarpoolRequestIds += ']'
-        if (approvedCarpoolProposalIds.endsWith(', '))
-            approvedCarpoolProposalIds = approvedCarpoolProposalIds.substring(0, approvedCarpoolProposalIds.length() - 2)
-        approvedCarpoolProposalIds += ']'
+        if (relatedCarpoolProposalIds.endsWith(', '))
+            relatedCarpoolProposalIds = relatedCarpoolProposalIds.substring(0, relatedCarpoolProposalIds.length() - 2)
+        relatedCarpoolProposalIds += ']'
+		if (relatedPickupTimes.endsWith(', '))
+			relatedPickupTimes = relatedPickupTimes.substring(0, relatedPickupTimes.length() - 2)
+		relatedPickupTimes += ']'
 
 
         // Prepare data about votes of participants (move it to the Vote domain class) ?
@@ -155,7 +160,7 @@ class SessionsController {
 
 		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'),
                 model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes,
-                        approvedCarpoolRequestIds: approvedCarpoolRequestIds, approvedCarpoolProposalIds: approvedCarpoolProposalIds])
+                        approvedCarpoolRequestIds: approvedCarpoolRequestIds, relatedCarpoolProposalIds: relatedCarpoolProposalIds, relatedPickupTimes: relatedPickupTimes])
 	}
 
 	def forecast = {
@@ -403,6 +408,7 @@ class SessionsController {
             flash.error = "You cannot reset this carpool proposal because you are not the driver (neither a manager of the team)"
             return redirect(action: "show", id: proposal.session.id)
         }
+		proposal.approvedRequests.each{it.pickupTime = ''}
 		proposal.approvedRequests.toArray().each{proposal.removeFromApprovedRequests(it)}
         proposal.save()
         flash.message = "Ok carpool proposal has been reset !"
@@ -438,11 +444,16 @@ class SessionsController {
 		}
 		proposal.approvedRequests.clear()
 		def approvedRequestIds = params.approvedRequestIds.split(',')
-		approvedRequestIds.each{
-			proposal.addToApprovedRequests(CarpoolRequest.get(it))
+		def seatIndexes = params.seatIndexes.split(',')
+		for (int i = 0; i < approvedRequestIds.length; i++) {
+			CarpoolRequest request = CarpoolRequest.get(approvedRequestIds[i])
+			if (request) {
+				request.pickupTime = params['pickupTimeForProposal' + params.id + "Seat" + (seatIndexes[i])]
+				proposal.addToApprovedRequests(request)
+			}
 		}
 		if (proposal.save()) {
-			flash.message = "Ok carpool requests has been approved !"
+			flash.message = "Ok carpool proposal has been updated !"
 		} else {
 			flash.error = "Unable to update carpool proposal: " + proposal.errors
 		}
