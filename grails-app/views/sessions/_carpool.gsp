@@ -5,19 +5,21 @@
 			document.addEventListener("DOMContentLoaded", function(event) {
 				//console.log("DOM fully loaded and parsed, adding restriction for composition drag and drop");
 				initCarpoolRequestDragging();
-				initApprovedCarpoolRequests(${approvedCarpoolRequestIds}, ${relatedCarpoolProposalIds}, ${relatedPickupTimes});
+				initApprovedCarpoolRequests(${approvedCarpoolRequestIds}, ${relatedCarpoolProposalIds}, ${relatedSeatIndexes}, ${relatedPickupTimes});
 			});
 
-			function initApprovedCarpoolRequests(approvedCarpoolRequestIds, relatedCarpoolProposalIds, relatedPickupTimes) {
+			function initApprovedCarpoolRequests(approvedCarpoolRequestIds, relatedCarpoolProposalIds, relatedSeatIndex, relatedPickupTimes) {
 			    var nextFreeSeatNbr = new Map()
 			    for (var i = 0; i < approvedCarpoolRequestIds.length; i++) {
 					var approvedCarpoolRequestId = approvedCarpoolRequestIds[i];
 					var approvedCarpoolRequestElement = document.getElementById('carpoolRequestOf' + approvedCarpoolRequestId);
 					var approvedCarpoolProposalId = relatedCarpoolProposalIds[i];
+					var seatIndex = relatedSeatIndex[i];
 
 					// Reset the approved request id into the form
 					var proposalForm = document.forms['formOfCarpoolProposal' + approvedCarpoolProposalId];
 					proposalForm['approvedRequestIds'].value = proposalForm['approvedRequestIds'].value + approvedCarpoolRequestId + ',';
+					proposalForm['seatIndexes'].value = proposalForm['seatIndexes'].value + seatIndex + ',';
 
 					// Determine a seat for that approved request
 					if (nextFreeSeatNbr.get(approvedCarpoolProposalId)) {

@@ -105,22 +105,26 @@ class SessionsController {
         // Prepare data about carpooling
         def approvedCarpoolRequestIds = '['
         def relatedCarpoolProposalIds = '['
+		def relatedSeatIndexes = '['
 		def relatedPickupTimes = '['
+		def seatIndex = 1
         session.carpoolRequests.each{ request ->
             if (request.driver) {
                 approvedCarpoolRequestIds += request.id + ', '
                 relatedCarpoolProposalIds += request.driver.id + ', '
+				relatedSeatIndexes += seatIndex++ + ', '
 				relatedPickupTimes += '\'' + request.pickupTime + '\', '
             }
         }
-        if (approvedCarpoolRequestIds.endsWith(', '))
-            approvedCarpoolRequestIds = approvedCarpoolRequestIds.substring(0, approvedCarpoolRequestIds.length() - 2)
-        approvedCarpoolRequestIds += ']'
-        if (relatedCarpoolProposalIds.endsWith(', '))
-            relatedCarpoolProposalIds = relatedCarpoolProposalIds.substring(0, relatedCarpoolProposalIds.length() - 2)
-        relatedCarpoolProposalIds += ']'
-		if (relatedPickupTimes.endsWith(', '))
+        if (approvedCarpoolRequestIds.endsWith(', ')) {
+			approvedCarpoolRequestIds = approvedCarpoolRequestIds.substring(0, approvedCarpoolRequestIds.length() - 2)
+			relatedCarpoolProposalIds = relatedCarpoolProposalIds.substring(0, relatedCarpoolProposalIds.length() - 2)
+			relatedSeatIndexes = relatedSeatIndexes.substring(0, relatedSeatIndexes.length() - 2)
 			relatedPickupTimes = relatedPickupTimes.substring(0, relatedPickupTimes.length() - 2)
+		}
+        approvedCarpoolRequestIds += ']'
+        relatedCarpoolProposalIds += ']'
+		relatedSeatIndexes += ']'
 		relatedPickupTimes += ']'
 
 
@@ -160,7 +164,8 @@ class SessionsController {
 
 		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'),
                 model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes,
-                        approvedCarpoolRequestIds: approvedCarpoolRequestIds, relatedCarpoolProposalIds: relatedCarpoolProposalIds, relatedPickupTimes: relatedPickupTimes])
+                        approvedCarpoolRequestIds: approvedCarpoolRequestIds, relatedCarpoolProposalIds: relatedCarpoolProposalIds,
+						relatedSeatIndexes:relatedSeatIndexes, relatedPickupTimes: relatedPickupTimes])
 	}
 
 	def forecast = {
