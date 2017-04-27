@@ -90,10 +90,10 @@
                         </tr>
                         <tr>
                         	<td>
-                        		<nobr><g:message code="team"/> <font color="red">*</font></nobr>
+                        		<nobr><g:message code="team"/></nobr>
                         	</td>
                         	<td>
-                        		<g:select name="teamId" from="${flexygames.Team.list(sort:'name', order:'asc')}" optionKey="id" />
+                        		<g:select name="teamId" from="${flexygames.Team.list(sort:'name', order:'asc')}" noSelection="['':'']" optionKey="id" />
                         	</td>
                         	<td>
                         		<g:message code="register.team.desc"/>

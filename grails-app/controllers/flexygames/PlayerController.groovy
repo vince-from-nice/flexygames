@@ -128,10 +128,13 @@ class PlayerController {
 			flash.message = "${message(code: 'register.invalidPassword')}"
 			return render(view: "register", model: [user: user])
 		}
-		Team team = Team.get(params.teamId)
-		if (!team) {
-			flash.message = "Team with id [$params.teamId] doesn't exist !"
-			return render(view: "register", model: [user: user])
+		Team team = null
+		if (params.teamId) {
+			team = Team.get(params.teamId)
+			if (!team) {
+				flash.message = "Team with id [$params.teamId] doesn't exist !"
+				return render(view: "register", model: [user: user])
+			}
 		}
 		user.passwordHash = new Sha512Hash(params.password).toHex()
 		user.firstName = params.firstName
@@ -139,10 +142,12 @@ class PlayerController {
 		user.registrationDate = new Date()
 		user.avatarName = 'no-avatar.jpg'
 		user.addToRoles(Role.findByName("Player"))
-		Membership ms = new Membership(user: user, team: team, manager: false,
-			regularForTraining: true,
-			regularForCompetition: false)
-		user.addToMemberships(ms)
+		if (team) {
+			Membership ms = new Membership(user: user, team: team, manager: false,
+					regularForTraining: true,
+					regularForCompetition: false)
+			user.addToMemberships(ms)
+		}
 		if (!user.save(flush: true)) {
 			flash.message = "${message(code: 'register.failed')}"
 			return render(view: "register", model: [user: user])
