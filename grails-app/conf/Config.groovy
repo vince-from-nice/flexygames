@@ -115,7 +115,7 @@ environments {
 	}
 	production {
 		//grails.serverURL="http://www.onlacherien.org/games"
-		grails.serverURL="http://www.flexygames.net"
+		grails.serverURL="https://www.flexygames.net"
 	}
 }
 
