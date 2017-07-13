@@ -39,12 +39,35 @@
             </g:else>
             <g:if test="${possibleStatus.size > 1}">
                 <script>var promptMsg = '${message(code:'session.show.participants.enterMessage')}'</script>
-                <g:select
-                        onChange="document.getElementById('participationStatusForm${part.id}').userLog.value = prompt(promptMsg, '');
+                <g:if test="${allStatusesArePossible || part.session.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+                    <select
+                            onChange="document.getElementById('participationStatusForm${part.id}').userLog.value = prompt(promptMsg, '');
+                            document.getElementById('participationStatusForm${part.id}').submit()"
+                            name="statusCode" style="font-size : 10px;">
+                        <g:each in="${possibleStatus}" var="status">
+                            <g:if test="${status == flexygames.Participation.Status.REQUESTED.code}">
+                                <option disabled>── Player status ──</option>
+                            </g:if>
+                            <g:if test="${status == flexygames.Participation.Status.APPROVED.code}">
+                                <option disabled>── Selection ──</option>
+                            </g:if>
+                            <g:if test="${status == flexygames.Participation.Status.DONE_GOOD.code}">
+                                <option disabled>── Reporting ──</option>
+                            </g:if>
+                            <g:set var="selected" value=""/>
+                            <g:if test="${status == part.statusCode}"><g:set var="selected" value="selected"/></g:if>
+                            <option ${selected} value="${status}"><g:message code="participation.status.${status}"/></option>
+                        </g:each>
+                    </select>
+                </g:if>
+                <g:else>
+                    <g:select
+                            onChange="document.getElementById('participationStatusForm${part.id}').userLog.value = prompt(promptMsg, '');
 		                    	document.getElementById('participationStatusForm${part.id}').submit()"
-                        name="statusCode" from="${possibleStatus}" value="${part.statusCode}"
-                        valueMessagePrefix="participation.status"
-                        style="font-size : 10px"/>
+                            name="statusCode" from="${possibleStatus}" value="${part.statusCode}"
+                            valueMessagePrefix="participation.status"
+                            style="font-size : 10px"/>
+                </g:else>
             </g:if>
             <g:else>
                 <b><g:message code="participation.status.${part.statusCode}"/></b>
