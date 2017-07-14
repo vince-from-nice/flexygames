@@ -26,6 +26,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	String calendarToken
 	Integer partCounter
 	Integer absenceCounter
+	Integer delayCounter
 	Integer gateCrashCounter
 	Integer actionCounter
 	Integer voteCounter
@@ -102,6 +103,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		partCounter(nullable: true)
 		absenceCounter(nullable: true)
 		gateCrashCounter(nullable: true)
+		delayCounter(nullable: true)
 		actionCounter(nullable: true)
 		voteCounter(nullable: true)
 		commentCounter(nullable: true)
@@ -187,7 +189,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		participations.each { p ->
 			// sessions in the past 
 			if (p.session.date.time < now) {
-				if (p.statusCode == Participation.Status.DONE_GOOD.code() || p.statusCode == Participation.Status.DONE_BAD.code()) {
+				if (p.isEffective()) {
 					result << p
 				}
 			}
@@ -466,8 +468,27 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return this.save()
 	}
 	
-	// Gatecrash counter
+	// Delay counter
 	
+	int countDelays() {
+		if (this.delayCounter == null) {
+			this.delayCounter = countParticipationsByStatus(Participation.Status.DONE_LATE.code())
+			if (!this.save(flush: true)) {
+				println "Error when initializing the delay counter for $this : " + this.errors
+			} else {
+				println "Delay counter for $this has been initialized"
+			}
+		}
+		return this.delayCounter
+	}
+
+	def updateDelayCounter (int offset) {
+		this.delayCounter = countDelays() + offset
+		return this.save()
+	}
+
+	// Gatecrash counter
+
 	int countGateCrashes() {
 		if (this.gateCrashCounter == null) {
 			this.gateCrashCounter = countParticipationsByStatus(Participation.Status.DONE_BAD.code())

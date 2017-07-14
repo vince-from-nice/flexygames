@@ -23,12 +23,12 @@
 			<b>${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.UNDONE.code)}</b>
 			<br />
 			<br />
+			<g:message code="player.stats.partCounter.late" /> :
+			<b>${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.DONE_LATE.code)}</b>
+			<br />
+			<br />
 			<g:message code="player.stats.partCounter.gateCrashed" /> :
 			<b>${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.DONE_BAD.code)}</b>
-			<br />
-			<br />
-			<g:message code="player.stats.requestedCarpools" /> :
-			<b>${userStats.player.countRequestedCarpools()}</b>
 		</td>
 		<td>
 			<g:message code="player.stats.partCounter.refused" /> :
@@ -41,12 +41,21 @@
 			<br />
 			<g:message code="player.stats.partCounter.pending" /> :
 			<b>${userStats.player.countParticipationsByStatus(flexygames.Participation.Status.REQUESTED.code)}</b>
-			<br />
-			<br />
-			<g:message code="player.stats.approvedCarpools" /> :
-			<b>${userStats.player.countApprovedCarpools()}</b>
 		</td>
 	</tr>
+	</table>
+	<br />
+	<table>
+		<tr>
+			<td>
+				<g:message code="player.stats.requestedCarpools" /> :
+				<b>${userStats.player.countRequestedCarpools()}</b>
+			</td>
+			<td>
+				<g:message code="player.stats.approvedCarpools" /> :
+				<b>${userStats.player.countApprovedCarpools()}</b>
+			</td>
+		</tr>
 	</table>
 	<br />
 	<h2><g:message code="player.stats.title.bySessionGroup" /></h2>

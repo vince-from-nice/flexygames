@@ -227,6 +227,9 @@ class ManagerController {
 		for (User player : sessionInstance.getParticipantsByStatus(Participation.Status.UNDONE.code)) {
 			player.updateAbsenceCounter(-1)
 		}
+		for (User player : sessionInstance.getParticipantsByStatus(Participation.Status.DONE_LATE.code)) {
+			player.updateDelayCounter(-1)
+		}
 		for (User player : sessionInstance.getParticipantsByStatus(Participation.Status.DONE_BAD.code)) {
 			player.updateGateCrashCounter(-1)
 		}

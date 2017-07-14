@@ -23,9 +23,10 @@ class Participation implements Comparable<Participation> {
 		DECLINED("DECLINED", "#FF8497"),
 		APPROVED("APPROVED", "#57F78F"),
 		WAITING_LIST("WAITING_LIST", "#63B6FF"),
-		REMOVED("REMOVED", "#FE6F0F"),
+		REMOVED("REMOVED", "#E5A84E"),
 		DONE_GOOD("DONE_GOOD", "#0FF460"),
-		DONE_BAD("DONE_BAD", "#FFFC00"),
+		DONE_LATE("DONE_LATE", "#FFFC00"),
+		DONE_BAD("DONE_BAD", "#FE6F0F"),
 		UNDONE("UNDONE", "#FF0000"),
 		private final String code
 		private final String color
@@ -74,7 +75,9 @@ class Participation implements Comparable<Participation> {
 	///////////////////////////////////////////////////////////////////////////
 	
 	boolean isEffective () {
-		return statusCode == Participation.Status.DONE_GOOD.code || statusCode == Participation.Status.DONE_BAD.code
+		return statusCode == Participation.Status.DONE_GOOD.code ||
+				statusCode == Participation.Status.DONE_LATE.code ||
+				statusCode == Participation.Status.DONE_BAD.code
 	}
 
 	List<SessionRound> getWins() {
@@ -175,7 +178,7 @@ class Participation implements Comparable<Participation> {
 	
 	static int getAllEffectiveCount () {
 		def q = Participation.where {
-			statusCode == Status.DONE_GOOD.code || statusCode == Status.DONE_BAD.code
+			statusCode == Status.DONE_GOOD.code || statusCode == Status.DONE_LATE.code || statusCode == Status.DONE_BAD.code
 		}
 		return q.count()
 	}

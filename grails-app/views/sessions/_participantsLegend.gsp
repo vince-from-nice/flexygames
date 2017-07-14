@@ -59,10 +59,17 @@
                         code="participation.status.${flexygames.Participation.Status.DONE_GOOD}"/></nobr><span><g:message
                         code="participation.status.${flexygames.Participation.Status.DONE_GOOD}.infos"/></span>
                 </a></td>
-                <td rowspan="3"
+                <td rowspan="4"
                     style="font-size:10px; line-height: 10px; vertical-align: middle; text-align: center; background-color: #ddeedd; border-bottom: solid black 1px">
                     R<br/>E<br/>P<br/>O<br/>R<br/>T<br/>I<br/>N<br/>G
                 </td>
+            </tr>
+            <tr>
+                <td style="background-color: ${flexygames.Participation.Status.DONE_LATE.color};">&nbsp;</td>
+                <td><a class="tooltip"><nobr><g:message
+                        code="participation.status.${flexygames.Participation.Status.DONE_LATE}"/></nobr><span><g:message
+                        code="participation.status.${flexygames.Participation.Status.DONE_LATE}.infos"/></span>
+                </a></td>
             </tr>
             <tr>
                 <td style="background-color: ${flexygames.Participation.Status.DONE_BAD.color};">&nbsp;</td>

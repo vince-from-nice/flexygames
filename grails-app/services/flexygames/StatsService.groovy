@@ -133,6 +133,8 @@ class StatsService {
                     status = Participation.Status.DONE_GOOD.code
                 } else if (criteria.equals('statuses.doneBad')) {
                     status = Participation.Status.DONE_BAD.code
+                } else if (criteria.equals('statuses.doneLate')) {
+                    status = Participation.Status.DONE_LATE.code
                 } else if (criteria.equals('statuses.undone')) {
                     status = Participation.Status.UNDONE.code
                 } else if (criteria.equals('statuses.removed')) {

@@ -10,6 +10,7 @@
 					<br />
 					<g:select name="criteria" value="${currentCriteria}" valueMessagePrefix="stats.criteria" from="[
 							'statuses.doneGood',
+							'statuses.doneLate',
 							'statuses.doneBad',
 							'statuses.undone',
 							'statuses.removed',

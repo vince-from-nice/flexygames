@@ -68,6 +68,7 @@ class SessionService {
 			// if new status is a reporting status, check session has begun
 			if (participation.session.date > new Date() &&
 			(newStatus == Participation.Status.DONE_GOOD.code ||
+			newStatus == Participation.Status.LATE.code  ||
 			newStatus == Participation.Status.DONE_BAD.code  ||
 			newStatus == Participation.Status.UNDONE.code )) {
 				throw new Exception("Hey you cannot set a reporting status if the session has not begun yet !!")
@@ -142,20 +143,27 @@ class SessionService {
 		///////////////////////////////////////////////////////////////////////////////////////////
 
 		def updatedUser = participation.player
+		def oldParticipation = new Participation(statusCode: oldStatusCode)
 
 		// If previous status was effective but new status is not, decrement player part counter
-		if ((oldStatusCode == Participation.Status.DONE_GOOD.code || oldStatusCode == Participation.Status.DONE_BAD.code)
-		&& (newStatus != Participation.Status.DONE_GOOD.code && newStatus != Participation.Status.DONE_BAD.code)) {
+		if (oldParticipation.isEffective() && !participation.isEffective()) {
 			updatedUser = participation.player.updatePartCounter(-1)
 		}
 		// If new status is effective but old status was not, increment player part counter
-		if ((newStatus == Participation.Status.DONE_GOOD.code || newStatus == Participation.Status.DONE_BAD.code)
-		&& (oldStatusCode != Participation.Status.DONE_GOOD.code && oldStatusCode != Participation.Status.DONE_BAD.code)) {
+		if (!oldParticipation.isEffective() && participation.isEffective()) {
 			updatedUser = participation.player.updatePartCounter(1)
+		}
+		// If new status is DONE_LATE, increment player delay counter
+		if (newStatus == Participation.Status.DONE_LATE.code) {
+			updatedUser = participation.player.updateDelayCounter(1)
 		}
 		// If new status is DONE_BAD, increment player gatecrash counter
 		if (newStatus == Participation.Status.DONE_BAD.code) {
 			updatedUser = participation.player.updateGateCrashCounter(1)
+		}
+		// If old status was DONE_LATE, decrement player delay counter
+		if (oldStatusCode == Participation.Status.DONE_LATE.code) {
+			updatedUser = participation.player.updateDelayCounter(-1)
 		}
 		// If old status was DONE_BAD, decrement player gatecrash counter
 		if (oldStatusCode == Participation.Status.DONE_BAD.code) {

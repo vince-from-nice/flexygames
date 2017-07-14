@@ -41,25 +41,37 @@
                             </td>
                             <td style="font-size: 10px; border: solid grey 0px">
                                 <nobr>
-                                    <b>${p.player.countParticipations()}</b>
-                                    <g:if test="${p.player.countParticipations() > 1}"><g:message
+                                    <g:set var="count" value="${p.player.countParticipations()}"/>
+                                    <b>${count}</b>
+                                    <g:if test="${count > 1}"><g:message
                                             code="participations"/></g:if>
                                     <g:else><g:message code="participation"/></g:else>
                                 </nobr>
                                 <br/>
                                 <nobr>
-                                    <span style="color: red">
-                                        <g:if test="${p.player.countAbsences() > 1}"><b>${p.player.countAbsences()}</b> <g:message
+                                    <span style="color: ${flexygames.Participation.Status.UNDONE.color}">
+                                        <g:set var="count" value="${p.player.countAbsences()}"/>
+                                        <g:if test="${count > 1}"><b>${count}</b> <g:message
                                                 code="absences"/><br/></g:if>
-                                        <g:if test="${p.player.countAbsences() == 1}"><b>1</b> <g:message
+                                        <g:if test="${count == 1}"><b>1</b> <g:message
                                                 code="absence"/><br/></g:if>
                                     </span>
                                 </nobr>
                                 <nobr>
-                                    <span style="color: #cc0">
-                                        <g:if test="${p.player.countGateCrashes() > 1}"><b>${p.player.countGateCrashes()}</b> <g:message
+                                    <span style="color: #cecc4e">
+                                        <g:set var="count" value="${p.player.countDelays()}"/>
+                                        <g:if test="${count > 1}"><b>${count}</b> <g:message
+                                                code="delays"/><br/></g:if>
+                                        <g:if test="${count == 1}"><b>1</b> <g:message
+                                                code="delay"/><br/></g:if>
+                                    </span>
+                                </nobr>
+                                <nobr>
+                                    <span style="color: ${flexygames.Participation.Status.DONE_BAD.color}">
+                                        <g:set var="count" value="${p.player.countGateCrashes()}"/>
+                                        <g:if test="${count > 1}"><b>${count}</b> <g:message
                                                 code="gatecrashes"/><br/></g:if>
-                                        <g:if test="${p.player.countGateCrashes() == 1}"><b>1</b> <g:message
+                                        <g:if test="${count == 1}"><b>1</b> <g:message
                                                 code="gatecrash"/><br/></g:if>
                                     </span>
                                 </nobr>
