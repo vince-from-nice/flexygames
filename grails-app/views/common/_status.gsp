@@ -46,13 +46,13 @@
                             name="statusCode" style="font-size : 10px;">
                         <g:each in="${possibleStatus}" var="status">
                             <g:if test="${status == flexygames.Participation.Status.REQUESTED.code}">
-                                <option disabled>── Player status ──</option>
+                                <option disabled>── <g:message code="availability"/> ──</option>
                             </g:if>
                             <g:if test="${status == flexygames.Participation.Status.APPROVED.code}">
-                                <option disabled>── Selection ──</option>
+                                <option disabled>── <g:message code="selection"/> ──</option>
                             </g:if>
                             <g:if test="${status == flexygames.Participation.Status.DONE_GOOD.code}">
-                                <option disabled>── Reporting ──</option>
+                                <option disabled>── <g:message code="reporting"/> ──</option>
                             </g:if>
                             <g:set var="selected" value=""/>
                             <g:if test="${status == part.statusCode}"><g:set var="selected" value="selected"/></g:if>

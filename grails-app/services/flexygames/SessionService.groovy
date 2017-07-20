@@ -68,7 +68,7 @@ class SessionService {
 			// if new status is a reporting status, check session has begun
 			if (participation.session.date > new Date() &&
 			(newStatus == Participation.Status.DONE_GOOD.code ||
-			newStatus == Participation.Status.LATE.code  ||
+			newStatus == Participation.Status.DONE_LATE.code  ||
 			newStatus == Participation.Status.DONE_BAD.code  ||
 			newStatus == Participation.Status.UNDONE.code )) {
 				throw new Exception("Hey you cannot set a reporting status if the session has not begun yet !!")
