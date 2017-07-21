@@ -157,6 +157,13 @@ class SessionsController {
 			}
 		}
 
+		// Prepare data about tasks
+		def tasksByTypeCode = [:]
+		session.tasks.each {
+			if (tasksByTypeCode[it.type.code]) tasksByTypeCode[it.type.code] += it
+			else tasksByTypeCode[it.type.code] = [it]
+		}
+
 		// Enhance texts of comments
 		session.comments.each { comment ->
 			forumService.enhanceText(comment)
@@ -165,7 +172,7 @@ class SessionsController {
 		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'),
                 model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes,
                         approvedCarpoolRequestIds: approvedCarpoolRequestIds, relatedCarpoolProposalIds: relatedCarpoolProposalIds,
-						relatedSeatIndexes:relatedSeatIndexes, relatedPickupTimes: relatedPickupTimes])
+						relatedSeatIndexes:relatedSeatIndexes, relatedPickupTimes: relatedPickupTimes, tasksByTypeCode: tasksByTypeCode])
 	}
 
 	def forecast = {
@@ -463,5 +470,41 @@ class SessionsController {
 			flash.error = "Unable to update carpool proposal: " + proposal.errors
 		}
 		redirect(action: "show", id: proposal.session.id)
+	}
+
+	def addTask = {
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!user) {
+			flash.error = "You need to be authenticated in order to add a task !!"
+			return redirect(action: "show", id: session.id)
+		}
+		def session = Session.get(params.id)
+		if (!session) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
+			return redirect(action: "list")
+		}
+		TaskType taskType = TaskType.findByCode(params.newTaskCode)
+		if (!taskType) {
+			flash.error = "Unable to find task type " + params.newTaskCode
+			return redirect(action: "show", id: session.id)
+		}
+		Task task = new Task(type: taskType, session: session, user: user)
+		if (task.save()) {
+			flash.message = "Ok your task has been saved !"
+		} else {
+			flash.error = "Unable to save task: " + task.errors
+		}
+		redirect(action: "show", id: task.session.id)
+	}
+
+	def deleteTask = {
+		def task = Task.get(params.id)
+		if (!task) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'task', default: 'Task'), params.id])}"
+			return redirect(action: "list")
+		}
+		task.delete()
+		flash.message = "Ok task has been removed !"
+		redirect(action: "show", id: task.session.id)
 	}
 }

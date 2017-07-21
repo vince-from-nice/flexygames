@@ -233,7 +233,7 @@
                                         <ul>
                                             <g:each in="${sessionInstance.tasks}" var="task" >
                                                 <li>
-                                                    <b><g:message code="task.${task.type.code}" /></b>
+                                                    <b><g:message code="${task.type.code}" /></b>
                                                     <g:link controller="player" action="show" id="${task.user.id}" >${task.user}</g:link>
                                                     <g:link controller="manager" action="deleteTask" id="${task.id}" >
                                                         <img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />

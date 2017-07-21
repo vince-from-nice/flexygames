@@ -19,6 +19,8 @@
 	
 	<g:render template="infos" />
 
+	<g:render template="tasks" />
+
 	<g:render template="participants" />
 	
 	<g:render template="compositions" />

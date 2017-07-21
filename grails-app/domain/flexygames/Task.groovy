@@ -7,6 +7,7 @@ class Task implements Comparable<Task> {
     static belongsTo = [session: Session, user: User]
 
     static constraints = {
+        type unique: ['session', 'user']
     }
 
     @Override
