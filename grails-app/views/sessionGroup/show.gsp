@@ -153,6 +153,24 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${sessionGroupInstance?.ballsTaskNeeded}">
+				<li class="fieldcontain">
+					<span id="ballsTaskNeeded-label" class="property-label"><g:message code="sessionGroup.ballsTaskNeeded.label" default="Balls Task Needed" /></span>
+					
+						<span class="property-value" aria-labelledby="ballsTaskNeeded-label"><g:formatBoolean boolean="${sessionGroupInstance?.ballsTaskNeeded}" /></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sessionGroupInstance?.jerseyTaskNeeded}">
+				<li class="fieldcontain">
+					<span id="jerseyTaskNeeded-label" class="property-label"><g:message code="sessionGroup.jerseyTaskNeeded.label" default="Jersey Task Needed" /></span>
+					
+						<span class="property-value" aria-labelledby="jerseyTaskNeeded-label"><g:formatBoolean boolean="${sessionGroupInstance?.jerseyTaskNeeded}" /></span>
+					
+				</li>
+				</g:if>
+			
 			</ol>
 			<g:form url="[resource:sessionGroupInstance, action:'delete']" method="DELETE">
 				<fieldset class="buttons">

@@ -1,5 +1,6 @@
 package flexygames
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import groovy.time.TimeCategory
 import org.apache.shiro.SecurityUtils
 
@@ -27,6 +28,7 @@ class Session implements Comparable {
 	User lastUpdater
 	String extraFieldName
 	String extraFieldValue
+
 	SortedSet<Composition> compositions
 	SortedSet<Task> tasks
 	Set<SessionWatcher> watchers

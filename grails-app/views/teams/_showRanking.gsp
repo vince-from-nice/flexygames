@@ -17,7 +17,13 @@
 							'actionScore',
 							'actionByRound',
 							'votingScore',
-							'successRatio']" />
+							'successRatio',
+							'tasks.BALLS',
+							'tasks.JERSEY',
+							'tasks.CAMERAMAN',
+							'tasks.BEERS',
+							'tasks.COACHING',
+							'tasks.REFEREE']" />
 					<g:if test="${currentCriteria == 'actionByRound' || currentCriteria == 'successRatio'}">
 						<br />
 						<br />

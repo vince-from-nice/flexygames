@@ -16,7 +16,9 @@ class SessionGroup implements Comparable<SessionGroup> {
     int defaultPreferredPlayerNbr
 	Integer defaultDuration
 	Integer defaultLockingTime
-	
+	Boolean ballsTaskNeeded = true
+	Boolean jerseyTaskNeeded = false
+
 	SortedSet<Session> sessions
 	SortedSet<Team> defaultTeams
 	
@@ -44,6 +46,8 @@ class SessionGroup implements Comparable<SessionGroup> {
         defaultPreferredPlayerNbr(min:1)
 		defaultDuration(min:0)
 		defaultLockingTime(min:0)
+		ballsTaskNeeded(nullable: true)
+		jerseyTaskNeeded(nullable: true)
     }
 	
 	static mappedBy = [ defaultTeams: 'sessionGroups' ]

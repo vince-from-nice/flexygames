@@ -137,3 +137,21 @@
 
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'ballsTaskNeeded', 'error')} ">
+	<label for="ballsTaskNeeded">
+		<g:message code="sessionGroup.ballsTaskNeeded.label" default="Balls Task Needed" />
+		
+	</label>
+	<g:checkBox name="ballsTaskNeeded" value="${sessionGroupInstance?.ballsTaskNeeded}" />
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionGroupInstance, field: 'jerseyTaskNeeded', 'error')} ">
+	<label for="jerseyTaskNeeded">
+		<g:message code="sessionGroup.jerseyTaskNeeded.label" default="Jersey Task Needed" />
+		
+	</label>
+	<g:checkBox name="jerseyTaskNeeded" value="${sessionGroupInstance?.jerseyTaskNeeded}" />
+
+</div>
+

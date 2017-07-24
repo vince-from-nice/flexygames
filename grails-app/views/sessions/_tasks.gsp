@@ -20,6 +20,8 @@
                 <g:message code="session.show.tasks.noTask"/>
             </g:else>
         </div>
+        <g:set var="isBallTaskAssigned" value="${false}"/>
+        <g:set var="isJerseyTaskAssigned" value="${false}"/>
         <table id="tasksDetailedZone" style="display: ${defaultDisplayForDetailedZone}; border: none; margin: 0px">
             <g:if test="${tasksByTypeCode.size() > 0}" >
                 <g:each in="${tasksByTypeCode}" var="tasksByTypeCodeElement">
@@ -27,6 +29,8 @@
                         <td>
                             <g:message code="task.type.${tasksByTypeCodeElement.key}"/>
                             <g:each in="${tasksByTypeCodeElement.value}" var="task">
+                                <g:if test="${tasksByTypeCodeElement.key == 'BALLS'}"><g:set var="isBallTaskAssigned" value="${true}"/></g:if>
+                                <g:if test="${tasksByTypeCodeElement.key == 'JERSEY'}"><g:set var="isJerseyTaskAssigned" value="${true}"/></g:if>
                                 <g:link controller="player" action="show" id="${task.user.id}" >${task.user.username}</g:link>
                                 <g:if test="${task.user == session.currentUser}">
                                     <g:link action="deleteTask" id="${task.id}" >
@@ -46,6 +50,34 @@
                     </td>
                 </tr>
             </g:else>
+            <g:if test="${sessionInstance.date.time > java.lang.System.currentTimeMillis()}">
+                <g:if test="${sessionInstance.group.ballsTaskNeeded && !isBallTaskAssigned}">
+                    <tr>
+                        <td>
+                            <g:if test="${sessionInstance.date.time < java.lang.System.currentTimeMillis() + 1000 * 60 * 60 * 24}">
+                                <span style="color: red; text-decoration: blink; font-weight: bold;"><g:message code="session.show.tasks.ballsNotAssigned"/></span>
+                            </g:if>
+                            <g:else>
+                                <span style="color: orange;"><g:message code="session.show.tasks.ballsNotAssigned"/></span>
+                            </g:else>
+                            <br />
+                        </td>
+                    </tr>
+                </g:if>
+                <g:if test="${sessionInstance.group.jerseyTaskNeeded && !isJerseyTaskAssigned}">
+                    <tr>
+                        <td>
+                            <g:if test="${sessionInstance.date.time < java.lang.System.currentTimeMillis() + 1000 * 60 * 60 * 24}">
+                                <span style="color: red; text-decoration: blink; font-weight: bold;"><g:message code="session.show.tasks.jerseyNotAssigned"/></span>
+                            </g:if>
+                            <g:else>
+                                <span style="color: orange;"><g:message code="session.show.tasks.jerseyNotAssigned"/></span>
+                            </g:else>
+                            <br />
+                        </td>
+                    </tr>
+                </g:if>
+            </g:if>
             <tr>
                 <td style="background-color: #d8f3f0">
                     <g:form name="taskForm" action="addTask" id="${sessionInstance.id}">
