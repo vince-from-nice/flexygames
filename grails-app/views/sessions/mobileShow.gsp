@@ -21,6 +21,8 @@
 
     <g:render template="mobileInfos" />
 
+    <g:render template="tasks" />
+
     <g:render template="mobileParticipants" />
 
     <g:render template="compositions" />

@@ -32,7 +32,7 @@
                                 <g:if test="${tasksByTypeCodeElement.key == 'BALLS'}"><g:set var="isBallTaskAssigned" value="${true}"/></g:if>
                                 <g:if test="${tasksByTypeCodeElement.key == 'JERSEY'}"><g:set var="isJerseyTaskAssigned" value="${true}"/></g:if>
                                 <g:link controller="player" action="show" id="${task.user.id}" >${task.user.username}</g:link>
-                                <g:if test="${task.user == session.currentUser}">
+                                <g:if test="${task.user == session.currentUser || sessionIsManagedByCurrentUser}">
                                     <g:link action="deleteTask" id="${task.id}" >
                                         <img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />
                                     </g:link>

@@ -10,7 +10,7 @@
 
             <g:set var="possibleStatus" value="${[part.statusCode]}"/>
             <!-- Check if session is managed by current user only if required -->
-            <g:if test="${allStatusesArePossible || part.session.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+            <g:if test="${allStatusesArePossible || sessionIsManagedByCurrentUser}">
                 <g:set var="possibleStatus" value="${part.constraints.statusCode.inList}"/>
             </g:if>
             <g:else>
@@ -39,7 +39,7 @@
             </g:else>
             <g:if test="${possibleStatus.size > 1}">
                 <script>var promptMsg = '${message(code:'session.show.participants.enterMessage')}'</script>
-                <g:if test="${allStatusesArePossible || part.session.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}">
+                <g:if test="${allStatusesArePossible || sessionIsManagedByCurrentUser}">
                     <select
                             onChange="document.getElementById('participationStatusForm${part.id}').userLog.value = prompt(promptMsg, '');
                             document.getElementById('participationStatusForm${part.id}').submit()"

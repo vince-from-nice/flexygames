@@ -473,22 +473,31 @@ class SessionsController {
 	}
 
 	def addTask = {
+		def session = Session.get(params.id)
+		if (!session) {
+			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
+			return redirect(action: "list")
+		}
 		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
 		if (!user) {
 			flash.error = "You need to be authenticated in order to add a task !!"
 			return redirect(action: "show", id: session.id)
 		}
-		def session = Session.get(params.id)
-		if (!session) {
-			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
-			return redirect(action: "list")
+		if (session.date < new Date()) {
+			flash.error = "${message(code: 'tooLateForThatAction')}"
+			return redirect(action: "show", id: session.id)
 		}
 		TaskType taskType = TaskType.findByCode(params.newTaskCode)
 		if (!taskType) {
 			flash.error = "Unable to find task type " + params.newTaskCode
 			return redirect(action: "show", id: session.id)
 		}
-		Task task = new Task(type: taskType, session: session, user: user)
+		Task task = Task.findByTypeAndSessionAndUser(taskType, session, user)
+		if (task) {
+			flash.error = "${message(code: 'session.show.tasks.alreadyAssigned')}"
+			return redirect(action: "show", id: session.id)
+		}
+		task = new Task(type: taskType, session: session, user: user)
 		if (task.save()) {
 			flash.message = "Ok your task has been saved !"
 		} else {
@@ -501,6 +510,15 @@ class SessionsController {
 		def task = Task.get(params.id)
 		if (!task) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'task', default: 'Task'), params.id])}"
+			return redirect(action: "list")
+		}
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!user) {
+			flash.error = "You need to be authenticated in order to add a task !!"
+			return redirect(action: "show", id: task.session.id)
+		}
+		if (task.user != user && !task.session.isManagedBy(user.username)) {
+			flash.error = "${message(code: 'youAreNotAuthorized')}"
 			return redirect(action: "list")
 		}
 		task.delete()
