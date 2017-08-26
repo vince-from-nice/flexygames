@@ -188,8 +188,9 @@ class ManagerController {
 			return redirect(controller:"sessions", action: "show", id: oldSession.id)
 		}
 		Session newSession = new Session(group: oldSession.group, type: oldSession.type, playground: oldSession.playground,
-		date: oldSession.date + duplicationOffset, duration: oldSession.duration, rdvBeforeStart: oldSession.rdvBeforeStart,
-		creation: new Date(), creator: user)
+				date: oldSession.date + duplicationOffset, duration: oldSession.duration,
+				rdvBeforeStart: oldSession.rdvBeforeStart, lockingTime: oldSession.lockingTime,
+				creation: new Date(), creator: user)
 		if (!newSession.hasErrors() && newSession.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'session.label', default: 'Session'), newSession.id])}"
 			// duplicate related reminders too
