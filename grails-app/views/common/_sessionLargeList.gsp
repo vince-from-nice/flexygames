@@ -2,7 +2,13 @@
 				<g:each in="${sessionInstanceList}" status="i" var="sessionInstance">
 					<g:if test="${sessionInstance.group.isVisibleByUsername(username)}">
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
-						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}" style="height: 40px;">
+						<g:if test="${sessionInstance.canceled}">
+							<g:set var="isCanceled" value="text-decoration: line-through;"/>
+						</g:if>
+						<g:else>
+							<g:set var="isCanceled" value="" />
+						</g:else>
+						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}" style="height: 40px; ${isCanceled}; ">
 							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
 								<g:link controller="sessions" action="show" id="${sessionInstance.id}">
 									<nobr><g:formatDate date="${sessionInstance.date}" format="EEEEEEE dd MMMM (HH:mm)" /></nobr>

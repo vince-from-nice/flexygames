@@ -28,6 +28,10 @@ class Session implements Comparable {
 	User lastUpdater
 	String extraFieldName
 	String extraFieldValue
+	Boolean canceled
+	String cancelationLog
+	User cancelationUser
+	Date cancelationDate
 
 	SortedSet<Composition> compositions
 	SortedSet<Task> tasks
@@ -67,6 +71,10 @@ class Session implements Comparable {
 		compositions(nullable: true)
 		lastUpdate(nullable: true)
 		lastUpdater(nullable: true)
+		canceled(nullable: true)
+		cancelationLog(nullable: true)
+		cancelationUser(nullable: true)
+		cancelationDate(nullable: true)
     }
 	
     static transients = [

@@ -15,10 +15,16 @@
 					</g:if>
 					<g:if test="${sessionInstance.group.isVisibleByUsername(username)}">
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
-						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+						<g:if test="${sessionInstance.canceled}">
+							<g:set var="isCanceled" value="text-decoration: line-through;"/>
+						</g:if>
+						<g:else>
+							<g:set var="isCanceled" value="" />
+						</g:else>
+						<tr style="${isCanceled}" class="${(i % 2) == 0 ? 'odd' : 'even'}">
 						
 							<!-- Date -->
-							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
+							<td style="vertical-align: middle; cursor: pointer;" onclick="document.location='${sessionLink}'">
 								<nobr><g:formatDate date="${sessionInstance.date}" format="EEEEEEE dd MMMM (HH:mm)" /></nobr>
 							</td>
 							

@@ -23,7 +23,13 @@
 							</tr>
 						</g:if>
 						<g:set var="lastDate" value="${sessionInstance.date.toString().substring(0, sessionInstance.date.toString().length() - 10)}" />
-						<tr style="height: 40px; vertical-align: middle;" class="${(i % 2) == 0 ? 'odd' : 'even'}">
+						<g:if test="${sessionInstance.canceled}">
+							<g:set var="isCanceled" value="text-decoration: line-through;"/>
+						</g:if>
+						<g:else>
+							<g:set var="isCanceled" value="" />
+						</g:else>
+						<tr style="height: 40px; vertical-align: middle; ${isCanceled}" class="${(i % 2) == 0 ? 'odd' : 'even'}">
 							<td style="text-align: center;  cursor: pointer; vertical-align: middle; margin: 0px; padding: 0px;" onclick="document.location='${sessionLink}'">
 								<g:set var="team" value="${sessionInstance.group.defaultTeams.first()}" />
 								<g:link controller="teams" action="show" id="${team.id}">

@@ -124,7 +124,7 @@
 	    <div class="buttons">
             <g:actionSubmit class="edit" action="editSession" value="${message(code:'management.session.edit')}" />
             <g:actionSubmit class="create" action="duplicateSession" value="${message(code:'management.session.duplicate')}" onclick="toggleDisplay('duplicationForm'); return false; " />
-            <g:actionSubmit class="delete" onclick="return confirm('${message(code:'management.session.areYouSureToDelete')}')" action="deleteSession" value="${message(code:'management.session.delete')}" />
+            <g:actionSubmit class="delete" action="deleteSession" value="${message(code:'management.session.cancel')}" onclick="toggleDisplay('cancelationForm'); return false; " />
 	    </div>
 		<div id="duplicationForm" style="display: none; ">
 			<br>
@@ -132,7 +132,23 @@
 			<g:field type="number" name="duplicationOffset" value="7" size="2" style="width: 3em;" />
 			<g:actionSubmit class="create" value="Go" action="duplicateSession" />
 		</div>
+		<div id="cancelationForm" style="display: none; ">
+			<br>
+			<g:message code="management.session.cancelInfos" />:
+			<br>
+			<g:textArea name="cancelationLog"></g:textArea>
+			<g:actionSubmit class="delete" value="Go" action="cancelSession" />
+		</div>
 	</g:form>
+</g:if>
+
+<g:if test="${sessionInstance.canceled}">
+	<br>
+	<div style="background-color: #ffdbce; border: 2px solid red; text-align: center; font-size: xx-large">
+		<span style="color: red"><g:message code="management.session.canceledByOn" args="[sessionInstance.cancelationUser, sessionInstance.cancelationDate]" /></span>
+		<br>
+		<i>${sessionInstance.cancelationLog}</i>
+	</div>
 </g:if>
 
 <g:set scope="request" var="timeAfterInfos" value="${java.lang.System.currentTimeMillis()}" />

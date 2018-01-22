@@ -207,6 +207,36 @@ class ManagerController {
 		}
 	}
 
+	def cancelSession = {
+		def sessionInstance = Session.get(params.id)
+		if (!sessionInstance) {
+			flash.error = message(code: 'default.not.found.message', args: [
+					message(code: 'session.label', default: 'Session'),
+					params.id
+			])
+			return redirect(controller: "sessions", action: "list")
+		}
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!sessionInstance.isManagedBy(user.username)) {
+			flash.error = "You cannot manage that session since you're not a manager !"
+			return redirect(controller: "sessions", action: "show", params: [id: sessionInstance.id])
+		}
+		sessionInstance.canceled = true
+		sessionInstance.cancelationDate = new Date()
+		sessionInstance.cancelationLog = params.cancelationLog
+		sessionInstance.cancelationUser = user
+		def emails = []
+		sessionInstance.participations.each { p ->
+			// Need to restrict to accepted or available participants ?
+			emails << p.player.email
+		}
+		def title = message(code:'mail.cancelSession.title')
+		def body =message(code:'mail.cancelSession.body', args:[sessionInstance, sessionInstance.cancelationUser, sessionInstance.cancelationDate])
+		mailerService.mail(emails, title, body)
+		flash.message = message(code: 'management.session.cancelSuccess')
+		redirect(controller:"sessions", action: "show", id: sessionInstance.id)
+	}
+
 	def deleteSession = {
 		def sessionInstance = Session.get(params.id)
 		if (!sessionInstance) {
