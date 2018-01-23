@@ -125,26 +125,27 @@
             <g:actionSubmit class="edit" action="editSession" value="${message(code:'management.session.edit')}" />
             <g:actionSubmit class="create" action="duplicateSession" value="${message(code:'management.session.duplicate')}" onclick="toggleDisplay('duplicationForm'); return false; " />
             <g:actionSubmit class="delete" action="deleteSession" value="${message(code:'management.session.cancel')}" onclick="toggleDisplay('cancelationForm'); return false; " />
+			<span style="color: red;"><= NEW !!</span>
 	    </div>
 		<div id="duplicationForm" style="display: none; ">
 			<br>
 			<g:message code="management.session.duplicationOffset" />:
 			<g:field type="number" name="duplicationOffset" value="7" size="2" style="width: 3em;" />
-			<g:actionSubmit class="create" value="Go" action="duplicateSession" />
+			<g:actionSubmit class="create" value="Ok" action="duplicateSession" />
 		</div>
 		<div id="cancelationForm" style="display: none; ">
 			<br>
 			<g:message code="management.session.cancelInfos" />:
 			<br>
-			<g:textArea name="cancelationLog"></g:textArea>
-			<g:actionSubmit class="delete" value="Go" action="cancelSession" />
+			<g:textArea name="cancelationLog" style="width: 80%;"></g:textArea>
+			<g:actionSubmit class="delete" value="Ok" action="cancelSession" />
 		</div>
 	</g:form>
 </g:if>
 
 <g:if test="${sessionInstance.canceled}">
 	<br>
-	<div style="background-color: #ffdbce; border: 2px solid red; text-align: center; font-size: xx-large">
+	<div style="background-color: #dbb7ac; border: 2px solid red; text-align: center; font-size: xx-large">
 		<span style="color: red"><g:message code="management.session.canceledByOn" args="[sessionInstance.cancelationUser, sessionInstance.cancelationDate]" /></span>
 		<br>
 		<i>${sessionInstance.cancelationLog}</i>
