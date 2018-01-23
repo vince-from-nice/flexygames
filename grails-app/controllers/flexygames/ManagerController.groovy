@@ -659,6 +659,7 @@ class ManagerController {
 		//def rounds = SessionRound.findAllBySession(session)
 		SessionRound round = new SessionRound(session: session/*, index: rounds.size() + 1*/)
 		session.addToRounds(round)
+		session.approvedParticipants.each { p -> round.addToPlayersForTeamA(p)}
 		if (session.save(flush: true)) {
 			flash.message = "A new round has been added to the session"
 		} else {
