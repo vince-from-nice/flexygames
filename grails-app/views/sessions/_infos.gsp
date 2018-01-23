@@ -124,8 +124,10 @@
 	    <div class="buttons">
             <g:actionSubmit class="edit" action="editSession" value="${message(code:'management.session.edit')}" />
             <g:actionSubmit class="create" action="duplicateSession" value="${message(code:'management.session.duplicate')}" onclick="toggleDisplay('duplicationForm'); return false; " />
-            <g:actionSubmit class="delete" action="deleteSession" value="${message(code:'management.session.cancel')}" onclick="toggleDisplay('cancelationForm'); return false; " />
-			<span style="color: red;"><= NEW !!</span>
+            <g:if test="${!sessionInstance.canceled}">
+                <g:actionSubmit class="delete" action="deleteSession" value="${message(code:'management.session.cancel')}" onclick="toggleDisplay('cancelationForm'); return false; " />
+			    <span style="color: red;"><= NEW !!</span>
+            </g:if>
 	    </div>
 		<div id="duplicationForm" style="display: none; ">
 			<br>
