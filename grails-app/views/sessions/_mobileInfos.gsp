@@ -81,7 +81,34 @@
                     </td>
                 </tr>
             </table>
-
+            <g:if test="${sessionIsManagedByCurrentUser}">
+                <span style="width: 100%	">
+                    <g:form controller="manager">
+                        <g:hiddenField name="id" value="${sessionInstance?.id}" />
+                        <div class="buttons">
+                            <g:actionSubmit class="edit" action="editSession" value="${message(code:'management.session.edit')}" />
+                            <g:actionSubmit class="create" action="duplicateSession" value="${message(code:'management.session.duplicate')}" onclick="toggleDisplay('duplicationForm'); return false; " />
+                            <g:if test="${!sessionInstance.canceled}">
+                                <g:actionSubmit class="delete" action="deleteSession" value="${message(code:'management.session.cancel')}" onclick="toggleDisplay('cancelationForm'); return false; " />
+                                <!--span style="color: red;"><= NEW !!</span-->
+                            </g:if>
+                        </div>
+                        <div id="duplicationForm" style="display: none; ">
+                            <br>
+                            <g:message code="management.session.duplicationOffset" />:
+                            <g:field type="number" name="duplicationOffset" value="7" size="2" style="width: 3em;" />
+                            <g:actionSubmit class="create" value="Ok" action="duplicateSession" />
+                        </div>
+                        <div id="cancelationForm" style="display: none; ">
+                            <br>
+                            <g:message code="management.session.cancelInfos" />:
+                            <br>
+                            <g:textArea name="cancelationLog" style="width: 80%;"></g:textArea>
+                            <g:actionSubmit class="delete" value="Ok" action="cancelSession" />
+                        </div>
+                    </g:form>
+                </span>
+            </g:if>
         </div>
     </div>
 </div>

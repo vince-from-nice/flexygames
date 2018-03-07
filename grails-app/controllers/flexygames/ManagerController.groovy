@@ -227,12 +227,17 @@ class ManagerController {
 		sessionInstance.cancelationUser = user
 		def emails = []
 		sessionInstance.participations.each { p ->
-			// Need to restrict to accepted or available participants ?
-			emails << p.player.email
+			// Mail all non declined participants
+			if (p.statusCode != Participation.Status.DECLINED)
+				emails << p.player.email
 		}
-		def title = message(code:'mail.cancelSession.title')
-		def body =message(code:'mail.cancelSession.body', args:[sessionInstance, sessionInstance.cancelationUser, sessionInstance.cancelationDate])
-		mailerService.mail(emails, title, body)
+		if (!emails.isEmpty()) {
+			def title = message(code: 'mail.cancelSession.title')
+			def body = message(code: 'mail.cancelSession.body', args: ['' + grailsApplication.config.grails.serverURL + '/sessions/show/' + sessionInstance.id,
+																	   sessionInstance, sessionInstance.cancelationUser,
+																	   sessionInstance.cancelationDate, sessionInstance.cancelationLog])
+			mailerService.mail(emails, title, body)
+		}
 		flash.message = message(code: 'management.session.cancelSuccess')
 		redirect(controller:"sessions", action: "show", id: sessionInstance.id)
 	}
