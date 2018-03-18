@@ -28,15 +28,23 @@
                     <tr>
                         <td>
                             <g:message code="task.type.${tasksByTypeCodeElement.key}"/>
+                            &nbsp;&nbsp;&nbsp;
                             <g:each in="${tasksByTypeCodeElement.value}" var="task">
                                 <g:if test="${tasksByTypeCodeElement.key == 'BALLS'}"><g:set var="isBallTaskAssigned" value="${true}"/></g:if>
                                 <g:if test="${tasksByTypeCodeElement.key == 'JERSEY'}"><g:set var="isJerseyTaskAssigned" value="${true}"/></g:if>
-                                <g:link controller="player" action="show" id="${task.user.id}" >${task.user.username}</g:link>
-                                <g:if test="${task.user == session.currentUser || sessionIsManagedByCurrentUser}">
-                                    <g:link action="deleteTask" id="${task.id}" >
-                                        <img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />
-                                    </g:link>
-                                </g:if>
+                                <span>
+                                    <g:render template="/common/avatar" model="[player:task.user]" />
+                                    <g:set var="username" value="${task.user.username}" />
+                                    <g:if test="${username.length() > 8}">
+                                        <g:set var="username" value="${username.substring(0, 7)}.." />
+                                    </g:if>
+                                    <g:link controller="player" action="show" id="${task.user.id}" >${username}</g:link>
+                                    <g:if test="${task.user == session.currentUser || sessionIsManagedByCurrentUser}">
+                                        <g:link action="deleteTask" id="${task.id}" >
+                                            <img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />
+                                        </g:link>
+                                    </g:if>
+                                </span>
                             </g:each>
                         </td>
                     </tr>

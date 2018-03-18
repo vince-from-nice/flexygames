@@ -47,22 +47,6 @@
                         <g:link controller="sessions" action="list" params="${['filteredSessionGroup':sessionInstance.group.id]}" >
                             ${sessionInstance?.group?.encodeAsHTML()}
                         </g:link>
-                        <g:if test="${sessionInstance.tasks.size() > 0}">
-                            <g:set var="lastTaskType" />
-                            <g:each in="${sessionInstance.tasks}" var="task" >
-                                <g:if test="${task.type != lastTaskType}">
-                                    <g:if test="${lastTaskType}">
-                                        <br>
-                                    </g:if>
-                                    <g:message code="task.${task.type.code}" />
-                                    <g:link controller="player" action="show" id="${task.user.id}" >${task.user}</g:link>
-                                </g:if>
-                                <g:else>
-                                    <g:link controller="player" action="show" id="${task.user.id}" >${task.user}</g:link>
-                                </g:else>
-                                <g:set var="lastTaskType" value="${task.type}" />
-                            </g:each>
-                        </g:if>
                     </td>
                     <td style="text-align: center; ">
                         <g:set var="defaultFirstTeam" value="${sessionInstance.group.defaultTeams?.first()}" scope="request" />
@@ -112,5 +96,14 @@
         </div>
     </div>
 </div>
+
+<g:if test="${sessionInstance.canceled}">
+    <br>
+    <div style="background-color: #dbb7ac; border: 2px solid red; text-align: center; font-size: xx-large">
+        <span style="color: red"><g:message code="management.session.canceledByOn" args="[sessionInstance.cancelationUser, sessionInstance.cancelationDate]" /></span>
+        <br>
+        <i>${sessionInstance.cancelationLog}</i>
+    </div>
+</g:if>
 
 

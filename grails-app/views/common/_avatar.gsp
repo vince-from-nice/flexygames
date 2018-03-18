@@ -8,5 +8,5 @@
 				<g:set var="maxWidth" value="${width}" />
 				<g:set var="maxHeight" value="auto" />
 			</g:else>
-			<img style="maxWidth: ${maxWidth}; vertical-align: middle; max-width: 200px;  max-height: ${maxHeight};" src="${resource(dir:'images/user',file:player.avatarName)}" alt="User avatar" />
+			<img style="maxWidth: ${maxWidth}; vertical-align: middle; max-width: 200px;  max-height: ${maxHeight};" src="${resource(dir:'images/user',file:player.avatarName)}" alt="User avatar" title="${player.username}" />
 		</g:link>
