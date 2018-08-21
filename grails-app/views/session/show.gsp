@@ -50,6 +50,15 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${sessionInstance?.lockingTime}">
+				<li class="fieldcontain">
+					<span id="lockingTime-label" class="property-label"><g:message code="session.lockingTime.label" default="Locking Time" /></span>
+					
+						<span class="property-value" aria-labelledby="lockingTime-label"><g:fieldValue bean="${sessionInstance}" field="lockingTime"/></span>
+					
+				</li>
+				</g:if>
+			
 				<g:if test="${sessionInstance?.name}">
 				<li class="fieldcontain">
 					<span id="name-label" class="property-label"><g:message code="session.name.label" default="Name" /></span>
@@ -210,6 +219,104 @@
 					
 						<g:each in="${sessionInstance.compositions}" var="c">
 						<span class="property-value" aria-labelledby="compositions-label"><g:link controller="composition" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></span>
+						</g:each>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sessionInstance?.lastUpdate}">
+				<li class="fieldcontain">
+					<span id="lastUpdate-label" class="property-label"><g:message code="session.lastUpdate.label" default="Last Update" /></span>
+					
+						<span class="property-value" aria-labelledby="lastUpdate-label"><g:formatDate date="${sessionInstance?.lastUpdate}" /></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sessionInstance?.lastUpdater}">
+				<li class="fieldcontain">
+					<span id="lastUpdater-label" class="property-label"><g:message code="session.lastUpdater.label" default="Last Updater" /></span>
+					
+						<span class="property-value" aria-labelledby="lastUpdater-label"><g:link controller="user" action="show" id="${sessionInstance?.lastUpdater?.id}">${sessionInstance?.lastUpdater?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sessionInstance?.canceled}">
+				<li class="fieldcontain">
+					<span id="canceled-label" class="property-label"><g:message code="session.canceled.label" default="Canceled" /></span>
+					
+						<span class="property-value" aria-labelledby="canceled-label"><g:formatBoolean boolean="${sessionInstance?.canceled}" /></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sessionInstance?.cancelationLog}">
+				<li class="fieldcontain">
+					<span id="cancelationLog-label" class="property-label"><g:message code="session.cancelationLog.label" default="Cancelation Log" /></span>
+					
+						<span class="property-value" aria-labelledby="cancelationLog-label"><g:fieldValue bean="${sessionInstance}" field="cancelationLog"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sessionInstance?.cancelationUser}">
+				<li class="fieldcontain">
+					<span id="cancelationUser-label" class="property-label"><g:message code="session.cancelationUser.label" default="Cancelation User" /></span>
+					
+						<span class="property-value" aria-labelledby="cancelationUser-label"><g:link controller="user" action="show" id="${sessionInstance?.cancelationUser?.id}">${sessionInstance?.cancelationUser?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sessionInstance?.cancelationDate}">
+				<li class="fieldcontain">
+					<span id="cancelationDate-label" class="property-label"><g:message code="session.cancelationDate.label" default="Cancelation Date" /></span>
+					
+						<span class="property-value" aria-labelledby="cancelationDate-label"><g:formatDate date="${sessionInstance?.cancelationDate}" /></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sessionInstance?.carpoolProposals}">
+				<li class="fieldcontain">
+					<span id="carpoolProposals-label" class="property-label"><g:message code="session.carpoolProposals.label" default="Carpool Proposals" /></span>
+					
+						<g:each in="${sessionInstance.carpoolProposals}" var="c">
+						<span class="property-value" aria-labelledby="carpoolProposals-label"><g:link controller="carpoolProposal" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></span>
+						</g:each>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sessionInstance?.carpoolRequests}">
+				<li class="fieldcontain">
+					<span id="carpoolRequests-label" class="property-label"><g:message code="session.carpoolRequests.label" default="Carpool Requests" /></span>
+					
+						<g:each in="${sessionInstance.carpoolRequests}" var="c">
+						<span class="property-value" aria-labelledby="carpoolRequests-label"><g:link controller="carpoolRequest" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></span>
+						</g:each>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sessionInstance?.tasks}">
+				<li class="fieldcontain">
+					<span id="tasks-label" class="property-label"><g:message code="session.tasks.label" default="Tasks" /></span>
+					
+						<g:each in="${sessionInstance.tasks}" var="t">
+						<span class="property-value" aria-labelledby="tasks-label"><g:link controller="task" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></span>
+						</g:each>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sessionInstance?.watchers}">
+				<li class="fieldcontain">
+					<span id="watchers-label" class="property-label"><g:message code="session.watchers.label" default="Watchers" /></span>
+					
+						<g:each in="${sessionInstance.watchers}" var="w">
+						<span class="property-value" aria-labelledby="watchers-label"><g:link controller="sessionWatcher" action="show" id="${w.id}">${w?.encodeAsHTML()}</g:link></span>
 						</g:each>
 					
 				</li>

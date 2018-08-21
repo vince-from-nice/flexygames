@@ -28,7 +28,7 @@ class SessionGroup implements Comparable<SessionGroup> {
 	
 	static belongsTo = flexygames.Team
     
-    static hasMany = [sessions: Session, defaultTeams: Team/*, defaultManagers: User*/]
+    static hasMany = [sessions: Session, defaultTeams: Team /*, defaultManagers: User*/]
     
     static constraints = {
         name(nullable: false, blank: true)

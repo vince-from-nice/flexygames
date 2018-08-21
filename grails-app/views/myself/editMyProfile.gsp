@@ -32,7 +32,8 @@
 							<td valign="top" class="value ${hasErrors(bean: playerInstance, field: 'username', 'errors')}">
 								<b>${playerInstance?.username}</b>
 							</td>
-							<td>
+							<td style="font-size: 12px">
+								<g:message code="myAccount.profile.username.notes" />
 							</td>
 						</tr>
 						<tr class="prop">

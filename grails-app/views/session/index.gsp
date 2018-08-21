@@ -30,11 +30,11 @@
 					
 						<g:sortableColumn property="rdvBeforeStart" title="${message(code: 'session.rdvBeforeStart.label', default: 'Rdv Before Start')}" />
 					
+						<g:sortableColumn property="lockingTime" title="${message(code: 'session.lockingTime.label', default: 'Locking Time')}" />
+					
 						<g:sortableColumn property="name" title="${message(code: 'session.name.label', default: 'Name')}" />
 					
 						<g:sortableColumn property="description" title="${message(code: 'session.description.label', default: 'Description')}" />
-					
-						<th><g:message code="session.playground.label" default="Playground" /></th>
 					
 					</tr>
 				</thead>
@@ -48,11 +48,11 @@
 					
 						<td>${fieldValue(bean: sessionInstance, field: "rdvBeforeStart")}</td>
 					
+						<td>${fieldValue(bean: sessionInstance, field: "lockingTime")}</td>
+					
 						<td>${fieldValue(bean: sessionInstance, field: "name")}</td>
 					
 						<td>${fieldValue(bean: sessionInstance, field: "description")}</td>
-					
-						<td>${fieldValue(bean: sessionInstance, field: "playground")}</td>
 					
 					</tr>
 				</g:each>

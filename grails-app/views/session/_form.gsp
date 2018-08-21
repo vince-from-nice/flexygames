@@ -29,6 +29,15 @@
 
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'lockingTime', 'error')} ">
+	<label for="lockingTime">
+		<g:message code="session.lockingTime.label" default="Locking Time" />
+		
+	</label>
+	<g:field name="lockingTime" type="number" min="0" value="${sessionInstance.lockingTime}"/>
+
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'name', 'error')} ">
 	<label for="name">
 		<g:message code="session.name.label" default="Name" />
@@ -230,6 +239,132 @@
 </g:each>
 <li class="add">
 <g:link controller="composition" action="create" params="['session.id': sessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'composition.label', default: 'Composition')])}</g:link>
+</li>
+</ul>
+
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'lastUpdate', 'error')} ">
+	<label for="lastUpdate">
+		<g:message code="session.lastUpdate.label" default="Last Update" />
+		
+	</label>
+	<g:datePicker name="lastUpdate" precision="day"  value="${sessionInstance?.lastUpdate}" default="none" noSelection="['': '']" />
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'lastUpdater', 'error')} ">
+	<label for="lastUpdater">
+		<g:message code="session.lastUpdater.label" default="Last Updater" />
+		
+	</label>
+	<g:select id="lastUpdater" name="lastUpdater.id" from="${flexygames.User.list()}" optionKey="id" value="${sessionInstance?.lastUpdater?.id}" class="many-to-one" noSelection="['null': '']"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'canceled', 'error')} ">
+	<label for="canceled">
+		<g:message code="session.canceled.label" default="Canceled" />
+		
+	</label>
+	<g:checkBox name="canceled" value="${sessionInstance?.canceled}" />
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'cancelationLog', 'error')} ">
+	<label for="cancelationLog">
+		<g:message code="session.cancelationLog.label" default="Cancelation Log" />
+		
+	</label>
+	<g:textField name="cancelationLog" value="${sessionInstance?.cancelationLog}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'cancelationUser', 'error')} ">
+	<label for="cancelationUser">
+		<g:message code="session.cancelationUser.label" default="Cancelation User" />
+		
+	</label>
+	<g:select id="cancelationUser" name="cancelationUser.id" from="${flexygames.User.list()}" optionKey="id" value="${sessionInstance?.cancelationUser?.id}" class="many-to-one" noSelection="['null': '']"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'cancelationDate', 'error')} ">
+	<label for="cancelationDate">
+		<g:message code="session.cancelationDate.label" default="Cancelation Date" />
+		
+	</label>
+	<g:datePicker name="cancelationDate" precision="day"  value="${sessionInstance?.cancelationDate}" default="none" noSelection="['': '']" />
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'carpoolProposals', 'error')} ">
+	<label for="carpoolProposals">
+		<g:message code="session.carpoolProposals.label" default="Carpool Proposals" />
+		
+	</label>
+	
+<ul class="one-to-many">
+<g:each in="${sessionInstance?.carpoolProposals?}" var="c">
+    <li><g:link controller="carpoolProposal" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="carpoolProposal" action="create" params="['session.id': sessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'carpoolProposal.label', default: 'CarpoolProposal')])}</g:link>
+</li>
+</ul>
+
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'carpoolRequests', 'error')} ">
+	<label for="carpoolRequests">
+		<g:message code="session.carpoolRequests.label" default="Carpool Requests" />
+		
+	</label>
+	
+<ul class="one-to-many">
+<g:each in="${sessionInstance?.carpoolRequests?}" var="c">
+    <li><g:link controller="carpoolRequest" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="carpoolRequest" action="create" params="['session.id': sessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'carpoolRequest.label', default: 'CarpoolRequest')])}</g:link>
+</li>
+</ul>
+
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'tasks', 'error')} ">
+	<label for="tasks">
+		<g:message code="session.tasks.label" default="Tasks" />
+		
+	</label>
+	
+<ul class="one-to-many">
+<g:each in="${sessionInstance?.tasks?}" var="t">
+    <li><g:link controller="task" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="task" action="create" params="['session.id': sessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'task.label', default: 'Task')])}</g:link>
+</li>
+</ul>
+
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sessionInstance, field: 'watchers', 'error')} ">
+	<label for="watchers">
+		<g:message code="session.watchers.label" default="Watchers" />
+		
+	</label>
+	
+<ul class="one-to-many">
+<g:each in="${sessionInstance?.watchers?}" var="w">
+    <li><g:link controller="sessionWatcher" action="show" id="${w.id}">${w?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="sessionWatcher" action="create" params="['session.id': sessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'sessionWatcher.label', default: 'SessionWatcher')])}</g:link>
 </li>
 </ul>
 

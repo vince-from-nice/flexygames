@@ -44,12 +44,14 @@ class AdminController {
 			flash.error = "A session group already exists for the next year !"
 			return redirect(controller: 'admin', action: 'index')
 		}
-		def newGroup = new SessionGroup(name: newName, competition: group.competition, visible: group.visible,
+		def newGroup = new SessionGroup(name: newName, competition: group.competition, visible: group.visible, defaultTeams: [], // need to init to prevent null pointer with comparator
 				defaultType: group.defaultType, defaultPlayground: group.defaultPlayground, defaultDuration: group.defaultDuration,
 				defaultMinPlayerNbr: group.defaultMinPlayerNbr, defaultMaxPlayerNbr: group.defaultMaxPlayerNbr, defaultPreferredPlayerNbr: group.defaultPreferredPlayerNbr,
 				defaultLockingTime: group.defaultLockingTime, defaultDayOfWeek: group.defaultDayOfWeek,
 				ballsTaskNeeded: group.ballsTaskNeeded, jerseyTaskNeeded: group.jerseyTaskNeeded)
-		if (!newGroup.save()) {
+		def team = group.defaultTeams.first()
+		team.addToSessionGroups(newGroup)
+		if (!team.save()) {
 			flash.error = "Unable to save duplicated session group: " + newGroup.errors
 		} else {
 			flash.message = "Session group <b>" + newGroup.name + "</b> has been saved !"
