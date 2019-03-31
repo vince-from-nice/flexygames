@@ -305,18 +305,17 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return result
 	}
 	
-	SortedSet<Participation> getParticipationsByStatus(String statusCode) {
-		//Participation.findAllByPlayerAndStatusCode(this, statusCode, [sort: "session.date", order:'desc'])
-		return participations.grep{it.statusCode == statusCode}
-	}
+	SortedSet<Participation> getParticipationsByStatus(statusCodes) {
+        return participations.grep { it.statusCode in statusCodes }
+    }
 	
 	int countParticipationsByStatus(String statusCode) {
 		Participation.countByPlayerAndStatusCode(this, statusCode)
 	}
 	
-	List<Participation> getParticipationsByStatusAndTeam(String statusCode, Team team) {
+	List<Participation> getParticipationsByStatusAndTeam(statusCodes, Team team) {
 		def result = []
-		def parts = getParticipationsByStatus(statusCode)
+		def parts = getParticipationsByStatus(statusCodes)
 		parts.each { p ->
 			//println "\t" + p.session.group.defaultTeams*.id
 			if (team.id in p.session.group.defaultTeams*.id) {
@@ -326,9 +325,9 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return result
 	}
 
-	List<Participation> getParticipationsByStatusAndSessionGroup(String statusCode, SessionGroup sessionGroup) {
+	List<Participation> getParticipationsByStatusAndSessionGroup(statusCodes, SessionGroup sessionGroup) {
 		def result = []
-		getParticipationsByStatus(statusCode).each { p ->
+		getParticipationsByStatus(statusCodes).each { p ->
 			if (sessionGroup.id == p.session.group.id) {
 				result << p
 			}

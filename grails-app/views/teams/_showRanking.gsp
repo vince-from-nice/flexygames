@@ -9,6 +9,7 @@
 					<g:message code="stats.selectCriteria" /> :
 					<br />
 					<g:select name="criteria" value="${currentCriteria}" valueMessagePrefix="stats.criteria" from="[
+							'statuses.present',
 							'statuses.doneGood',
 							'statuses.doneLate',
 							'statuses.doneBad',

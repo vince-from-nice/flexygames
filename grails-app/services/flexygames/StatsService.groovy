@@ -130,6 +130,13 @@ class StatsService {
                     } else {
                         value = player.getVotingScoreByTeam(team)
                     }
+                } else if (criteria.equals('statuses.present')) {
+                    def statusCodes = [Participation.Status.DONE_GOOD.code, Participation.Status.DONE_BAD.code, Participation.Status.DONE_LATE.code]
+                    if (sessionGroup) {
+                        value = player.getParticipationsByStatusAndSessionGroup(statusCodes, sessionGroup).size()
+                    } else {
+                        value = player.getParticipationsByStatusAndTeam(statusCodes, team).size()
+                    }
                 } else if (criteria.startsWith('statuses.')) {
                     def status
                     if (criteria.equals('statuses.doneGood')) {
