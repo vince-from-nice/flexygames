@@ -7,5 +7,7 @@ classes
 .settings
 .idea
 *.iml
+*.iws
+*.ipr
 web-app/images/team/team-*
 web-app/images/user/user-*

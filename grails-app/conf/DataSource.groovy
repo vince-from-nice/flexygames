@@ -17,7 +17,7 @@ environments {
             dbCreate = "update" // one of 'create', 'create-drop','update'
             //url = "jdbc:hsqldb:mem:devDB"
             driverClassName = "org.postgresql.Driver"
-            url = "jdbc:postgresql://localhost/flexygames"
+            url = "jdbc:postgresql://localhost:5432/flexygames"
             username = "postgres"
             password = ""
 			loggingSql = true // see log4j block in Config.groovy

@@ -44,7 +44,7 @@ grails.project.dependency.resolution = {
         // runtime 'mysql:mysql-connector-java:5.1.16'
 
         // turman : add PG driver (put the driver into /lib/ was enough with Eclipse/GGTS but not with IntelliJ)
-        runtime 'org.postgresql:postgresql:9.3-1103-jdbc41'
+        runtime 'org.postgresql:postgresql:42.2.6'
 
         // turman : add Jsoup library for HTML cleaning of user inputs
         runtime 'org.jsoup:jsoup:1.7.2'
@@ -67,7 +67,7 @@ grails.project.dependency.resolution = {
 		runtime ":database-migration:1.4.0"
 		//runtime ":jquery:1.11.1"
 		
-		// turman : depuis grails 2.3 on ne peut plus utiliser le plugin manager et il faut rajouter toutes les dépendances à  la main !
+		// turman : depuis grails 2.3 on ne peut plus utiliser le plugin manager et il faut rajouter toutes les dï¿½pendances ï¿½ la main !
 		compile ":mail:1.0.7"
         compile ":quartz:1.0.2"
 		compile (":shiro:1.2.1") {excludes([name: 'quartz', group: 'org.opensymphony.quartz'])}
