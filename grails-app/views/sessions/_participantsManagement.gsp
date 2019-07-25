@@ -1,8 +1,12 @@
-    <h3><g:message code="management.title"/></h3>
-    <g:form controller="manager">
+<%@ page import="flexygames.Participation" %>
+<h3><g:message code="management.title"/></h3>
+    <g:form name="managementForm"  controller="manager">
         <g:hiddenField name="id" value="${sessionInstance?.id}"/>
         <g:hiddenField name="messageType" value="email"/>
         <div class="buttons">
+
+            <b><g:message code="management.participations.invite"/></b>
+            <br>
             <g:actionSubmit class="create" action="requestAllRegulars"
                             value="${message(code: 'management.participations.requestAllRegulars')}"/>
             <g:actionSubmit class="create" action="requestAllTourists"
@@ -22,7 +26,6 @@
                 <g:actionSubmit class="create" action="requestExtraPlayer"
                                 value="Invite that FlexyGames user !!"/>
             </div>
-
             <div id="extraInternalUserDiv" style="display: none">
                 <br/>
                 <g:select name="internalUserId"
@@ -32,6 +35,9 @@
                                 value="Invite that team player !!"/>
             </div>
             <br/>
+
+            <b><g:message code="management.participations.send"/></b>
+            <br>
             <g:actionSubmit class="edit"
                             onclick="toggleDisplay('customizedMessageDiv'); return false"
                             value="${message(code: 'management.participations.sendCustomizedMessage')}"/>
@@ -40,7 +46,6 @@
                             action="sendGoGoGoMessage"
                             value="${message(code: 'management.participations.sendGoGoGoMessage')}"/>
             <br/>
-
             <div id="customizedMessageDiv" style="display: none">
                 <table style="width: auto">
                     <tr>
@@ -76,9 +81,21 @@
                     </tr>
                 </table>
             </div>
+
+            <b><g:message code="management.participations.update"/></b>
+            <br>
+            <g:message code="management.participations.quickUpdate"/>:
             <g:actionSubmit class="save" action="approveAvailableParticipants"
                             value="${message(code: 'management.participations.approveAvailableParticipants')}"/>
             <g:actionSubmit class="save" action="validateApprovedParticipants"
                             value="${message(code: 'management.participations.validateApprovedParticipants')}"/>
+            <br>
+            <g:message code="management.participations.multiUpdate"/>:
+            <g:message code="status"/>
+            <g:select name="statusCode" from="${flexygames.Participation.constraints.statusCode.inList}"
+                      valueMessagePrefix="participation.status" style="font-size : 14px" />
+            <g:message code="log"/>
+            <g:field type="text" name="userLog" style="background-color: white; color: black;"  />
+            <g:actionSubmit class="save" action="updateParticipationStatus" value="${message(code: 'update')}"/>
         </div>
     </g:form>

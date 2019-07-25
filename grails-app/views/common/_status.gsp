@@ -7,7 +7,6 @@
         <g:form name="participationStatusForm${part.id}" method="get" controller="sessions" action="update">
             <g:hiddenField name="id" value="${part.id}"/>
             <g:hiddenField name="userLog" value=""/>
-
             <g:set var="possibleStatus" value="${[part.statusCode]}"/>
             <!-- Check if session is managed by current user only if required -->
             <g:if test="${allStatusesArePossible || sessionIsManagedByCurrentUser}">
@@ -66,7 +65,7 @@
 		                    	document.getElementById('participationStatusForm${part.id}').submit()"
                             name="statusCode" from="${possibleStatus}" value="${part.statusCode}"
                             valueMessagePrefix="participation.status"
-                            style="font-size : 10px"/>
+                            style="font-size : 14px"/>
                 </g:else>
             </g:if>
             <g:else>

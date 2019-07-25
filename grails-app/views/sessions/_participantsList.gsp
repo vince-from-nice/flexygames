@@ -1,6 +1,7 @@
             <table class="flexyTab">
                 <thead>
                 <tr>
+                    <g:if test="${sessionIsManagedByCurrentUser}"><th></th></g:if>
                     <th style="vertical-align: top; text-align: center;" colspan="2"><g:message code="player"/></th>
                     <th style="vertical-align: top;">&nbsp;</th>
                     <th style="vertical-align: top;"><g:message code="teams"/></th>
@@ -19,8 +20,12 @@
                                 <g:set var="display" value="${hidePendingPlayersByDefault?'none':'table-row'}"/>
                             </g:if>
                         </g:if>
-                        <tr id="participation-${p.id}" class="${(i % 2) == 0 ? 'odd' : 'even'}"
-                            style="display: ${display}; border: solid grey 1px">
+                        <tr id="participation-${p.id}" class="${(i % 2) == 0 ? 'odd' : 'even'}" style="display: ${display}; border: solid grey 1px">
+                            <g:if test="${sessionIsManagedByCurrentUser}">
+                                <th style="vertical-align: middle">
+                                    <input type="checkbox" name="selectParticipation${p.id}" form="managementForm"/>
+                                </th>
+                            </g:if>
                             <td style="text-align: right; height: 50px; padding-left: 0px">
                                 <g:render template="/common/avatar" model="[player: p.player]"/>
                             </td>

@@ -14,6 +14,8 @@ class ManagerController {
 
 	def mailerService
 
+	def sessionService
+
 	/*********************************************************************************************
 	 * Session basic management
 	 *********************************************************************************************/
@@ -365,6 +367,38 @@ class ManagerController {
 		redirect(controller: "sessions", action: "show", id: params.id)
 	}
 
+	def updateParticipationStatus = {
+		def session = Session.get(params.id)
+		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		if (!session.isManagedBy(user.username)) {
+			flash.error = "You cannot manage that session since you're not a manager !"
+			return redirect(controller: "sessions", action: "show", params: [id: params.id])
+		}
+		try {
+			boolean atLeastOnePlayerUpdated = false
+			params.keySet().each { param ->
+				if (param.startsWith('selectParticipation')) {
+					def participationId = param.substring('selectParticipation'.length())
+					Participation participation = Participation.get(participationId)
+					sessionService.updatePlayerStatus(user, participation, params.statusCode, params.userLog)
+					atLeastOnePlayerUpdated = true
+				}
+			}
+			def newStatus = message(code: 'participation.status.' + params.statusCode)
+			if (atLeastOnePlayerUpdated) {
+				flash.message = "${message(code: 'management.participations.statusUpdateOk', args: [newStatus])}"
+			} else {
+				flash.error = "${message(code: 'management.participations.statusUpdateEmpty')}"
+			}
+		} catch (Exception e) {
+			println "Exception on status update: " + e.getMessage()
+			e.printStackTrace()
+			flash.error = "${message(code: 'session.show.update.error', args: [e.message])}"
+			return redirect(controller: "sessions", action: "show", id:session.id)
+		}
+		redirect(controller: "sessions", action: "show", id: params.id)
+	}
+
 	def approveAvailableParticipants = {
 		def session = Session.get(params.id)
 		if (!session) {
@@ -376,39 +410,25 @@ class ManagerController {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: params.id])
 		}
-		def emails = []
-		session.participations.each{ p ->
-			if (p.statusCode == Participation.Status.AVAILABLE.code) {
-				p.statusCode = Participation.Status.APPROVED.code
-				p.userLog = "" // hmm on pourrait aussi garder le log initial du joueur
-				p.setLastUpdate(new Date())
-				p.setLastUpdater(user.username)
-				emails << p.player.email
+		try {
+			boolean atLeastOnePlayerUpdated = false
+			session.participations.each{ participation ->
+				if (participation.statusCode == Participation.Status.AVAILABLE.code) {
+					sessionService.updatePlayerStatus(user, participation, Participation.Status.APPROVED.code, params.userLog)
+					atLeastOnePlayerUpdated = true
+				}
 			}
-		}
-		// Notify by email the players whose status has been updated
-		if (emails.empty) {
-			flash.error = "There's no available players to update !"
-			return redirect(controller: "sessions", action: "show", id: params.id)
-		}
-		def title = message(code:'mail.statusUpdateNotification.title', args:[
-			message(code: "participation.status." + Participation.Status.APPROVED.code, locale: new Locale("en","Us")),
-			session
-		])
-		def body = message(code:'mail.statusUpdateNotification.body', args:[
-			user.username,
-			'' + grailsApplication.config.grails.serverURL + '/sessions/show/' + session.id,
-			session,
-			message(code: "participation.status." + Participation.Status.APPROVED.code, locale: new Locale("en","Us")),
-			session.group.defaultTeams.first().name
-		])
-		body = body.replace('USER_LOG', '')
-		mailerService.mail(emails, title, body)
-		// And save the session
-		if (session.save()) {
-			flash.message = "Ok participations has been updated !"
-		} else {
-			flash.error = "Sorry, an error has occured.<br><br>$session.errors"
+			def newStatus = message(code: 'participation.status.' + Participation.Status.APPROVED.code)
+			if (atLeastOnePlayerUpdated) {
+				flash.message = "${message(code: 'management.participations.statusUpdateOk', args: [newStatus])}"
+			} else {
+				flash.error = "There's no available players to update !"
+			}
+		} catch (Exception e) {
+			println "Exception on status update: " + e.getMessage()
+			e.printStackTrace()
+			flash.error = "${message(code: 'session.show.update.error', args: [e.message])}"
+			return redirect(controller: "sessions", action: "show", id:session.id)
 		}
 		redirect(controller: "sessions", action: "show", id: params.id)
 	}
@@ -429,46 +449,25 @@ class ManagerController {
 			flash.error = "Session has not started yet, you cannot validate player participations !"
 			return redirect(controller: "sessions", action: "show", id: params.id)
 		}
-		def emails = []
-		// For each approved participation
-		session.participations.each{ p ->
-			if (p.statusCode == Participation.Status.APPROVED.code) {
-				// Update its status (+ log + counter)
-				p.statusCode = Participation.Status.DONE_GOOD.code
-				p.userLog = ""
-				p.setLastUpdate(new Date())
-				p.setLastUpdater(user.username)
-				if (!p.player.updatePartCounter(1)) {
-					flash.error = "Sorry, an error has occured when updating participation counter : $p.player.errors"
-					redirect(controller: "sessions", action: "show", id: params.id)
+		try {
+			boolean atLeastOnePlayerUpdated = false
+			session.participations.each{ participation ->
+				if (participation.statusCode == Participation.Status.APPROVED.code) {
+					sessionService.updatePlayerStatus(user, participation, Participation.Status.DONE_GOOD.code, params.userLog)
+					atLeastOnePlayerUpdated = true
 				}
-				emails << p.player.email
 			}
-		}
-		// Notify by email the players whose status has been updated
-		if (emails.empty) {
-			println "No player need to be notified by email about his status update"
-			flash.error = "There's no approved players to update !"
-			return redirect(controller: "sessions", action: "show", id: params.id)
-		}
-		def title = message(code:'mail.statusUpdateNotification.title', args:[
-			message(code: "participation.status." + Participation.Status.DONE_GOOD.code, locale: new Locale("en","Us")),
-			session
-		])
-		def body = message(code:'mail.statusUpdateNotification.body', args:[
-			user.username,
-			'' + grailsApplication.config.grails.serverURL + '/sessions/show/' + session.id,
-			session,
-			message(code: "participation.status." + Participation.Status.DONE_GOOD.code, locale: new Locale("en","Us")),
-			session.group.defaultTeams.first()
-		])
-		body = body.replace('USER_LOG', '')
-		mailerService.mail(emails, title, body)
-		// And save the session
-		if (session.save()) {
-			flash.message = "Ok participations has been updated !"
-		} else {
-			flash.error = "Sorry, an error has occured.<br><br>$session.errors"
+			def newStatus = message(code: 'participation.status.' + Participation.Status.DONE_GOOD.code)
+			if (atLeastOnePlayerUpdated) {
+				flash.message = "${message(code: 'management.participations.statusUpdateOk', args: [newStatus])}"
+			} else {
+				flash.error = "There's no approved players to update !"
+			}
+		} catch (Exception e) {
+			println "Exception on status update: " + e.getMessage()
+			e.printStackTrace()
+			flash.error = "${message(code: 'session.show.update.error', args: [e.message])}"
+			return redirect(controller: "sessions", action: "show", id:session.id)
 		}
 		redirect(controller: "sessions", action: "show", id: params.id)
 	}
