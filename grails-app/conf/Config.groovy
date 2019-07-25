@@ -104,86 +104,6 @@ environments {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// FlexyGames configuration
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
-// URL
-environments {
-	development {
-		grails.serverURL="http://192.168.1.18:8080/flexygames"
-	}
-	production {
-		//grails.serverURL="http://www.onlacherien.org/games"
-		grails.serverURL="https://www.flexygames.net"
-	}
-}
-
-// pour la feature "remember me"
-security.shiro.authc.required = false
-
-// Google API Key
-google.api.key = 'AIzaSyAoWBElMNGHdbLCdP-5WIY9rOJlEpdtgjE'
-
-// mail config
-grails.mail.default.from="webmaster@flexygames.net"
-environments {
-	development {
-		grails {
-            // Config for Orange SMTP
-			mail {
-                // It doesn't work..
-				host = "smtp.orange.fr"
-				port = 465
-			}
-
-            // Config for GMail SMTP
-            mail {
-                // It works but I need to activate a security parameter in Google account: "Allow application which are less secure"
-                host = "smtp.gmail.com"
-                port = 465
-                username = "vincent.frison@gmail.com"
-                password = "not_in_git"
-                props = ["mail.smtp.auth":"true",
-                         "mail.smtp.socketFactory.port":"465",
-                         "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
-                         "mail.smtp.socketFactory.fallback":"false",
-                         "mail.smtp.starttls.enable": "true",
-                         "mail.debug": "true"]
-            }
-		}
-	}
-	production {
-		grails {
-			mail {
-				host = "localhost"
-				port = 25
-			}
-		}
-	}
-}
-
-// Mailing
-flexygames.mailing.webmaster="webmaster@flexygames.net"
-flexygames.mailing.title.prefix='[FlexyGames] '
-flexygames.mailing.title.suffix=''
-flexygames.mailing.body.prefix='<html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></head><body>'
-flexygames.mailing.body.suffix='</body></html>'
-
-// File uploading
-flexygames.fileUpload.userAvatar.maxSize = 1024 * 32
-flexygames.fileUpload.userAvatar.allowedExtensions = ["jpg","jpeg","gif","png"]
-flexygames.fileUpload.userAvatar.path = "E:\\Repositories\\flexygames\\web-app\\images\\user"
-flexygames.fileUpload.teamLogo.maxSize = 1024 * 32
-flexygames.fileUpload.teamLogo.allowedExtensions = ["jpg","jpeg","gif","png"]
-flexygames.fileUpload.teamLogo.path = "E:\\Repositories\\flexygames\\web-app\\images\\team"
-environments {
-    production {
-        flexygames.fileUpload.userAvatar.path = "/home/asas/webapps/flexygames/images/user/"
-        flexygames.fileUpload.teamLogo.path = "/home/asas/webapps/flexygames/images/team/"
-    }
-}
-
 ckeditor {
     config = "/js/myckconfig.js"
     skipAllowedItemsCheck = false
@@ -219,7 +139,7 @@ ckeditor {
 
 // Uncomment and edit the following lines to start using Grails encoding & escaping improvements
 
-/* remove this line 
+/* remove this line
 // GSP settings
 grails {
     views {
@@ -240,3 +160,86 @@ grails {
     }
 }
 remove this line */
+
+// Apache Shiro configuration
+security.shiro.authc.required = false
+
+// Google API Key
+google.api.key = 'AIzaSyAoWBElMNGHdbLCdP-5WIY9rOJlEpdtgjE'
+
+// Mail config
+grails.mail.default.from="webmaster@flexygames.net"
+environments {
+    development {
+        grails {
+            // Config for Orange SMTP
+            mail {
+                // It doesn't work..
+                host = "smtp.orange.fr"
+                port = 465
+            }
+            // Config for GMail SMTP
+            mail {
+                // It works but I need to activate a security parameter in Google account: "Allow application which are less secure"
+                host = "smtp.gmail.com"
+                port = 465
+                username = "vincent.frison@gmail.com"
+                password = "not_in_git"
+                props = ["mail.smtp.auth":"true",
+                         "mail.smtp.socketFactory.port":"465",
+                         "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+                         "mail.smtp.socketFactory.fallback":"false",
+                         "mail.smtp.starttls.enable": "true",
+                         "mail.debug": "true"]
+            }
+        }
+    }
+    production {
+        grails {
+            mail {
+                host = "localhost"
+                port = 25
+            }
+        }
+    }
+}
+
+// Server URL
+environments {
+    development {
+        grails.serverURL="http://192.168.1.7:8080/flexygames"
+    }
+    production {
+        //grails.serverURL="http://www.onlacherien.org/games"
+        grails.serverURL="https://www.flexygames.net"
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// FlexyGames specific configuration
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Mailing
+flexygames.mailing.webmaster="webmaster@flexygames.net"
+flexygames.mailing.title.prefix='[FlexyGames] '
+flexygames.mailing.title.suffix=''
+flexygames.mailing.body.prefix='<html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></head><body>'
+flexygames.mailing.body.suffix='</body></html>'
+
+// File uploading
+flexygames.fileUpload.userAvatar.maxSize = 1024 * 32
+flexygames.fileUpload.userAvatar.allowedExtensions = ["jpg","jpeg","gif","png"]
+flexygames.fileUpload.userAvatar.path = "E:\\Repositories\\flexygames\\web-app\\images\\user"
+flexygames.fileUpload.teamLogo.maxSize = 1024 * 32
+flexygames.fileUpload.teamLogo.allowedExtensions = ["jpg","jpeg","gif","png"]
+flexygames.fileUpload.teamLogo.path = "E:\\Repositories\\flexygames\\web-app\\images\\team"
+environments {
+    production {
+        flexygames.fileUpload.userAvatar.path = "/home/asas/webapps/flexygames/images/user/"
+        flexygames.fileUpload.teamLogo.path = "/home/asas/webapps/flexygames/images/team/"
+    }
+}
+
+// Miscellaneous
+flexygames.amnestyDaysNbr = 10
+

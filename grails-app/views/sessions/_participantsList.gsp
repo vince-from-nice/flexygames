@@ -40,6 +40,7 @@
                                 </nobr>
                             </td>
                             <td style="font-size: 10px; border: solid grey 0px">
+                                <g:set var="amnestyTime" value="${now - Integer.valueOf(grailsApplication.config.flexygames.amnestyDaysNbr) * 24 * 60 * 60 * 1000}" />
                                 <nobr>
                                     <g:set var="count" value="${p.player.countParticipations()}"/>
                                     <b>${count}</b>
@@ -52,27 +53,45 @@
                                     <span style="color: ${flexygames.Participation.Status.UNDONE.color}">
                                         <g:set var="count" value="${p.player.countAbsences()}"/>
                                         <g:if test="${count > 1}"><b>${count}</b> <g:message
-                                                code="absences"/><br/></g:if>
+                                                code="absences"/></g:if>
                                         <g:if test="${count == 1}"><b>1</b> <g:message
-                                                code="absence"/><br/></g:if>
+                                                code="absence"/></g:if>
+                                        <g:if test="${count > 0}">
+                                            <g:if test="${amnestyTime < p.player.absenceLastDate?.time}">
+                                                <span class="blink_text">(<g:message code="session.show.participants.recently"/>)</span>
+                                            </g:if>
+                                            <br/>
+                                        </g:if>
                                     </span>
                                 </nobr>
                                 <nobr>
                                     <span style="color: #cecc4e">
                                         <g:set var="count" value="${p.player.countDelays()}"/>
                                         <g:if test="${count > 1}"><b>${count}</b> <g:message
-                                                code="delays"/><br/></g:if>
+                                                code="delays"/></g:if>
                                         <g:if test="${count == 1}"><b>1</b> <g:message
-                                                code="delay"/><br/></g:if>
+                                                code="delay"/></g:if>
+                                        <g:if test="${count > 0}">
+                                            <g:if test="${amnestyTime < p.player.delayLastDate?.time}">
+                                                <span class="blink_text">(<g:message code="session.show.participants.recently"/>)</span>
+                                            </g:if>
+                                            <br/>
+                                        </g:if>
                                     </span>
                                 </nobr>
                                 <nobr>
                                     <span style="color: ${flexygames.Participation.Status.DONE_BAD.color}">
                                         <g:set var="count" value="${p.player.countGateCrashes()}"/>
                                         <g:if test="${count > 1}"><b>${count}</b> <g:message
-                                                code="gatecrashes"/><br/></g:if>
+                                                code="gatecrashes"/></g:if>
                                         <g:if test="${count == 1}"><b>1</b> <g:message
-                                                code="gatecrash"/><br/></g:if>
+                                                code="gatecrash"/></g:if>
+                                        <g:if test="${count > 0}">
+                                            <g:if test="${amnestyTime < p.player.gateCrashLastDate?.time}">
+                                                <span class="blink_text">(<g:message code="session.show.participants.recently"/>)</span>
+                                            </g:if>
+                                            <br/>
+                                        </g:if>
                                     </span>
                                 </nobr>
                                 <nobr>

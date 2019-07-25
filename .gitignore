@@ -5,6 +5,7 @@ classes
 .project
 .classpath
 .settings
+.slcache
 .idea
 *.iml
 *.iws

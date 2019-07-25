@@ -34,15 +34,15 @@ class SessionService {
 		}
 	}
 
-	def updatePlayerStatus(User user, Participation participation, String newStatus, String userLogText) throws Exception  {
+	def updatePlayerStatus(User updater, Participation participation, String newStatus, String userLogText) throws Exception  {
 
 		///////////////////////////////////////////////////////////////////////////////////////////
-		// Checking
+		// Authorization
 		///////////////////////////////////////////////////////////////////////////////////////////
 
 		// Checking if user is not admin or manager
 		if (!SecurityUtils.getSubject().hasRole("Administrator")
-		&& !participation.session.isManagedBy(user.username)) {
+		&& !participation.session.isManagedBy(updater.username)) {
 			// Standard users can use 3 status only
 			if (newStatus != Participation.Status.REQUESTED.code &&
 			newStatus != Participation.Status.AVAILABLE.code  &&
@@ -58,7 +58,7 @@ class SessionService {
 				throw new Exception("Sorry, it's too late to update your status because the locking time of that session is " + participation.session.lockingDate)
 			}
 			// Check user is changing his own status
-			if (user != participation.player) {
+			if (updater != participation.player) {
 				throw new Exception("Hey you cannot change status for others participants !!")
 			}
 		}
@@ -76,13 +76,13 @@ class SessionService {
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////
-		// Updating status
+		// Status update
 		///////////////////////////////////////////////////////////////////////////////////////////
 
 		String oldStatusCode = participation.statusCode
 		participation.setStatusCode(newStatus)
 		participation.setLastUpdate(new Date())
-		participation.setLastUpdater(user.username)
+		participation.setLastUpdater(updater.username)
 		// Truncate and clean the user log text before insert it into DB
 		String userLog = userLogText
 		if (!userLog || userLog == 'null') {
@@ -105,13 +105,13 @@ class SessionService {
 		def locale = new Locale("en","Us")
 		
 		// If the status update has not been performed by user itself, notify him by email
-		if (user != participation.player) {
+		if (updater != participation.player) {
 			def title = messageSource.getMessage('mail.statusUpdateNotification.title', [
 				messageSource.getMessage("participation.status." + participation.statusCode, [].toArray(), locale), 
 				participation.session
 			].toArray(), locale)
 			def body = messageSource.getMessage('mail.statusUpdateNotification.body', [
-				user.username,
+				updater.username,
 				'' + grailsApplication.config.grails.serverURL + '/sessions/show/' + participation.session.id,
 				participation.session,
 				messageSource.getMessage("participation.status." + participation.statusCode, [].toArray(), locale),
@@ -123,11 +123,11 @@ class SessionService {
 
 		// If a non manager user change its status from APPROVED to DECLINED, notify managers by email
 		if (oldStatusCode == Participation.Status.APPROVED.code && newStatus == Participation.Status.DECLINED.code
-		&& !participation.session.isManagedBy(user.username)) {
+		&& !participation.session.isManagedBy(updater.username)) {
 			def title = messageSource.getMessage('mail.statusUpdateNotificationForManager.title', 
-				[user.username, participation.session].toArray(), locale)
+				[updater.username, participation.session].toArray(), locale)
 			def body = messageSource.getMessage('mail.statusUpdateNotificationForManager.body', [
-				user.username,
+				updater.username,
 				'' + grailsApplication.config.grails.serverURL + '/sessions/show/' + participation.session.id,
 				participation.session,
 				messageSource.getMessage("participation.status." + participation.statusCode, [].toArray(), locale)
@@ -139,7 +139,7 @@ class SessionService {
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////
-		// Updating statistics
+		// Statistics update
 		///////////////////////////////////////////////////////////////////////////////////////////
 
 		def updatedUser = participation.player
@@ -147,35 +147,43 @@ class SessionService {
 
 		// If previous status was effective but new status is not, decrement player part counter
 		if (oldParticipation.isEffective() && !participation.isEffective()) {
-			updatedUser = participation.player.updatePartCounter(-1)
+			updatedUser.updatePartCounter(-1)
 		}
 		// If new status is effective but old status was not, increment player part counter
 		if (!oldParticipation.isEffective() && participation.isEffective()) {
-			updatedUser = participation.player.updatePartCounter(1)
+			updatedUser.updatePartCounter(1)
 		}
-		// If new status is DONE_LATE, increment player delay counter
-		if (newStatus == Participation.Status.DONE_LATE.code) {
-			updatedUser = participation.player.updateDelayCounter(1)
-		}
-		// If new status is DONE_BAD, increment player gatecrash counter
-		if (newStatus == Participation.Status.DONE_BAD.code) {
-			updatedUser = participation.player.updateGateCrashCounter(1)
-		}
-		// If old status was DONE_LATE, decrement player delay counter
-		if (oldStatusCode == Participation.Status.DONE_LATE.code) {
-			updatedUser = participation.player.updateDelayCounter(-1)
-		}
-		// If old status was DONE_BAD, decrement player gatecrash counter
-		if (oldStatusCode == Participation.Status.DONE_BAD.code) {
-			updatedUser = participation.player.updateGateCrashCounter(-1)
-		}
-		// If new status is UNDONE, increment player gatecrash counter
+
+		// If new status is UNDONE, increment player gatecrash counter and last date
 		if (newStatus == Participation.Status.UNDONE.code) {
-			updatedUser = participation.player.updateAbsenceCounter(1)
+			updatedUser.absenceLastDate = participation.session.date
+			updatedUser = updatedUser.updateAbsenceCounter(1)
 		}
-		// If old status was UNDONE, decrement player gatecrash counter
+		// If new status is DONE_LATE, increment player delay counter and last dateNN
+		if (newStatus == Participation.Status.DONE_LATE.code) {
+			updatedUser.delayLastDate = participation.session.date
+			updatedUser.updateDelayCounter(1)
+		}
+		// If new status is DONE_BAD, increment player gatecrash counter and last date
+		if (newStatus == Participation.Status.DONE_BAD.code) {
+			updatedUser.gateCrashLastDate = participation.session.date
+			updatedUser = updatedUser.updateGateCrashCounter(1)
+		}
+
+		// If old status was UNDONE, decrement player gatecrash counter and last date
 		if (oldStatusCode == Participation.Status.UNDONE.code) {
-			updatedUser = participation.player.updateAbsenceCounter(-1)
+			updatedUser.absenceLastDate = null
+			updatedUser = updatedUser.updateAbsenceCounter(-1)
+		}
+		// If old status was DONE_LATE, decrement player delay counter and last date
+		if (oldStatusCode == Participation.Status.DONE_LATE.code) {
+			updatedUser.delayLastDate = null
+			updatedUser = updatedUser.updateDelayCounter(-1)
+		}
+		// If old status was DONE_BAD, decrement player gatecrash counter and last date
+		if (oldStatusCode == Participation.Status.DONE_BAD.code) {
+			updatedUser.gateCrashLastDate = null
+			updatedUser = updatedUser.updateGateCrashCounter(-1)
 		}
 
 		if (!updatedUser) {
