@@ -45,7 +45,7 @@
                                 </nobr>
                             </td>
                             <td style="font-size: 10px; border: solid grey 0px">
-                                <g:set var="amnestyTime" value="${now - Integer.valueOf(grailsApplication.config.flexygames.amnestyDaysNbr) * 24 * 60 * 60 * 1000}" />
+                                <g:set var="amnestyTime" value="${java.lang.System.currentTimeMillis() - Integer.valueOf(grailsApplication.config.flexygames.amnestyDaysNbr) * 24 * 60 * 60 * 1000}" />
                                 <nobr>
                                     <g:set var="count" value="${p.player.countParticipations()}"/>
                                     <b>${count}</b>

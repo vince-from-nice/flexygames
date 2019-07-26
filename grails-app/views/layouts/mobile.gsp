@@ -37,6 +37,8 @@
 
     <g:layoutHead/>
     <r:layoutResources />
+
+    <g:set var="now" value="${System.currentTimeMillis()}" />
 </head>
 
 <body onload="${pageProperty(name:'body.onload')}; ">

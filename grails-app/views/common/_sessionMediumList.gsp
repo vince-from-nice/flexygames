@@ -1,13 +1,12 @@
 				<g:set var="username" value="${org.apache.shiro.SecurityUtils.subject.principal}" />
-				<g:set var="now" value="${System.currentTimeMillis()}" />
 				<g:set var="future" value="${false}" />
 				<g:each in="${sessionInstanceList}" status="i" var="sessionInstance">
-					<g:if test="${sessionInstance.date.getTime() > now}">
+					<g:if test="${sessionInstance.date > new Date()}">
 						<g:if test="${!future}">
 							<tr style="height: 5px;">
 								<td colspan="10" style="background-color: #FFB2B2; font-size: 12px; line-height: 10px; text-align: center; color: red">
 									<g:message code="home.session.currentHour" /> :
-									<g:formatDate date="${new Date(now)}" format="EEEEEEE dd MMMM (HH:mm)" />	 
+									<g:formatDate date="${new Date()}" format="EEEEEEE dd MMMM (HH:mm)" />
 								</td>
 							</tr>
 						</g:if>

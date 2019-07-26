@@ -22,13 +22,12 @@
     <br>
     <div style="text-align: center">
         <b>Page statistics :</b>
-    <g:set var="now" value="${System.currentTimeMillis()}" />
-    <g:set var="rt" value="${java.lang.Runtime.getRuntime()}" />
-    It was rendered in ${now - timeBeforeController} ms
-                        (controller: ${timeAfterController - timeBeforeController} ms
-                        view: ${now - timeAfterController} ms) |
-                        Memory: Used: <b>${(int)((rt.totalMemory() - rt.freeMemory())/1024)} kB</b> Free: <b>${(int)(rt.freeMemory()/1024)} kB</b>
-    Total: <b>${(int)(rt.totalMemory()/1024)} kB</b> Max: <b>${(int)(rt.maxMemory()/1024)} kB</b> </small>
+        <g:set var="rt" value="${java.lang.Runtime.getRuntime()}" />
+        It was rendered in ${now - timeBeforeController} ms
+                            (controller: ${timeAfterController - timeBeforeController} ms
+                            view: ${now - timeAfterController} ms) |
+                            Memory: Used: <b>${(int)((rt.totalMemory() - rt.freeMemory())/1024)} kB</b> Free: <b>${(int)(rt.freeMemory()/1024)} kB</b>
+        Total: <b>${(int)(rt.totalMemory()/1024)} kB</b> Max: <b>${(int)(rt.maxMemory()/1024)} kB</b> </small>
     </div>
     <br>
 </shiro:hasRole>

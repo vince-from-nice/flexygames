@@ -4,7 +4,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="layout" content="desktop" />
 	<g:javascript library="interact-1.2.4.min" />
-	<g:set var="now" value="${java.lang.System.currentTimeMillis()}" />
 </head>
 <body>
 	<g:render template="title" />
