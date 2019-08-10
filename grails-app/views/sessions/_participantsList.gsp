@@ -26,7 +26,7 @@
                                     <input type="checkbox" name="selectParticipation${p.id}" form="managementForm"/>
                                 </td>
                             </g:if>
-                            <td style="text-align: left; height: 50px; padding-left: 0px">
+                            <td style="text-align: center; height: 50px; padding-left: 0px">
                                 <g:render template="/common/avatar" model="[player: p.player]"/>
                             </td>
                             <td style="text-align: left; padding-left: 0px; border: solid grey 0px">
