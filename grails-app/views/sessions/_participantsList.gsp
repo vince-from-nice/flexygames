@@ -4,7 +4,7 @@
                     <g:if test="${sessionIsManagedByCurrentUser}"><th></th></g:if>
                     <th style="vertical-align: top; text-align: center;" colspan="2"><g:message code="player"/></th>
                     <th style="vertical-align: top;">&nbsp;</th>
-                    <th style="vertical-align: top;"><g:message code="teams"/></th>
+                    <g:if test="${!mobile}"><th style="vertical-align: top;"><g:message code="teams"/></th></g:if>
                     <th style="vertical-align: top; text-align: center;"><g:message code="status"/></th>
                     <th style="vertical-align: top; min-width: 200px;"><g:message code="log"/></th>
                 </tr>
@@ -22,25 +22,23 @@
                         </g:if>
                         <tr id="participation-${p.id}" class="${(i % 2) == 0 ? 'odd' : 'even'}" style="display: ${display}; border: solid grey 1px">
                             <g:if test="${sessionIsManagedByCurrentUser}">
-                                <th style="vertical-align: middle">
+                                <td style="vertical-align: middle; text-align: center; padding: 2px;">
                                     <input type="checkbox" name="selectParticipation${p.id}" form="managementForm"/>
-                                </th>
+                                </td>
                             </g:if>
-                            <td style="text-align: right; height: 50px; padding-left: 0px">
+                            <td style="text-align: left; height: 50px; padding-left: 0px">
                                 <g:render template="/common/avatar" model="[player: p.player]"/>
                             </td>
-                            <td style="padding-left: 0px; border: solid grey 0px">
+                            <td style="text-align: left; padding-left: 0px; border: solid grey 0px">
                                 <g:link controller="player" action="show" id="${p.player.id}">
                                     ${p.player}
                                 </g:link><br/>
                                 <nobr>
                                     <g:if test="${p.player.membershipInCurrentSession?.feesUpToDate}">
-                                        <span style="font-size: 10px; color: green"><g:message
-                                                code="team.show.membership.feesUpToDate"/></span>
+                                        <span style="font-size: 10px; color: green"><g:message code="team.show.membership.feesUpToDate"/></span>
                                     </g:if>
                                     <g:else>
-                                        <span style="font-size: 10px; color: red"><g:message
-                                                code="team.show.membership.feesNotUpToDate"/></span>
+                                        <span style="font-size: 10px; color: red"><g:message code="team.show.membership.feesNotUpToDate"/></span>
                                     </g:else>
                                 </nobr>
                             </td>
@@ -49,18 +47,15 @@
                                 <nobr>
                                     <g:set var="count" value="${p.player.countParticipations()}"/>
                                     <b>${count}</b>
-                                    <g:if test="${count > 1}"><g:message
-                                            code="participations"/></g:if>
+                                    <g:if test="${count > 1}"><g:message code="participations"/></g:if>
                                     <g:else><g:message code="participation"/></g:else>
                                 </nobr>
                                 <br/>
                                 <nobr>
                                     <span style="color: ${flexygames.Participation.Status.UNDONE.color}">
                                         <g:set var="count" value="${p.player.countAbsences()}"/>
-                                        <g:if test="${count > 1}"><b>${count}</b> <g:message
-                                                code="absences"/></g:if>
-                                        <g:if test="${count == 1}"><b>1</b> <g:message
-                                                code="absence"/></g:if>
+                                        <g:if test="${count > 1}"><b>${count}</b> <g:message code="absences"/></g:if>
+                                        <g:if test="${count == 1}"><b>1</b> <g:message code="absence"/></g:if>
                                         <g:if test="${count > 0}">
                                             <g:if test="${amnestyTime < p.player.absenceLastDate?.time}">
                                                 <span class="blink_text">(<g:message code="session.show.participants.recently"/>)</span>
@@ -72,10 +67,8 @@
                                 <nobr>
                                     <span style="color: #cecc4e">
                                         <g:set var="count" value="${p.player.countDelays()}"/>
-                                        <g:if test="${count > 1}"><b>${count}</b> <g:message
-                                                code="delays"/></g:if>
-                                        <g:if test="${count == 1}"><b>1</b> <g:message
-                                                code="delay"/></g:if>
+                                        <g:if test="${count > 1}"><b>${count}</b> <g:message code="delays"/></g:if>
+                                        <g:if test="${count == 1}"><b>1</b> <g:message code="delay"/></g:if>
                                         <g:if test="${count > 0}">
                                             <g:if test="${amnestyTime < p.player.delayLastDate?.time}">
                                                 <span class="blink_text">(<g:message code="session.show.participants.recently"/>)</span>
@@ -87,10 +80,8 @@
                                 <nobr>
                                     <span style="color: ${flexygames.Participation.Status.DONE_BAD.color}">
                                         <g:set var="count" value="${p.player.countGateCrashes()}"/>
-                                        <g:if test="${count > 1}"><b>${count}</b> <g:message
-                                                code="gatecrashes"/></g:if>
-                                        <g:if test="${count == 1}"><b>1</b> <g:message
-                                                code="gatecrash"/></g:if>
+                                        <g:if test="${count > 1}"><b>${count}</b> <g:message code="gatecrashes"/></g:if>
+                                        <g:if test="${count == 1}"><b>1</b> <g:message code="gatecrash"/></g:if>
                                         <g:if test="${count > 0}">
                                             <g:if test="${amnestyTime < p.player.gateCrashLastDate?.time}">
                                                 <span class="blink_text">(<g:message code="session.show.participants.recently"/>)</span>
@@ -105,21 +96,20 @@
                                     </g:link>
                                 </nobr>
                             </td>
+                            <g:if test="${!mobile}">
                             <td style="font-size: 10px; line-height: 10px; border: solid grey 1px">
                                 <g:each in="${p.player.teamsInCurrentSession}" var="t">
                                     <g:link controller="teams" action="show" id="${t.id}">${t}</g:link><br/>
                                 </g:each>
                             </td>
+                            </g:if>
                             <g:render template="/common/status" model="['part': p, 'allStatusesArePossible':sessionIsManagedByCurrentUser]"/>
                             <td style="background-color: ${flexygames.Participation.Status.color(p.statusCode)}; font-size: 12px; border: solid black 1px">
                                 <g:if test="${p.lastUpdate}">
                                     <g:message code="session.show.participants.lastUpdate" args="[]"/>
                                     <b><flexy:humanDate date="${p.lastUpdate.time}"/></b>
-                                    <g:if test="${p.lastUpdater}">
-                                        <g:message code="by"/> ${p.lastUpdater}
-                                    </g:if>
-                                    <g:if test="${p.userLog?.length() > 0}">: <span
-                                            style="font-size: 12px"><i>${p.userLog}</i></span></g:if>
+                                    <g:if test="${p.lastUpdater}"><g:message code="by"/> ${p.lastUpdater}</g:if>
+                                    <g:if test="${p.userLog?.length() > 0}">: <span style="font-size: 12px"><i>${p.userLog}</i></span></g:if>
                                 </g:if>
                             </td>
                         </tr>

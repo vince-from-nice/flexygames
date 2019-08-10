@@ -49,7 +49,7 @@
             <g:if test="${sessionIsManagedByCurrentUser}">
                 <g:set var="hidePendingPlayersByDefault" value="${true}" />
             </g:if>
-            <g:render template="participantsList" />
+            <g:render template="participantsList" model="[mobile:true]" />
             <form>
                 <input type="checkbox" data-role="flipswitch" name="hidePendingPlayers" id="flip-checkbox-4" checked="${hidePendingPlayersByDefault}" onchange="togglePendingParticipations(); return true; ">
                 <label for="hidePendingPlayers" style="display: inline;"><g:message code="session.show.participants.hidePendingPlayers"/></label>
