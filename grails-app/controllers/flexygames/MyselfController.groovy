@@ -14,12 +14,12 @@ class MyselfController {
     }
 
 	def myAccount = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		render(view: (displayService.isMobileDevice(request) ? 'myAccountMobile' : 'myAccount'),  model:[playerInstance: user])
 	}
 	
 	def myPlanning = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		// if calendarToken is not already generated do it now !
 		if (!user.calendarToken) {
 			user.calendarToken = UUID.randomUUID().toString()
@@ -61,21 +61,21 @@ class MyselfController {
 	}
 
 	def myProfile = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		redirect (controller:"player", action:"show", id: user.id)
 	}
 	
 	def myStats = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		redirect(controller: "player", action: "stats", params:[id:user.id])
 	}
 	
 	def editMyProfile = {
-		[playerInstance: User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())]
+		[playerInstance: session.currentUser]
 	}
 
 	def updateMyProfile = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		if (user) {
 			if (params.version) {
 				def version = params.version.toLong()
@@ -110,7 +110,7 @@ class MyselfController {
 	}
 
 	def changeMyPassord = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		if (user) {
 			def oldPasswordHash = new Sha512Hash(params.oldPassword).toHex()
 			if (user.passwordHash != oldPasswordHash) {
@@ -130,7 +130,7 @@ class MyselfController {
 	}
 
 	def joinTeam = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		def team = Team.get(params.id)
 		if (!user) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player')])}"
@@ -153,7 +153,7 @@ class MyselfController {
 	}
 	
 	def updateMembership = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		def ms = Membership.get(params.id)
 		if (!user) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player')])}"
@@ -172,8 +172,8 @@ class MyselfController {
 	}
 
 	def leaveTeam = {
-		//User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		//User user = session.currentUser
+		User user = session.currentUser
 		def ms = Membership.get(params.id)
 		if (!user) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player')])}"
@@ -195,7 +195,7 @@ class MyselfController {
 	}
 
 	def addSkill = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		GameSkill skill = GameSkill.get(params.id)
 		if (!user) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player')])}"
@@ -222,7 +222,7 @@ class MyselfController {
 	}
 
 	def removeSkill = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		GameSkill skill = GameSkill.get(params.id)
 		if (!user) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player')])}"

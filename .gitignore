@@ -1,7 +1,8 @@
-target*
-upload*
-misc
+target
+upload
+build
 classes
+.gradle
 .project
 .classpath
 .settings

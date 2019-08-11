@@ -86,7 +86,7 @@ class TeamsController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'blogEntry'), params.id])}"
 			return redirect(action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		def comment
 		try {
 			comment = forumService.postBlogComment(user, be, params.comment)

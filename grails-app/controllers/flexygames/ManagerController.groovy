@@ -26,7 +26,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!groupInstance.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session group (and add a new session) since you're not a manager !"
 			return redirect(controller: "sessions", action: "list")
@@ -48,7 +48,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!groupInstance.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session group (and add a new session) since you're not a manager !"
 			return redirect(controller: "sessions", action: "list")
@@ -85,7 +85,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!sessionInstance.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: sessionInstance.id])
@@ -99,7 +99,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!sessionInstance.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: sessionInstance.id])
@@ -146,7 +146,7 @@ class ManagerController {
 			return redirect(controller: "sessions", action: "list")
 		}
 		def sessionInstance = reminder.session
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!sessionInstance.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: sessionInstance.id])
@@ -163,7 +163,7 @@ class ManagerController {
 			return redirect(controller: "sessions", action: "list")
 		}
 		def sessionInstance = task.session
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!sessionInstance.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: sessionInstance.id])
@@ -179,7 +179,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!oldSession.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: oldSession.id])
@@ -218,7 +218,7 @@ class ManagerController {
 			])
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!sessionInstance.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: sessionInstance.id])
@@ -253,7 +253,7 @@ class ManagerController {
 			])
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!sessionInstance.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: sessionInstance.id])
@@ -300,7 +300,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!s.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: params.id])
@@ -334,7 +334,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!s.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: params.id])
@@ -369,7 +369,7 @@ class ManagerController {
 
 	def updateParticipationStatus = {
 		def session = Session.get(params.id)
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: params.id])
@@ -405,7 +405,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: params.id])
@@ -439,7 +439,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: params.id])
@@ -478,7 +478,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: params.id])
@@ -530,7 +530,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: params.id])
@@ -563,7 +563,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: params.id])
@@ -587,7 +587,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'composition.label', default: 'Composition'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!composition.session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: composition.session])
@@ -635,7 +635,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'composition.label', default: 'Composition'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!composition.session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: composition.session])
@@ -655,7 +655,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: params.id])
@@ -678,7 +678,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'round.label', default: 'Round'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!round.session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: round.session.id])
@@ -702,7 +702,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'round.label', default: 'Round'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!round.session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: round.session.id])
@@ -754,7 +754,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'round.label', default: 'Session'), params.id])}"
 			return redirect(controller: "sessions", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!oldRound.session.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: oldRound.session.id])
@@ -796,7 +796,7 @@ class ManagerController {
 			flash.error = "Membership doesn't exist !"
 			return redirect(controller: "teams", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!ms.team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
 			redirect(controller:"teams", action: "show", id: ms.team.id)
@@ -818,7 +818,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team')])}"
 			return redirect(controller: "teams", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
 			redirect(controller:"teams", action: "show", id: team.id)
@@ -847,7 +847,7 @@ class ManagerController {
 			flash.error = "Membership doesn't exist !"
 			return redirect(controller: "teams", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!ms.team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
 			redirect(controller:"teams", action: "show", id: ms.team.id)
@@ -872,7 +872,7 @@ class ManagerController {
 
 	def showAttendanceSheet() {
 		def STOUFIX_MAGIC_NUMBER = "6"
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		Team team = Team.get(params.id)
 		if (!team) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team', default: 'Team'), params.id])}"
@@ -932,7 +932,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team'), params.teamId])}"
 			return redirect(controller: "teams", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
 			redirect(controller:"teams", action: "show", id: team.id)
@@ -947,7 +947,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'team.label', default: 'Team'), params.teamId])}"
 			return redirect(controller: "teams", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		if (!team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
 			redirect(controller:"teams", action: "show", id: team.id)
@@ -992,7 +992,7 @@ class ManagerController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'blogEntry'), params.id])}"
 			return redirect(controller: "teams", action: "list")
 		}
-		def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		def user = session.currentUser
 		def team = be.getTeam()
 		if (!team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
