@@ -1,10 +1,13 @@
 package flexygames
 
+import grails.gorm.transactions.Transactional
+
 import org.apache.shiro.SecurityUtils
 import org.jsoup.Jsoup
 import org.jsoup.safety.Whitelist
 import org.springframework.context.MessageSource;
 
+@Transactional
 class SessionService {
 
 	def grailsApplication
@@ -12,8 +15,7 @@ class SessionService {
 	MessageSource messageSource
 	
 	def mailerService
-
-
+	
 
 	def join(User user, Session session) throws Exception {
 		// Check if the session is not in the past

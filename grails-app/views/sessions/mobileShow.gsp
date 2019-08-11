@@ -17,7 +17,7 @@
         <div class="errors">${flash.error}</div>
     </g:if>
 
-    <g:set var="sessionIsManagedByCurrentUser" value="${sessionInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}" />
+    <g:set var="sessionIsManagedByCurrentUser" value="${sessionInstance.isManagedBy(session.currentUser?.username)}" />
 
     <g:render template="mobileInfos" />
 

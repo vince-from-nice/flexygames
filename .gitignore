@@ -10,5 +10,5 @@ classes
 *.iml
 *.iws
 *.ipr
-web-app/images/team/team-*
-web-app/images/user/user-*
+src/main/webapp/images/team/team-*
+src/main/webapp/images/user/user-*

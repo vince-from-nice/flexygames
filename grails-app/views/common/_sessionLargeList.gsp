@@ -1,6 +1,5 @@
-				<g:set var="username" value="${org.apache.shiro.SecurityUtils.subject.principal}" />
 				<g:each in="${sessionInstanceList}" status="i" var="sessionInstance">
-					<g:if test="${sessionInstance.group.isVisibleByUsername(username)}">
+					<g:if test="${sessionInstance.group.isVisibleByUsername(session.currentUser?.username)}">
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
 						<g:if test="${sessionInstance.canceled}">
 							<g:set var="isCanceled" value="text-decoration: line-through;"/>
@@ -36,7 +35,7 @@
 					        	<span style="font-size: small">(min: ${sessionInstance.group.defaultMinPlayerNbr})</span>
 					        	</nobr>
 					        </td>
-					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': org.apache.shiro.SecurityUtils.subject.principal]" />
+					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': session.currentUser?.username]" />
 							<g:if test="${request.display == 'desktop'}">
 								<td style="vertical-align: middle;">${fieldValue(bean: sessionInstance, field: "playground")}</td>
 								<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'" >

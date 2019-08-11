@@ -1,8 +1,10 @@
 package flexygames
 
-import grails.transaction.Transactional
-import grails.plugins.rest.client.RestBuilder
-import org.codehaus.groovy.grails.web.json.JSONObject
+import grails.gorm.transactions.Transactional
+//import grails.plugins.rest.client.RestBuilder
+
+import org.grails.web.json.JSONObject
+
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 
@@ -25,7 +27,8 @@ class ForecastService {
 		
 		// Fetch data from Yahoo Weather API
 		long t1 = System.currentTimeMillis();
-		def rest = new RestBuilder(connectTimeout:5000, readTimeout:5000)
+		// TODO: remplace RestBuilder which seems unavailable for Grails 3.x ?
+		//def rest = new RestBuilder(connectTimeout:5000, readTimeout:5000)
 		def query = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + session.playground.city + "') and u='c'&format=json"
 		def resp = null
 		try {
@@ -36,7 +39,8 @@ class ForecastService {
 		}
 		//println "resp.json: " + resp.json
 		def results = resp?.json?.query?.results
-		if (results == null || results instanceof org.codehaus.groovy.grails.web.json.JSONObject.Null || !resp.json.query.results.has('channel')) {
+		// TODO Why JSONObject.NULL is not accessible ?
+		if (results == null || results instanceof org.grails.web.json.JSONObject/*.NULL*/ || !resp.json.query.results.has('channel')) {
 			return null
 		}
 		def channel = resp.json.query.results.channel

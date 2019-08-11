@@ -1,13 +1,13 @@
 package flexygames
 
+import grails.gorm.transactions.Transactional
 import grails.util.Environment
 
 import org.springframework.context.i18n.LocaleContextHolder as LCH
 
 
+@Transactional
 class MailerService {
-
-    static transactional = true
 
     def grailsApplication
 

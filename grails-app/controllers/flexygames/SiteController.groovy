@@ -30,7 +30,7 @@ class SiteController {
 		render (view: "tutorial")
 	}
 	
-	def contact = { command.ContactCommand cmd ->
+	def contact = { flexygames.command.ContactCommand cmd ->
 		if (!request.post) {
 			return render (view: "contact", )
 		}

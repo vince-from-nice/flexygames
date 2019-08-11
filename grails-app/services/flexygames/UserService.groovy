@@ -1,6 +1,6 @@
 package flexygames
 
-import org.springframework.transaction.annotation.Transactional;
+import grails.gorm.transactions.Transactional
 
 @Transactional
 class UserService {

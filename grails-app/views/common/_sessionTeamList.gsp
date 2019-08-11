@@ -1,4 +1,3 @@
-				<g:set var="username" value="${org.apache.shiro.SecurityUtils.subject.principal}" />
 				<g:set var="past" value="${false}" />
 				<g:each in="${sessionInstanceList}" status="i" var="sessionInstance">
 					<g:if test="${sessionInstance.date < new Date()}">
@@ -12,7 +11,7 @@
 						</g:if>
 						<g:set var="past" value="${true}" />
 					</g:if>
-					<g:if test="${sessionInstance.group.isVisibleByUsername(username)}">
+					<g:if test="${sessionInstance.group.isVisibleByUsername(session.currentUser?.username)}">
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
 						<g:if test="${sessionInstance.canceled}">
 							<g:set var="isCanceled" value="text-decoration: line-through;"/>
@@ -60,7 +59,7 @@
 					        </td>
 					        
 					        <!-- Status -->
-					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': org.apache.shiro.SecurityUtils.subject.principal]" />
+					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': session.currentUser?.username]" />
 
 					        <!-- Players Numbers -->
 							<g:set var="color" value="#f33" />

@@ -32,7 +32,7 @@ class MyselfController {
 	}
 	
 	def mySessions = {
-		User user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+		User user = session.currentUser
 		Calendar cal = Calendar.getInstance()
 		final int WEEKS_NBR = 4;
 		def allSessions = [];

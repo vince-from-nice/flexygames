@@ -1,9 +1,12 @@
 package flexygames
 
+import grails.gorm.transactions.Transactional
+
 import org.jsoup.Jsoup
 import org.jsoup.safety.Whitelist
 import org.springframework.context.MessageSource;
 
+@Transactional
 class ForumService {
 
 	def grailsApplication

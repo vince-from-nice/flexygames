@@ -171,8 +171,9 @@ class Team implements Comparable {
 	}
 
 	Session getNextSession(boolean competition) {
-		def sessions = Session.findAllByGroupInListAndDateGreaterThan(this.sessionGroups.grep{it.competition == competition},
-				new Date(), [max: 1, sort: "date", order: "asc"])
+		def groups = this.sessionGroups.grep{it.competition == competition}
+		if (groups.isEmpty()) return null
+		def sessions = Session.findAllByGroupInListAndDateGreaterThan(groups, new Date(), [max: 1, sort: "date", order: "asc"])
 		if (sessions.isEmpty()) return null
 		return sessions.first()
 	}

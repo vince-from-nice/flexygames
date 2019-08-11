@@ -1,5 +1,8 @@
 package flexygames
 
+import grails.gorm.transactions.Transactional
+
+@Transactional
 class VotingService {
 
 	def vote(Session session, User voter, params) throws Exception  {

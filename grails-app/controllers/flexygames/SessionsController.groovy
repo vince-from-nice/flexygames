@@ -74,32 +74,28 @@ class SessionsController {
 			redirect(action: "list")
 		}
 
-		def allPlayers = session.participations*.player
-
 		// Prepare data about participants
-		// Since Participation.compareTo() is smart there is nothing special to do, the participation table will well sorted
+		def allPlayers = session.participations*.player
+		if (allPlayers.size() > 0) {
+			// Since Participation.compareTo() is smart there is nothing special to do about sorting
 
-		// Prepare data about memberships of participants (for feesUpToDate)
-		Team defaultTeam = session.group.defaultTeams.first()
-		// Fetch membership of all users of the session in one shot
-		def allMembershipsForCurrentSession = Membership.findAllByTeamAndUserInList(defaultTeam, allPlayers)
-//		session.participations.each { part ->
-//			def player = part.player
-//			def membership = allMembershipsForCurrentSession.find{it.user == player}
-//			player.membershipInCurrentSession = membership
-//			//println("- participant: " + player.username + " has fees up to date:" + membership?.feesUpToDate)
-//		}
-		allMembershipsForCurrentSession.each { membership ->
-			def player = allPlayers.find{it == membership.user}
-			player.membershipInCurrentSession = membership
-		}
+			// Prepare data about memberships of participants (for feesUpToDate)
+			Team defaultTeam = session.group.defaultTeams.first()
+			// Fetch membership of all users of the session in one shot
+			def allMembershipsForCurrentSession = Membership.findAllByTeamAndUserInList(defaultTeam, allPlayers)
 
-		// Prepare data about teams of participants
-		def allMembershipsForAnySession = Membership.findAllByUserInList(allPlayers)
-		// The previous request has fetched memberships of all players in one shot, now dispatch associated teams into their relative players
-		allMembershipsForAnySession.each { membership ->
-			def player = allPlayers.find{it == membership.user}
-			player.teamsInCurrentSession << membership.team
+			allMembershipsForCurrentSession.each { membership ->
+				def player = allPlayers.find { it == membership.user }
+				player.membershipInCurrentSession = membership
+			}
+
+			// Prepare data about teams of participants
+			def allMembershipsForAnySession = Membership.findAllByUserInList(allPlayers)
+			// The previous request has fetched memberships of all players in one shot, now dispatch associated teams into their relative players
+			allMembershipsForAnySession.each { membership ->
+				def player = allPlayers.find { it == membership.user }
+				player.teamsInCurrentSession << membership.team
+			}
 		}
 
         // Prepare data about carpooling
@@ -129,31 +125,33 @@ class SessionsController {
 
 
         // Prepare data about votes of participants (move it to the Vote domain class) ?
+		def currentVotes = null
 		def participantsByScore = []
 		def effectivePlayers = session.getEffectiveParticipants()
-		// Fetch all relevant votes in one query
-		def allVotes = Vote.findAllBySessionAndPlayerInList(session, effectivePlayers)
-		effectivePlayers.each{ player ->
-			int score = 0
-			//def votes = Vote.findAllBySessionAndPlayer(session, player)
-			def votes = allVotes.grep{it.player == player}
-			votes.each{vote -> score += vote.score}
-			player.scoreInCurrentSession = score
-			participantsByScore << player
-			participantsByScore.sort{it.scoreInCurrentSession}
-		}
-		def currentVotes = null
-		def currentUser = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
-		if (currentUser) {
-			currentVotes = [:]
-			def votes = allVotes.grep{it.user == currentUser}
-			votes.each{ vote ->
-				if (vote.score == 3) currentVotes.put('firstPositive',  vote.player)
-				else if (vote.score == 2) currentVotes.put('secondPositive',  vote.player)
-				else if (vote.score == 1) currentVotes.put('thirdPositive',  vote.player)
-				else if (vote.score == -3) currentVotes.put('firstNegative',  vote.player)
-				else if (vote.score == -2) currentVotes.put('secondNegative',  vote.player)
-				else if (vote.score == -1) currentVotes.put('thirdNegative',  vote.player)
+		if (effectivePlayers.size() > 0) {
+			// Fetch all relevant votes in one query
+			def allVotes = Vote.findAllBySessionAndPlayerInList(session, effectivePlayers)
+			effectivePlayers.each { player ->
+				int score = 0
+				//def votes = Vote.findAllBySessionAndPlayer(session, player)
+				def votes = allVotes.grep { it.player == player }
+				votes.each { vote -> score += vote.score }
+				player.scoreInCurrentSession = score
+				participantsByScore << player
+				participantsByScore.sort { it.scoreInCurrentSession }
+			}
+			def currentUser = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
+			if (currentUser) {
+				currentVotes = [:]
+				def votes = allVotes.grep { it.user == currentUser }
+				votes.each { vote ->
+					if (vote.score == 3) currentVotes.put('firstPositive', vote.player)
+					else if (vote.score == 2) currentVotes.put('secondPositive', vote.player)
+					else if (vote.score == 1) currentVotes.put('thirdPositive', vote.player)
+					else if (vote.score == -3) currentVotes.put('firstNegative', vote.player)
+					else if (vote.score == -2) currentVotes.put('secondNegative', vote.player)
+					else if (vote.score == -1) currentVotes.put('thirdNegative', vote.player)
+				}
 			}
 		}
 

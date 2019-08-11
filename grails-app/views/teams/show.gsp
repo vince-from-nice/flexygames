@@ -1,5 +1,5 @@
 <%@ page import="flexygames.Team" %>
-<g:set var="teamIsManagedByCurrentUser" value="${teamInstance.isManagedBy(org.apache.shiro.SecurityUtils.subject.principal)}" />
+<g:set var="teamIsManagedByCurrentUser" value="${teamInstance.isManagedBy(session.currentUser?.username)}" />
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

@@ -2,8 +2,9 @@ package flexygames
 
 import grails.transaction.Transactional
 
-@Transactional
 class DisplayService {
+
+    static transactional = false
 
     def isMobileDevice(request) {
         if ('mobile'.equals(request.session.flavour)) {

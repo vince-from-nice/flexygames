@@ -39,7 +39,7 @@
 								<th style="font-size: 12px; vertical-align: middle;"><g:message code="lastComment" /></th>
 							</tr>
 							<g:if test="${group.sessions.size() > 0}">
-								<g:if test="${group.isVisibleByUsername(org.apache.shiro.SecurityUtils.subject.principal)}">
+								<g:if test="${group.isVisibleByUsername(session.currentUser?.username)}">
 									<g:render template="/common/sessionTeamList" model="['sessionInstanceList': group.sessions, 'competition': group.competition]" />
 								</g:if>
 								<g:else>

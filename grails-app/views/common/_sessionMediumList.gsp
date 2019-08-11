@@ -1,4 +1,3 @@
-				<g:set var="username" value="${org.apache.shiro.SecurityUtils.subject.principal}" />
 				<g:set var="future" value="${false}" />
 				<g:each in="${sessionInstanceList}" status="i" var="sessionInstance">
 					<g:if test="${sessionInstance.date > new Date()}">
@@ -12,7 +11,7 @@
 						</g:if>
 						<g:set var="future" value="${true}" />
 					</g:if>
-					<g:if test="${sessionInstance.group.isVisibleByUsername(username)}">
+					<g:if test="${sessionInstance.group.isVisibleByUsername(session.currentUser?.username)}">
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
 						<g:if test="${lastDate != sessionInstance.date.toString().substring(0, sessionInstance.date.toString().length() - 10)}">
 							<tr>
@@ -53,7 +52,7 @@
 					        	<span style="font-size: 10px">(min: ${sessionInstance.group.defaultMinPlayerNbr})</span>
 					        	</nobr>
 					        </td>
-					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': org.apache.shiro.SecurityUtils.subject.principal]" />
+					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': session.currentUser?.username]" />
 							<td style="vertical-align: middle; ">
 								<g:if test="${sessionInstance.comments}">
 									<g:set var="lastComment" value="${sessionInstance.comments.first()}" />

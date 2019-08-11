@@ -92,7 +92,7 @@
             <br>
             <g:message code="management.participations.multiUpdate"/>:
             <g:message code="status"/>
-            <g:select name="statusCode" from="${flexygames.Participation.constraints.statusCode.inList}"
+            <g:select name="statusCode" from="${flexygames.Participation.constrainedProperties.statusCode.inList}"
                       valueMessagePrefix="participation.status" style="font-size : 14px" />
             <g:message code="log"/>
             <g:field type="text" name="userLog" style="background-color: white; color: black;"  />

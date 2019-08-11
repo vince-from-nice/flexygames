@@ -1,8 +1,8 @@
 <!-- Load the participation only if required -->
 <g:if test="${part == null}">
-    <g:set var="part" value="${sessionInstance.getParticipationOf(username)}"/>
+    <g:set var="part" value="${sessionInstance.getParticipationOf(session.currentUser?.username)}"/>
 </g:if>
-<g:if test="${part}">
+<g:if test="${part!=null}">
     <td style="text-align: center; vertical-align: middle; border: solid black 1px; background-color: ${flexygames.Participation.Status.color(part?.statusCode)}; ">
         <g:form name="participationStatusForm${part.id}" method="get" controller="sessions" action="update">
             <g:hiddenField name="id" value="${part.id}"/>
@@ -10,10 +10,10 @@
             <g:set var="possibleStatus" value="${[part.statusCode]}"/>
             <!-- Check if session is managed by current user only if required -->
             <g:if test="${allStatusesArePossible || sessionIsManagedByCurrentUser}">
-                <g:set var="possibleStatus" value="${part.constraints.statusCode.inList}"/>
+                <g:set var="possibleStatus" value="${flexygames.Participation.constrainedProperties.statusCode.inList}"/>
             </g:if>
             <g:else>
-                <g:if test="${org.apache.shiro.SecurityUtils.subject.principal == part.player.username}">
+                <g:if test="${session.currentUser?.username == part.player.username}">
                     <g:if test="${part.statusCode == flexygames.Participation.Status.REQUESTED.code}">
                         <g:set var="possibleStatus"
                                value="${[flexygames.Participation.Status.REQUESTED.code, flexygames.Participation.Status.AVAILABLE.code, flexygames.Participation.Status.DECLINED.code]}"/>

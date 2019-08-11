@@ -9,7 +9,7 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 
 class ReminderService {
 
-	static transactional = false // pour éviter un spam général
+	static transactional = false
 	
 	def grailsApplication
 	
