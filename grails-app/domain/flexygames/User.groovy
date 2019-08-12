@@ -591,8 +591,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		def onlineUsers = event.session.servletContext.onlineUsers
 		if (onlineUsers.contains(this)) onlineUsers.remove(this)
 		println "User $username is logged out"
-		//lastLogout = new Date()
-		//if (!this.save()) println "Unable to update last logout for $username"
 	}
 
 }

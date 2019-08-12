@@ -14,12 +14,12 @@ class MyselfController {
     }
 
 	def myAccount = {
-		User user = session.currentUser
+		User user = request.currentUser
 		render(view: (displayService.isMobileDevice(request) ? 'myAccountMobile' : 'myAccount'),  model:[playerInstance: user])
 	}
 	
 	def myPlanning = {
-		User user = session.currentUser
+		User user = request.currentUser
 		// if calendarToken is not already generated do it now !
 		if (!user.calendarToken) {
 			user.calendarToken = UUID.randomUUID().toString()
@@ -32,7 +32,7 @@ class MyselfController {
 	}
 	
 	def mySessions = {
-		User user = session.currentUser
+		User user = request.currentUser
 		Calendar cal = Calendar.getInstance()
 		final int WEEKS_NBR = 4;
 		def allSessions = [];
@@ -61,21 +61,21 @@ class MyselfController {
 	}
 
 	def myProfile = {
-		User user = session.currentUser
+		User user = request.currentUser
 		redirect (controller:"player", action:"show", id: user.id)
 	}
 	
 	def myStats = {
-		User user = session.currentUser
+		User user = request.currentUser
 		redirect(controller: "player", action: "stats", params:[id:user.id])
 	}
 	
 	def editMyProfile = {
-		[playerInstance: session.currentUser]
+		[playerInstance: request.currentUser]
 	}
 
 	def updateMyProfile = {
-		User user = session.currentUser
+		User user = request.currentUser
 		if (user) {
 			if (params.version) {
 				def version = params.version.toLong()
@@ -110,7 +110,7 @@ class MyselfController {
 	}
 
 	def changeMyPassord = {
-		User user = session.currentUser
+		User user = request.currentUser
 		if (user) {
 			def oldPasswordHash = new Sha512Hash(params.oldPassword).toHex()
 			if (user.passwordHash != oldPasswordHash) {
@@ -130,7 +130,7 @@ class MyselfController {
 	}
 
 	def joinTeam = {
-		User user = session.currentUser
+		User user = request.currentUser
 		def team = Team.get(params.id)
 		if (!user) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player')])}"
@@ -153,7 +153,7 @@ class MyselfController {
 	}
 	
 	def updateMembership = {
-		User user = session.currentUser
+		User user = request.currentUser
 		def ms = Membership.get(params.id)
 		if (!user) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player')])}"
@@ -172,8 +172,8 @@ class MyselfController {
 	}
 
 	def leaveTeam = {
-		//User user = session.currentUser
-		User user = session.currentUser
+		//User user = request.currentUser
+		User user = request.currentUser
 		def ms = Membership.get(params.id)
 		if (!user) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player')])}"
@@ -195,7 +195,7 @@ class MyselfController {
 	}
 
 	def addSkill = {
-		User user = session.currentUser
+		User user = request.currentUser
 		GameSkill skill = GameSkill.get(params.id)
 		if (!user) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player')])}"
@@ -222,7 +222,7 @@ class MyselfController {
 	}
 
 	def removeSkill = {
-		User user = session.currentUser
+		User user = request.currentUser
 		GameSkill skill = GameSkill.get(params.id)
 		if (!user) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player')])}"

@@ -1,6 +1,6 @@
 <!-- Load the participation only if required -->
 <g:if test="${part == null}">
-    <g:set var="part" value="${sessionInstance.getParticipationOf(session.currentUser?.username)}"/>
+    <g:set var="part" value="${sessionInstance.getParticipationOf(request.currentUser?.username)}"/>
 </g:if>
 <g:if test="${part!=null}">
     <td style="text-align: center; vertical-align: middle; border: solid black 1px; background-color: ${flexygames.Participation.Status.color(part?.statusCode)}; ">
@@ -13,7 +13,7 @@
                 <g:set var="possibleStatus" value="${flexygames.Participation.constrainedProperties.statusCode.inList}"/>
             </g:if>
             <g:else>
-                <g:if test="${session.currentUser?.username == part.player.username}">
+                <g:if test="${request.currentUser?.username == part.player.username}">
                     <g:if test="${part.statusCode == flexygames.Participation.Status.REQUESTED.code}">
                         <g:set var="possibleStatus"
                                value="${[flexygames.Participation.Status.REQUESTED.code, flexygames.Participation.Status.AVAILABLE.code, flexygames.Participation.Status.DECLINED.code]}"/>

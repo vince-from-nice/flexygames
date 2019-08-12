@@ -31,13 +31,14 @@ class OnlineUserInterceptor {
                 if (!onlineUsers*.username.contains(username)) {
                     println "Adding $username to online users"
                     onlineUsers << user
+                    session.currentUser = user
                 }
                 // if user isn't not already in session (which could happen with the "remember me" feature), do it now !
-                if (session.currentUser != user ) {
+                if (user.username != session.currentUser?.username) {
                     println "Adding $username into session"
                 }
-                // Actually need to update the user in session in any case (lazy proxies can have a valid Hibernate session)
-                session.currentUser = user
+                // Set the current user in request
+                request.currentUser = user
             }
         }
         true

@@ -39,7 +39,7 @@
                                         <g:set var="username" value="${username.substring(0, 7)}.." />
                                     </g:if>
                                     <g:link controller="player" action="show" id="${task.user.id}" >${username}</g:link>
-                                    <g:if test="${task.user == session.currentUser || sessionIsManagedByCurrentUser}">
+                                    <g:if test="${task.user == request.currentUser || sessionIsManagedByCurrentUser}">
                                         <g:link action="deleteTask" id="${task.id}" >
                                             <img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />
                                         </g:link>

@@ -33,6 +33,7 @@ class ShiroWildcardDbRealm implements GrailsShiroRealm, SimplifiedRealm {
                 throw new AccountException("Null usernames are not allowed by this realm ${getName()}.")
             }
 
+            // turman: try to find user by username
             def user = User.findByUsername(username)
             if (!user) {
                 throw new UnknownAccountException("No account found for user [${username}]")

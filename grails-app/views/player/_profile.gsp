@@ -22,7 +22,7 @@
 				<td valign="top" class="name"><g:message code="birthYear" default="Year Date" /></td>
 				<td valign="top" class="value">${playerInstance?.yearBirthDate}</td>
 			</tr>
-			<g:if test="${playerInstance.isManagedBy(session.currentUser?.username)}" >
+			<g:if test="${playerInstance.isManagedBy(request.currentUser?.username)}" >
 				<tr class="prop">
 					<td valign="top" class="name"><g:message code="email" default="Email" /></td>
 					<td valign="top" class="value"><a href="mailto:${playerInstance.email}">${fieldValue(bean: playerInstance, field: "email")}</a></td>

@@ -19,10 +19,10 @@
 			</div>
 		</shiro:user>
 		<br />
-		<g:if test="${session.currentUser != null}">
+		<g:if test="${request.currentUser != null}">
 			<g:form action="watch" name="watchForm">
 				<g:hiddenField name="id" value="${sessionInstance.id}" />
-				<g:checkBox name="watch" value="${true}" checked="${session.currentUser.isWatchingSession(sessionInstance) }"
+				<g:checkBox name="watch" value="${true}" checked="${request.currentUser.isWatchingSession(sessionInstance) }"
 							onclick="document.getElementById('watchForm').submit();" />
 				<div style="position: relative; left: 40px; top: -15px"><g:message code="session.show.comments.checkToWatch" /></div>
 			</g:form>

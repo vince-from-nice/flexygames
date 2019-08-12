@@ -16,18 +16,26 @@ class ShiroSecurityInterceptor {
 
 	boolean before() {
         // Ignore direct views (e.g. the default main index page).
-        if (!controllerName) return true
+        if (!controllerName) {
+            return true
+        }
+
+        if (controllerName == 'images' || controllerName == 'css' || controllerName == 'js') {
+            return true
+        }
 
         // turman : no access control for some controllers.
-        if (controllerName in ['auth', 'player', 'playgrounds', 'site', 'stats', 'teams', 'assets', 'fileUpload', 'images', 'css', 'js']) return true
+        if (controllerName in ['auth', 'player', 'playgrounds', 'site', 'stats', 'teams', 'assets', 'fileUpload']) {
+            return true
+        }
 
         // turman : no access control for some controllers AND actions.
-        if (
-            (controllerName == 'sessions' && actionName == 'list') ||
-            (controllerName == 'sessions' && actionName == 'show') ||
-            (controllerName == 'sessions' && actionName == 'forecast') ||
-            (controllerName == 'fileUploader' && actionName == 'show')
-        ) return true
+        if ((controllerName == 'sessions' && actionName == 'list') ||
+                (controllerName == 'sessions' && actionName == 'show') ||
+                (controllerName == 'sessions' && actionName == 'forecast') ||
+                (controllerName == 'fileUploader' && actionName == 'show')) {
+            return true
+        }
 
         // turman: restrict access to team manager for some controllers
         // TOO DIFFICULT because access control are too much specific to action (so it's done in each action)
@@ -39,8 +47,6 @@ class ShiroSecurityInterceptor {
 
         // Access control by convention.
         accessControl()
-
-        true
     }
 
     boolean after() {

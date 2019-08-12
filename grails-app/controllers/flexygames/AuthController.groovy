@@ -45,10 +45,9 @@ class AuthController {
             // the password is incorrect.
             SecurityUtils.subject.login(authToken)
 
-            // turman : put the user into the session and into the online user list
+            // turman : put the user into the session
             def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
-            session.setAttribute("currentUser", user)
-            servletContext.onlineUsers?.add(user)
+            session.currentUser = user
 
             log.info "Redirecting to ${targetUri}."
             redirect(uri: targetUri)
@@ -75,10 +74,6 @@ class AuthController {
     }
 
     def signOut() {
-        // turman : remove the user into from the online user list
-        def onlineUsers = servletContext.onlineUsers
-        onlineUsers.remove(session.currentUser)
-
         // Log the user out of the application.
         SecurityUtils.subject?.logout()
         webRequest.getCurrentRequest().session = null

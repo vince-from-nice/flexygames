@@ -206,7 +206,7 @@
 										</tr>
 										<tr>
 											<td colspan="${1 + proposal.freePlaceNbr}">
-												<g:if test="${sessionIsManagedByCurrentUser || proposal.driver == session.currentUser}">
+												<g:if test="${sessionIsManagedByCurrentUser || proposal.driver == request.currentUser}">
 													<div class="buttons" style="width: 100%">
 														<g:actionSubmit class="save" id="updateButtonForProposal${proposal.id}" style="display: inline; text-align: right"
 																		action="updateCarpoolProposal" value="${message(code:'update')}" />
@@ -243,7 +243,7 @@
 										</g:if>
 										<br>
 										<span style="font-size: x-small; color: lightsalmon">${username}</span>
-										<g:if test="${sessionIsManagedByCurrentUser || request.enquirer == session.currentUser}">
+										<g:if test="${sessionIsManagedByCurrentUser || request.enquirer == request.currentUser}">
 											<g:link action="removeCarpoolRequest" id="${request.id}"
 													onclick="return confirm('${message(code:'session.show.carpool.request.areYouSureToDelete')}')" >
 												<img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />

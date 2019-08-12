@@ -11,7 +11,7 @@
 						</g:if>
 						<g:set var="past" value="${true}" />
 					</g:if>
-					<g:if test="${sessionInstance.group.isVisibleByUsername(session.currentUser?.username)}">
+					<g:if test="${sessionInstance.group.isVisibleByUsername(request.currentUser?.username)}">
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
 						<g:if test="${sessionInstance.canceled}">
 							<g:set var="isCanceled" value="text-decoration: line-through;"/>
@@ -44,7 +44,7 @@
 					        	<span style="font-size: 10px">(min: ${sessionInstance.group.defaultMinPlayerNbr})</span>
 					        	</nobr>
 					        </td>
-					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': session.currentUser?.username]" />
+					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': request.currentUser?.username]" />
 							<g:if test="${request.display == 'desktop'}">
 								<td style="vertical-align: middle; font-size: 12px">${fieldValue(bean: sessionInstance, field: "playground")}</td>
 								<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">${sessionInstance.rounds.size()}</td>

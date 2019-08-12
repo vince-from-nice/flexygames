@@ -11,7 +11,7 @@
 						</g:if>
 						<g:set var="past" value="${true}" />
 					</g:if>
-					<g:if test="${sessionInstance.group.isVisibleByUsername(session.currentUser?.username)}">
+					<g:if test="${sessionInstance.group.isVisibleByUsername(request.currentUser?.username)}">
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
 						<g:if test="${sessionInstance.canceled}">
 							<g:set var="isCanceled" value="text-decoration: line-through;"/>
@@ -59,7 +59,7 @@
 					        </td>
 					        
 					        <!-- Status -->
-					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': session.currentUser?.username]" />
+					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': request.currentUser?.username]" />
 
 					        <!-- Players Numbers -->
 							<g:set var="color" value="#f33" />

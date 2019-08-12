@@ -18,7 +18,7 @@
 	    	<tr class="fieldcontain ${hasErrors(bean: contactForm, field: 'email', 'error')} required">
 	    		<td><g:message code="contact.email" /></td>
 	    		<g:set var="email" value="" />
-	    		<g:if test="${session.currentUser}"><g:set var="email" value="${session.currentUser.email}" /></g:if>
+	    		<g:if test="${request.currentUser}"><g:set var="email" value="${request.currentUser.email}" /></g:if>
 	    		<td><g:textField name="email" size="30" value="${email}" /></td>
 	    	</tr>
 	    	<tr class="fieldcontain ${hasErrors(bean: contactForm, field: 'subject', 'error')} required">

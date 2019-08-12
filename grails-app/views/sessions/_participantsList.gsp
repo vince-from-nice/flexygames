@@ -15,7 +15,7 @@
                     <g:each in="${sessionInstance.participations}" status="i" var="p">
                         <g:set var="display" value="table-row"/>
                         <g:if test="${p.statusCode == flexygames.Participation.Status.REQUESTED.code}">
-                            <g:if test="${p.player != session.currentUser}">
+                            <g:if test="${p.player != request.currentUser}">
                                 <g:javascript>pendingParticipationIds.push(${p.id});</g:javascript>
                                 <g:set var="display" value="${hidePendingPlayersByDefault?'none':'table-row'}"/>
                             </g:if>

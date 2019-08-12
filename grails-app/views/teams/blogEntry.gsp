@@ -1,5 +1,5 @@
 <%@ page import="flexygames.Team" %>
-<g:set var="teamIsManagedByCurrentUser" value="${blogEntry.team.isManagedBy(session.currentUser?.username)}" />
+<g:set var="teamIsManagedByCurrentUser" value="${blogEntry.team.isManagedBy(request.currentUser?.username)}" />
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

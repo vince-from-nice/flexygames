@@ -68,7 +68,7 @@ class SessionsController {
 	}
 
 	def show = {
-		def currentUser = session.currentUser
+		def currentUser = request.currentUser
 		Session session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
@@ -198,7 +198,7 @@ class SessionsController {
 	}*/
 
 	def update = {
-		User user = session.currentUser
+		User user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to update status !!"
 			return redirect(action: "list")
@@ -229,7 +229,7 @@ class SessionsController {
 	}
 
 	def join = {
-		User user = session.currentUser
+		User user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to update status !!"
 			return redirect(action: "show", id: params.id)
@@ -251,7 +251,7 @@ class SessionsController {
 
 	// Used by the mails sent by reminders (here the id is for the session, not for the participation like it is in the original method)
 	def updateFromMail = {
-		User user = session.currentUser
+		User user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to update status !!"
 			return redirect(action: "list")
@@ -278,7 +278,7 @@ class SessionsController {
 	}
 
 	def vote = {
-		def user = session.currentUser
+		def user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to vote !!"
 			return redirect(action: "show", id: session.id)
@@ -301,7 +301,7 @@ class SessionsController {
 	}
 
 	def post = {
-		def user = session.currentUser
+		def user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to post a comment !!"
 			return redirect(action: "show", id: session.id)
@@ -324,7 +324,7 @@ class SessionsController {
 	}
 
 	def watch = {
-		def user = session.currentUser
+		def user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to post a comment !!"
 			return redirect(action: "show", id: session.id)
@@ -349,7 +349,7 @@ class SessionsController {
 	}
 
 	def addCarpoolProposal = {
-		def user = session.currentUser
+		def user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to propose a carpool !!"
 			redirect(action: "show", id: session.id)
@@ -370,7 +370,7 @@ class SessionsController {
 	}
 
 	def addCarpoolRequest = {
-		def user = session.currentUser
+		def user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to request a carpool !!"
 			return redirect(action: "show", id: session.id)
@@ -390,7 +390,7 @@ class SessionsController {
 	}
 
 	def removeCarpoolProposal = {
-		def user = session.currentUser
+		def user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to remove a carpool proposal !!"
 			return redirect(action: "show", id: session.id)
@@ -408,7 +408,7 @@ class SessionsController {
 	}
 
     def cancelAllCarpoolAcceptances = {
-        def user = session.currentUser
+        def user = request.currentUser
         if (!user) {
             flash.error = "You need to be authenticated in order to reset a carpool proposal !!"
             return redirect(action: "show", id: session.id)
@@ -426,7 +426,7 @@ class SessionsController {
     }
 
 	def removeCarpoolRequest = {
-		def user = session.currentUser
+		def user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to remove a carpool proposal !!"
 			return redirect(action: "show", id: session.id)
@@ -442,7 +442,7 @@ class SessionsController {
 	}
 
 	def updateCarpoolProposal = {
-		def user = session.currentUser
+		def user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to update a carpool proposal !!"
 			return redirect(action: "show", id: session.id)
@@ -476,7 +476,7 @@ class SessionsController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
-		def user = session.currentUser
+		def user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to add a task !!"
 			return redirect(action: "show", id: session.id)
@@ -510,7 +510,7 @@ class SessionsController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'task', default: 'Task'), params.id])}"
 			return redirect(action: "list")
 		}
-		def user = session.currentUser
+		def user = request.currentUser
 		if (!user) {
 			flash.error = "You need to be authenticated in order to add a task !!"
 			return redirect(action: "show", id: task.session.id)

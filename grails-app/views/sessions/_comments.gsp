@@ -6,10 +6,10 @@
 		<span style="float:right; font-size: small;"><g:message code="clickForShowOrHideDetails" /></span>
 	</div>
 	<div class="sessionZoneContent">
-		<g:if test="${session.currentUser != null}">
+		<g:if test="${request.currentUser != null}">
 			<g:form action="watch" name="watchForm">
 				<g:hiddenField name="id" value="${sessionInstance.id}" />
-				<g:checkBox name="watch" value="${true}" checked="${session.currentUser.isWatchingSession(sessionInstance) }"
+				<g:checkBox name="watch" value="${true}" checked="${request.currentUser.isWatchingSession(sessionInstance) }"
 					onclick="document.getElementById('watchForm').submit();" />
 				<g:message code="session.show.comments.checkToWatch" />
 			</g:form>

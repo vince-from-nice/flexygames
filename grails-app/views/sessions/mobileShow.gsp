@@ -17,7 +17,7 @@
         <div class="errors">${flash.error}</div>
     </g:if>
 
-    <g:set var="sessionIsManagedByCurrentUser" value="${sessionInstance.isManagedBy(session.currentUser?.username)}" />
+    <g:set var="sessionIsManagedByCurrentUser" value="${sessionInstance.isManagedBy(request.currentUser?.username)}" />
 
     <g:render template="mobileInfos" />
 

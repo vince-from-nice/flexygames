@@ -8,7 +8,7 @@
         <span style="float:right; font-size: small;"><g:message code="clickForShowOrHideDetails"/></span>
     </div>
 
-    <g:set var="currentUserParticipation" value="${sessionInstance.getParticipationOf(session.currentUser?.username)}"/>
+    <g:set var="currentUserParticipation" value="${sessionInstance.getParticipationOf(request.currentUser?.username)}"/>
 
     <div class="sessionZoneContent">
         <g:set var="defaultDisplayForSummaryZone" value="table"/>
