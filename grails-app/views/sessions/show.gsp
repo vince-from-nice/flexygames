@@ -4,6 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="layout" content="desktop" />
 	<g:javascript library="interact-1.2.4.min" />
+	<script src="/js/interact-1.2.4.min.js" type="text/javascript"></script>
 </head>
 <body>
 	<g:render template="title" />

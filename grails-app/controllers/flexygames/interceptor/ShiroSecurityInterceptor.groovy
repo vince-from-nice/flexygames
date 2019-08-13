@@ -46,7 +46,11 @@ class ShiroSecurityInterceptor {
         //if (! controllerName in ['admin', 'stats', 'player', 'teams', 'playgrounds', 'sessions', 'fileUploader']) { }
 
         // Access control by convention.
-        accessControl()
+        if (!accessControl()) {
+            flash.message = "You need to be authenticated in order to do that action."
+            return false
+        }
+        true
     }
 
     boolean after() {

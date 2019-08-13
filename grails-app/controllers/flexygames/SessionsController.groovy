@@ -1,5 +1,6 @@
 package flexygames
 
+import grails.gorm.transactions.Transactional
 import org.apache.shiro.SecurityUtils
 
 class SessionsController {
@@ -14,11 +15,15 @@ class SessionsController {
 	
 	def forecastService
 
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	// Following actions are not transactional and not restricted to authenticated users
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
 	def index = { redirect(action:"list") }
 
 	def home = { redirect(action:"list") }
 
-	def list = {
+	def list() {
 		// prepare default params values
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		if(!params.offset) params.offset = 0
@@ -67,7 +72,7 @@ class SessionsController {
 		]
 	}
 
-	def show = {
+	def show() {
 		def currentUser = request.currentUser
 		Session session = Session.get(params.id)
 		if (!session) {
@@ -123,7 +128,6 @@ class SessionsController {
         relatedCarpoolProposalIds += ']'
 		relatedSeatIndexes += ']'
 		relatedPickupTimes += ']'
-
 
         // Prepare data about votes of participants (move it to the Vote domain class) ?
 		def currentVotes = null
@@ -197,12 +201,13 @@ class SessionsController {
 		}
 	}*/
 
-	def update = {
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	// Following actions are transactional (excplictely or via the use of a service)
+	// and restricted to authenticated users (via Shiro interceptor)
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	def update() {
 		User user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to update status !!"
-			return redirect(action: "list")
-		}
 		Participation participation = Participation.get(params.id)
 		if (!participation) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Participation'), params.id])}"
@@ -228,12 +233,8 @@ class SessionsController {
 		return redirect(action: "show", id:participation.session.id)
 	}
 
-	def join = {
+	def join(){
 		User user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to update status !!"
-			return redirect(action: "show", id: params.id)
-		}
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
@@ -250,12 +251,8 @@ class SessionsController {
 	}
 
 	// Used by the mails sent by reminders (here the id is for the session, not for the participation like it is in the original method)
-	def updateFromMail = {
+	def updateFromMail() {
 		User user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to update status !!"
-			return redirect(action: "list")
-		}
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
@@ -277,18 +274,12 @@ class SessionsController {
 		return redirect(action: "show", id: participation.session.id)
 	}
 
-	def vote = {
-		def user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to vote !!"
-			return redirect(action: "show", id: session.id)
-		}
+	def vote() {
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
-
 		try  {
 			votingService.vote(session, user, params)
 			flash.votingMessage = "Your vote has been taken into account."
@@ -296,21 +287,16 @@ class SessionsController {
 			flash.votingError = "${message(code: 'session.show.votes.update.error', args: [e.message])}"
 			return redirect(action: "show", id: session.id, fragment: "votingArea")
 		}
-
 		redirect(action: "show", id:session.id, fragment: "votingArea")
 	}
 
-	def post = {
-		def user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to post a comment !!"
-			return redirect(action: "show", id: session.id)
-		}
+	def post () {
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
+		def user = request.currentUser
 		def comment
 		try {
 			comment = forumService.postSessionComment(user, session, params.comment)
@@ -323,12 +309,8 @@ class SessionsController {
 		redirect(action: "show", id:session.id, fragment: "comment" + comment.id)
 	}
 
-	def watch = {
+	def watch() {
 		def user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to post a comment !!"
-			return redirect(action: "show", id: session.id)
-		}
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
@@ -348,12 +330,9 @@ class SessionsController {
 		redirect(action: "show", id: session.id)
 	}
 
-	def addCarpoolProposal = {
+	@Transactional
+	def addCarpoolProposal() {
 		def user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to propose a carpool !!"
-			redirect(action: "show", id: session.id)
-		}
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
@@ -369,12 +348,9 @@ class SessionsController {
 		redirect(action: "show", id: session.id)
 	}
 
-	def addCarpoolRequest = {
+	@Transactional
+	def addCarpoolRequest() {
 		def user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to request a carpool !!"
-			return redirect(action: "show", id: session.id)
-		}
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
@@ -389,12 +365,9 @@ class SessionsController {
 		redirect(action: "show", id: session.id)
 	}
 
-	def removeCarpoolProposal = {
+	@Transactional
+	def removeCarpoolProposal() {
 		def user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to remove a carpool proposal !!"
-			return redirect(action: "show", id: session.id)
-		}
 		def proposal = CarpoolProposal.get(params.id)
 		if (proposal.driver != user && !proposal.session.isManagedBy(user.username)) {
 			flash.error = "You cannot remove this carpool proposal because you are not the driver (neither a manager of the team)"
@@ -407,12 +380,9 @@ class SessionsController {
 		redirect(action: "show", id: proposal.session.id)
 	}
 
-    def cancelAllCarpoolAcceptances = {
+	@Transactional
+    def cancelAllCarpoolAcceptances() {
         def user = request.currentUser
-        if (!user) {
-            flash.error = "You need to be authenticated in order to reset a carpool proposal !!"
-            return redirect(action: "show", id: session.id)
-        }
         def proposal = CarpoolProposal.get(params.id)
         if (proposal.driver != user && !proposal.session.isManagedBy(user.username)) {
             flash.error = "You cannot reset this carpool proposal because you are not the driver (neither a manager of the team)"
@@ -425,12 +395,9 @@ class SessionsController {
         redirect(action: "show", id: proposal.session.id)
     }
 
-	def removeCarpoolRequest = {
+	@Transactional
+	def removeCarpoolRequest() {
 		def user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to remove a carpool proposal !!"
-			return redirect(action: "show", id: session.id)
-		}
 		def request = CarpoolRequest.get(params.id)
 		if (request.enquirer != user && !request.session.isManagedBy(user.username)) {
 			flash.error = "You cannot remove this carpool request because you are not the enquirer (neither a manager of the team)"
@@ -441,12 +408,9 @@ class SessionsController {
 		redirect(action: "show", id: request.session.id)
 	}
 
-	def updateCarpoolProposal = {
+	@Transactional
+	def updateCarpoolProposal() {
 		def user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to update a carpool proposal !!"
-			return redirect(action: "show", id: session.id)
-		}
 		CarpoolProposal proposal = CarpoolProposal.get(params.id)
 		if (proposal.driver != user && !proposal.session.isManagedBy(user.username)) {
 			flash.error = "You cannot update this carpool proposal because you are not the driver (neither a manager of the team)"
@@ -463,24 +427,21 @@ class SessionsController {
 			}
 		}
 		if (proposal.save()) {
-			flash.message = "Ok carpool proposal has been updated !"
+			flash.message = "Ok carpool proposal has been updated!"
 		} else {
 			flash.error = "Unable to update carpool proposal: " + proposal.errors
 		}
 		redirect(action: "show", id: proposal.session.id)
 	}
 
-	def addTask = {
+	@Transactional
+	def addTask() {
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
 		def user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to add a task !!"
-			return redirect(action: "show", id: session.id)
-		}
 		if (session.date < new Date()) {
 			flash.error = "${message(code: 'tooLateForThatAction')}"
 			return redirect(action: "show", id: session.id)
@@ -504,17 +465,14 @@ class SessionsController {
 		redirect(action: "show", id: task.session.id)
 	}
 
-	def deleteTask = {
+	@Transactional
+	def deleteTask() {
 		def task = Task.get(params.id)
 		if (!task) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'task', default: 'Task'), params.id])}"
 			return redirect(action: "list")
 		}
 		def user = request.currentUser
-		if (!user) {
-			flash.error = "You need to be authenticated in order to add a task !!"
-			return redirect(action: "show", id: task.session.id)
-		}
 		if (task.user != user && !task.session.isManagedBy(user.username)) {
 			flash.error = "${message(code: 'youAreNotAuthorized')}"
 			return redirect(action: "list")

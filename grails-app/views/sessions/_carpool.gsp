@@ -1,11 +1,11 @@
 <div class="sessionZone">
 	<g:if test="${sessionInstance.carpoolProposals.size() > 0 && sessionInstance.carpoolRequests.size() > 0}">
-		<g:javascript>
+		<script type="text/javascript">
 			// On attend que tout le DOM soit complètement chargé afin que les éléments soient bien trouvables
 			document.addEventListener("DOMContentLoaded", function(event) {
 				//console.log("DOM fully loaded and parsed, adding restriction for composition drag and drop");
 				initCarpoolRequestDragging();
-				initApprovedCarpoolRequests(${approvedCarpoolRequestIds}, ${relatedCarpoolProposalIds}, ${relatedSeatIndexes}, ${relatedPickupTimes});
+				initApprovedCarpoolRequests(${approvedCarpoolRequestIds.encodeAsJson()}, ${relatedCarpoolProposalIds.encodeAsJson()}, ${relatedSeatIndexes.encodeAsJson()}, ${relatedPickupTimes.encodeAsJson()});
 			});
 
 			function initApprovedCarpoolRequests(approvedCarpoolRequestIds, relatedCarpoolProposalIds, relatedSeatIndex, relatedPickupTimes) {
@@ -117,7 +117,7 @@
 					n.parentNode.removeChild(n);
 				},20); // you can play with this timeout to make it as short as possible
 			}
-		</g:javascript>
+		</script>
 	</g:if>
 	<div class="sessionZoneHeader" onclick="toggleDisplay('carpoolSummaryZone'); toggleDisplay('carpoolDetailedZone'); return false">
 		<h2 style="vertical-align: top; display: inline;">
@@ -151,9 +151,9 @@
 					<td style="width: 50%">
 						<g:if test="${sessionInstance.carpoolRequests.size() > 0}" >
 							<g:message code="session.show.carpool.carpoolRequestsNbr" args="[sessionInstance.getNumberOfNonApprovedCarpoolRequest(), sessionInstance.carpoolRequests.size()]"/>:
-							<g:each in="${sessionInstance.carpoolRequests}" var="request">
+							<g:each in="${sessionInstance.carpoolRequests}" var="r">
 								<g:link controller="players">
-									${request.enquirer.username}
+									${r.enquirer.username}
 								</g:link>
 							</g:each>
 						</g:if>
@@ -233,25 +233,25 @@
 							<br>
 							<br>
 							<div class="carpoolRequestDropZone">
-								<g:each in="${sessionInstance.carpoolRequests}" var="request">
-									<div id="carpoolRequestOf${request.id}" class="draggableCarpoolRequest drag-drop"
+								<g:each in="${sessionInstance.carpoolRequests}" var="r">
+									<div id="carpoolRequestOf${r.id}" class="draggableCarpoolRequest drag-drop"
 										 style="border: solid lightsalmon 1px; padding: 5px; display: inline-block; width: 70px; height: 95px; text-align: center; line-height: 1.0; ">
-										<img style="max-width:60px; max-height: 60px; vertical-align: middle; " src="${resource(dir:'images/user',file:request.enquirer.avatarName)}" alt="Player avatar" />
-										<g:set var="username" value="${request.enquirer.username}" />
+										<img style="max-width:60px; max-height: 60px; vertical-align: middle; " src="${resource(dir:'images/user',file:r.enquirer.avatarName)}" alt="Player avatar" />
+										<g:set var="username" value="${r.enquirer.username}" />
 										<g:if test="${username.length() > 8}">
 											<g:set var="username" value="${username.substring(0, 7)}.." />
 										</g:if>
 										<br>
 										<span style="font-size: x-small; color: lightsalmon">${username}</span>
-										<g:if test="${sessionIsManagedByCurrentUser || request.enquirer == request.currentUser}">
-											<g:link action="removeCarpoolRequest" id="${request.id}"
+										<g:if test="${sessionIsManagedByCurrentUser || r.enquirer == request.currentUser}">
+											<g:link action="removeCarpoolRequest" id="${r.id}"
 													onclick="return confirm('${message(code:'session.show.carpool.request.areYouSureToDelete')}')" >
 												<img src="${resource(dir:'images/skin',file:'database_delete.png')}" alt="Delete"  />
 											</g:link>
 										</g:if>
-										<g:if test="${request.pickupLocation}">
+										<g:if test="${r.pickupLocation}">
 											<br>
-											<span style="font-size: xx-small; ">${request.pickupLocation}</span>
+											<span style="font-size: xx-small; ">${r.pickupLocation}</span>
 										</g:if>
 									</div>
 								</g:each>

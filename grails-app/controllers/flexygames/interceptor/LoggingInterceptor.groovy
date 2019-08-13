@@ -8,6 +8,8 @@ import flexygames.User
 
 class  LoggingInterceptor {
 
+    int order = HIGHEST_PRECEDENCE+99
+
     LoggingInterceptor() {
         matchAll().excludes(controller:"assets")
     }

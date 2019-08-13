@@ -28,8 +28,8 @@ class Participation implements Comparable<Participation> {
 		DONE_LATE("DONE_LATE", "#FFFC00"),
 		DONE_BAD("DONE_BAD", "#FE6F0F"),
 		UNDONE("UNDONE", "#FF0000"),
-		private final String code
-		private final String color
+		public final String code
+		public final String color
 		Status (String code, String color) {
 			this.code = code
 			this.color = color

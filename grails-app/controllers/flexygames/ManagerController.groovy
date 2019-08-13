@@ -193,7 +193,7 @@ class ManagerController {
 				date: oldSession.date + duplicationOffset, duration: oldSession.duration,
 				rdvBeforeStart: oldSession.rdvBeforeStart, lockingTime: oldSession.lockingTime,
 				creation: new Date(), creator: user)
-		if (!newSession.hasErrors() && newSession.save(flush: true)) {
+		if (!newSession.hasErrors() && newSession.save()) {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'session.label', default: 'Session'), newSession.id])}"
 			// duplicate related reminders too
 			oldSession.reminders.each { currentReminder ->
