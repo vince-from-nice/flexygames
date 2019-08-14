@@ -1,91 +1,90 @@
 package flexygames.admin
 
 import flexygames.SessionComment
-
+import flexygames.admin.SessionCommentService
+import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
-import grails.gorm.transactions.Transactional
 
-@Transactional(readOnly = true)
 class SessionCommentController {
+
+    static namespace = 'admin'
+
+    SessionCommentService sessionCommentService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond SessionComment.list(params), model:[sessionCommentInstanceCount: SessionComment.count()]
+        respond sessionCommentService.list(params), model:[sessionCommentCount: sessionCommentService.count()]
     }
 
-    def show(SessionComment sessionCommentInstance) {
-        respond sessionCommentInstance
+    def show(Long id) {
+        respond sessionCommentService.get(id)
     }
 
     def create() {
         respond new SessionComment(params)
     }
 
-    @Transactional
-    def save(SessionComment sessionCommentInstance) {
-        if (sessionCommentInstance == null) {
+    def save(SessionComment sessionComment) {
+        if (sessionComment == null) {
             notFound()
             return
         }
 
-        if (sessionCommentInstance.hasErrors()) {
-            respond sessionCommentInstance.errors, view:'create'
+        try {
+            sessionCommentService.save(sessionComment)
+        } catch (ValidationException e) {
+            respond sessionComment.errors, view:'create'
             return
         }
 
-        sessionCommentInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'sessionComment.label', default: 'SessionComment'), sessionCommentInstance.id])
-                redirect sessionCommentInstance
+                flash.message = message(code: 'default.created.message', args: [message(code: 'sessionComment.label', default: 'SessionComment'), sessionComment.id])
+                redirect sessionComment
             }
-            '*' { respond sessionCommentInstance, [status: CREATED] }
+            '*' { respond sessionComment, [status: CREATED] }
         }
     }
 
-    def edit(SessionComment sessionCommentInstance) {
-        respond sessionCommentInstance
+    def edit(Long id) {
+        respond sessionCommentService.get(id)
     }
 
-    @Transactional
-    def update(SessionComment sessionCommentInstance) {
-        if (sessionCommentInstance == null) {
+    def update(SessionComment sessionComment) {
+        if (sessionComment == null) {
             notFound()
             return
         }
 
-        if (sessionCommentInstance.hasErrors()) {
-            respond sessionCommentInstance.errors, view:'edit'
+        try {
+            sessionCommentService.save(sessionComment)
+        } catch (ValidationException e) {
+            respond sessionComment.errors, view:'edit'
             return
         }
 
-        sessionCommentInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'SessionComment.label', default: 'SessionComment'), sessionCommentInstance.id])
-                redirect sessionCommentInstance
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'sessionComment.label', default: 'SessionComment'), sessionComment.id])
+                redirect sessionComment
             }
-            '*'{ respond sessionCommentInstance, [status: OK] }
+            '*'{ respond sessionComment, [status: OK] }
         }
     }
 
-    @Transactional
-    def delete(SessionComment sessionCommentInstance) {
-
-        if (sessionCommentInstance == null) {
+    def delete(Long id) {
+        if (id == null) {
             notFound()
             return
         }
 
-        sessionCommentInstance.delete flush:true
+        sessionCommentService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'SessionComment.label', default: 'SessionComment'), sessionCommentInstance.id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'sessionComment.label', default: 'SessionComment'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }

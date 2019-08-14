@@ -1,91 +1,89 @@
 package flexygames.admin
 
 import flexygames.TaskType
-
+import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
-import grails.gorm.transactions.Transactional
 
-@Transactional(readOnly = true)
 class TaskTypeController {
+
+    static namespace = 'admin'
+
+    TaskTypeService taskTypeService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond TaskType.list(params), model:[taskTypeInstanceCount: TaskType.count()]
+        respond taskTypeService.list(params), model:[taskTypeCount: taskTypeService.count()]
     }
 
-    def show(TaskType taskTypeInstance) {
-        respond taskTypeInstance
+    def show(Long id) {
+        respond taskTypeService.get(id)
     }
 
     def create() {
         respond new TaskType(params)
     }
 
-    @Transactional
-    def save(TaskType taskTypeInstance) {
-        if (taskTypeInstance == null) {
+    def save(TaskType taskType) {
+        if (taskType == null) {
             notFound()
             return
         }
 
-        if (taskTypeInstance.hasErrors()) {
-            respond taskTypeInstance.errors, view:'create'
+        try {
+            taskTypeService.save(taskType)
+        } catch (ValidationException e) {
+            respond taskType.errors, view:'create'
             return
         }
 
-        taskTypeInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'taskType.label', default: 'TaskType'), taskTypeInstance.id])
-                redirect taskTypeInstance
+                flash.message = message(code: 'default.created.message', args: [message(code: 'taskType.label', default: 'TaskType'), taskType.id])
+                redirect taskType
             }
-            '*' { respond taskTypeInstance, [status: CREATED] }
+            '*' { respond taskType, [status: CREATED] }
         }
     }
 
-    def edit(TaskType taskTypeInstance) {
-        respond taskTypeInstance
+    def edit(Long id) {
+        respond taskTypeService.get(id)
     }
 
-    @Transactional
-    def update(TaskType taskTypeInstance) {
-        if (taskTypeInstance == null) {
+    def update(TaskType taskType) {
+        if (taskType == null) {
             notFound()
             return
         }
 
-        if (taskTypeInstance.hasErrors()) {
-            respond taskTypeInstance.errors, view:'edit'
+        try {
+            taskTypeService.save(taskType)
+        } catch (ValidationException e) {
+            respond taskType.errors, view:'edit'
             return
         }
 
-        taskTypeInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'TaskType.label', default: 'TaskType'), taskTypeInstance.id])
-                redirect taskTypeInstance
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'taskType.label', default: 'TaskType'), taskType.id])
+                redirect taskType
             }
-            '*'{ respond taskTypeInstance, [status: OK] }
+            '*'{ respond taskType, [status: OK] }
         }
     }
 
-    @Transactional
-    def delete(TaskType taskTypeInstance) {
-
-        if (taskTypeInstance == null) {
+    def delete(Long id) {
+        if (id == null) {
             notFound()
             return
         }
 
-        taskTypeInstance.delete flush:true
+        taskTypeService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'TaskType.label', default: 'TaskType'), taskTypeInstance.id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'taskType.label', default: 'TaskType'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }

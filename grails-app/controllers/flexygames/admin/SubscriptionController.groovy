@@ -1,104 +1,102 @@
 package flexygames.admin
 
-import org.springframework.dao.DataIntegrityViolationException
-
-import flexygames.Subscription;
+import flexygames.Subscription
+import grails.validation.ValidationException
+import static org.springframework.http.HttpStatus.*
 
 class SubscriptionController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static namespace = 'admin'
 
-    def index() {
-        redirect(action: "list", params: params)
-    }
+    SubscriptionService subscriptionService
 
-    def list(Integer max) {
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+    def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [subscriptionInstanceList: Subscription.list(params), subscriptionInstanceTotal: Subscription.count()]
-    }
-
-    def create() {
-        [subscriptionInstance: new Subscription(params)]
-    }
-
-    def save() {
-        def subscriptionInstance = new Subscription(params)
-        if (!subscriptionInstance.save(flush: true)) {
-            render(view: "create", model: [subscriptionInstance: subscriptionInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.created.message', args: [message(code: 'subscription.label', default: 'Subscription'), subscriptionInstance.id])
-        redirect(action: "show", id: subscriptionInstance.id)
+        respond subscriptionService.list(params), model:[subscriptionCount: subscriptionService.count()]
     }
 
     def show(Long id) {
-        def subscriptionInstance = Subscription.get(id)
-        if (!subscriptionInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'subscription.label', default: 'Subscription'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [subscriptionInstance: subscriptionInstance]
+        respond subscriptionService.get(id)
     }
 
-    def edit(Long id) {
-        def subscriptionInstance = Subscription.get(id)
-        if (!subscriptionInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'subscription.label', default: 'Subscription'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [subscriptionInstance: subscriptionInstance]
+    def create() {
+        respond new Subscription(params)
     }
 
-    def update(Long id, Long version) {
-        def subscriptionInstance = Subscription.get(id)
-        if (!subscriptionInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'subscription.label', default: 'Subscription'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (subscriptionInstance.version > version) {
-                subscriptionInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'subscription.label', default: 'Subscription')] as Object[],
-                          "Another user has updated this Subscription while you were editing")
-                render(view: "edit", model: [subscriptionInstance: subscriptionInstance])
-                return
-            }
-        }
-
-        subscriptionInstance.properties = params
-
-        if (!subscriptionInstance.save(flush: true)) {
-            render(view: "edit", model: [subscriptionInstance: subscriptionInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'subscription.label', default: 'Subscription'), subscriptionInstance.id])
-        redirect(action: "show", id: subscriptionInstance.id)
-    }
-
-    def delete(Long id) {
-        def subscriptionInstance = Subscription.get(id)
-        if (!subscriptionInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'subscription.label', default: 'Subscription'), id])
-            redirect(action: "list")
+    def save(Subscription subscription) {
+        if (subscription == null) {
+            notFound()
             return
         }
 
         try {
-            subscriptionInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'subscription.label', default: 'Subscription'), id])
-            redirect(action: "list")
+            subscriptionService.save(subscription)
+        } catch (ValidationException e) {
+            respond subscription.errors, view:'create'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'subscription.label', default: 'Subscription'), id])
-            redirect(action: "show", id: id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'subscription.label', default: 'Subscription'), subscription.id])
+                redirect subscription
+            }
+            '*' { respond subscription, [status: CREATED] }
+        }
+    }
+
+    def edit(Long id) {
+        respond subscriptionService.get(id)
+    }
+
+    def update(Subscription subscription) {
+        if (subscription == null) {
+            notFound()
+            return
+        }
+
+        try {
+            subscriptionService.save(subscription)
+        } catch (ValidationException e) {
+            respond subscription.errors, view:'edit'
+            return
+        }
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'subscription.label', default: 'Subscription'), subscription.id])
+                redirect subscription
+            }
+            '*'{ respond subscription, [status: OK] }
+        }
+    }
+
+    def delete(Long id) {
+        if (id == null) {
+            notFound()
+            return
+        }
+
+        subscriptionService.delete(id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'subscription.label', default: 'Subscription'), id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'subscription.label', default: 'Subscription'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

@@ -1,90 +1,90 @@
 package flexygames.admin
 
 import flexygames.SessionGroup
+import flexygames.admin.SessionGroupService
+import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
-import grails.gorm.transactions.Transactional
 
-@Transactional(readOnly = true)
 class SessionGroupController {
+
+    static namespace = 'admin'
+
+    SessionGroupService sessionGroupService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond SessionGroup.list(params), model:[sessionGroupInstanceCount: SessionGroup.count()]
+        respond sessionGroupService.list(params), model:[sessionGroupCount: sessionGroupService.count()]
     }
 
-    def show(SessionGroup sessionGroupInstance) {
-        respond sessionGroupInstance
+    def show(Long id) {
+        respond sessionGroupService.get(id)
     }
 
     def create() {
         respond new SessionGroup(params)
     }
 
-    @Transactional
-    def save(SessionGroup sessionGroupInstance) {
-        if (sessionGroupInstance == null) {
+    def save(SessionGroup sessionGroup) {
+        if (sessionGroup == null) {
             notFound()
             return
         }
 
-        if (sessionGroupInstance.hasErrors()) {
-            respond sessionGroupInstance.errors, view:'create'
+        try {
+            sessionGroupService.save(sessionGroup)
+        } catch (ValidationException e) {
+            respond sessionGroup.errors, view:'create'
             return
         }
 
-        sessionGroupInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), sessionGroupInstance.id])
-                redirect sessionGroupInstance
+                flash.message = message(code: 'default.created.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), sessionGroup.id])
+                redirect sessionGroup
             }
-            '*' { respond sessionGroupInstance, [status: CREATED] }
+            '*' { respond sessionGroup, [status: CREATED] }
         }
     }
 
-    def edit(SessionGroup sessionGroupInstance) {
-        respond sessionGroupInstance
+    def edit(Long id) {
+        respond sessionGroupService.get(id)
     }
 
-    @Transactional
-    def update(SessionGroup sessionGroupInstance) {
-        if (sessionGroupInstance == null) {
+    def update(SessionGroup sessionGroup) {
+        if (sessionGroup == null) {
             notFound()
             return
         }
 
-        if (sessionGroupInstance.hasErrors()) {
-            respond sessionGroupInstance.errors, view:'edit'
+        try {
+            sessionGroupService.save(sessionGroup)
+        } catch (ValidationException e) {
+            respond sessionGroup.errors, view:'edit'
             return
         }
 
-        sessionGroupInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'SessionGroup.label', default: 'SessionGroup'), sessionGroupInstance.id])
-                redirect sessionGroupInstance
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), sessionGroup.id])
+                redirect sessionGroup
             }
-            '*'{ respond sessionGroupInstance, [status: OK] }
+            '*'{ respond sessionGroup, [status: OK] }
         }
     }
 
-    @Transactional
-    def delete(SessionGroup sessionGroupInstance) {
-
-        if (sessionGroupInstance == null) {
+    def delete(Long id) {
+        if (id == null) {
             notFound()
             return
         }
 
-        sessionGroupInstance.delete flush:true
+        sessionGroupService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'SessionGroup.label', default: 'SessionGroup'), sessionGroupInstance.id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'sessionGroup.label', default: 'SessionGroup'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }

@@ -1,102 +1,102 @@
 package flexygames.admin
 
-import flexygames.GameSkill;
+import flexygames.GameSkill
+import grails.validation.ValidationException
+import static org.springframework.http.HttpStatus.*
 
 class GameSkillController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static namespace = 'admin'
 
-    def index = {
-        redirect(action: "list", params: params)
+    GameSkillService gameSkillService
+
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond gameSkillService.list(params), model:[gameSkillCount: gameSkillService.count()]
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [gameSkillInstanceList: GameSkill.list(params), gameSkillInstanceTotal: GameSkill.count()]
+    def show(Long id) {
+        respond gameSkillService.get(id)
     }
 
-    def create = {
-        def gameSkillInstance = new GameSkill()
-        gameSkillInstance.properties = params
-        return [gameSkillInstance: gameSkillInstance]
+    def create() {
+        respond new GameSkill(params)
     }
 
-    def save = {
-        def gameSkillInstance = new GameSkill(params)
-        if (gameSkillInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), gameSkillInstance.id])}"
-            redirect(action: "show", id: gameSkillInstance.id)
+    def save(GameSkill gameSkill) {
+        if (gameSkill == null) {
+            notFound()
+            return
         }
-        else {
-            render(view: "create", model: [gameSkillInstance: gameSkillInstance])
-        }
-    }
 
-    def show = {
-        def gameSkillInstance = GameSkill.get(params.id)
-        if (!gameSkillInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), params.id])}"
-            redirect(action: "list")
+        try {
+            gameSkillService.save(gameSkill)
+        } catch (ValidationException e) {
+            respond gameSkill.errors, view:'create'
+            return
         }
-        else {
-            [gameSkillInstance: gameSkillInstance]
-        }
-    }
 
-    def edit = {
-        def gameSkillInstance = GameSkill.get(params.id)
-        if (!gameSkillInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [gameSkillInstance: gameSkillInstance]
-        }
-    }
-
-    def update = {
-        def gameSkillInstance = GameSkill.get(params.id)
-        if (gameSkillInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (gameSkillInstance.version > version) {
-                    
-                    gameSkillInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'gameSkill.label', default: 'GameSkill')] as Object[], "Another user has updated this GameSkill while you were editing")
-                    render(view: "edit", model: [gameSkillInstance: gameSkillInstance])
-                    return
-                }
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), gameSkill.id])
+                redirect gameSkill
             }
-            gameSkillInstance.properties = params
-            if (!gameSkillInstance.hasErrors() && gameSkillInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), gameSkillInstance.id])}"
-                redirect(action: "show", id: gameSkillInstance.id)
-            }
-            else {
-                render(view: "edit", model: [gameSkillInstance: gameSkillInstance])
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), params.id])}"
-            redirect(action: "list")
+            '*' { respond gameSkill, [status: CREATED] }
         }
     }
 
-    def delete = {
-        def gameSkillInstance = GameSkill.get(params.id)
-        if (gameSkillInstance) {
-            try {
-                gameSkillInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), params.id])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), params.id])}"
-                redirect(action: "show", id: params.id)
-            }
+    def edit(Long id) {
+        respond gameSkillService.get(id)
+    }
+
+    def update(GameSkill gameSkill) {
+        if (gameSkill == null) {
+            notFound()
+            return
         }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), params.id])}"
-            redirect(action: "list")
+
+        try {
+            gameSkillService.save(gameSkill)
+        } catch (ValidationException e) {
+            respond gameSkill.errors, view:'edit'
+            return
+        }
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), gameSkill.id])
+                redirect gameSkill
+            }
+            '*'{ respond gameSkill, [status: OK] }
+        }
+    }
+
+    def delete(Long id) {
+        if (id == null) {
+            notFound()
+            return
+        }
+
+        gameSkillService.delete(id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'gameSkill.label', default: 'GameSkill'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

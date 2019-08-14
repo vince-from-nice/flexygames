@@ -1,102 +1,102 @@
 package flexygames.admin
 
-import flexygames.Participation;
+import flexygames.Participation
+import grails.validation.ValidationException
+import static org.springframework.http.HttpStatus.*
 
 class ParticipationController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static namespace = 'admin'
 
-    def index = {
-        redirect(action: "list", params: params)
+    ParticipationService participationService
+
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond participationService.list(params), model:[participationCount: participationService.count()]
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [participationInstanceList: Participation.list(params), participationInstanceTotal: Participation.count()]
+    def show(Long id) {
+        respond participationService.get(id)
     }
 
-    def create = {
-        def participationInstance = new Participation()
-        participationInstance.properties = params
-        return [participationInstance: participationInstance]
+    def create() {
+        respond new Participation(params)
     }
 
-    def save = {
-        def participationInstance = new Participation(params)
-        if (participationInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'participation.label', default: 'Participation'), participationInstance.id])}"
-            redirect(action: "show", id: participationInstance.id)
+    def save(Participation participation) {
+        if (participation == null) {
+            notFound()
+            return
         }
-        else {
-            render(view: "create", model: [participationInstance: participationInstance])
-        }
-    }
 
-    def show = {
-        def participationInstance = Participation.get(params.id)
-        if (!participationInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'participation.label', default: 'Participation'), params.id])}"
-            redirect(action: "list")
+        try {
+            participationService.save(participation)
+        } catch (ValidationException e) {
+            respond participation.errors, view:'create'
+            return
         }
-        else {
-            [participationInstance: participationInstance]
-        }
-    }
 
-    def edit = {
-        def participationInstance = Participation.get(params.id)
-        if (!participationInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'participation.label', default: 'Participation'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [participationInstance: participationInstance]
-        }
-    }
-
-    def update = {
-        def participationInstance = Participation.get(params.id)
-        if (participationInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (participationInstance.version > version) {
-                    
-                    participationInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'participation.label', default: 'Participation')] as Object[], "Another user has updated this Participation while you were editing")
-                    render(view: "edit", model: [participationInstance: participationInstance])
-                    return
-                }
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'participation.label', default: 'Participation'), participation.id])
+                redirect participation
             }
-            participationInstance.properties = params
-            if (!participationInstance.hasErrors() && participationInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'participation.label', default: 'Participation'), participationInstance.id])}"
-                redirect(action: "show", id: participationInstance.id)
-            }
-            else {
-                render(view: "edit", model: [participationInstance: participationInstance])
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'participation.label', default: 'Participation'), params.id])}"
-            redirect(action: "list")
+            '*' { respond participation, [status: CREATED] }
         }
     }
 
-    def delete = {
-        def participationInstance = Participation.get(params.id)
-        if (participationInstance) {
-            try {
-                participationInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'participation.label', default: 'Participation'), params.id])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'participation.label', default: 'Participation'), params.id])}"
-                redirect(action: "show", id: params.id)
-            }
+    def edit(Long id) {
+        respond participationService.get(id)
+    }
+
+    def update(Participation participation) {
+        if (participation == null) {
+            notFound()
+            return
         }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'participation.label', default: 'Participation'), params.id])}"
-            redirect(action: "list")
+
+        try {
+            participationService.save(participation)
+        } catch (ValidationException e) {
+            respond participation.errors, view:'edit'
+            return
+        }
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'participation.label', default: 'Participation'), participation.id])
+                redirect participation
+            }
+            '*'{ respond participation, [status: OK] }
+        }
+    }
+
+    def delete(Long id) {
+        if (id == null) {
+            notFound()
+            return
+        }
+
+        participationService.delete(id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'participation.label', default: 'Participation'), id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'participation.label', default: 'Participation'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

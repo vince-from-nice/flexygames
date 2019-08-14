@@ -14,7 +14,7 @@ class ManagerController {
 
 	def mailerService
 
-	def sessionService
+	def sessionsService
 
 	/*********************************************************************************************
 	 * Session basic management

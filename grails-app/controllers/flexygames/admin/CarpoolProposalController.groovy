@@ -1,91 +1,89 @@
 package flexygames.admin
 
 import flexygames.CarpoolProposal
-
+import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
-import grails.gorm.transactions.Transactional
 
-@Transactional(readOnly = true)
 class CarpoolProposalController {
+
+    static namespace = 'admin'
+
+    CarpoolProposalService carpoolProposalService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond CarpoolProposal.list(params), model:[carpoolProposalInstanceCount: CarpoolProposal.count()]
+        respond carpoolProposalService.list(params), model:[carpoolProposalCount: carpoolProposalService.count()]
     }
 
-    def show(CarpoolProposal carpoolProposalInstance) {
-        respond carpoolProposalInstance
+    def show(Long id) {
+        respond carpoolProposalService.get(id)
     }
 
     def create() {
         respond new CarpoolProposal(params)
     }
 
-    @Transactional
-    def save(CarpoolProposal carpoolProposalInstance) {
-        if (carpoolProposalInstance == null) {
+    def save(CarpoolProposal carpoolProposal) {
+        if (carpoolProposal == null) {
             notFound()
             return
         }
 
-        if (carpoolProposalInstance.hasErrors()) {
-            respond carpoolProposalInstance.errors, view:'create'
+        try {
+            carpoolProposalService.save(carpoolProposal)
+        } catch (ValidationException e) {
+            respond carpoolProposal.errors, view:'create'
             return
         }
 
-        carpoolProposalInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'carpoolProposal.label', default: 'CarpoolProposal'), carpoolProposalInstance.id])
-                redirect carpoolProposalInstance
+                flash.message = message(code: 'default.created.message', args: [message(code: 'carpoolProposal.label', default: 'CarpoolProposal'), carpoolProposal.id])
+                redirect carpoolProposal
             }
-            '*' { respond carpoolProposalInstance, [status: CREATED] }
+            '*' { respond carpoolProposal, [status: CREATED] }
         }
     }
 
-    def edit(CarpoolProposal carpoolProposalInstance) {
-        respond carpoolProposalInstance
+    def edit(Long id) {
+        respond carpoolProposalService.get(id)
     }
 
-    @Transactional
-    def update(CarpoolProposal carpoolProposalInstance) {
-        if (carpoolProposalInstance == null) {
+    def update(CarpoolProposal carpoolProposal) {
+        if (carpoolProposal == null) {
             notFound()
             return
         }
 
-        if (carpoolProposalInstance.hasErrors()) {
-            respond carpoolProposalInstance.errors, view:'edit'
+        try {
+            carpoolProposalService.save(carpoolProposal)
+        } catch (ValidationException e) {
+            respond carpoolProposal.errors, view:'edit'
             return
         }
 
-        carpoolProposalInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'CarpoolProposal.label', default: 'CarpoolProposal'), carpoolProposalInstance.id])
-                redirect carpoolProposalInstance
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'carpoolProposal.label', default: 'CarpoolProposal'), carpoolProposal.id])
+                redirect carpoolProposal
             }
-            '*'{ respond carpoolProposalInstance, [status: OK] }
+            '*'{ respond carpoolProposal, [status: OK] }
         }
     }
 
-    @Transactional
-    def delete(CarpoolProposal carpoolProposalInstance) {
-
-        if (carpoolProposalInstance == null) {
+    def delete(Long id) {
+        if (id == null) {
             notFound()
             return
         }
 
-        carpoolProposalInstance.delete flush:true
+        carpoolProposalService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'CarpoolProposal.label', default: 'CarpoolProposal'), carpoolProposalInstance.id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'carpoolProposal.label', default: 'CarpoolProposal'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }

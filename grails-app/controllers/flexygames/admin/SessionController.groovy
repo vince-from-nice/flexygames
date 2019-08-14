@@ -1,91 +1,91 @@
 package flexygames.admin
 
 import flexygames.Session
-
+import flexygames.admin.SessionService
+import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
-import grails.gorm.transactions.Transactional
 
-@Transactional(readOnly = true)
 class SessionController {
+
+    static namespace = 'admin'
+
+    SessionService sessionService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [sessionInstanceList: Session.list(params), sessionInstanceCount: Session.count()]
+        respond sessionService.list(params), model:[sessionCount: sessionService.count()]
     }
 
-    def show(Session sessionInstance) {
-        respond sessionInstance
+    def show(Long id) {
+        respond sessionService.get(id)
     }
 
     def create() {
         respond new Session(params)
     }
 
-    @Transactional
-    def save(Session sessionInstance) {
-        if (sessionInstance == null) {
+    def save(Session session) {
+        if (session == null) {
             notFound()
             return
         }
 
-        if (sessionInstance.hasErrors()) {
-            respond sessionInstance.errors, view:'create'
+        try {
+            sessionService.save(session)
+        } catch (ValidationException e) {
+            respond session.errors, view:'create'
             return
         }
 
-        sessionInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'session.label', default: 'Session'), sessionInstance.id])
-                redirect sessionInstance
+                flash.message = message(code: 'default.created.message', args: [message(code: 'session.label', default: 'Session'), session.id])
+                redirect session
             }
-            '*' { respond sessionInstance, [status: CREATED] }
+            '*' { respond session, [status: CREATED] }
         }
     }
 
-    def edit(Session sessionInstance) {
-        respond sessionInstance
+    def edit(Long id) {
+        respond sessionService.get(id)
     }
 
-    @Transactional
-    def update(Session sessionInstance) {
-        if (sessionInstance == null) {
+    def update(Session session) {
+        print "gluar"
+        if (session == null) {
             notFound()
             return
         }
 
-        if (sessionInstance.hasErrors()) {
-            respond sessionInstance.errors, view:'edit'
+        try {
+            sessionService.save(session)
+        } catch (ValidationException e) {
+            respond session.errors, view:'edit'
             return
         }
 
-        sessionInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Session.label', default: 'Session'), sessionInstance.id])
-                redirect sessionInstance
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'session.label', default: 'Session'), session.id])
+                redirect session
             }
-            '*'{ respond sessionInstance, [status: OK] }
+            '*'{ respond session, [status: OK] }
         }
     }
 
-    @Transactional
-    def delete(Session sessionInstance) {
-
-        if (sessionInstance == null) {
+    def delete(Long id) {
+        if (id == null) {
             notFound()
             return
         }
 
-        sessionInstance.delete flush:true
+        sessionService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Session.label', default: 'Session'), sessionInstance.id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'session.label', default: 'Session'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }

@@ -1,91 +1,89 @@
 package flexygames.admin
 
 import flexygames.Task
-
+import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
-import grails.gorm.transactions.Transactional
 
-@Transactional(readOnly = true)
 class TaskController {
+
+    static namespace = 'admin'
+
+    TaskService taskService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Task.list(params), model:[taskInstanceCount: Task.count()]
+        respond taskService.list(params), model:[taskCount: taskService.count()]
     }
 
-    def show(Task taskInstance) {
-        respond taskInstance
+    def show(Long id) {
+        respond taskService.get(id)
     }
 
     def create() {
         respond new Task(params)
     }
 
-    @Transactional
-    def save(Task taskInstance) {
-        if (taskInstance == null) {
+    def save(Task task) {
+        if (task == null) {
             notFound()
             return
         }
 
-        if (taskInstance.hasErrors()) {
-            respond taskInstance.errors, view:'create'
+        try {
+            taskService.save(task)
+        } catch (ValidationException e) {
+            respond task.errors, view:'create'
             return
         }
 
-        taskInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'task.label', default: 'Task'), taskInstance.id])
-                redirect taskInstance
+                flash.message = message(code: 'default.created.message', args: [message(code: 'task.label', default: 'Task'), task.id])
+                redirect task
             }
-            '*' { respond taskInstance, [status: CREATED] }
+            '*' { respond task, [status: CREATED] }
         }
     }
 
-    def edit(Task taskInstance) {
-        respond taskInstance
+    def edit(Long id) {
+        respond taskService.get(id)
     }
 
-    @Transactional
-    def update(Task taskInstance) {
-        if (taskInstance == null) {
+    def update(Task task) {
+        if (task == null) {
             notFound()
             return
         }
 
-        if (taskInstance.hasErrors()) {
-            respond taskInstance.errors, view:'edit'
+        try {
+            taskService.save(task)
+        } catch (ValidationException e) {
+            respond task.errors, view:'edit'
             return
         }
 
-        taskInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Task.label', default: 'Task'), taskInstance.id])
-                redirect taskInstance
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'task.label', default: 'Task'), task.id])
+                redirect task
             }
-            '*'{ respond taskInstance, [status: OK] }
+            '*'{ respond task, [status: OK] }
         }
     }
 
-    @Transactional
-    def delete(Task taskInstance) {
-
-        if (taskInstance == null) {
+    def delete(Long id) {
+        if (id == null) {
             notFound()
             return
         }
 
-        taskInstance.delete flush:true
+        taskService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Task.label', default: 'Task'), taskInstance.id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'task.label', default: 'Task'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }

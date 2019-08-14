@@ -1,91 +1,89 @@
 package flexygames.admin
 
 import flexygames.User
-
+import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
-import grails.gorm.transactions.Transactional
 
-@Transactional(readOnly = true)
 class UserController {
+
+    static namespace = 'admin'
+
+    UserService userService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond User.list(params), model:[userInstanceCount: User.count()]
+        respond userService.list(params), model:[userCount: userService.count()]
     }
 
-    def show(User userInstance) {
-        respond userInstance
+    def show(Long id) {
+        respond userService.get(id)
     }
 
     def create() {
         respond new User(params)
     }
 
-    @Transactional
-    def save(User userInstance) {
-        if (userInstance == null) {
+    def save(User user) {
+        if (user == null) {
             notFound()
             return
         }
 
-        if (userInstance.hasErrors()) {
-            respond userInstance.errors, view:'create'
+        try {
+            userService.save(user)
+        } catch (ValidationException e) {
+            respond user.errors, view:'create'
             return
         }
 
-        userInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])
-                redirect userInstance
+                flash.message = message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), user.id])
+                redirect user
             }
-            '*' { respond userInstance, [status: CREATED] }
+            '*' { respond user, [status: CREATED] }
         }
     }
 
-    def edit(User userInstance) {
-        respond userInstance
+    def edit(Long id) {
+        respond userService.get(id)
     }
 
-    @Transactional
-    def update(User userInstance) {
-        if (userInstance == null) {
+    def update(User user) {
+        if (user == null) {
             notFound()
             return
         }
 
-        if (userInstance.hasErrors()) {
-            respond userInstance.errors, view:'edit'
+        try {
+            userService.save(user)
+        } catch (ValidationException e) {
+            respond user.errors, view:'edit'
             return
         }
 
-        userInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'User.label', default: 'User'), userInstance.id])
-                redirect userInstance
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'User'), user.id])
+                redirect user
             }
-            '*'{ respond userInstance, [status: OK] }
+            '*'{ respond user, [status: OK] }
         }
     }
 
-    @Transactional
-    def delete(User userInstance) {
-
-        if (userInstance == null) {
+    def delete(Long id) {
+        if (id == null) {
             notFound()
             return
         }
 
-        userInstance.delete flush:true
+        userService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'User.label', default: 'User'), userInstance.id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }
@@ -100,5 +98,5 @@ class UserController {
             }
             '*'{ render status: NOT_FOUND }
         }
-   }
+    }
 }

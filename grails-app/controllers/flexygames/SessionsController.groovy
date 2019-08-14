@@ -1,13 +1,12 @@
 package flexygames
 
 import grails.gorm.transactions.Transactional
-import org.apache.shiro.SecurityUtils
 
 class SessionsController {
 
 	def displayService
 
-	def sessionService
+	def sessionsService
 
 	def votingService
 
@@ -214,7 +213,7 @@ class SessionsController {
 			return redirect(action: "list")
 		}
 		try {
-			sessionService.updatePlayerStatus(user, participation, params.statusCode, params.userLog)
+			sessionsService.updatePlayerStatus(user, participation, params.statusCode, params.userLog)
 			def newStatus = message(code: 'participation.status.' + params.statusCode)
 			flash.message = "${message(code: 'session.show.update.success', args: [newStatus])}"
 		} catch (Exception e) {
@@ -241,7 +240,7 @@ class SessionsController {
 			return redirect(action: "list")
 		}
 		try  {
-			sessionService.join(user, session)
+			sessionsService.join(user, session)
 			flash.message = "${message(code: 'session.show.participants.join.success')}"
 		} catch (Exception e) {
 			flash.error = e.message
@@ -264,7 +263,7 @@ class SessionsController {
 			return redirect(action: "list")
 		}
 		try {
-			sessionService.updatePlayerStatus(user, participation, params.statusCode, '')
+			sessionsService.updatePlayerStatus(user, participation, params.statusCode, '')
 			def newStatus = message(code: 'participation.status.' + params.statusCode)
 			flash.message = "${message(code: 'session.show.update.success', args: [newStatus])}"
 		} catch (Exception e) {

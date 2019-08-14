@@ -1,102 +1,102 @@
 package flexygames.admin
 
-import flexygames.GameAction;
+import flexygames.GameAction
+import grails.validation.ValidationException
+import static org.springframework.http.HttpStatus.*
 
 class GameActionController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static namespace = 'admin'
 
-    def index = {
-        redirect(action: "list", params: params)
+    GameActionService gameActionService
+
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond gameActionService.list(params), model:[gameActionCount: gameActionService.count()]
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [gameActionInstanceList: GameAction.list(params), gameActionInstanceTotal: GameAction.count()]
+    def show(Long id) {
+        respond gameActionService.get(id)
     }
 
-    def create = {
-        def gameActionInstance = new GameAction()
-        gameActionInstance.properties = params
-        return [gameActionInstance: gameActionInstance]
+    def create() {
+        respond new GameAction(params)
     }
 
-    def save = {
-        def gameActionInstance = new GameAction(params)
-        if (gameActionInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'gameAction.label', default: 'GameAction'), gameActionInstance.id])}"
-            redirect(action: "show", id: gameActionInstance.id)
+    def save(GameAction gameAction) {
+        if (gameAction == null) {
+            notFound()
+            return
         }
-        else {
-            render(view: "create", model: [gameActionInstance: gameActionInstance])
-        }
-    }
 
-    def show = {
-        def gameActionInstance = GameAction.get(params.id)
-        if (!gameActionInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'gameAction.label', default: 'GameAction'), params.id])}"
-            redirect(action: "list")
+        try {
+            gameActionService.save(gameAction)
+        } catch (ValidationException e) {
+            respond gameAction.errors, view:'create'
+            return
         }
-        else {
-            [gameActionInstance: gameActionInstance]
-        }
-    }
 
-    def edit = {
-        def gameActionInstance = GameAction.get(params.id)
-        if (!gameActionInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'gameAction.label', default: 'GameAction'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [gameActionInstance: gameActionInstance]
-        }
-    }
-
-    def update = {
-        def gameActionInstance = GameAction.get(params.id)
-        if (gameActionInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (gameActionInstance.version > version) {
-                    
-                    gameActionInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'gameAction.label', default: 'GameAction')] as Object[], "Another user has updated this GameAction while you were editing")
-                    render(view: "edit", model: [gameActionInstance: gameActionInstance])
-                    return
-                }
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'gameAction.label', default: 'GameAction'), gameAction.id])
+                redirect gameAction
             }
-            gameActionInstance.properties = params
-            if (!gameActionInstance.hasErrors() && gameActionInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'gameAction.label', default: 'GameAction'), gameActionInstance.id])}"
-                redirect(action: "show", id: gameActionInstance.id)
-            }
-            else {
-                render(view: "edit", model: [gameActionInstance: gameActionInstance])
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'gameAction.label', default: 'GameAction'), params.id])}"
-            redirect(action: "list")
+            '*' { respond gameAction, [status: CREATED] }
         }
     }
 
-    def delete = {
-        def gameActionInstance = GameAction.get(params.id)
-        if (gameActionInstance) {
-            try {
-                gameActionInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'gameAction.label', default: 'GameAction'), params.id])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'gameAction.label', default: 'GameAction'), params.id])}"
-                redirect(action: "show", id: params.id)
-            }
+    def edit(Long id) {
+        respond gameActionService.get(id)
+    }
+
+    def update(GameAction gameAction) {
+        if (gameAction == null) {
+            notFound()
+            return
         }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'gameAction.label', default: 'GameAction'), params.id])}"
-            redirect(action: "list")
+
+        try {
+            gameActionService.save(gameAction)
+        } catch (ValidationException e) {
+            respond gameAction.errors, view:'edit'
+            return
+        }
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'gameAction.label', default: 'GameAction'), gameAction.id])
+                redirect gameAction
+            }
+            '*'{ respond gameAction, [status: OK] }
+        }
+    }
+
+    def delete(Long id) {
+        if (id == null) {
+            notFound()
+            return
+        }
+
+        gameActionService.delete(id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'gameAction.label', default: 'GameAction'), id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'gameAction.label', default: 'GameAction'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

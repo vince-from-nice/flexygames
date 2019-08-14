@@ -1,91 +1,89 @@
 package flexygames.admin
 
 import flexygames.BlogEntry
-
+import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
-import grails.gorm.transactions.Transactional
 
-@Transactional(readOnly = true)
 class BlogEntryController {
+
+    static namespace = 'admin'
+
+    BlogEntryService blogEntryService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond BlogEntry.list(params), model:[blogEntryInstanceCount: BlogEntry.count()]
+        respond blogEntryService.list(params), model:[blogEntryCount: blogEntryService.count()]
     }
 
-    def show(BlogEntry blogEntryInstance) {
-        respond blogEntryInstance
+    def show(Long id) {
+        respond blogEntryService.get(id)
     }
 
     def create() {
         respond new BlogEntry(params)
     }
 
-    @Transactional
-    def save(BlogEntry blogEntryInstance) {
-        if (blogEntryInstance == null) {
+    def save(BlogEntry blogEntry) {
+        if (blogEntry == null) {
             notFound()
             return
         }
 
-        if (blogEntryInstance.hasErrors()) {
-            respond blogEntryInstance.errors, view:'create'
+        try {
+            blogEntryService.save(blogEntry)
+        } catch (ValidationException e) {
+            respond blogEntry.errors, view:'create'
             return
         }
 
-        blogEntryInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'blogEntry.label', default: 'BlogEntry'), blogEntryInstance.id])
-                redirect blogEntryInstance
+                flash.message = message(code: 'default.created.message', args: [message(code: 'blogEntry.label', default: 'BlogEntry'), blogEntry.id])
+                redirect blogEntry
             }
-            '*' { respond blogEntryInstance, [status: CREATED] }
+            '*' { respond blogEntry, [status: CREATED] }
         }
     }
 
-    def edit(BlogEntry blogEntryInstance) {
-        respond blogEntryInstance
+    def edit(Long id) {
+        respond blogEntryService.get(id)
     }
 
-    @Transactional
-    def update(BlogEntry blogEntryInstance) {
-        if (blogEntryInstance == null) {
+    def update(BlogEntry blogEntry) {
+        if (blogEntry == null) {
             notFound()
             return
         }
 
-        if (blogEntryInstance.hasErrors()) {
-            respond blogEntryInstance.errors, view:'edit'
+        try {
+            blogEntryService.save(blogEntry)
+        } catch (ValidationException e) {
+            respond blogEntry.errors, view:'edit'
             return
         }
 
-        blogEntryInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'BlogEntry.label', default: 'BlogEntry'), blogEntryInstance.id])
-                redirect blogEntryInstance
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'blogEntry.label', default: 'BlogEntry'), blogEntry.id])
+                redirect blogEntry
             }
-            '*'{ respond blogEntryInstance, [status: OK] }
+            '*'{ respond blogEntry, [status: OK] }
         }
     }
 
-    @Transactional
-    def delete(BlogEntry blogEntryInstance) {
-
-        if (blogEntryInstance == null) {
+    def delete(Long id) {
+        if (id == null) {
             notFound()
             return
         }
 
-        blogEntryInstance.delete flush:true
+        blogEntryService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'BlogEntry.label', default: 'BlogEntry'), blogEntryInstance.id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'blogEntry.label', default: 'BlogEntry'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }

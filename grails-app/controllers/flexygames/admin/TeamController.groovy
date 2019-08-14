@@ -1,91 +1,89 @@
 package flexygames.admin
 
 import flexygames.Team
-
+import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
-import grails.gorm.transactions.Transactional
 
-@Transactional(readOnly = true)
 class TeamController {
+
+    static namespace = 'admin'
+
+    TeamService teamService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Team.list(params), model:[teamInstanceCount: Team.count()]
+        respond teamService.list(params), model:[teamCount: teamService.count()]
     }
 
-    def show(Team teamInstance) {
-        respond teamInstance
+    def show(Long id) {
+        respond teamService.get(id)
     }
 
     def create() {
         respond new Team(params)
     }
 
-    @Transactional
-    def save(Team teamInstance) {
-        if (teamInstance == null) {
+    def save(Team team) {
+        if (team == null) {
             notFound()
             return
         }
 
-        if (teamInstance.hasErrors()) {
-            respond teamInstance.errors, view:'create'
+        try {
+            teamService.save(team)
+        } catch (ValidationException e) {
+            respond team.errors, view:'create'
             return
         }
 
-        teamInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'team.label', default: 'Team'), teamInstance.id])
-                redirect teamInstance
+                flash.message = message(code: 'default.created.message', args: [message(code: 'team.label', default: 'Team'), team.id])
+                redirect team
             }
-            '*' { respond teamInstance, [status: CREATED] }
+            '*' { respond team, [status: CREATED] }
         }
     }
 
-    def edit(Team teamInstance) {
-        respond teamInstance
+    def edit(Long id) {
+        respond teamService.get(id)
     }
 
-    @Transactional
-    def update(Team teamInstance) {
-        if (teamInstance == null) {
+    def update(Team team) {
+        if (team == null) {
             notFound()
             return
         }
 
-        if (teamInstance.hasErrors()) {
-            respond teamInstance.errors, view:'edit'
+        try {
+            teamService.save(team)
+        } catch (ValidationException e) {
+            respond team.errors, view:'edit'
             return
         }
 
-        teamInstance.save flush:true
-
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Team.label', default: 'Team'), teamInstance.id])
-                redirect teamInstance
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'team.label', default: 'Team'), team.id])
+                redirect team
             }
-            '*'{ respond teamInstance, [status: OK] }
+            '*'{ respond team, [status: OK] }
         }
     }
 
-    @Transactional
-    def delete(Team teamInstance) {
-
-        if (teamInstance == null) {
+    def delete(Long id) {
+        if (id == null) {
             notFound()
             return
         }
 
-        teamInstance.delete flush:true
+        teamService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Team.label', default: 'Team'), teamInstance.id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'team.label', default: 'Team'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }

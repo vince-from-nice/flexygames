@@ -1,111 +1,102 @@
 package flexygames.admin
 
-import org.springframework.dao.DataIntegrityViolationException
-
-import flexygames.Playground;
+import flexygames.Playground
+import grails.validation.ValidationException
+import static org.springframework.http.HttpStatus.*
 
 class PlaygroundController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static namespace = 'admin'
 
-    def index() {
-        redirect(action: "list", params: params)
+    PlaygroundService playgroundService
+
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond playgroundService.list(params), model:[playgroundCount: playgroundService.count()]
     }
 
-    def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [playgroundInstanceList: Playground.list(params), playgroundInstanceTotal: Playground.count()]
+    def show(Long id) {
+        respond playgroundService.get(id)
     }
 
     def create() {
-        [playgroundInstance: new Playground(params)]
+        respond new Playground(params)
     }
 
-    def save() {
-        def playgroundInstance = new Playground(params)
-        if (!playgroundInstance.save(flush: true)) {
-            render(view: "create", model: [playgroundInstance: playgroundInstance])
-            return
-        }
-
-		flash.message = message(code: 'default.created.message', args: [message(code: 'playground.label', default: 'Playground'), playgroundInstance.id])
-        redirect(action: "show", id: playgroundInstance.id)
-    }
-
-    def show() {
-        def playgroundInstance = Playground.get(params.id)
-        if (!playgroundInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'playground.label', default: 'Playground'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        [playgroundInstance: playgroundInstance]
-    }
-
-    def edit() {
-        def playgroundInstance = Playground.get(params.id)
-        if (!playgroundInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'playground.label', default: 'Playground'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        [playgroundInstance: playgroundInstance]
-    }
-
-    def update() {
-        def playgroundInstance = Playground.get(params.id)
-        if (!playgroundInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'playground.label', default: 'Playground'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        if (params.version) {
-            def version = params.version.toLong()
-            if (playgroundInstance.version > version) {
-                playgroundInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'playground.label', default: 'Playground')] as Object[],
-                          "Another user has updated this Playground while you were editing")
-                render(view: "edit", model: [playgroundInstance: playgroundInstance])
-                return
-            }
-        }
-
-		playgroundInstance.properties = params
-		
-		// Bug au niveau HTML (http://jira.grails.org/browse/GRAILS-8143) mais y aussi pb ici, on perd les décimales !
-		Float lat = Float.parseFloat(params.latitude)
-		Float lon = Float.parseFloat(params.longitude)
-		playgroundInstance.latitude = lat
-		playgroundInstance.longitude = lon
-		
-        if (!playgroundInstance.save(flush: true)) {
-            render(view: "edit", model: [playgroundInstance: playgroundInstance])
-            return
-        }
-
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'playground.label', default: 'Playground'), playgroundInstance.id])
-        redirect(action: "show", id: playgroundInstance.id)
-    }
-
-    def delete() {
-        def playgroundInstance = Playground.get(params.id)
-        if (!playgroundInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'playground.label', default: 'Playground'), params.id])
-            redirect(action: "list")
+    def save(Playground playground) {
+        if (playground == null) {
+            notFound()
             return
         }
 
         try {
-            playgroundInstance.delete(flush: true)
-			flash.message = message(code: 'default.deleted.message', args: [message(code: 'playground.label', default: 'Playground'), params.id])
-            redirect(action: "list")
+            playgroundService.save(playground)
+        } catch (ValidationException e) {
+            respond playground.errors, view:'create'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'playground.label', default: 'Playground'), params.id])
-            redirect(action: "show", id: params.id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'playground.label', default: 'Playground'), playground.id])
+                redirect playground
+            }
+            '*' { respond playground, [status: CREATED] }
+        }
+    }
+
+    def edit(Long id) {
+        respond playgroundService.get(id)
+    }
+
+    def update(Playground playground) {
+        if (playground == null) {
+            notFound()
+            return
+        }
+
+        try {
+            playgroundService.save(playground)
+        } catch (ValidationException e) {
+            respond playground.errors, view:'edit'
+            return
+        }
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'playground.label', default: 'Playground'), playground.id])
+                redirect playground
+            }
+            '*'{ respond playground, [status: OK] }
+        }
+    }
+
+    def delete(Long id) {
+        if (id == null) {
+            notFound()
+            return
+        }
+
+        playgroundService.delete(id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'playground.label', default: 'Playground'), id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'playground.label', default: 'Playground'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

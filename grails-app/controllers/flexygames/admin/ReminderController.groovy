@@ -1,102 +1,103 @@
 package flexygames.admin
 
-import flexygames.Reminder;
+import flexygames.Reminder
+import flexygames.ReminderService
+import grails.validation.ValidationException
+import static org.springframework.http.HttpStatus.*
 
 class ReminderController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static namespace = 'admin'
 
-    def index = {
-        redirect(action: "list", params: params)
+    ReminderService reminderService
+
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond reminderService.list(params), model:[reminderCount: reminderService.count()]
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [reminderInstanceList: Reminder.list(params), reminderInstanceTotal: Reminder.count()]
+    def show(Long id) {
+        respond reminderService.get(id)
     }
 
-    def create = {
-        def reminderInstance = new Reminder()
-        reminderInstance.properties = params
-        return [reminderInstance: reminderInstance]
+    def create() {
+        respond new Reminder(params)
     }
 
-    def save = {
-        def reminderInstance = new Reminder(params)
-        if (reminderInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'reminder.label', default: 'Reminder'), reminderInstance.id])}"
-            redirect(action: "show", id: reminderInstance.id)
+    def save(Reminder reminder) {
+        if (reminder == null) {
+            notFound()
+            return
         }
-        else {
-            render(view: "create", model: [reminderInstance: reminderInstance])
-        }
-    }
 
-    def show = {
-        def reminderInstance = Reminder.get(params.id)
-        if (!reminderInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'reminder.label', default: 'Reminder'), params.id])}"
-            redirect(action: "list")
+        try {
+            reminderService.save(reminder)
+        } catch (ValidationException e) {
+            respond reminder.errors, view:'create'
+            return
         }
-        else {
-            [reminderInstance: reminderInstance]
-        }
-    }
 
-    def edit = {
-        def reminderInstance = Reminder.get(params.id)
-        if (!reminderInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'reminder.label', default: 'Reminder'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [reminderInstance: reminderInstance]
-        }
-    }
-
-    def update = {
-        def reminderInstance = Reminder.get(params.id)
-        if (reminderInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (reminderInstance.version > version) {
-                    
-                    reminderInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'reminder.label', default: 'Reminder')] as Object[], "Another user has updated this Reminder while you were editing")
-                    render(view: "edit", model: [reminderInstance: reminderInstance])
-                    return
-                }
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'reminder.label', default: 'Reminder'), reminder.id])
+                redirect reminder
             }
-            reminderInstance.properties = params
-            if (!reminderInstance.hasErrors() && reminderInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'reminder.label', default: 'Reminder'), reminderInstance.id])}"
-                redirect(action: "show", id: reminderInstance.id)
-            }
-            else {
-                render(view: "edit", model: [reminderInstance: reminderInstance])
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'reminder.label', default: 'Reminder'), params.id])}"
-            redirect(action: "list")
+            '*' { respond reminder, [status: CREATED] }
         }
     }
 
-    def delete = {
-        def reminderInstance = Reminder.get(params.id)
-        if (reminderInstance) {
-            try {
-                reminderInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'reminder.label', default: 'Reminder'), params.id])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'reminder.label', default: 'Reminder'), params.id])}"
-                redirect(action: "show", id: params.id)
-            }
+    def edit(Long id) {
+        respond reminderService.get(id)
+    }
+
+    def update(Reminder reminder) {
+        if (reminder == null) {
+            notFound()
+            return
         }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'reminder.label', default: 'Reminder'), params.id])}"
-            redirect(action: "list")
+
+        try {
+            reminderService.save(reminder)
+        } catch (ValidationException e) {
+            respond reminder.errors, view:'edit'
+            return
+        }
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'reminder.label', default: 'Reminder'), reminder.id])
+                redirect reminder
+            }
+            '*'{ respond reminder, [status: OK] }
+        }
+    }
+
+    def delete(Long id) {
+        if (id == null) {
+            notFound()
+            return
+        }
+
+        reminderService.delete(id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'reminder.label', default: 'Reminder'), id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'reminder.label', default: 'Reminder'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

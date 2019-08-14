@@ -1,102 +1,102 @@
 package flexygames.admin
 
-import flexygames.Vote;
+import flexygames.Vote
+import grails.validation.ValidationException
+import static org.springframework.http.HttpStatus.*
 
 class VoteController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static namespace = 'admin'
 
-    def index = {
-        redirect(action: "list", params: params)
+    VoteService voteService
+
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond voteService.list(params), model:[voteCount: voteService.count()]
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [voteInstanceList: Vote.list(params), voteInstanceTotal: Vote.count()]
+    def show(Long id) {
+        respond voteService.get(id)
     }
 
-    def create = {
-        def voteInstance = new Vote()
-        voteInstance.properties = params
-        return [voteInstance: voteInstance]
+    def create() {
+        respond new Vote(params)
     }
 
-    def save = {
-        def voteInstance = new Vote(params)
-        if (voteInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'vote.label', default: 'Vote'), voteInstance.id])}"
-            redirect(action: "show", id: voteInstance.id)
+    def save(Vote vote) {
+        if (vote == null) {
+            notFound()
+            return
         }
-        else {
-            render(view: "create", model: [voteInstance: voteInstance])
-        }
-    }
 
-    def show = {
-        def voteInstance = Vote.get(params.id)
-        if (!voteInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'vote.label', default: 'Vote'), params.id])}"
-            redirect(action: "list")
+        try {
+            voteService.save(vote)
+        } catch (ValidationException e) {
+            respond vote.errors, view:'create'
+            return
         }
-        else {
-            [voteInstance: voteInstance]
-        }
-    }
 
-    def edit = {
-        def voteInstance = Vote.get(params.id)
-        if (!voteInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'vote.label', default: 'Vote'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [voteInstance: voteInstance]
-        }
-    }
-
-    def update = {
-        def voteInstance = Vote.get(params.id)
-        if (voteInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (voteInstance.version > version) {
-                    
-                    voteInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'vote.label', default: 'Vote')] as Object[], "Another user has updated this Vote while you were editing")
-                    render(view: "edit", model: [voteInstance: voteInstance])
-                    return
-                }
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'vote.label', default: 'Vote'), vote.id])
+                redirect vote
             }
-            voteInstance.properties = params
-            if (!voteInstance.hasErrors() && voteInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'vote.label', default: 'Vote'), voteInstance.id])}"
-                redirect(action: "show", id: voteInstance.id)
-            }
-            else {
-                render(view: "edit", model: [voteInstance: voteInstance])
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'vote.label', default: 'Vote'), params.id])}"
-            redirect(action: "list")
+            '*' { respond vote, [status: CREATED] }
         }
     }
 
-    def delete = {
-        def voteInstance = Vote.get(params.id)
-        if (voteInstance) {
-            try {
-                voteInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'vote.label', default: 'Vote'), params.id])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'vote.label', default: 'Vote'), params.id])}"
-                redirect(action: "show", id: params.id)
-            }
+    def edit(Long id) {
+        respond voteService.get(id)
+    }
+
+    def update(Vote vote) {
+        if (vote == null) {
+            notFound()
+            return
         }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'vote.label', default: 'Vote'), params.id])}"
-            redirect(action: "list")
+
+        try {
+            voteService.save(vote)
+        } catch (ValidationException e) {
+            respond vote.errors, view:'edit'
+            return
+        }
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'vote.label', default: 'Vote'), vote.id])
+                redirect vote
+            }
+            '*'{ respond vote, [status: OK] }
+        }
+    }
+
+    def delete(Long id) {
+        if (id == null) {
+            notFound()
+            return
+        }
+
+        voteService.delete(id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'vote.label', default: 'Vote'), id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'vote.label', default: 'Vote'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

@@ -255,7 +255,8 @@ class Session implements Comparable {
 	
 	public String toString() {
 		if (name) return name
-		else return "Session on " + getDate().toString().substring(0,10)  + " at $playground"
+		else if (date) return "Session on " + date.toString().substring(0,10)  + " at $playground"
+		else return "Null session"
 	}
 	
 	public boolean equals (Object o) {
