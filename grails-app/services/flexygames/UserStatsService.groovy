@@ -2,7 +2,7 @@ package flexygames
 
 import grails.gorm.transactions.Transactional
 
-@Transactional
+@Transactional (readOnly = true)
 class UserStatsService {
 
     def getUserStats(User player) {

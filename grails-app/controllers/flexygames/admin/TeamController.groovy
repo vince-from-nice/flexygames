@@ -3,7 +3,7 @@ package flexygames.admin
 import flexygames.Team
 
 import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 
 @Transactional(readOnly = true)
 class TeamController {

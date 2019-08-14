@@ -3,7 +3,7 @@ package flexygames.admin
 import flexygames.Session
 
 import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 
 @Transactional(readOnly = true)
 class SessionController {
@@ -12,7 +12,7 @@ class SessionController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Session.list(params), model:[sessionInstanceCount: Session.count()]
+        [sessionInstanceList: Session.list(params), sessionInstanceCount: Session.count()]
     }
 
     def show(Session sessionInstance) {

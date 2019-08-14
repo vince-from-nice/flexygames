@@ -8,7 +8,7 @@ import org.grails.web.json.JSONObject
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 
-@Transactional
+@Transactional (readOnly = true)
 class ForecastService {
 
 	private static final int MAX_DISPLAYED_DAYS = 4 // Number of days displayed
