@@ -20,7 +20,7 @@ class PlayerController {
 
 	def mailerService
 
-	def statsService
+	def userStatsService
 	
 	def index() { redirect(action:"list") }
 
@@ -89,7 +89,7 @@ class PlayerController {
 				return render(view: 'statsForGroup', model: [playerInstance: player, group: group])
 			} else {
 				// Prepare all data for user statistics
-				def userStats = statsService.getUserStats(player)
+				def userStats = userStatsService.getUserStats(player)
 				return [userStats:userStats]
 			}
 		}

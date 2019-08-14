@@ -44,7 +44,7 @@ class SiteController {
 	}
 	
 	def stats = {
-		// TODO move it to StatsService
+		// TODO move it to GlobalStatsService
 
 		//def teams = "[ ['ASAS Football Team', 18], ['ASAS Volleyball Team', 4] ]"
 		//def scorers = "[ [ 'turman', 23 ], [ 'ypos', 12 ], [ 'dudak', 40 ]]"

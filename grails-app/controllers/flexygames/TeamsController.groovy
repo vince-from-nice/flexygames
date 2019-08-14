@@ -1,10 +1,8 @@
 package flexygames
 
-import org.apache.shiro.SecurityUtils
-
 class TeamsController {
 
-	def statsService
+	def teamStatsService
 
 	def forumService
 	
@@ -50,7 +48,7 @@ class TeamsController {
 		def criteria = (params.criteria ? params.criteria : 'statuses.doneGood')
 		def sessionGroupId = (params.sessionGroupId ? Integer.parseInt(params.sessionGroupId) : 0)
 		SessionGroup sessionGroup = (sessionGroupId > 0 ? SessionGroup.get(sessionGroupId) : null)
-		def membersRanking = statsService.getTeamMembersRanking(team, criteria, sessionGroup)
+		def membersRanking = teamStatsService.getTeamMembersRanking(team, criteria, sessionGroup)
 		return [teamInstance: team, membersRanking: membersRanking, currentCriteria: criteria, currentSessionGroupId: sessionGroupId]
 	}
 	

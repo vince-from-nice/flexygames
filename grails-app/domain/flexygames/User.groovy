@@ -211,38 +211,8 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	}
 
 	///////////////////////////////////////////////////////////////////////////
-	// Stats methods (need to move them)
+	// Stats methods (need to move them to UserStatsService)
 	///////////////////////////////////////////////////////////////////////////
-
-	// too slow
-
-	/*
-	def countTasksByTypeAndSessionGroup(taskType, sessionGroup) {
-		def result = 0
-		def tasks = Task.findAllByUserAndType(this, taskType)
-		tasks.each { task ->
-			if (sessionGroup.sessions.contains(task.session)) result++
-		}
-		return result
-	}
-
-	def countTasksByTypeAndTeam(taskType, team) {
-		def result = 0
-		def tasks = Task.findAllByUserAndType(this, taskType)
-		def sessions = team.sessions
-		tasks.each { task ->
-			if (sessions.contains(task.session)) result++
-		}
-		return result
-	}
-
-	def countTasksByTypeAndSessionGroup(taskType, sessionGroup) {
-		return Task.countByUserAndTypeAndSessionInList(this, taskType, sessionGroup.sessions)
-	}
-
-	def countTasksByTypeAndTeam(taskType, team) {
-		return Task.countByUserAndTypeAndSessionInList(this, taskType, team.sessions)
-	}*/
 
 	def countRequestedCarpools() {
 		return CarpoolRequest.countByEnquirer(this)
@@ -460,7 +430,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		}
 		return score
 	}
-	
+
 	///////////////////////////////////////////////////////////////////////////
 	// Counter methods for precomputed statistics
 	///////////////////////////////////////////////////////////////////////////

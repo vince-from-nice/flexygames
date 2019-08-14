@@ -125,7 +125,7 @@
 									<g:if test="${ratio == 1}">(100%)</g:if>
 									<g:if test="${0 < ratio && ratio < 1}">(${(100*ratio).toString().substring(0,2)}%)</g:if>
 							</g:if>
-						</b>
+						</span>
 						</nobr>
 					</td>
 					<td style="vertical-align: middle; ; text-align: center">
@@ -138,7 +138,7 @@
 									<g:if test="${ratio == 1}">(100%)</g:if>
 									<g:if test="${0 < ratio && ratio < 1}">(${(100*ratio).toString().substring(0,2)}%)</g:if>
 							</g:if>
-						</b>
+						</span>
 						</nobr>
 					</td>
 					<td style="vertical-align: middle; text-align: center">
@@ -151,7 +151,7 @@
 									<g:if test="${ratio == 1}">(100%)</g:if>
 									<g:if test="${0 < ratio && ratio < 1}">(${(100*ratio).toString().substring(0,2)}%)</g:if>
 							</g:if>
-						</b>
+						</span>
 						</nobr>
 					</td>
 					<td style="vertical-align: middle; text-align: center; border-left: black solid 1px">${actions}</td>
