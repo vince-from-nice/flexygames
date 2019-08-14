@@ -26,16 +26,18 @@
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile-20160208.css')}" />
 		<link rel="stylesheet" href="${resource(dir:'css',file:'flexygames-v6.css')}" />
 
-		<g:javascript library="application"/>
+		<!--g:javascript library="application"/-->
 		<!--g:javascript library="flexygames" /-->
+		<script type="text/javascript" src="${resource(dir:'js',file:'application.js')}"></script>
 		<script type="text/javascript" src="${resource(dir:'js',file:'flexygames-20160508.js')}"></script>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		
-		<g:layoutHead/>
-        <r:layoutResources />
+
+        <!--r:layoutResources /-->
 
 		<g:set var="now" value="${System.currentTimeMillis()}" />
+
+		<g:layoutHead/>
 	</head>
 	
 	<body onload="${pageProperty(name:'body.onload')}; ">
@@ -112,7 +114,7 @@
 				<g:render template="/layouts/footer" />
 			</div>
 			<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
-	        <r:layoutResources />
+	        <!--r:layoutResources /-->
 		</div>
 	</body>
 	

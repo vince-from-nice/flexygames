@@ -13,7 +13,7 @@ class OnlineUserInterceptor {
     }
 
 	boolean before() {
-        if (controllerName != 'images' && controllerName != 'css' && controllerName != 'js') {
+        if (controllerName && controllerName != 'images' && controllerName != 'css' && controllerName != 'js') {
             if (servletContext.onlineUsers == null) {
                 println "Init online user list..."
                 servletContext.onlineUsers = new TreeSet<User>()

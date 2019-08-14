@@ -31,7 +31,7 @@ class SessionService {
 		def newParticipation = new Participation(player: user, session:session,
 		statusCode: Participation.Status.AVAILABLE.code,
 		lastUpdate: new Date(), lastUpdater: user.username)
-		if (!newParticipation.save(flush:true)) {
+		if (!newParticipation.save()) {
 			throw new Exception("Error on saving : " + newParticipation.errors)
 		}
 	}

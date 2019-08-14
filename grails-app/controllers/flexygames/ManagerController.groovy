@@ -1,15 +1,15 @@
 package flexygames
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import groovy.json.JsonSlurper;
 
 import java.text.SimpleDateFormat
 
-import org.apache.shiro.SecurityUtils
 import org.jsoup.Jsoup
 import org.jsoup.safety.Whitelist
 import org.springframework.dao.DataIntegrityViolationException
 
+@Transactional
 class ManagerController {
 
 	def mailerService
@@ -56,11 +56,11 @@ class ManagerController {
 		def sessionInstance = new Session(params)
 		sessionInstance.setCreator(user);
 		sessionInstance.setCreation(new Date())
-		if (sessionInstance.save(flush: true)) {
+		if (sessionInstance.save()) {
 			// By default add 2 reminders at -24h and -72h
 			def reminder1 = new Reminder(minutesBeforeSession: 60 * 24, session: sessionInstance)
 			def reminder2 = new Reminder(minutesBeforeSession: 60 * 72, session: sessionInstance)
-			if (reminder1.save(flush: true) && reminder2.save(flush: true) ) {
+			if (reminder1.save() && reminder2.save() ) {
 				flash.message = "Ok session $sessionInstance.id has been created !"
 			} else {
 				flash.message = "Ok session $sessionInstance.id has been created.. but not its default reminders !"
@@ -130,7 +130,7 @@ class ManagerController {
 		}
 		sessionInstance.lastUpdate = new Date()
 		sessionInstance.lastUpdater = user
-		if (!sessionInstance.hasErrors() && sessionInstance.save(flush: true)) {
+		if (!sessionInstance.hasErrors() && sessionInstance.save()) {
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'session.label', default: 'Session'), sessionInstance.id])}"
 			redirect(controller:"sessions", action: "show", id: sessionInstance.id)
 		}
@@ -151,7 +151,7 @@ class ManagerController {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: sessionInstance.id])
 		}
-		reminder.delete(flush: true)
+		reminder.delete()
 		flash.message = "Ok reminder has been deleted !"
 		render(view: "sessionForm", model: [sessionInstance: sessionInstance])
 	}
@@ -168,7 +168,7 @@ class ManagerController {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: sessionInstance.id])
 		}
-		task.delete(flush: true)
+		task.delete()
 		flash.message = "Ok task has been deleted !"
 		render(view: "sessionForm", model: [sessionInstance: sessionInstance])
 	}
@@ -198,7 +198,7 @@ class ManagerController {
 			// duplicate related reminders too
 			oldSession.reminders.each { currentReminder ->
 				def newReminder = new Reminder(session: newSession, minutesBeforeSession: currentReminder.minutesBeforeSession, jobExecuted: false)
-				if (newReminder.hasErrors() || !newReminder.save(flush: true)) {
+				if (newReminder.hasErrors() || !newReminder.save()) {
 					flash.message << "<br/>Sorry, an error has occured on duplicating $currentReminder (details: $newReminder.errors)"
 				}
 			}
@@ -275,7 +275,7 @@ class ManagerController {
 			comment.user.updateCommentCounter(-1)
 		}
 		try {
-			sessionInstance.delete(flush: true)
+			sessionInstance.delete()
 			flash.message = message(code: 'default.deleted.message', args: [
 				message(code: 'session.label', default: 'Session'),
 				params.id
@@ -357,7 +357,7 @@ class ManagerController {
 						def newParticipation = new Participation(player: ms.user, session: s,
 						statusCode: Participation.Status.REQUESTED.code,
 						lastUpdate: new Date(), lastUpdater: user.username)
-						newParticipation.save(flush: true)
+						newParticipation.save()
 						newPlayers << ms.user
 					}
 				}
@@ -573,7 +573,7 @@ class ManagerController {
 				lastUpdate: new Date(), 
 				lastUpdater: user)
 		session.addToCompositions(composition)
-		if (session.save(flush: true)) {
+		if (session.save()) {
 			flash.message = "A new composition has been added to the session"
 		} else {
 			flash.error = "Sorry, unable to add a new composition to the session"
@@ -607,7 +607,7 @@ class ManagerController {
 		def items = CompositionItem.findAllByComposition(composition)
 		items.each{it.delete()}
 		//composition.removeFromItems(items)		
-		composition.save(flush: true)
+		composition.save()
 		
 		// Recreate an item for each player 
 		println "data: " + params["data"]
@@ -621,7 +621,7 @@ class ManagerController {
 			item.y = player['y']
 			composition.addToItems(item)
 		}		
-		if (composition.save(flush: true)) {
+		if (composition.save()) {
 			flash.message = "Composition has been updated"
 		} else {
 			flash.error = "Sorry, unable to update composition"
@@ -640,7 +640,7 @@ class ManagerController {
 			flash.error = "You cannot manage that session since you're not a manager !"
 			return redirect(controller: "sessions", action: "show", params: [id: composition.session])
 		}
-		composition.delete(flush: true)
+		composition.delete()
 		flash.message = "Composition has been deleted !"
 		redirect(uri: "/sessions/show/" + composition.session.id + "#compositionsDetailedZone")
 	}
@@ -664,7 +664,7 @@ class ManagerController {
 		SessionRound round = new SessionRound(session: session/*, index: rounds.size() + 1*/)
 		session.addToRounds(round)
 		session.approvedParticipants.each { p -> round.addToPlayersForTeamA(p)}
-		if (session.save(flush: true)) {
+		if (session.save()) {
 			flash.message = "A new round has been added to the session"
 		} else {
 			flash.error = "Sorry, unable to add a new round to the session"
@@ -691,7 +691,7 @@ class ManagerController {
 			flash.error = "Sorry, unable to remove round from session"
 			return redirect(controller:"sessions", action: "show", id: session.id)
 		}
-		round.delete(flush: true)
+		round.delete()
 		flash.message = "Round has been deleted !"
 		redirect(uri: "/sessions/show/" + session.id + "#scoresheetArea")
 	}
@@ -710,7 +710,7 @@ class ManagerController {
 		def session = round.session
 		// delete ALL actions
 		round.actions.clear()
-		round.save(flush:true)
+		round.save()
 		// for each participants : reset his team and create his actions
 		session.approvedParticipants.each { p ->
 			round.removeFromPlayersForTeamA(p)
@@ -718,10 +718,6 @@ class ManagerController {
 			//p.removeFromSessionRounds(round)
 			if(params.get("player" + p.id + "Team") == "TeamA") round.addToPlayersForTeamA(p)
 			if(params.get("player" + p.id + "Team") == "TeamB") round.addToPlayersForTeamB(p)
-			//			if (!round.save(flush:true) || !p.save(flush:true)) {
-			//				flash.message = "Sorry, unable to update round !<br/><br/>Detail : $round.errors"
-			//				redirect(uri: "/sessions/show/" + session.id + "#scoresheetArea")
-			//			}
 			def scoreParam = params.get("player" + p.id + "Score")
 			if (scoreParam) {
 				def score = Integer.parseInt(scoreParam)
@@ -743,7 +739,7 @@ class ManagerController {
 			new GameAction(sessionRound: round, mainContributor: null, forFirstTeamIfOrphelin: false).save()
 		}
 		// save round
-		if (round.save(flush:true)) flash.message = "Round has been successfuly updated"
+		if (round.save()) flash.message = "Round has been successfuly updated"
 		else flash.error = "Sorry, unable to update round !<br/><br/>Detail : $round.errors"
 		redirect(uri: "/sessions/show/" + session.id + "#scoresheetArea")
 	}
@@ -768,7 +764,7 @@ class ManagerController {
 			newRound.addToPlayersForTeamB(p)
 		}
 		session.addToRounds(newRound)
-		if (session.save(flush: true)) {
+		if (session.save()) {
 			flash.message = "A new duplicated round has been added to the session"
 		} else {
 			flash.error = "Sorry, unable to duplicate round for the session"
@@ -856,11 +852,8 @@ class ManagerController {
 		try {
 			team.removeFromMemberships(ms)
 			player.removeFromMemberships(ms)
-			team.save(flush: false)
-			player.save(flush: false)
-			//			ms.delete(flush: false)
-			//			team.discard()
-			//			user.discard()
+			team.save()
+			player.save()
 			mailerService.mail(player.email, message(code:'management.membership.remove.mail.title'),
 			message(code:'management.membership.remove.mail.body', args: [user.username, team.name]))
 			flash.message = "Ok membership has been removed"
@@ -940,7 +933,6 @@ class ManagerController {
 		render(view: '../manager/blogEntryForm', model: [team: team, blogEntry: params.id ? BlogEntry.get(params.id) : null])
 	}
 
-	@Transactional
 	def saveBlogEntry() {
 		Team team = Team.get(params.teamId)
 		if (!team) {
@@ -985,7 +977,6 @@ class ManagerController {
 		redirect(controller:"teams", action: "show", id: team.id)
 	}
 
-	@Transactional
 	def deleteBlogEntry() {
 		BlogEntry be = BlogEntry.get(params.id)
 		if (!be) {

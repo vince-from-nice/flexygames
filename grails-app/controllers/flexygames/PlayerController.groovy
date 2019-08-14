@@ -1,6 +1,7 @@
 package flexygames
 
 import grails.converters.JSON
+import grails.gorm.transactions.Transactional
 
 import java.text.SimpleDateFormat
 import java.util.regex.Matcher
@@ -21,11 +22,11 @@ class PlayerController {
 
 	def statsService
 	
-	def index = { redirect(action:"list") }
+	def index() { redirect(action:"list") }
 
-	def home = { redirect(action:"list") }
+	def home() { redirect(action:"list") }
 
-	def list = {
+	def list() {
 		if (!params.max || params.max == 'null') params.max = 20
 		params.max = Math.min(params.max ? params.int('max') : 20, 100)
 		if(!params.sort) params.sort = "username"
@@ -52,19 +53,8 @@ class PlayerController {
 //		} 
 		[playerInstanceList: users, playerInstanceTotal: total]
 	}
-	
-	def listOld = {
-		if (!params.max || params.max == 'null') params.max = 20
-		params.max = Math.min(params.max ? params.int('max') : 20, 100)
-		if(!params.sort) params.sort = "username"
-		if(!params.order) params.order = "asc"
-		def users = User.list(params)
-		//		println "\tUser.count() returns " + User.count()
-		//		println "\tUser list size is " + users.size()
-		[playerInstanceList: users, playerInstanceTotal: User.count()]
-	}
 
-	def jsonList = {
+	def jsonList() {
 		def users = User.list(sort: 'username', order: 'asc')
 		def json = []
 		users.each { u ->
@@ -73,7 +63,7 @@ class PlayerController {
 		render  json as JSON
 	}
 
-	def show = {
+	def show() {
 		def playerInstance = User.get(params.id)
 		if (!playerInstance) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player'), params.id])}"
@@ -84,7 +74,7 @@ class PlayerController {
 		}
 	}
 
-	def stats = {
+	def stats() {
 		def player = User.get(params.id)
 		if (!player) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player'), params.id])}"
@@ -105,13 +95,10 @@ class PlayerController {
 		}
 	}
 
-	def register = {
-//		def playerInstance = new User()
-//		playerInstance.properties = params
-//		return [playerInstance: playerInstance]
-	}
+	def register() {}
 
-	def save = {
+	@Transactional
+	def save () {
 		User user = new User(params)
 		User similarUser = User.findByUsernameIlike(params.username.toLowerCase())
 		if (similarUser) {
@@ -147,7 +134,7 @@ class PlayerController {
 					regularForCompetition: false)
 			user.addToMemberships(ms)
 		}
-		if (!user.save(flush: true)) {
+		if (!user.save()) {
 			flash.message = "${message(code: 'register.failed')}"
 			return render(view: "register", model: [user: user])
 		}
@@ -155,9 +142,10 @@ class PlayerController {
 		redirect(controller:"site", action: "home")
 	}
 
-	def remindPassword = {}
+	def remindPassword() {}
 
-	def sendPasswordReset = {
+	@Transactional
+	def sendPasswordReset() {
 		User user = User.findByUsernameOrEmail(params.username, params.email.toLowerCase())
 		if (!user) {
 			flash.message = "${message(code: 'remindPassword.userNotFound')}"
@@ -182,10 +170,10 @@ class PlayerController {
 		redirect(controller:"site", action: "home")
 	}
 
-	def resetPassword = {
-	}
+	def resetPassword() {}
 
-	def refreshPassword = {
+	@Transactional
+	def refreshPassword() {
 		User user = User.findByIdAndPasswordResetToken(params.id, params.token)
 		if (!user) {
 			flash.message = "${message(code: 'resetPassword.userNotFound')}"
@@ -206,7 +194,7 @@ class PlayerController {
 		redirect(controller:"site", action: "home")
 	}
 	
-	def cal = {
+	def cal() {
 		def player = User.get(params.id)
 		if (!player) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player'), params.id])}"

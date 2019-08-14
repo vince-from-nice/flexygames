@@ -1,6 +1,6 @@
 package flexygames
 
-import org.apache.shiro.SecurityUtils
+import grails.gorm.transactions.Transactional
 import org.apache.shiro.crypto.hash.Sha512Hash
 
 class MyselfController {
@@ -9,21 +9,21 @@ class MyselfController {
 
 	def userService
 	
-    def index = {
+    def index() {
         redirect(action: "myAccount", params: params)
     }
 
-	def myAccount = {
+	def myAccount() {
 		User user = request.currentUser
 		render(view: (displayService.isMobileDevice(request) ? 'myAccountMobile' : 'myAccount'),  model:[playerInstance: user])
 	}
 	
-	def myPlanning = {
+	def myPlanning() {
 		User user = request.currentUser
 		// if calendarToken is not already generated do it now !
 		if (!user.calendarToken) {
 			user.calendarToken = UUID.randomUUID().toString()
-			if (!user.save(flush: true)) {
+			if (!user.save()) {
 				flash.message = "Sorry, unable to generate user calendar token ! <br><br>$user.errors"
 				return redirect(controller:"site", action: "home")
 			}
@@ -31,7 +31,7 @@ class MyselfController {
 		render (view:"myPlanning", model:[player: user])
 	}
 	
-	def mySessions = {
+	def mySessions() {
 		User user = request.currentUser
 		Calendar cal = Calendar.getInstance()
 		final int WEEKS_NBR = 4;
@@ -60,27 +60,27 @@ class MyselfController {
 		render (view:"mySessions", model:[allSessions: allSessions, year: year, week: firstWeek])
 	}
 
-	def myProfile = {
+	def myProfile() {
 		User user = request.currentUser
 		redirect (controller:"player", action:"show", id: user.id)
 	}
 	
-	def myStats = {
+	def myStats() {
 		User user = request.currentUser
 		redirect(controller: "player", action: "stats", params:[id:user.id])
 	}
 	
-	def editMyProfile = {
+	def editMyProfile() {
 		[playerInstance: request.currentUser]
 	}
 
-	def updateMyProfile = {
+	@Transactional
+	def updateMyProfile() {
 		User user = request.currentUser
 		if (user) {
 			if (params.version) {
 				def version = params.version.toLong()
 				if (user.version > version) {
-
 					user.errors.rejectValue("version", "default.optimistic.locking.failure", [
 						message(code: 'player.label', default: 'Player')]
 					as Object[], "Another user has updated this Player while you were editing")
@@ -88,14 +88,9 @@ class MyselfController {
 					return
 				}
 			}
-			// Update user with params but not whithout keeping in safe the username and registration fields
-			//String oldUsername = user.username
-			//Date oldRegDate = user.registrationDate
-			//user.properties = params
 			userService.update(user.id, params) // using a service method in order to test transactional behavior
-			// user.username = oldUsername
-			//user.registrationDate = oldRegDate
-			if (!user.hasErrors() && user.save(flush: true)) {
+			user.properties = params
+			if (!user.hasErrors() && user.save()) {
 				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'player.label', default: 'Player'), user.username])}"
 				redirect(action: "myAccount")
 			}
@@ -109,7 +104,8 @@ class MyselfController {
 		}
 	}
 
-	def changeMyPassord = {
+	@Transactional
+	def changeMyPassord() {
 		User user = request.currentUser
 		if (user) {
 			def oldPasswordHash = new Sha512Hash(params.oldPassword).toHex()
@@ -129,7 +125,8 @@ class MyselfController {
 		redirect(action: "myAccount")
 	}
 
-	def joinTeam = {
+	@Transactional
+	def joinTeam() {
 		User user = request.currentUser
 		def team = Team.get(params.id)
 		if (!user) {
@@ -151,8 +148,9 @@ class MyselfController {
 			redirect(action: "myAccount")
 		}
 	}
-	
-	def updateMembership = {
+
+	@Transactional
+	def updateMembership() {
 		User user = request.currentUser
 		def ms = Membership.get(params.id)
 		if (!user) {
@@ -171,7 +169,8 @@ class MyselfController {
 		}
 	}
 
-	def leaveTeam = {
+	@Transactional
+	def leaveTeam () {
 		//User user = request.currentUser
 		User user = request.currentUser
 		def ms = Membership.get(params.id)
@@ -194,7 +193,8 @@ class MyselfController {
 		redirect(action: "myAccount")
 	}
 
-	def addSkill = {
+	@Transactional
+	def addSkill() {
 		User user = request.currentUser
 		GameSkill skill = GameSkill.get(params.id)
 		if (!user) {
@@ -205,23 +205,17 @@ class MyselfController {
 			redirect(action: "myAccount")
 		} else if (user.skills.contains(skill)) {
 			flash.message = "You already have the skill $skill"
-			// TODO comprendre pour le redirect aboutit lors du 1er ajout de skill sur :
-			// sur org.hibernate.LazyInitializationException: could not initialize proxy - no Session
-			//redirect(action: "showMyProfile")
 			render(view: "myAccount", model:  [playerInstance: user])
 		} else {
 			user.addToSkills(skill)
-			user.save(flush: true)
-			skill.save(flush: true)
+			user.save()
 			flash.message = "$user has a new skill : $skill"
-			// TODO comprendre pour le redirect aboutit lors du 1er ajout de skill sur :
-			// sur org.hibernate.LazyInitializationException: could not initialize proxy - no Session
-			//redirect(action: "showMyProfile")
 			render(view: "myAccount", model:  [playerInstance: user])
 		}
 	}
 
-	def removeSkill = {
+	@Transactional
+	def removeSkill() {
 		User user = request.currentUser
 		GameSkill skill = GameSkill.get(params.id)
 		if (!user) {
@@ -235,19 +229,18 @@ class MyselfController {
 			redirect(action: "myAccount")
 		} else {
 			user.removeFromSkills(skill)
-			user.save(flush: true)
-			skill.save(flush: true)
+			user.save()
 			flash.message = "$user doesn't have the skill $skill anymore"
 			redirect(action: "myAccount")
 		}
 	}
 
-	def changeAvatarSuccess = {
+	def changeAvatarSuccess() {
 		flash.message = "Your new avatar has been uploaded"
 		redirect(action: "myAccount")
 	}
 
-	def changeAvatarError = {
+	def changeAvatarError() {
 		flash.message = "Sorry, your new avatar has NOT been uploaded : $flash.message"
 		redirect(action: "myAccount")
 	}

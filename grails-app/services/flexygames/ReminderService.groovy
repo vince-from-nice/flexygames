@@ -1,15 +1,12 @@
 package flexygames
 
-
-import grails.util.Environment
-
+import grails.gorm.transactions.Transactional
 import org.springframework.context.MessageSource
-import org.springframework.context.i18n.LocaleContextHolder as LCH
 
-
+@Transactional
 class ReminderService {
 
-	static transactional = false
+	//static transactional = false
 	
 	def grailsApplication
 	
@@ -63,7 +60,7 @@ class ReminderService {
 						println "Ok nothing to do, no player need to be reminded"
 					}
 					reminder.jobExecuted = true
-					reminder.save(flush: true)
+					reminder.save()
 				}
 			}
 		}

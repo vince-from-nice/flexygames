@@ -74,7 +74,7 @@ grails:
             encoding: UTF-8
             htmlcodec: xml
             codecs:
-                expression: html
+                expression: none # change html to none because I don't want to update all the messages including HTML
                 scriptlets: html
                 taglib: none
                 staticparts: none
