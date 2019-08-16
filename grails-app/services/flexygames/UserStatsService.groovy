@@ -13,14 +13,10 @@ class UserStatsService {
         def allSessionGroups = player.getAllEffectiveSessionGroups()
 
         // TODO fetch in one shot from the DB the playersInTeam* of all rounds
-        def allRounds = SessionRound.findAllBySessionInList(allEffectiveSessions)
-        //def playersInTeamA = User.findAll
-//        println "User has " + allRounds.size() + " rounds:"
-//				allRounds.each { round ->
-//					println "\t$round: "
-//					println "\t\tplayers in teamA: " + round.playersForTeamA.size()
-//					println "\t\tplayers in teamB: " + round.playersForTeamB.size()
-//				}
+        def allRounds = []
+        if (allEffectiveSessions.size() > 0) {
+            allRounds = SessionRound.findAllBySessionInList(allEffectiveSessions)
+        }
 
         userStats.player = player
         userStats.sessionGroups = []
