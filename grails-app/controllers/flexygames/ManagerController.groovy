@@ -380,7 +380,7 @@ class ManagerController {
 				if (param.startsWith('selectParticipation')) {
 					def participationId = param.substring('selectParticipation'.length())
 					Participation participation = Participation.get(participationId)
-					sessionService.updatePlayerStatus(user, participation, params.statusCode, params.userLog)
+					sessionsService.updatePlayerStatus(user, participation, params.statusCode, params.userLog)
 					atLeastOnePlayerUpdated = true
 				}
 			}
@@ -414,7 +414,7 @@ class ManagerController {
 			boolean atLeastOnePlayerUpdated = false
 			session.participations.each{ participation ->
 				if (participation.statusCode == Participation.Status.AVAILABLE.code) {
-					sessionService.updatePlayerStatus(user, participation, Participation.Status.APPROVED.code, params.userLog)
+					sessionsService.updatePlayerStatus(user, participation, Participation.Status.APPROVED.code, params.userLog)
 					atLeastOnePlayerUpdated = true
 				}
 			}
@@ -453,7 +453,7 @@ class ManagerController {
 			boolean atLeastOnePlayerUpdated = false
 			session.participations.each{ participation ->
 				if (participation.statusCode == Participation.Status.APPROVED.code) {
-					sessionService.updatePlayerStatus(user, participation, Participation.Status.DONE_GOOD.code, params.userLog)
+					sessionsService.updatePlayerStatus(user, participation, Participation.Status.DONE_GOOD.code, params.userLog)
 					atLeastOnePlayerUpdated = true
 				}
 			}
