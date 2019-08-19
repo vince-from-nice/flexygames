@@ -20,6 +20,9 @@ apply plugin:"org.grails.grails-web"
 apply plugin:"asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
 
+// turman: thanks to https://stackoverflow.com/questions/33621966/create-grails-3-war-without-version-number
+war.archiveName="${war.baseName}.war"
+
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
