@@ -31,13 +31,13 @@ class OnlineUserInterceptor {
                 if (!onlineUsers*.username.contains(username)) {
                     println "Adding $username to online users"
                     onlineUsers << user
-                    session.currentUser = user
                 }
                 // if user isn't not already in session (which could happen with the "remember me" feature), do it now !
                 if (user.username != session.currentUser?.username) {
                     println "Adding $username into session"
+                    session.currentUser = user
                 }
-                // Set the current user in request
+                // Set the current user in the request scope
                 request.currentUser = user
             }
         }
