@@ -1,12 +1,14 @@
 package flexygames.admin
 
 import flexygames.SessionGroup
+import grails.gorm.transactions.Transactional
 import org.apache.shiro.SecurityUtils
 
 import flexygames.User
 
 import java.util.regex.Pattern;
 
+@Transactional
 class AdminController {
 
     def index = {        
