@@ -607,7 +607,7 @@ class ManagerController {
 		def items = CompositionItem.findAllByComposition(composition)
 		items.each{it.delete()}
 		//composition.removeFromItems(items)		
-		composition.save()
+		composition.save(flush: true)
 		
 		// Recreate an item for each player 
 		println "data: " + params["data"]

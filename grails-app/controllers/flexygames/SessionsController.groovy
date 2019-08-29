@@ -206,14 +206,13 @@ class SessionsController {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	def update() {
-		User user = request.currentUser
 		Participation participation = Participation.get(params.id)
 		if (!participation) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Participation'), params.id])}"
 			return redirect(action: "list")
 		}
 		try {
-			sessionsService.updatePlayerStatus(user, participation, params.statusCode, params.userLog)
+			sessionsService.updatePlayerStatus(request.currentUser, participation, params.statusCode, params.userLog)
 			def newStatus = message(code: 'participation.status.' + params.statusCode)
 			flash.message = "${message(code: 'session.show.update.success', args: [newStatus])}"
 		} catch (Exception e) {
@@ -233,14 +232,13 @@ class SessionsController {
 	}
 
 	def join(){
-		User user = request.currentUser
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
 		try  {
-			sessionsService.join(user, session)
+			sessionsService.join(request.currentUser, session)
 			flash.message = "${message(code: 'session.show.participants.join.success')}"
 		} catch (Exception e) {
 			flash.error = e.message
@@ -280,7 +278,7 @@ class SessionsController {
 			return redirect(action: "list")
 		}
 		try  {
-			votingService.vote(session, user, params)
+			votingService.vote(session, request.currentUser, params)
 			flash.votingMessage = "Your vote has been taken into account."
 		} catch (Exception e) {
 			flash.votingError = "${message(code: 'session.show.votes.update.error', args: [e.message])}"
@@ -295,10 +293,9 @@ class SessionsController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
-		def user = request.currentUser
 		def comment
 		try {
-			comment = forumService.postSessionComment(user, session, params.comment)
+			comment = forumService.postSessionComment(request.currentUser, session, params.comment)
 			flash.message = "Ok comment has been posted !!"
 		} catch (Exception e) {
 			e.printStackTrace()
@@ -309,7 +306,6 @@ class SessionsController {
 	}
 
 	def watch() {
-		def user = request.currentUser
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
@@ -317,7 +313,7 @@ class SessionsController {
 		}
 		try {
 			def wantToWatch = params.watch != null
-			forumService.watchSessionComments(user, session, wantToWatch)
+			forumService.watchSessionComments(request.currentUser, session, wantToWatch)
 			if (wantToWatch) {
 				flash.message = "Ok you're watching that session now..."
 			} else {
@@ -331,13 +327,12 @@ class SessionsController {
 
 	@Transactional
 	def addCarpoolProposal() {
-		def user = request.currentUser
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
-		CarpoolProposal proposal = new CarpoolProposal(session: session, driver: user, freePlaceNbr: params.freePlaceNbr,
+		CarpoolProposal proposal = new CarpoolProposal(session: session, driver: request.currentUser, freePlaceNbr: params.freePlaceNbr,
 				carDescription: params.carDescription, rdvDescription: params.rdvDescription)
 		if (!proposal.save()) {
 			flash.error = "Unable to save your carpool proposal: " + proposal.errors
@@ -349,13 +344,12 @@ class SessionsController {
 
 	@Transactional
 	def addCarpoolRequest() {
-		def user = request.currentUser
 		def session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
-		CarpoolRequest request = new CarpoolRequest(session: session, enquirer: user, pickupLocation: params.pickupLocation, pickupTimeRange: params.pickupTimeRange)
+		CarpoolRequest request = new CarpoolRequest(session: session, enquirer: request.currentUser, pickupLocation: params.pickupLocation, pickupTimeRange: params.pickupTimeRange)
 		if (!request.save()) {
 			flash.error = "Unable to save your carpool request: " + request.errors
 		} else {
@@ -366,9 +360,8 @@ class SessionsController {
 
 	@Transactional
 	def removeCarpoolProposal() {
-		def user = request.currentUser
 		def proposal = CarpoolProposal.get(params.id)
-		if (proposal.driver != user && !proposal.session.isManagedBy(user.username)) {
+		if (proposal.driver != request.currentUser && !proposal.session.isManagedBy(request.currentUser.username)) {
 			flash.error = "You cannot remove this carpool proposal because you are not the driver (neither a manager of the team)"
 			return redirect(action: "show", id: proposal.session.id)
 		}
@@ -381,9 +374,8 @@ class SessionsController {
 
 	@Transactional
     def cancelAllCarpoolAcceptances() {
-        def user = request.currentUser
         def proposal = CarpoolProposal.get(params.id)
-        if (proposal.driver != user && !proposal.session.isManagedBy(user.username)) {
+        if (proposal.driver != request.currentUser && !proposal.session.isManagedBy(request.currentUser.username)) {
             flash.error = "You cannot reset this carpool proposal because you are not the driver (neither a manager of the team)"
             return redirect(action: "show", id: proposal.session.id)
         }
@@ -396,9 +388,8 @@ class SessionsController {
 
 	@Transactional
 	def removeCarpoolRequest() {
-		def user = request.currentUser
 		def request = CarpoolRequest.get(params.id)
-		if (request.enquirer != user && !request.session.isManagedBy(user.username)) {
+		if (request.enquirer != request.currentUser && !request.session.isManagedBy(request.currentUser.username)) {
 			flash.error = "You cannot remove this carpool request because you are not the enquirer (neither a manager of the team)"
 			return redirect(action: "show", id: request.session.id)
 		}
@@ -409,9 +400,8 @@ class SessionsController {
 
 	@Transactional
 	def updateCarpoolProposal() {
-		def user = request.currentUser
 		CarpoolProposal proposal = CarpoolProposal.get(params.id)
-		if (proposal.driver != user && !proposal.session.isManagedBy(user.username)) {
+		if (proposal.driver != request.currentUser && !proposal.session.isManagedBy(request.currentUser.username)) {
 			flash.error = "You cannot update this carpool proposal because you are not the driver (neither a manager of the team)"
 			return redirect(action: "show", id: proposal.session.id)
 		}
@@ -440,7 +430,6 @@ class SessionsController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
 			return redirect(action: "list")
 		}
-		def user = request.currentUser
 		if (session.date < new Date()) {
 			flash.error = "${message(code: 'tooLateForThatAction')}"
 			return redirect(action: "show", id: session.id)
@@ -450,12 +439,12 @@ class SessionsController {
 			flash.error = "Unable to find task type " + params.newTaskCode
 			return redirect(action: "show", id: session.id)
 		}
-		Task task = Task.findByTypeAndSessionAndUser(taskType, session, user)
+		Task task = Task.findByTypeAndSessionAndUser(taskType, session, request.currentUser)
 		if (task) {
 			flash.error = "${message(code: 'session.show.tasks.alreadyAssigned')}"
 			return redirect(action: "show", id: session.id)
 		}
-		task = new Task(type: taskType, session: session, user: user)
+		task = new Task(type: taskType, session: session, user: request.currentUser)
 		if (task.save()) {
 			flash.message = "Ok your task has been saved !"
 		} else {
@@ -471,8 +460,7 @@ class SessionsController {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'task', default: 'Task'), params.id])}"
 			return redirect(action: "list")
 		}
-		def user = request.currentUser
-		if (task.user != user && !task.session.isManagedBy(user.username)) {
+		if (task.user != request.currentUser && !task.session.isManagedBy(request.currentUser.username)) {
 			flash.error = "${message(code: 'youAreNotAuthorized')}"
 			return redirect(action: "list")
 		}

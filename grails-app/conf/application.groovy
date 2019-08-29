@@ -4,7 +4,7 @@
 
 environments {
     development {
-        grails.serverURL="http://192.168.0.7:8080"
+        grails.serverURL="http://192.168.1.22:8080"
     }
     production {
         //grails.serverURL="http://www.onlacherien.org/games"
