@@ -2,9 +2,10 @@ package flexygames
 
 import grails.gorm.transactions.Transactional
 
-@Transactional (readOnly = true)
+
 class UserStatsService {
 
+    @Transactional (readOnly = true)
     def getUserStats(User player) {
         def userStats = [:]
 
@@ -70,5 +71,18 @@ class UserStatsService {
         }
 
         return userStats
+    }
+
+    @Transactional ()
+    def refreshCountersForAllUsers() {
+        for (User user in User.getAll()) {
+            user.setPartCounter(user.getEffectiveParticipations().size())
+            user.setAbsenceCounter(user.countParticipationsByStatus(Participation.Status.UNDONE.code()))
+            user.setGateCrashCounter(user.countParticipationsByStatus(Participation.Status.DONE_BAD.code()))
+            user.setDelayCounter(user.countParticipationsByStatus(Participation.Status.DONE_LATE.code()))
+            user.setVoteCounter(user.getVotes().size())
+            user.setActionCounter(user.getActions().size())
+            user.setCommentCounter(SessionComment.findAllByUser(user).size() + BlogComment.findAllByUser(user).size())
+        }
     }
 }

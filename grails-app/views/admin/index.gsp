@@ -18,12 +18,6 @@
 			${flash.error}
 		</div>
 	</g:if>
-	<g:message code="admin.refreshAllPlayersCounters" />
-	<g:link action="refreshPlayerCounters">
-		<input type="button" value="Refresh" class="button" />
-	</g:link>
-	<br />
-	<br />
 	<g:form controller="admin">
 		<g:message code="admin.findPlayer" />
 		<g:textField name="playerToken" />
@@ -48,6 +42,12 @@
 		<g:select name="sessionGroupId" from="${flexygames.SessionGroup.list()}" optionKey="id" required="" />
 		<input type="submit" value="Duplicate" class="button" />
 	</g:form>
+	<br />
+	<br />
+	<g:message code="admin.refreshAllPlayersCounters" />
+	<g:link action="refreshPlayerCounters">
+		<input type="button" value="Refresh" class="button" />
+	</g:link>
 	<br />
 	<br />
 	<br />

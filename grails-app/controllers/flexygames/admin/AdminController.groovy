@@ -1,6 +1,10 @@
 package flexygames.admin
 
+import flexygames.BlogComment
+import flexygames.Participation
+import flexygames.SessionComment
 import flexygames.SessionGroup
+import flexygames.UserStatsService
 import grails.gorm.transactions.Transactional
 import org.apache.shiro.SecurityUtils
 
@@ -11,16 +15,13 @@ import java.util.regex.Pattern;
 @Transactional
 class AdminController {
 
+	def userStatsService;
+
     def index = {        
     }
 
 	def  refreshPlayerCounters = {
-		for (User user in User.getAll()) {
-			user.countParticipations()
-			user.countAbsences()
-			user.countGateCrashes()
-			user.countComments()
-		}
+		userStatsService.refreshCountersForAllUsers()
 		flash.message = "Ok, counters has been refreshed for all players !"
 		return redirect(controller: 'admin', action: 'index')
 	}
