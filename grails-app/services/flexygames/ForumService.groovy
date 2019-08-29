@@ -29,7 +29,9 @@ class ForumService {
 		// clean the input before insert it into DB
 		comment.text = comment.text.replace(System.getProperty("line.separator"), "<br>" + System.getProperty("line.separator"))
 		comment.text = new Jsoup().clean(comment.text, Whitelist.basicWithImages())
-		if (comment.save() && user.updateCommentCounter(1)) {
+		if (comment.save()) {
+			// update user counter
+			user.setCommentCounter(user.getCommentCounter() + 1)
 			// notify by email users who are watching that session
 			def watches = SessionWatcher.findAllBySession(session)
 			def emails = watches*.user.email
@@ -77,7 +79,7 @@ class ForumService {
 		// clean the input before insert it into DB
 		comment.text = comment.text.replace(System.getProperty("line.separator"), "<br>" + System.getProperty("line.separator"))
 		comment.text = new Jsoup().clean(comment.text, Whitelist.basicWithImages())
-		if (!comment.save() || !user.updateCommentCounter(1)) {
+		if (!comment.save() || !user.setCommentCounter(user.getCommentCounter() + 1)) {
 			throw new Exception(comment.errors)
 		}
 		return comment;

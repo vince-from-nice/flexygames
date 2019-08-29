@@ -144,48 +144,48 @@ class SessionsService {
 		// Statistics update
 		///////////////////////////////////////////////////////////////////////////////////////////
 
-		def updatedUser = participation.player
+		User updatedUser = participation.player
 		def oldParticipation = new Participation(statusCode: oldStatusCode)
 
 		// If previous status was effective but new status is not, decrement player part counter
 		if (oldParticipation.isEffective() && !participation.isEffective()) {
-			updatedUser.updatePartCounter(-1)
+			updatedUser.setPartCounter(updatedUser.countParticipations() - 1)
 		}
 		// If new status is effective but old status was not, increment player part counter
 		if (!oldParticipation.isEffective() && participation.isEffective()) {
-			updatedUser.updatePartCounter(1)
+			updatedUser.setPartCounter(updatedUser.countParticipations() + 1)
 		}
 
 		// If new status is UNDONE, increment player gatecrash counter and last date
 		if (newStatus == Participation.Status.UNDONE.code) {
 			updatedUser.absenceLastDate = participation.session.date
-			updatedUser = updatedUser.updateAbsenceCounter(1)
+			updatedUser.setAbsenceCounter(updatedUser.countAbsences() + 1)
 		}
 		// If new status is DONE_LATE, increment player delay counter and last dateNN
 		if (newStatus == Participation.Status.DONE_LATE.code) {
 			updatedUser.delayLastDate = participation.session.date
-			updatedUser.updateDelayCounter(1)
+			updatedUser.setDelayCounter(updatedUser.countDelays() + 1)
 		}
 		// If new status is DONE_BAD, increment player gatecrash counter and last date
 		if (newStatus == Participation.Status.DONE_BAD.code) {
 			updatedUser.gateCrashLastDate = participation.session.date
-			updatedUser = updatedUser.updateGateCrashCounter(1)
+			updatedUser.setGateCrashCounter(updatedUser.countGateCrashes() + 1)
 		}
 
 		// If old status was UNDONE, decrement player gatecrash counter and last date
 		if (oldStatusCode == Participation.Status.UNDONE.code) {
 			updatedUser.absenceLastDate = null
-			updatedUser = updatedUser.updateAbsenceCounter(-1)
+			updatedUser.setAbsenceCounter(updatedUser.countAbsences() - 1)
 		}
 		// If old status was DONE_LATE, decrement player delay counter and last date
 		if (oldStatusCode == Participation.Status.DONE_LATE.code) {
 			updatedUser.delayLastDate = null
-			updatedUser = updatedUser.updateDelayCounter(-1)
+			updatedUser.setDelayCounter(updatedUser.countDelays() - 1)
 		}
 		// If old status was DONE_BAD, decrement player gatecrash counter and last date
 		if (oldStatusCode == Participation.Status.DONE_BAD.code) {
 			updatedUser.gateCrashLastDate = null
-			updatedUser = updatedUser.updateGateCrashCounter(-1)
+			updatedUser.setGateCrashCounter(updatedUser.countGateCrashes() - 1)
 		}
 
 		if (!updatedUser) {

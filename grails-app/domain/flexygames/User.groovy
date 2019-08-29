@@ -1,5 +1,7 @@
 package flexygames
 
+import grails.util.Holders
+
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -7,6 +9,8 @@ import javax.servlet.http.HttpSessionBindingEvent
 import javax.servlet.http.HttpSessionBindingListener
 
 class User implements Comparable<User>, HttpSessionBindingListener {
+
+	//def authService
 
     String username
     String passwordHash
@@ -70,7 +74,8 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		receivedVotes lazy: true, batchSize: 50
 	}
 
-	static transients = [ 'name', 'scoreInCurrentSession', 'membershipInCurrentSession', 'teamsInCurrentSession',
+	static transients = [ 'authService', 'name',
+						  'scoreInCurrentSession', 'membershipInCurrentSession', 'teamsInCurrentSession',
 						  'allSubscribedTeams', 'allSubscribedSessionGroups', 'allSessions',
 						  'wins', 'defeats', 'draws', 'rounds', 'votingScore', 'actionScore', 'effectiveParticipations' ]
 
@@ -434,9 +439,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	///////////////////////////////////////////////////////////////////////////
 	// Counter methods for precomputed statistics
 	///////////////////////////////////////////////////////////////////////////
-	
-	// Participation counter 
-	
+
 	int countParticipations() {
 		if (this.partCounter == null) {
 			this.partCounter = getEffectiveParticipations().size()
@@ -449,13 +452,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return this.partCounter
 	}
 
-	def updatePartCounter (int offset) {
-		this.partCounter = countParticipations() + offset
-		return this.save()
-	}
-	
-	// Absence counter
-	
 	int countAbsences() {
 		if (this.absenceCounter == null) {
 			this.absenceCounter = countParticipationsByStatus(Participation.Status.UNDONE.code())
@@ -468,13 +464,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return this.absenceCounter
 	}
 
-	def updateAbsenceCounter (int offset) {
-		this.absenceCounter = countAbsences() + offset
-		return this.save()
-	}
-	
-	// Delay counter
-	
 	int countDelays() {
 		if (this.delayCounter == null) {
 			this.delayCounter = countParticipationsByStatus(Participation.Status.DONE_LATE.code())
@@ -487,13 +476,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		return this.delayCounter
 	}
 
-	def updateDelayCounter (int offset) {
-		this.delayCounter = countDelays() + offset
-		return this.save()
-	}
-
-	// Gatecrash counter
-
 	int countGateCrashes() {
 		if (this.gateCrashCounter == null) {
 			this.gateCrashCounter = countParticipationsByStatus(Participation.Status.DONE_BAD.code())
@@ -505,13 +487,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		}
 		return this.gateCrashCounter
 	}
-
-	def updateGateCrashCounter (int offset) {
-		this.gateCrashCounter = countGateCrashes() + offset
-		return this.save()
-	}
-
-	// Comment counter
 	
 	int countComments() {
 		if (this.commentCounter == null) {
@@ -523,11 +498,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 			}
 		}
 		return this.commentCounter
-	}
-	
-	def updateCommentCounter (int offset) {
-		this.commentCounter = countComments() + offset
-		return this.save()
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
@@ -548,19 +518,13 @@ class User implements Comparable<User>, HttpSessionBindingListener {
     public String toString() {
         return getUsername()
     }
-	
+
 	void valueBound(HttpSessionBindingEvent event) {
-		def onlineUsers = event.session.servletContext.onlineUsers
-		if (!onlineUsers.contains(this)) onlineUsers.add(this)
-		println "User $username is logged in"
-		lastLogin = new Date()
-		if (!this.save()) println "Unable to update last login for $username"
+		Holders.grailsApplication.mainContext.authService.logonUser(this, event.session.servletContext.onlineUsers)
 	}
 	
 	void valueUnbound(HttpSessionBindingEvent event) {
-		def onlineUsers = event.session.servletContext.onlineUsers
-		if (onlineUsers.contains(this)) onlineUsers.remove(this)
-		println "User $username is logged out"
+		Holders.grailsApplication.mainContext.authService.logoutUser(this, event.session.servletContext.onlineUsers)
 	}
 
 }

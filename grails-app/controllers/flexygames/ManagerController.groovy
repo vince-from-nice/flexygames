@@ -260,19 +260,19 @@ class ManagerController {
 		}
 		// Decrement participation and posts counters for participants
 		for (User player : sessionInstance.getEffectiveParticipants()) {
-			player.updatePartCounter(-1)
+			player.setPartCounter(player.countParticipations() - 1)
 		}
 		for (User player : sessionInstance.getParticipantsByStatus(Participation.Status.UNDONE.code)) {
-			player.updateAbsenceCounter(-1)
+			player.setAbsenceCounter(player.countAbsences() - 1)
 		}
 		for (User player : sessionInstance.getParticipantsByStatus(Participation.Status.DONE_LATE.code)) {
-			player.updateDelayCounter(-1)
+			player.setDelayCounter(player.countDelays() -1)
 		}
 		for (User player : sessionInstance.getParticipantsByStatus(Participation.Status.DONE_BAD.code)) {
-			player.updateGateCrashCounter(-1)
+			player.setGateCrashCounter(player.countGateCrashes() - 1)
 		}
 		for (SessionComment comment : sessionInstance.comments) {
-			comment.user.updateCommentCounter(-1)
+			comment.user.setCommentCounter(comment.user.countComments())
 		}
 		try {
 			sessionInstance.delete()
@@ -992,7 +992,7 @@ class ManagerController {
 		be.delete()
 		// Decrement posts counters for participants
 		for (BlogComment comment : be.comments) {
-			comment.user.updateCommentCounter(-1)
+			comment.user.setCommentCounter(comment.user.countComments() - 1)
 		}
 		flash.message = "Ok blog entry has been deleted !"
 		redirect(controller:"teams", action: "show", id: team.id)
