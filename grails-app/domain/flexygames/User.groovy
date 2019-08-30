@@ -520,11 +520,11 @@ class User implements Comparable<User>, HttpSessionBindingListener {
     }
 
 	void valueBound(HttpSessionBindingEvent event) {
-		Holders.grailsApplication.mainContext.authService.logonUser(this, event.session.servletContext.onlineUsers)
+		Holders.grailsApplication.mainContext.authService.logonUser(this)
 	}
 	
 	void valueUnbound(HttpSessionBindingEvent event) {
-		Holders.grailsApplication.mainContext.authService.logoutUser(this, event.session.servletContext.onlineUsers)
+		Holders.grailsApplication.mainContext.authService.logoutUser(this)
 	}
 
 }

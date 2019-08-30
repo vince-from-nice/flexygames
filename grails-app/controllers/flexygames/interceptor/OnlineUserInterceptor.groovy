@@ -14,24 +14,10 @@ class OnlineUserInterceptor {
 
 	boolean before() {
         if (controllerName && controllerName != 'images' && controllerName != 'css' && controllerName != 'js') {
-            if (servletContext.onlineUsers == null) {
-                println "Init online user list..."
-                servletContext.onlineUsers = new TreeSet<User>()
-            }
-            // TODO code temporaire pour mettre la liste dans le scope request (et non application)
-            // car le servletApplication est null dans certaines gsp, bug de grails 2.0 ?
-            request.onlineUsers = servletContext.onlineUsers
-
             // If there is a user currently logged in
             def username = SecurityUtils.getSubject().getPrincipal().toString()
             if (username != "null" && username != "anonymous") {
                 def user = User.findByUsername(SecurityUtils.getSubject().getPrincipal().toString())
-                // if user isn't not already in the online user list (which could happen with the "remember me" feature), do it now !
-                def onlineUsers = servletContext.onlineUsers
-                if (!onlineUsers*.username.contains(username)) {
-                    println "Adding $username to online users"
-                    onlineUsers << user
-                }
                 // if user isn't not already in session (which could happen with the "remember me" feature), do it now !
                 if (user.username != session.currentUser?.username) {
                     println "Adding $username into session"
@@ -40,6 +26,9 @@ class OnlineUserInterceptor {
                 // Set the current user in the request scope
                 request.currentUser = user
             }
+            // TODO code temporaire pour mettre la liste dans le scope request
+            // car le servletApplication est null dans certaines GSP, bug de grails 2.0 ?
+            request.onlineUsers = servletContext.onlineUsers
         }
         true
     }
