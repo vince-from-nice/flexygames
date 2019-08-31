@@ -66,16 +66,17 @@
 				<br />
 				<div class="block">
 					<h3 style="margin-top: 0.2em"><g:message code="layout.whoIsOnline" /></h3>
-					<g:if test="${request.onlineUsers != null}">
-						<g:if test="${request.onlineUsers.size() < 2}">
-							<g:message code="layout.whoIsOnline.text.onePlayer" args="[request.onlineUsers.size()]" />
+					<g:set var="onlineUsers" value="${grails.web.context.ServletContextHolder.getServletContext().onlineUsers}" />
+					<g:if test="${!onlineUsers?.isEmpty()}">
+						<g:if test="${onlineUsers.size() < 2}">
+							<g:message code="layout.whoIsOnline.text.onePlayer" args="[onlineUsers.size()]" />
 						</g:if>
 						<g:else>
-							<g:message code="layout.whoIsOnline.text.multiPlayers" args="[request.onlineUsers.size()]" />
+							<g:message code="layout.whoIsOnline.text.multiPlayers" args="[onlineUsers.size()]" />
 						</g:else>
 						: 
 						<ul>
-						<g:each in="${request.onlineUsers}" var="user">
+						<g:each in="${onlineUsers}" var="user">
 							<g:if test="${user != null}">
 								<li><g:link controller="player" action="show" id="${user.id}">${user}</g:link></li>
 							</g:if>

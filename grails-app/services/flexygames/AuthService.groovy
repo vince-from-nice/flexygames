@@ -1,18 +1,18 @@
 package flexygames
 
 import grails.gorm.transactions.Transactional
-import org.grails.web.util.WebUtils
+import grails.web.context.ServletContextHolder
 
 @Transactional
 class AuthService {
 
     def logonUser(User user) {
         println "User $user.username is logged in"
-        def onlineUsers = WebUtils.retrieveGrailsWebRequest().currentRequest.session.servletContext.onlineUsers
+        def onlineUsers = ServletContextHolder.getServletContext().onlineUsers
         if (onlineUsers == null) {
-            println "Init the online users list..."
+            println "Init the online users list"
             onlineUsers = new TreeSet<User>()
-            WebUtils.retrieveGrailsWebRequest().currentRequest.session.servletContext.onlineUsers = onlineUsers
+            ServletContextHolder.getServletContext().onlineUsers = onlineUsers
         }
         if (!onlineUsers*.username.contains(user.username)) {
             println "Adding $user.username to online users"
@@ -24,7 +24,7 @@ class AuthService {
 
     def logoutUser(User user) {
         println "User $user.username is logged out"
-        def onlineUsers = WebUtils.retrieveGrailsWebRequest().currentRequest.session.servletContext.onlineUsers;
+        def onlineUsers = ServletContextHolder.getServletContext().onlineUsers
         if (onlineUsers*.username.contains(user.username)) {
             onlineUsers.remove(user)
         }
