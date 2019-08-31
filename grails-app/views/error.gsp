@@ -2,6 +2,7 @@
   <head>
 	  <title>Grails Runtime Exception</title>
 	  <g:render template="/common/layout" />
+	  <!--meta name="layout" content="desktop" /-->
 	  <style type="text/css">
 	  		.message {
 	  			border: 1px solid black;

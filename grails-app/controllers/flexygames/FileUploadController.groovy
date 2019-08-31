@@ -1,8 +1,11 @@
 package flexygames
 
+import grails.gorm.transactions.Transactional
+
 /**
  * Inspired from the controller of the Grails File Uploader plugin.
  */
+@Transactional
 class FileUploadController {
 
     def defaultAction = "process"
@@ -85,9 +88,10 @@ class FileUploadController {
         /*******************************
          Copy the file to the good place
          *******************************/
-        def filePath = basePath + File.separator + fileName
+        def filePath = basePath + fileName
         log.debug "Receiving an uploaded file of ${file.size} bytes, moving it to ${filePath}"
-        file.transferTo(new File(filePath))
+        File f = new File(filePath)
+        file.transferTo(f)
 
         redirect controller: params.successController, action: params.successAction, params:[id: params.id]
     }
