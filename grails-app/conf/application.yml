@@ -109,7 +109,7 @@ environments:
     production:
         dataSource:
             dbCreate: update
-            url: jdbc:postgresql://localhost/asas_flexygames
+            url: jdbc:postgresql://localhost/flexygames
             dialect: org.hibernate.dialect.PostgreSQLDialect
             properties:
                 jmxEnabled: true

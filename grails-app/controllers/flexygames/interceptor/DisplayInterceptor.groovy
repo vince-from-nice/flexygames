@@ -15,7 +15,8 @@ class DisplayInterceptor {
     }
 
 	boolean before() {
-        if (controllerName != 'images' && controllerName != 'css' && controllerName != 'js') {
+        if (controllerName && controllerName != 'images' && controllerName != 'css'
+                && controllerName != 'js' && controllerName != 'favicon.ico') {
             // If user forces flavour via the "flavour" request parameter, store it into the session
             def flavour = request.getParameter('flavour')
             if (flavour != null) {

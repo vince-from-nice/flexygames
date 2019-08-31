@@ -15,7 +15,8 @@ class  LoggingInterceptor {
     }
 
 	boolean before() {
-        if (controllerName != 'images' && controllerName != 'css' && controllerName != 'js') {
+        if (controllerName && controllerName != 'images' && controllerName != 'css'
+                && controllerName != 'js' && controllerName != 'favicon.ico') {
             // keep init time for stats
             request.setProperty("timeBeforeController", System.currentTimeMillis())
 

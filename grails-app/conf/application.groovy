@@ -5,10 +5,11 @@
 environments {
     development {
         grails.serverURL="http://192.168.1.22:8080"
+        server.session.timeout = 600
     }
     production {
-        //grails.serverURL="http://www.onlacherien.org/games"
         grails.serverURL="https://www.flexygames.net"
+        server.session.timeout = 600
     }
 }
 
@@ -104,16 +105,18 @@ flexygames.mailing.body.prefix='<html><head><meta content="text/html; charset=ut
 flexygames.mailing.body.suffix='</body></html>'
 
 // File uploading
-flexygames.fileUpload.userAvatar.maxSize = 1024 * 32
+flexygames.fileUpload.userAvatar.maxSize = 1024 * 64
 flexygames.fileUpload.userAvatar.allowedExtensions = ["jpg","jpeg","gif","png"]
-flexygames.fileUpload.userAvatar.path = "E:\\Repositories\\flexygames\\web-app\\images\\user"
-flexygames.fileUpload.teamLogo.maxSize = 1024 * 32
+flexygames.fileUpload.teamLogo.maxSize = 1024 * 64
 flexygames.fileUpload.teamLogo.allowedExtensions = ["jpg","jpeg","gif","png"]
-flexygames.fileUpload.teamLogo.path = "E:\\Repositories\\flexygames\\web-app\\images\\team"
 environments {
+    development {
+        flexygames.fileUpload.userAvatar.path = "/home/turman/Repositories/flexygames/src/main/webapp/images/user/"
+        flexygames.fileUpload.teamLogo.path = "/home/turman/Repositories/flexygames/src/main/webapp/images/team/"
+    }
     production {
-        flexygames.fileUpload.userAvatar.path = "/home/asas/webapps/flexygames/images/user/"
-        flexygames.fileUpload.teamLogo.path = "/home/asas/webapps/flexygames/images/team/"
+        flexygames.fileUpload.userAvatar.path = "/var/lib/tomcat9/webapps/ROOT/images/user/"
+        flexygames.fileUpload.teamLogo.path = "/var/lib/tomcat9/webapps/ROOT/images/team/"
     }
 }
 
