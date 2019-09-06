@@ -67,7 +67,7 @@
 				<div class="block">
 					<h3 style="margin-top: 0.2em"><g:message code="layout.whoIsOnline" /></h3>
 					<g:set var="onlineUsers" value="${grails.web.context.ServletContextHolder.getServletContext().onlineUsers}" />
-					<g:if test="${!onlineUsers?.isEmpty()}">
+					<g:if test="${onlineUsers && !onlineUsers.isEmpty()}">
 						<g:if test="${onlineUsers.size() < 2}">
 							<g:message code="layout.whoIsOnline.text.onePlayer" args="[onlineUsers.size()]" />
 						</g:if>

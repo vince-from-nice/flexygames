@@ -388,14 +388,14 @@ class SessionsController {
 
 	@Transactional
 	def removeCarpoolRequest() {
-		def request = CarpoolRequest.get(params.id)
-		if (request.enquirer != request.currentUser && !request.session.isManagedBy(request.currentUser.username)) {
+		def cpr = CarpoolRequest.get(params.id)
+		if (cpr.enquirer != request.currentUser && !request.session.isManagedBy(request.currentUser.username)) {
 			flash.error = "You cannot remove this carpool request because you are not the enquirer (neither a manager of the team)"
-			return redirect(action: "show", id: request.session.id)
+			return redirect(action: "show", id: cpr.session.id)
 		}
-		request.delete()
+		cpr.delete()
 		flash.message = "Ok carpool request has been removed !"
-		redirect(action: "show", id: request.session.id)
+		redirect(action: "show", id: cpr.session.id)
 	}
 
 	@Transactional
