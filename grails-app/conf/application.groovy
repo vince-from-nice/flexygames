@@ -115,8 +115,8 @@ environments {
         flexygames.fileUpload.teamLogo.path = "/home/turman/Repositories/flexygames/src/main/webapp/images/team/"
     }
     production {
-        flexygames.fileUpload.userAvatar.path = "/var/lib/tomcat9/webapps/ROOT/images/user/"
-        flexygames.fileUpload.teamLogo.path = "/var/lib/tomcat9/webapps/ROOT/images/team/"
+        flexygames.fileUpload.userAvatar.path = "/root/webapps/flexygames/deployed/images/user/"
+        flexygames.fileUpload.teamLogo.path = "/root/webapps/flexygames/deployed/images/team/"
     }
 }
 
