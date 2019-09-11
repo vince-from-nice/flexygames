@@ -1,5 +1,6 @@
 package flexygames
 
+import ch.silviowangler.grails.icalender.CalendarExporter
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 
@@ -21,6 +22,8 @@ class PlayerController {
 	def mailerService
 
 	def userStatsService
+
+	def calendarService
 	
 	def index() { redirect(action:"list") }
 
@@ -204,36 +207,10 @@ class PlayerController {
 			flash.message = "Sorry, your calendar link is invalid.. are you trying to spy $player ? :)"
 			redirect(action: "show", id: player.id)
 		}
-		TimeZoneRegistry registry = TimeZoneRegistryFactory.instance.createRegistry()
-		TimeZone timezone = registry.getTimeZone("Europe/Paris")
-		VTimeZone tz = timezone.vTimeZone
-		render(contentType: 'text/calendar') {
-			calendar {
-				events {
-					for (Participation p in player.participationsVisibleInCalendar) {
-						Session s = p.session
-						Playground pg = s.playground
-						DateTime start = new DateTime(s.rdvDate.getTime());
-						start.setTimeZone(timezone);
-						DateTime end = new DateTime(s.endDate.getTime());
-						end.setTimeZone(timezone);
-						event(
-							start: start,
-							end: end,
-							//tzId: 'Europe/Paris',
-							tzId: tz.timeZoneId,
-							description: 'Session link : ' + grailsApplication.config.grails.serverURL + '/sessions/show/' + s.id,
-							location: pg.name + ', ' + pg.postalAddress,
-							streetAddress: pg.street,
-							locality: pg.city, 
-							summary: s.group.name
-						) 
-					}
-				}
-			}
-		}
+		def calendar = calendarService.getPlayerCalendar(player)
 		// TODO mettre un bon filename dans la réponse
 		response.addHeader("content-disposition", String.format("attachment;filename=%s", "FlexyCalendarFor"+player.username + ".ics"))
 		println new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " FlexyGames : Calendar generated for $player"
+		return calendar
 	}
 }
