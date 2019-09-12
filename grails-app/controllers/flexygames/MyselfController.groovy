@@ -6,8 +6,6 @@ import org.apache.shiro.crypto.hash.Sha512Hash
 class MyselfController {
 
 	def displayService
-
-	def userService
 	
     def index() {
         redirect(action: "myAccount", params: params)
@@ -88,7 +86,8 @@ class MyselfController {
 					return
 				}
 			}
-			userService.update(user.id, params) // using a service method in order to test transactional behavior
+            user.properties = params
+            user.save()
 			user.properties = params
 			if (!user.hasErrors() && user.save()) {
 				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'player.label', default: 'Player'), user.username])}"
