@@ -22,7 +22,8 @@ class ShiroSecurityInterceptor {
 
         // turman: no access control for static resources
         if (controllerName == 'images' || controllerName == 'css'
-                || controllerName == 'js' || controllerName == 'favicon.ico') {
+                || controllerName == 'js' || controllerName == 'favicon.ico'
+                || controllerName == 'robots.txt' || controllerName == 'index2.html') {
             return true
         }
 
