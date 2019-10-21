@@ -18,10 +18,42 @@
 		</g:if>
 		<table style="width: 100%;">
 			<tr>
+				<td style="text-align: center;">
+					<h2><g:message code="Avatar"/></h2>
+					<g:render template="/common/avatar" model="[player:playerInstance, width:'auto']" />
+					<br />
+					<span style="font-size: 12px">
+						<g:message code="myAccount.uploadAvatar" /><br />
+						<g:form controller="fileUpload" action="process" method="post" enctype="multipart/form-data" >
+							<g:hiddenField name="uploadType" value="userAvatar" />
+							<g:hiddenField name="id" value="${playerInstance.id}" />
+							<g:hiddenField name="errorAction" value="changeAvatarError" />
+							<g:hiddenField name="errorController" value="myself" />
+							<g:hiddenField name="successAction" value="changeAvatarSuccess" />
+							<g:hiddenField name="successController" value="myself" />
+							<input type='file' name='file' />
+							<input type='submit' name='submit' value='Submit' />
+						</g:form>
+					</span>
+				</td>
+			</tr>
+			<tr>
 				<td colspan="1">
 					<h2><g:message code="myAccount.myPersonalInfos" /></h2>
 					<g:render template="profile" />
 				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="nav">
+						<ul>
+							<li><g:link class="edit" action="editMyProfile" id="${playerInstance?.id}"><img src="../images/skin/database_edit.png"> ${message(code:'myAccount.editPersonalInfos')}</g:link></li>
+							<li><g:link class="list" controller="player" action="show" id="${playerInstance?.id}">${message(code:'myAccount.viewMyProfile')}</g:link></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+			<tr>
 				<td>
 					<h2><g:message code="myAccount.mySkills" /></h2>
 					<table>
@@ -42,51 +74,11 @@
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<div class="nav">
-						<ul>
-							<li><g:link class="edit" action="editMyProfile" id="${playerInstance?.id}"><img src="../images/skin/database_edit.png"> ${message(code:'myAccount.editPersonalInfos')}</g:link></li>
-							<li><g:link class="list" controller="player" action="show" id="${playerInstance?.id}">${message(code:'myAccount.viewMyProfile')}</g:link></li>
-						</ul>
-					</div>
-				</td>
-				<td>
-					<g:form>
-						<div class="buttons">
-							<input type="button" class="edit" onclick="toggleDisplay('changePasswordDiv')" value="${message(code:'myAccount.changeMyPassword')}" >
-						</div>
-						<div id="changePasswordDiv" style="display: none">
-							<g:message code="myAccount.oldPassword" /> <g:passwordField style="width: 100px" name="oldPassword"/><br />
-							<g:message code="myAccount.newPassword" /> <g:passwordField style="width: 100px" name="newPassword"/><br />
-							<g:actionSubmit class="edit" action="changeMyPassord" value="${message(code:'change')}" />
-						</div>
-					</g:form>
-				</td>
-			</tr>
-			<tr>
-				<td style="text-align: center;">
-					<g:render template="/common/avatar" model="[player:playerInstance, width:'auto']" />
-					<br />
-					<span style="font-size: 12px">
-						<g:message code="myAccount.uploadAvatar" /><br />
-						<g:form controller="fileUpload" action="process" method="post" enctype="multipart/form-data" >
-							<g:hiddenField name="uploadType" value="userAvatar" />
-							<g:hiddenField name="id" value="${playerInstance.id}" />
-							<g:hiddenField name="errorAction" value="changeAvatarError" />
-							<g:hiddenField name="errorController" value="myself" />
-							<g:hiddenField name="successAction" value="changeAvatarSuccess" />
-							<g:hiddenField name="successController" value="myself" />
-							<input type='file' name='file' />
-							<input type='submit' name='submit' value='Submit' />
-						</g:form>
-					</span>
-				</td>
-
-			</tr>
-			<tr>
-				<td colspan="2">
+				<td colspan="1">
 					<h2><g:message code="myAccount.myTeams" /></h2>
-					<g:render template="memberships" />
+					<table>
+						<g:render template="memberships" />
+					</table>
 				</td>
 			</tr>
 		</table>

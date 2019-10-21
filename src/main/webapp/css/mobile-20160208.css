@@ -80,3 +80,91 @@
 		margin-left: 0;
 	}
 }
+
+/* Menus for mobile inspired from: https://webdesign.tutsplus.com/fr/articles/a-simple-responsive-mobile-first-navigation--webdesign-6074 */
+
+a.to_nav {
+	float: right;
+	color: #fff;
+	background: #ccc;
+	text-decoration: none;
+	padding: 0 10px;
+	font-size: x-large;
+	font-weight: bold;
+	line-height: 22px;
+	height: 22px;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+}
+
+a.to_nav:hover,
+a.to_nav:focus {
+	color: #3ab4a6;
+	background: #ccc;
+}
+
+/*menu*/
+
+#primary_nav ul {
+	list-style: none;
+	background: #ccc;
+	padding: 5px 0;
+}
+
+#primary_nav li a {
+	display: block;
+	padding: 0 20px;
+	color: #fff;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	letter-spacing: 0.1em;
+	line-height: 2em;
+	height: 2em;
+	border-bottom: 1px solid #383838;
+}
+
+#primary_nav li:last-child a {
+	border-bottom: none;
+}
+
+#primary_nav li a:hover,
+#primary_nav li a:focus {
+	color: #1c1c1c;
+	background: #ccc;
+}
+
+#secondary_nav ul {
+	list-style: none;
+	background: #ccc;
+	padding: 5px 0;
+}
+
+#secondary_nav li a {
+	display: block;
+	padding: 0 20px;
+	color: #fff;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	letter-spacing: 0.1em;
+	line-height: 2em;
+	height: 2em;
+	border-bottom: 1px solid #383838;
+}
+
+#secondary_nav li:last-child a {
+	border-bottom: none;
+}
+
+#secondary_nav li a:hover,
+#secondary_nav li a:focus {
+	color: #1c1c1c;
+	background: #ccc;
+}
+
