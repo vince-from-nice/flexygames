@@ -17,7 +17,8 @@
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta http-equiv="Expires" content="0" />
-		
+
+		<asset:link rel="shortcut icon" href="flexygames-icon-32x32.png" type="image/png"/>
 		<link rel="shortcut icon" href="${resource(dir: 'images', file: 'flexygames-icon-32x32.png')}" type="image/png" />
 		<link rel="apple-touch-icon" href="${resource(dir: 'images', file: 'flexygames-icon-32x32.png')}">
 		<link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'flexygames-icon-114x114.png')}" />
