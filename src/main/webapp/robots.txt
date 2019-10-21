@@ -7,13 +7,16 @@ Allow: /
 User-agent: Bleriot
 Allow: /
 
+User-agent: DuckDuckBot
+Allow: /
+
 User-agent: Facebot
 Allow: /
 
 User-agent: Googlebot
 Allow: /
 
-User-agent: DuckDuckBot
+User-agent: Qwantify
 Allow: /
 
 User-agent: Twitterbot
