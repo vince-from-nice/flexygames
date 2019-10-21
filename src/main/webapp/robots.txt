@@ -4,6 +4,9 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
+User-agent: Bleriot
+Allow: /
+
 User-agent: Facebot
 Allow: /
 
