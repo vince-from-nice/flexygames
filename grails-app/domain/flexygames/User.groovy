@@ -32,12 +32,14 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	Integer absenceCounter
 	Integer delayCounter
 	Integer gateCrashCounter
+	Integer waitingListCounter
 	Integer actionCounter
 	Integer voteCounter
 	Integer commentCounter
 	Date absenceLastDate
 	Date delayLastDate
 	Date gateCrashLastDate
+	Date waitingListLastDate
 
 	int scoreInCurrentSession // transient
 	Membership membershipInCurrentSession // transient
@@ -111,6 +113,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		partCounter(nullable: true)
 		absenceCounter(nullable: true)
 		gateCrashCounter(nullable: true)
+		waitingListCounter(nullable: true)
 		delayCounter(nullable: true)
 		actionCounter(nullable: true)
 		voteCounter(nullable: true)
@@ -118,6 +121,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		absenceLastDate(nullable: true)
 		delayLastDate(nullable: true)
 		gateCrashLastDate(nullable: true)
+		waitingListLastDate(nullable: true)
     }
 
 	///////////////////////////////////////////////////////////////////////////
@@ -486,6 +490,18 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 			}
 		}
 		return this.gateCrashCounter
+	}
+
+	int countWaitingLists() {
+		if (this.waitingListCounter == null) {
+			this.waitingListCounter = countParticipationsByStatus(Participation.Status.WAITING_LIST.code())
+			if (!this.save(flush: true)) {
+				println "Error when initializing the waiting list counter for $this : " + this.errors
+			} else {
+				println "Waiting list counter for $this has been initialized"
+			}
+		}
+		return this.waitingListCounter
 	}
 	
 	int countComments() {

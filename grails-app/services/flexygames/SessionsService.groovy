@@ -156,36 +156,38 @@ class SessionsService {
 			updatedUser.setPartCounter(updatedUser.countParticipations() + 1)
 		}
 
-		// If new status is UNDONE, increment player gatecrash counter and last date
+		// Update status counter with its last date
 		if (newStatus == Participation.Status.UNDONE.code) {
 			updatedUser.absenceLastDate = participation.session.date
 			updatedUser.setAbsenceCounter(updatedUser.countAbsences() + 1)
 		}
-		// If new status is DONE_LATE, increment player delay counter and last dateNN
 		if (newStatus == Participation.Status.DONE_LATE.code) {
 			updatedUser.delayLastDate = participation.session.date
 			updatedUser.setDelayCounter(updatedUser.countDelays() + 1)
 		}
-		// If new status is DONE_BAD, increment player gatecrash counter and last date
 		if (newStatus == Participation.Status.DONE_BAD.code) {
 			updatedUser.gateCrashLastDate = participation.session.date
 			updatedUser.setGateCrashCounter(updatedUser.countGateCrashes() + 1)
 		}
-
-		// If old status was UNDONE, decrement player gatecrash counter and last date
+		if (newStatus == Participation.Status.WAITING_LIST.code) {
+			updatedUser.waitingListLastDate = participation.session.date
+			updatedUser.setWaitingListCounter(updatedUser.countWaitingLists() + 1)
+		}
 		if (oldStatusCode == Participation.Status.UNDONE.code) {
 			updatedUser.absenceLastDate = null
 			updatedUser.setAbsenceCounter(updatedUser.countAbsences() - 1)
 		}
-		// If old status was DONE_LATE, decrement player delay counter and last date
 		if (oldStatusCode == Participation.Status.DONE_LATE.code) {
 			updatedUser.delayLastDate = null
 			updatedUser.setDelayCounter(updatedUser.countDelays() - 1)
 		}
-		// If old status was DONE_BAD, decrement player gatecrash counter and last date
 		if (oldStatusCode == Participation.Status.DONE_BAD.code) {
 			updatedUser.gateCrashLastDate = null
 			updatedUser.setGateCrashCounter(updatedUser.countGateCrashes() - 1)
+		}
+		if (oldStatusCode == Participation.Status.WAITING_LIST.code) {
+			updatedUser.waitingListLastDate = null
+			updatedUser.setWaitingListCounter(updatedUser.countWaitingLists() - 1)
 		}
 
 		if (!updatedUser) {

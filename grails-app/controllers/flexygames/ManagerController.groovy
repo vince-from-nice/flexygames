@@ -271,6 +271,9 @@ class ManagerController {
 		for (User player : sessionInstance.getParticipantsByStatus(Participation.Status.DONE_BAD.code)) {
 			player.setGateCrashCounter(player.countGateCrashes() - 1)
 		}
+		for (User player : sessionInstance.getParticipantsByStatus(Participation.Status.WAITING_LIST.code)) {
+			player.setWaitingListCounter(player.countWaitingLists() - 1)
+		}
 		for (SessionComment comment : sessionInstance.comments) {
 			comment.user.setCommentCounter(comment.user.countComments())
 		}

@@ -45,10 +45,12 @@
                             <td style="font-size: 10px; border: solid grey 0px">
                                 <g:set var="amnestyTime" value="${java.lang.System.currentTimeMillis() - Integer.valueOf(grailsApplication.config.flexygames.amnestyDaysNbr) * 24 * 60 * 60 * 1000}" />
                                 <nobr>
-                                    <g:set var="count" value="${p.player.countParticipations()}"/>
-                                    <b>${count}</b>
-                                    <g:if test="${count > 1}"><g:message code="participations"/></g:if>
-                                    <g:else><g:message code="participation"/></g:else>
+                                    <span style="font-size: 12px;">
+                                        <g:set var="count" value="${p.player.countParticipations()}"/>
+                                        <b>${count}</b>
+                                        <g:if test="${count > 1}"><g:message code="participations"/></g:if>
+                                        <g:else><g:message code="participation"/></g:else>
+                                    </span>
                                 </nobr>
                                 <br/>
                                 <nobr>
@@ -91,9 +93,17 @@
                                     </span>
                                 </nobr>
                                 <nobr>
-                                    <g:link controller="player" action="stats" id="${p.player.id}">
-                                        <g:message code="detailledStats"/>
-                                    </g:link>
+                                    <span style="color: ${flexygames.Participation.Status.WAITING_LIST.color}">
+                                        <g:set var="count" value="${p.player.countWaitingLists()}"/>
+                                        <g:if test="${count > 1}"><b>${count}</b> <g:message code="waitinglists"/></g:if>
+                                        <g:if test="${count == 1}"><b>1</b> <g:message code="waitinglist"/></g:if>
+                                        <g:if test="${count > 0}">
+                                            <g:if test="${amnestyTime < p.player.waitingListLastDate?.time}">
+                                                <span class="blink_text">(<g:message code="session.show.participants.recently"/>)</span>
+                                            </g:if>
+                                            <br/>
+                                        </g:if>
+                                    </span>
                                 </nobr>
                             </td>
                             <g:if test="${!mobile}">
