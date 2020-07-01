@@ -19,22 +19,24 @@ class CalendarService implements CalendarExporter {
                 events {
                     for (Participation p in player.participationsVisibleInCalendar) {
                         Session s = p.session
-                        Playground pg = s.playground
-                        DateTime start = new DateTime(s.rdvDate.getTime());
-                        start.setTimeZone(timezone);
-                        DateTime end = new DateTime(s.endDate.getTime());
-                        end.setTimeZone(timezone);
-                        event(
-                                start: start,
-                                end: end,
-                                //tzId: 'Europe/Paris',
-                                tzId: tz.timeZoneId,
-                                description: 'Session link : ' + grailsApplication.config.grails.serverURL + '/sessions/show/' + s.id,
-                                location: pg.name + ', ' + pg.postalAddress,
-                                streetAddress: pg.street,
-                                locality: pg.city,
-                                summary: s.group.name
-                        )
+                        if (!s.canceled) {
+                            Playground pg = s.playground
+                            DateTime start = new DateTime(s.rdvDate.getTime());
+                            start.setTimeZone(timezone);
+                            DateTime end = new DateTime(s.endDate.getTime());
+                            end.setTimeZone(timezone);
+                            event(
+                                    start: start,
+                                    end: end,
+                                    //tzId: 'Europe/Paris',
+                                    tzId: tz.timeZoneId,
+                                    description: 'Session link : ' + grailsApplication.config.grails.serverURL + '/sessions/show/' + s.id,
+                                    location: pg.name + ', ' + pg.postalAddress,
+                                    streetAddress: pg.street,
+                                    locality: pg.city,
+                                    summary: s.group.name
+                            )
+                        }
                     }
                 }
             }
