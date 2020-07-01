@@ -79,21 +79,21 @@
 				</div>
 			</td>
 			<td>
-				<h2><g:message code="playground.show.sessionGroups" /></h2>
-				<g:message code="playground.show.sessionGroups.desc" /> :
+				<h2><g:message code="playground.show.teams" /></h2>
+				<g:message code="playground.show.teams.desc" /> :
 				<g:if test="${playground.sessionGroups.size() > 0}">
 				<ul>
-				<g:each var="group" in="${playground.sessionGroups}">
+				<g:each var="team" in="${playground.sessionGroups*.defaultTeams.toSet()}">
 					<li>
-						<g:link controller="sessions" action="list" params="${['filteredSessionGroup':group.id]}">
-							${group}
+						<g:link controller="teams" action="show" params="${['id':team.id]}">
+							${team}
 						</g:link>
 					</li>
 				</g:each>
 				</ul>
 				</g:if>
 				<g:else>
-					<i><g:message code="playground.show.sessionGroups.empty" /></i>
+					<i><g:message code="playground.show.teams.empty" /></i>
 				</g:else>
 			</td>
 		</tr>

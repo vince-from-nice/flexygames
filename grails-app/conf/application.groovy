@@ -4,7 +4,7 @@
 
 environments {
     development {
-        grails.serverURL="http://192.168.1.15:8080"
+        grails.serverURL="http://192.168.1.23:8080"
         server.session.timeout = 600
     }
     production {

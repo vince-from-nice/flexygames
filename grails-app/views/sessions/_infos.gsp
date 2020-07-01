@@ -63,18 +63,11 @@
 							<tr>
 								<td style="vertical-align: top; " ><g:message code="playground" default="Playground" /></td>
 								<td style="vertical-align: top; " >
-									<g:link controller="playground" action="show" id="${sessionInstance?.playground?.id}" onclick="toggleDisplay('playgroundDiv'); return false" >
-										${sessionInstance?.playground?.encodeAsHTML()}
-									</g:link>
-									<div id="playgroundDiv" class="block" style="display: none;">
-										${sessionInstance?.playground?.postalAddress}
-										<g:if test="${sessionInstance?.playground?.gmapsUrl}">
-											<br>
-											<g:message code="phoneNumber" /> : ${sessionInstance?.playground?.phoneNumber}
-										</g:if>
-										<br>
-										<g:link controller="playgrounds" action="show" id="${sessionInstance?.playground?.id}"><g:message code="session.show.viewPlayground" /></g:link>
-									</div>
+									<b>${sessionInstance?.playground?.encodeAsHTML()}</b>
+									<br>
+									${sessionInstance?.playground?.postalAddress}
+									<br>
+									<g:link controller="playgrounds" action="show" id="${sessionInstance?.playground?.id}"><g:message code="session.show.viewPlayground" /></g:link>
 								</td>
 							</tr>
 							<tr>
