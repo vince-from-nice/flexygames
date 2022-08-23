@@ -88,7 +88,7 @@ ckeditor {
 security.shiro.authc.required = false
 
 // It should be outside Git
-google.api.key = 'AIzaSyAoWBElMNGHdbLCdP-5WIY9rOJlEpdtgjE'
+google.api.key = 'notAnymoreInGit'
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // FlexyGames specific configuration
