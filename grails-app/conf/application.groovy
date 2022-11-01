@@ -4,7 +4,7 @@
 
 environments {
     development {
-        grails.serverURL="http://192.168.1.23:8080"
+        grails.serverURL="http://localhost:8080"
         server.session.timeout = 600
     }
     production {
@@ -18,27 +18,27 @@ environments {
     development {
         grails {
             // Config for SMTP of Orange
-            mail {
-                host = "smtp.orange.fr"
-                port = 465
-            }
+//            mail {
+//                host = "smtp.orange.fr"
+//                port = 465
+//            }
             // Config for SMTP of Free
 //            mail {
 //                host = "smtp.free.fr"
 //                port = 25
 //            }
             // Config for GMail SMTP: It works but I need to activate a security parameter in Google account: "Allow application which are less secure"
-//            mail {
-//                host = "smtp.gmail.com"
-//                port = 465
-//                username = "vincent.frison@gmail.com"
-//                password = "not_in_git"
-//                props = ["mail.smtp.auth":"true",
-//                         "mail.smtp.socketFactory.port":"465",
-//                         "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
-//                         "mail.smtp.socketFactory.fallback":"false",
-//                         "mail.debug": "true"]
-//            }
+            mail {
+                host = "smtp.gmail.com"
+                port = 465
+                username = "vincent.frison@gmail.com"
+                password = "not_in_git"
+                props = ["mail.smtp.auth":"true",
+                         "mail.smtp.socketFactory.port":"465",
+                         "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+                         "mail.smtp.socketFactory.fallback":"false",
+                         "mail.debug": "true"]
+            }
         }
     }
     production {

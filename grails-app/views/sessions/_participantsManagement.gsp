@@ -7,17 +7,17 @@
 
             <b><g:message code="management.participations.invite"/></b>
             <br>
-            <g:actionSubmit class="create" action="requestAllRegulars"
-                            value="${message(code: 'management.participations.requestAllRegulars')}"/>
-            <g:actionSubmit class="create" action="requestAllTourists"
-                            value="${message(code: 'management.participations.requestAllTourists')}"/>
-            <br/>
             <g:actionSubmit class="create"
                             onclick="toggleDisplay('extraInternalUserDiv'); return false"
                             value="${message(code: 'management.participations.requestInternalPlayer')}"/>
             <g:actionSubmit class="create"
                             onclick="toggleDisplay('extraExternalUserDiv'); return false"
                             value="${message(code: 'management.participations.requestExternalPlayer')}"/>
+            <br/>
+            <g:actionSubmit class="create" action="requestAllRegulars"
+                            value="${message(code: 'management.participations.requestAllRegulars')}"/>
+            <g:actionSubmit class="create" action="requestAllTourists"
+                            value="${message(code: 'management.participations.requestAllTourists')}"/>
             <div id="extraExternalUserDiv" style="display: none">
                 <br/>
                 <g:select name="externalUserId"

@@ -329,7 +329,11 @@ class ManagerController {
 
 	def requestAllRegulars = { return requestMissingPlayers(true) }
 
-	def requestAllTourists = { return requestMissingPlayers(false) }
+	def requestAllTourists = {
+		//return requestMissingPlayers(false)
+		flash.error = "Sorry, that feature is currently disabled because of mail issues"
+		redirect(controller: "sessions", action: "show", id: params.id)
+	}
 
 	def requestMissingPlayers = { boolean regular ->
 		def s = Session.get(params.id)
