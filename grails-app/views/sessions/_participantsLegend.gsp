@@ -32,10 +32,17 @@
                         code="participation.status.${flexygames.Participation.Status.APPROVED}"/></nobr><span><g:message
                         code="participation.status.${flexygames.Participation.Status.APPROVED}.infos"/></span>
                 </a></td>
-                <td rowspan="3"
+                <td rowspan="4"
                     style="font-size:10px; line-height: 10px; vertical-align: middle; text-align: center; background-color: #ddeedd;">
                     M<br/>A<br/>N<br/>A<br/>G<br/>I<br/>N<br/>G
                 </td>
+            </tr>
+            <tr>
+                <td style="background-color: ${flexygames.Participation.Status.APPROVED_EXTRA.color};">&nbsp;</td>
+                <td><a class="tooltip"><nobr><g:message
+                        code="participation.status.${flexygames.Participation.Status.APPROVED_EXTRA}"/></nobr><span><g:message
+                        code="participation.status.${flexygames.Participation.Status.APPROVED_EXTRA}.infos"/></span>
+                </a></td>
             </tr>
             <tr>
                 <td style="background-color: ${flexygames.Participation.Status.WAITING_LIST.color};">&nbsp;</td>

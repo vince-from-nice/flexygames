@@ -18,17 +18,17 @@
                         <g:set var="possibleStatus"
                                value="${[flexygames.Participation.Status.REQUESTED.code, flexygames.Participation.Status.AVAILABLE.code, flexygames.Participation.Status.DECLINED.code]}"/>
                     </g:if>
-                    <g:if test="${part.statusCode == flexygames.Participation.Status.AVAILABLE.code}">
-                        <g:set var="possibleStatus"
-                               value="${[flexygames.Participation.Status.AVAILABLE.code, flexygames.Participation.Status.DECLINED.code]}"/>
-                    </g:if>
-                    <g:if test="${part.statusCode == flexygames.Participation.Status.DECLINED.code}">
+                    <g:if test="${part.statusCode == flexygames.Participation.Status.AVAILABLE.code || part.statusCode == flexygames.Participation.Status.DECLINED.code}">
                         <g:set var="possibleStatus"
                                value="${[flexygames.Participation.Status.AVAILABLE.code, flexygames.Participation.Status.DECLINED.code]}"/>
                     </g:if>
                     <g:if test="${part.statusCode == flexygames.Participation.Status.APPROVED.code}">
                         <g:set var="possibleStatus"
                                value="${[flexygames.Participation.Status.APPROVED.code, flexygames.Participation.Status.DECLINED.code]}"/>
+                    </g:if>
+                    <g:if test="${part.statusCode == flexygames.Participation.Status.APPROVED_EXTRA.code}">
+                        <g:set var="possibleStatus"
+                               value="${[flexygames.Participation.Status.APPROVED_EXTRA.code, flexygames.Participation.Status.DECLINED.code]}"/>
                     </g:if>
                     <g:if test="${part.statusCode == flexygames.Participation.Status.WAITING_LIST.code}">
                         <g:set var="possibleStatus"
@@ -47,7 +47,7 @@
                             <g:if test="${status == flexygames.Participation.Status.REQUESTED.code}">
                                 <option disabled>── <g:message code="availability"/> ──</option>
                             </g:if>
-                            <g:if test="${status == flexygames.Participation.Status.APPROVED.code}">
+                            <g:if test="${status == flexygames.Participation.Status. APPROVED.code}">
                                 <option disabled>── <g:message code="selection"/> ──</option>
                             </g:if>
                             <g:if test="${status == flexygames.Participation.Status.DONE_GOOD.code}">

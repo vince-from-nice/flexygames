@@ -124,8 +124,8 @@ class SessionsService {
 		}
 
 		// If a non manager user change its status from APPROVED to DECLINED, notify managers by email
-		if (oldStatusCode == Participation.Status.APPROVED.code && newStatus == Participation.Status.DECLINED.code
-		&& !participation.session.isManagedBy(updater.username)) {
+		if ((oldStatusCode == Participation.Status.APPROVED.code || oldStatusCode == Participation.Status.APPROVED_EXTRA.code)
+			&& newStatus == Participation.Status.DECLINED.code && !participation.session.isManagedBy(updater.username)) {
 			def title = messageSource.getMessage('mail.statusUpdateNotificationForManager.title', 
 				[updater.username, participation.session].toArray(), locale)
 			def body = messageSource.getMessage('mail.statusUpdateNotificationForManager.body', [

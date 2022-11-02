@@ -211,7 +211,8 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 			// sessions in the future 
 			else {
 				if (p.statusCode == Participation.Status.REQUESTED.code() || p.statusCode == Participation.Status.AVAILABLE.code() ||
-					p.statusCode == Participation.Status.APPROVED.code() || p.statusCode == Participation.Status.WAITING_LIST.code()) {
+					p.statusCode == Participation.Status.APPROVED.code() || p.statusCode == Participation.Status.APPROVED_EXTRA.code() ||
+						p.statusCode == Participation.Status.WAITING_LIST.code()) {
 					result << p
 				}
 			}
