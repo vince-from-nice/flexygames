@@ -14,10 +14,6 @@ class MailerService {
     //def messageSource
 
     def mail(addresses, title, body) {
-        mail(null, addresses, title, body)
-    }
-
-    def mail(sender, addresses, title, body) {
         def conf = grailsApplication.config.flexygames.mailing
         def htmlTitle = '' + conf.title.prefix + title + conf.title.suffix
         def bodyHeader = grailsApplication.getMainContext().getMessage("mail.body.header", [] as Object[], LCH.getLocale())
@@ -28,19 +24,12 @@ class MailerService {
         // Send mails ONLY in Production environment
         if (Environment.currentEnvironment == Environment.PRODUCTION
                 || (addresses.size() == 1 && addresses[0] == 'vincent.frison@gmail.com')) {
-            if (sender) {
-                sendMail {
-                    cc sender
-                    bcc addresses
-                    subject htmlTitle
-                    html htmlBody
-                }
-            } else {
-                sendMail {
-                    bcc addresses
-                    subject htmlTitle
-                    html htmlBody
-                }
+            sendMail {
+                from conf.webmaster
+                to conf.webmaster
+                bcc addresses
+                subject htmlTitle
+                html htmlBody
             }
         } else {
             println "Environment is not in production mode, no mail is sent !"

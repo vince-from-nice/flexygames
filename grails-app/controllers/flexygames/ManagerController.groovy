@@ -499,7 +499,8 @@ class ManagerController {
 			session.participations.each { addresses << it.player.email }
 		} else if (params.recipients == "AVAILABLE_PARTICIPANTS") {
 			session.participations.each { p ->
-				if (p.statusCode == Participation.Status.AVAILABLE.code || p.statusCode == Participation.Status.APPROVED.code) {
+				if (p.statusCode == Participation.Status.AVAILABLE.code ||
+						p.statusCode == Participation.Status.APPROVED.code || p.statusCode == Participation.Status.APPROVED_EXTRA.code) {
 					addresses << p.player.email
 				}
 			}
@@ -526,7 +527,7 @@ class ManagerController {
 			session.group.defaultTeams.first()
 		])
 		body = body.replace("BODY_STRING", info)
-		mailerService.mail(user.email, addresses, title, body)
+		mailerService.mail(addresses, title, body)
 		flash.message = "Mail has been sent to <b>" + addresses.size() + "</b> participant(s)."
 		redirect(controller:"sessions", action: "show", id: session.id)
 	}
