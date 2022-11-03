@@ -66,10 +66,10 @@
                                 </g:each>
                             </td-->
 							<td style="vertical-align: middle;">
-								${playerInstance.countParticipations()}
+								${playerInstance.participationCounter}
 							</td>
 							<td style="vertical-align: middle;">
-								${playerInstance.countComments()}
+								${playerInstance.commentCounter}
 							</td>
                             <td style="vertical-align: middle; font-size: 12px;">
 								<nobr><g:formatDate date="${playerInstance.registrationDate}" format="yyyy-MM-dd" timeStyle="LONG" /></nobr>

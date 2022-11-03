@@ -73,21 +73,21 @@ class SiteController {
 		groups.append("]")
 		
 		StringBuffer participants = new StringBuffer("[")
-		def allParticipants = User.getAll().sort{ it.countParticipations()}.reverse()
+		def allParticipants = User.getAll().sort{ it.participationCounter}.reverse()
 		max = (allParticipants.size() <  STATS_SCORERS_SIZE ? allParticipants.size() : STATS_SCORERS_SIZE)
 		for (int i = 0; i < max; i++) {
 			def user = allParticipants.get(i)
-			participants.append("['" + user.username + "', " + user.countParticipations() /*+ ", " + user.id*/ + "]")
+			participants.append("['" + user.username + "', " + user.participationCounter /*+ ", " + user.id*/ + "]")
 			if (i < max - 1) participants.append(", ")
 		}
 		participants.append("]")
 		
 		StringBuffer posters = new StringBuffer("[")
-		def allPosters = User.getAll().sort{ it.countComments()}.reverse()
+		def allPosters = User.getAll().sort{ it.commentCounter}.reverse()
 		max = (allPosters.size() <  STATS_SCORERS_SIZE ? allPosters.size() : STATS_SCORERS_SIZE)
 		for (int i = 0; i < max; i++) {
 			def user = allPosters.get(i)
-			posters.append("['" + user.username + "', " + user.countComments() + "]")
+			posters.append("['" + user.username + "', " + user.commentCounter + "]")
 			if (i < max - 1) posters.append(", ")
 		}
 		posters.append("]")

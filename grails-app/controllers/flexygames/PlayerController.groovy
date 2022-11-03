@@ -1,17 +1,11 @@
 package flexygames
 
-import ch.silviowangler.grails.icalender.CalendarExporter
+
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 
 import java.text.SimpleDateFormat
 import java.util.regex.Matcher
-
-
-import net.fortuna.ical4j.model.DateTime
-import net.fortuna.ical4j.model.TimeZoneRegistry
-import net.fortuna.ical4j.model.TimeZoneRegistryFactory
-import net.fortuna.ical4j.model.component.VTimeZone
 
 import org.apache.shiro.crypto.hash.Sha512Hash
 
@@ -137,6 +131,15 @@ class PlayerController {
 					regularForCompetition: false)
 			user.addToMemberships(ms)
 		}
+		// Init counters to avoid null values
+		user.commentCounter = 0;
+		user.participationCounter = 0;
+		user.voteCounter = 0;
+		user.actionCounter = 0;
+		user.absenceCounter = 0;
+		user.delayCounter = 0;
+		user.gateCrashCounter = 0;
+		user.waitingListCounter = 0;
 		if (!user.save()) {
 			flash.message = "${message(code: 'register.failed')}"
 			return render(view: "register", model: [user: user])

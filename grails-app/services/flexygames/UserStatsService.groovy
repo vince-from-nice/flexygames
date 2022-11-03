@@ -76,10 +76,11 @@ class UserStatsService {
     @Transactional ()
     def refreshCountersForAllUsers() {
         for (User user in User.getAll()) {
-            user.setPartCounter(user.getEffectiveParticipations().size())
+            user.setParticipationCounter(user.getEffectiveParticipations().size())
             user.setAbsenceCounter(user.countParticipationsByStatus(Participation.Status.UNDONE.code()))
             user.setGateCrashCounter(user.countParticipationsByStatus(Participation.Status.DONE_BAD.code()))
             user.setDelayCounter(user.countParticipationsByStatus(Participation.Status.DONE_LATE.code()))
+            user.setWaitingListCounter(user.countParticipationsByStatus(Participation.Status.WAITING_LIST.code()))
             user.setVoteCounter(user.getVotes().size())
             user.setActionCounter(user.getActions().size())
             user.setCommentCounter(SessionComment.findAllByUser(user).size() + BlogComment.findAllByUser(user).size())

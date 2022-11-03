@@ -149,45 +149,45 @@ class SessionsService {
 
 		// If previous status was effective but new status is not, decrement player part counter
 		if (oldParticipation.isEffective() && !participation.isEffective()) {
-			updatedUser.setPartCounter(updatedUser.countParticipations() - 1)
+			updatedUser.participationCounter -= 1
 		}
 		// If new status is effective but old status was not, increment player part counter
 		if (!oldParticipation.isEffective() && participation.isEffective()) {
-			updatedUser.setPartCounter(updatedUser.countParticipations() + 1)
+			updatedUser.participationCounter += 1
 		}
 
 		// Update status counter with its last date
 		if (newStatus == Participation.Status.UNDONE.code) {
 			updatedUser.absenceLastDate = participation.session.date
-			updatedUser.setAbsenceCounter(updatedUser.countAbsences() + 1)
+			updatedUser.absenceCounter += 1
 		}
 		if (newStatus == Participation.Status.DONE_LATE.code) {
 			updatedUser.delayLastDate = participation.session.date
-			updatedUser.setDelayCounter(updatedUser.countDelays() + 1)
+			updatedUser.delayCounter += 1
 		}
 		if (newStatus == Participation.Status.DONE_BAD.code) {
 			updatedUser.gateCrashLastDate = participation.session.date
-			updatedUser.setGateCrashCounter(updatedUser.countGateCrashes() + 1)
+			updatedUser.gateCrashCounter += 1
 		}
 		if (newStatus == Participation.Status.WAITING_LIST.code) {
 			updatedUser.waitingListLastDate = participation.session.date
-			updatedUser.setWaitingListCounter(updatedUser.countWaitingLists() + 1)
+			updatedUser.waitingListCounter += 1
 		}
 		if (oldStatusCode == Participation.Status.UNDONE.code) {
 			updatedUser.absenceLastDate = null
-			updatedUser.setAbsenceCounter(updatedUser.countAbsences() - 1)
+			updatedUser.absenceCounter += 1
 		}
 		if (oldStatusCode == Participation.Status.DONE_LATE.code) {
 			updatedUser.delayLastDate = null
-			updatedUser.setDelayCounter(updatedUser.countDelays() - 1)
+			updatedUser.delayCounter += 1
 		}
 		if (oldStatusCode == Participation.Status.DONE_BAD.code) {
 			updatedUser.gateCrashLastDate = null
-			updatedUser.setGateCrashCounter(updatedUser.countGateCrashes() - 1)
+			updatedUser.gateCrashCounter += 1
 		}
 		if (oldStatusCode == Participation.Status.WAITING_LIST.code) {
 			updatedUser.waitingListLastDate = null
-			updatedUser.setWaitingListCounter(updatedUser.countWaitingLists() - 1)
+			updatedUser.waitingListCounter += 1
 		}
 
 		if (!updatedUser) {

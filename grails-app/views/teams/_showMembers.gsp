@@ -30,27 +30,34 @@
 							</td>
 							<td style="text-align: center; vertical-align: middle; font-size: 12px; ">
 								<nobr>
-									<b>${ms.user.countParticipations()}</b>
-									<g:if test="${ms.user.countParticipations() > 1}"><g:message code="participations" /></g:if>
+									<b>${ms.user.participationCounter}</b>
+									<g:if test="${ms.user.participationCounter > 1}"><g:message code="participations" /></g:if>
 									<g:else><g:message code="participation" /></g:else> 
 								</nobr>
 								<br />
-									<nobr>
-										<span style="color: red">
-											<g:if test="${ms.user.countAbsences() > 1}"><b>${ms.user.countAbsences()}</b> <g:message code="absences" /><br /></g:if>
-											<g:if test="${ms.user.countAbsences() == 1}"><b>1</b> <g:message code="absence" /><br /></g:if>
-										</span>
-									</nobr>
-									<nobr>
-										<span style="color: #cc0">
-											<g:if test="${ms.user.countGateCrashes() > 1}"><b>${ms.user.countGateCrashes()}</b> <g:message code="gatecrashes" /><br /></g:if>
-											<g:if test="${ms.user.countGateCrashes() == 1}"><b>1</b> <g:message code="gatecrash" /><br /></g:if>
-										</span>
-									</nobr>
 								<nobr>
-									<g:link controller="player" action="stats" id="${ms.user.id}">
-										<g:message code="detailledStats" />
-									</g:link>
+									<span style="color: ${flexygames.Participation.Status.UNDONE.color}">
+										<g:if test="${ms.user.absenceCounter > 1}"><b>${ms.user.absenceCounter}</b> <g:message code="absences" /><br /></g:if>
+										<g:if test="${ms.user.absenceCounter == 1}"><b>1</b> <g:message code="absence" /><br /></g:if>
+									</span>
+								</nobr>
+								<nobr>
+									<span style="color: ${flexygames.Participation.Status.DONE_BAD.color}">
+										<g:if test="${ms.user.gateCrashCounter > 1}"><b>${ms.user.gateCrashCounter}</b> <g:message code="gatecrashes" /><br /></g:if>
+										<g:if test="${ms.user.gateCrashCounter == 1}"><b>1</b> <g:message code="gatecrash" /><br /></g:if>
+									</span>
+								</nobr>
+								<nobr>
+									<span style="color: ${flexygames.Participation.Status.DONE_LATE.color}">
+										<g:if test="${ms.user.delayCounter > 1}"><b>${ms.user.delayCounter}</b> <g:message code="delays" /><br /></g:if>
+										<g:if test="${ms.user.delayCounter == 1}"><b>1</b> <g:message code="delay" /><br /></g:if>
+									</span>
+								</nobr>
+								<nobr>
+									<span style="color: ${flexygames.Participation.Status.WAITING_LIST.color}">
+										<g:if test="${ms.user.waitingListCounter > 1}"><b>${ms.user.waitingListCounter}</b> <g:message code="waitinglists" /><br /></g:if>
+										<g:if test="${ms.user.waitingListCounter == 1}"><b>1</b> <g:message code="waitinglists" /><br /></g:if>
+									</span>
 								</nobr>
 							</td>
 							<td style="text-align: center; vertical-align: middle; font-size: 12px;">

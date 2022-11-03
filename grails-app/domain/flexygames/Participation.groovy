@@ -18,7 +18,7 @@ class Participation implements Comparable<Participation> {
 		WAITING_LIST("WAITING_LIST", "#63B6FF"),
 		REMOVED("REMOVED", "#E5A84E"),
 		DONE_GOOD("DONE_GOOD", "#229f37"),
-		DONE_LATE("DONE_LATE", "#FFFC00"),
+		DONE_LATE("DONE_LATE", "#c2bf01"),
 		DONE_BAD("DONE_BAD", "#FE6F0F"),
 		UNDONE("UNDONE", "#FF0000"),
 		public final String code

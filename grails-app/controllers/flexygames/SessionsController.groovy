@@ -201,7 +201,7 @@ class SessionsController {
 	}*/
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
-	// Following actions are transactional (excplictely or via the use of a service)
+	// Following actions are transactional (explicitly or via the use of a service)
 	// and restricted to authenticated users (via Shiro interceptor)
 	///////////////////////////////////////////////////////////////////////////////////////////////
 

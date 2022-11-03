@@ -94,7 +94,7 @@
             <g:message code="status"/>
             <g:select name="statusCode" from="${flexygames.Participation.constrainedProperties.statusCode.inList}"
                       valueMessagePrefix="participation.status" style="font-size : 14px" />
-            <g:message code="log"/>
+            <g:message code="optionalText"/>
             <g:field type="text" name="userLog" style="background-color: white; color: black;"  />
             <g:actionSubmit class="save" action="updateParticipationStatus" value="${message(code: 'update')}"/>
         </div>

@@ -23,13 +23,13 @@
 				<h2><g:message code="statistics" /></h2>
 				<div class="block" style="width: auto">
 					<g:message code="player.stats.partCounter" /> :
-					<span style="font-size: 20px; font-weight: bold;">${playerInstance.countParticipations()}</span>
+					<span style="font-size: 20px; font-weight: bold;">${playerInstance.participationCounter}</span>
 					<br />
 					%{--<span style="font-size: 14px"><g:message code="player.stats.partCounter.infos" /></span>--}%
 					%{--<br />--}%
 					<br />
 					<g:message code="player.stats.commentCounter" /> :
-					<span style="font-size: 20px; font-weight: bold;">${playerInstance.countComments()}</span>
+					<span style="font-size: 20px; font-weight: bold;">${playerInstance.commentCounter}</span>
 					<br />
 					<br />
 					<g:message code="registrationDate" default="Registration Date" /> :

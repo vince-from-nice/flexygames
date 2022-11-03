@@ -46,7 +46,7 @@
                                 <g:set var="amnestyTime" value="${java.lang.System.currentTimeMillis() - Integer.valueOf(grailsApplication.config.flexygames.amnestyDaysNbr) * 24 * 60 * 60 * 1000}" />
                                 <nobr>
                                     <span style="font-size: 12px;">
-                                        <g:set var="count" value="${p.player.countParticipations()}"/>
+                                        <g:set var="count" value="${p.player.participationCounter}"/>
                                         <b>${count}</b>
                                         <g:if test="${count > 1}"><g:message code="participations"/></g:if>
                                         <g:else><g:message code="participation"/></g:else>
@@ -55,7 +55,7 @@
                                 <br/>
                                 <nobr>
                                     <span style="color: ${flexygames.Participation.Status.UNDONE.color}">
-                                        <g:set var="count" value="${p.player.countAbsences()}"/>
+                                        <g:set var="count" value="${p.player.absenceCounter}"/>
                                         <g:if test="${count > 1}"><b>${count}</b> <g:message code="absences"/></g:if>
                                         <g:if test="${count == 1}"><b>1</b> <g:message code="absence"/></g:if>
                                         <g:if test="${count > 0}">
@@ -68,7 +68,7 @@
                                 </nobr>
                                 <nobr>
                                     <span style="color: #cecc4e">
-                                        <g:set var="count" value="${p.player.countDelays()}"/>
+                                        <g:set var="count" value="${p.player.delayCounter}"/>
                                         <g:if test="${count > 1}"><b>${count}</b> <g:message code="delays"/></g:if>
                                         <g:if test="${count == 1}"><b>1</b> <g:message code="delay"/></g:if>
                                         <g:if test="${count > 0}">
@@ -81,7 +81,7 @@
                                 </nobr>
                                 <nobr>
                                     <span style="color: ${flexygames.Participation.Status.DONE_BAD.color}">
-                                        <g:set var="count" value="${p.player.countGateCrashes()}"/>
+                                        <g:set var="count" value="${p.player.gateCrashCounter}"/>
                                         <g:if test="${count > 1}"><b>${count}</b> <g:message code="gatecrashes"/></g:if>
                                         <g:if test="${count == 1}"><b>1</b> <g:message code="gatecrash"/></g:if>
                                         <g:if test="${count > 0}">
@@ -94,7 +94,7 @@
                                 </nobr>
                                 <nobr>
                                     <span style="color: ${flexygames.Participation.Status.WAITING_LIST.color}">
-                                        <g:set var="count" value="${p.player.countWaitingLists()}"/>
+                                        <g:set var="count" value="${p.player.waitingListCounter}"/>
                                         <g:if test="${count > 1}"><b>${count}</b> <g:message code="waitinglists"/></g:if>
                                         <g:if test="${count == 1}"><b>1</b> <g:message code="waitinglist"/></g:if>
                                         <g:if test="${count > 0}">

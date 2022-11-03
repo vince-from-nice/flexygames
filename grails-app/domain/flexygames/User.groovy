@@ -1,5 +1,6 @@
 package flexygames
 
+import grails.gorm.transactions.Transactional
 import grails.util.Holders
 
 import java.util.regex.Matcher
@@ -28,7 +29,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	Date lastLogin
 	Date lastLogout
 	String calendarToken
-	Integer partCounter
+	Integer participationCounter
 	Integer absenceCounter
 	Integer delayCounter
 	Integer gateCrashCounter
@@ -110,7 +111,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		lastLogin(nullable: true)
 		lastLogout(nullable: true)
 		calendarToken(nullable: true)
-		partCounter(nullable: true)
+		participationCounter(nullable: true)
 		absenceCounter(nullable: true)
 		gateCrashCounter(nullable: true)
 		waitingListCounter(nullable: true)
@@ -439,82 +440,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 			if (group.id == v.session.group.id) score += v.score
 		}
 		return score
-	}
-
-	///////////////////////////////////////////////////////////////////////////
-	// Counter methods for precomputed statistics
-	///////////////////////////////////////////////////////////////////////////
-
-	int countParticipations() {
-		if (this.partCounter == null) {
-			this.partCounter = getEffectiveParticipations().size()
-			if (!this.save(flush: true)) {
-				println "Error when initializing the participation counter for $this : " + this.errors
-			} else {
-				println "Participation counter for $this has been initialized"
-			}
-		}
-		return this.partCounter
-	}
-
-	int countAbsences() {
-		if (this.absenceCounter == null) {
-			this.absenceCounter = countParticipationsByStatus(Participation.Status.UNDONE.code())
-			if (!this.save(flush: true)) {
-				println "Error when initializing the absence counter for $this : " + this.errors
-			} else {
-				println "Absence counter for $this has been initialized"
-			}
-		}
-		return this.absenceCounter
-	}
-
-	int countDelays() {
-		if (this.delayCounter == null) {
-			this.delayCounter = countParticipationsByStatus(Participation.Status.DONE_LATE.code())
-			if (!this.save(flush: true)) {
-				println "Error when initializing the delay counter for $this : " + this.errors
-			} else {
-				println "Delay counter for $this has been initialized"
-			}
-		}
-		return this.delayCounter
-	}
-
-	int countGateCrashes() {
-		if (this.gateCrashCounter == null) {
-			this.gateCrashCounter = countParticipationsByStatus(Participation.Status.DONE_BAD.code())
-			if (!this.save(flush: true)) {
-				println "Error when initializing the gatecrash counter for $this : " + this.errors
-			} else {
-				println "Gatecrash counter for $this has been initialized"
-			}
-		}
-		return this.gateCrashCounter
-	}
-
-	int countWaitingLists() {
-		if (this.waitingListCounter == null) {
-			this.waitingListCounter = countParticipationsByStatus(Participation.Status.WAITING_LIST.code())
-			if (!this.save(flush: true)) {
-				println "Error when initializing the waiting list counter for $this : " + this.errors
-			} else {
-				println "Waiting list counter for $this has been initialized"
-			}
-		}
-		return this.waitingListCounter
-	}
-	
-	int countComments() {
-		if (this.commentCounter == null) {
-			this.commentCounter = SessionComment.findAllByUser(this).size()
-			if (!this.save(flush: true)) {
-				println "Error when initializing the comment counter for $this : " + this.errors
-			} else {
-				println "Comment counter for $this has been initialized"
-			}
-		}
-		return this.commentCounter
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
