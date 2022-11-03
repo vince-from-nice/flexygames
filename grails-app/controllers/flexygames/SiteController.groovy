@@ -38,6 +38,10 @@ class SiteController {
 			//flash.message = "Unable to send message !"
 			return render (view: "contact", model: [contactForm: cmd])
 		}
+		if (cmd.botChalenge != "21") {
+			flash.error = "Sorry Mr Bot, your response to the chalenge is incorrect :)"
+			return render (view: "contact", model: [contactForm: cmd])
+		}
 		mailerService.mailForContact(cmd.email, cmd.subject, cmd.body)
 		flash.message = 'Your message has been sent !'
 		redirect(action: 'home')

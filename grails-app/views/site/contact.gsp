@@ -8,6 +8,9 @@
 	<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
 	</g:if>
+	<g:if test="${flash.error}">
+		<div class="errors">${flash.error}</div>
+	</g:if>
 	<g:hasErrors bean="${contactForm}">
 		<div class="errors">
 		    <g:renderErrors bean="${contactForm}" as="list" />
@@ -29,6 +32,10 @@
 	    		<td><g:message code="contact.body" /></td>
 	    		<td><g:textArea name="body" style="width: 500px" /></td>
 	    	</tr>
+			<tr class="fieldcontain ${hasErrors(bean: contactForm, field: 'botChalenge', 'error')} required">
+				<td style="width: 20%"><g:message code="contact.botChalenge" /></td>
+				<td><g:textField name="botChalenge" size="3" /></td>
+			</tr>
 	    	<tr> 
 	    		<td colspan="2" style="text-align: center;"><g:actionSubmit name="contact" action="contact" value="${message(code:'send')}"/></td>
 	    	</tr>
