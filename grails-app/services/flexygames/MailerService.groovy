@@ -44,6 +44,7 @@ class MailerService {
         // Send mails ONLY in Production environment
         if (Environment.currentEnvironment == Environment.PRODUCTION || email == 'vincent.frison@gmail.com') {
             sendMail {
+                from email
                 to conf.webmaster
                 cc email
                 subject htmlTitle
