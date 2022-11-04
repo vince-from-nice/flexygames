@@ -29,6 +29,11 @@
 		</div>
 		<table id="votesDetailedZone" style="display: ${defaultDisplayForDetailedZone};">
 			<tr>
+				<td colspan="5">
+					<g:message code="session.show.votes.intro" />
+				</td>
+			</tr>
+			<tr>
 				<th colspan="2" style="text-align: center; width: 40%"><g:message code="session.show.votes.menOfTheMatch" /></th>
 				<th colspan="2" style="text-align: center; width: 40%"><g:message code="session.show.votes.bouletOfTheMatch" /></th>
 				<th colspan="1" style="text-align: center; width: 20%"><g:message code="session.show.votes.scores" /></th>

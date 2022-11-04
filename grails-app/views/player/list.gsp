@@ -33,8 +33,9 @@
 						<g:sortableColumn property="company" title="${message(code: 'company', default: 'Company')}" />
 						<g:sortableColumn property="city" title="${message(code: 'city', default: 'City')}" />
 						<th><g:message code="teams" /></th>
-						<g:sortableColumn style="font-size: 10px; vertical-align: middle" property="partCounter" title="${message(code: 'participations', default: 'Participations')}" />
+						<g:sortableColumn style="font-size: 10px; vertical-align: middle" property="participationCounter" title="${message(code: 'participations', default: 'Participations')}" />
 						<g:sortableColumn style="font-size: 10px; vertical-align: middle" property="commentCounter" title="${message(code: 'comments', default: 'Comments')}" />
+						<g:sortableColumn style="font-size: 10px; vertical-align: middle" property="voteCounter" title="${message(code: 'votes', default: 'Votes')}" />
 						<!--g:sortableColumn style="font-size: 10px; vertical-align: middle" property="skills" title="${message(code: 'skills', default: 'Skills')}" /-->
 						<g:sortableColumn style="font-size: 10px; vertical-align: middle" property="registrationDate" title="${message(code: 'registration', default: 'Registration Date')}" />
 						<g:sortableColumn style="font-size: 10px; vertical-align: middle" property="lastLogin" title="${message(code: 'lastLogin', default: 'Last login')}" />
@@ -70,6 +71,9 @@
 							</td>
 							<td style="vertical-align: middle;">
 								${playerInstance.commentCounter}
+							</td>
+							<td style="vertical-align: middle;">
+								${playerInstance.voteCounter}
 							</td>
                             <td style="vertical-align: middle; font-size: 12px;">
 								<nobr><g:formatDate date="${playerInstance.registrationDate}" format="yyyy-MM-dd" timeStyle="LONG" /></nobr>

@@ -11,13 +11,8 @@
     <g:set var="currentUserParticipation" value="${sessionInstance.getParticipationOf(request.currentUser?.username)}"/>
 
     <div class="sessionZoneContent">
-        <g:set var="defaultDisplayForSummaryZone" value="table"/>
-        <g:set var="defaultDisplayForDetailedZone" value="none"/>
-        <!-- Display the participants table by default if session is in the future or if user can manage it -->
-        <g:if test="${sessionIsManagedByCurrentUser || sessionInstance?.date.getTime() > System.currentTimeMillis()}">
-            <g:set var="defaultDisplayForSummaryZone" value="none"/>
-            <g:set var="defaultDisplayForDetailedZone" value="table"/>
-        </g:if>
+        <g:set var="defaultDisplayForSummaryZone" value="none"/>
+        <g:set var="defaultDisplayForDetailedZone" value="table"/>
         <table class="fuckCSS" id="participantsSummaryZone"
                style="display: ${defaultDisplayForSummaryZone}; width: 100%; ">
             <tr>

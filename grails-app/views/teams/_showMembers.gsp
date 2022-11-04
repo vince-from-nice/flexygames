@@ -27,6 +27,10 @@
 									<span style="font-size: 10px; color: red"><g:message code="team.show.membership.feesNotUpToDate" /></span>
 								</g:else>
 								</nobr>
+								<br/>
+								<nobr>
+									<span style="font-size: 10px;"><g:message code="player.show.scores.votes"/>: <b>${ms.user.voteCounter}</b></span>
+								</nobr>
 							</td>
 							<td style="text-align: center; vertical-align: middle; font-size: 12px; ">
 								<nobr>

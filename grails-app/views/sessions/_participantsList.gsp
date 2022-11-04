@@ -32,7 +32,8 @@
                             <td style="text-align: left; padding-left: 0px; border: solid grey 0px">
                                 <g:link controller="player" action="show" id="${p.player.id}">
                                     ${p.player}
-                                </g:link><br/>
+                                </g:link>
+                                <br/>
                                 <nobr>
                                     <g:if test="${p.player.membershipInCurrentSession?.feesUpToDate}">
                                         <span style="font-size: 10px; color: green"><g:message code="team.show.membership.feesUpToDate"/></span>
@@ -40,6 +41,10 @@
                                     <g:else>
                                         <span style="font-size: 10px; color: red"><g:message code="team.show.membership.feesNotUpToDate"/></span>
                                     </g:else>
+                                </nobr>
+                                <br/>
+                                <nobr>
+                                    <span style="font-size: 10px;"><g:message code="player.show.scores.votes"/>: <b>${p.player.voteCounter}</b></span>
                                 </nobr>
                             </td>
                             <td style="font-size: 10px; border: solid grey 0px">
