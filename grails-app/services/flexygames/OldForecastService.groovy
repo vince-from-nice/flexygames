@@ -9,7 +9,7 @@ import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 
 @Transactional (readOnly = true)
-class ForecastService {
+class OldForecastService {
 
 	private static final int MAX_DISPLAYED_DAYS = 4 // Number of days displayed
 

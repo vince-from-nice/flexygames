@@ -2,6 +2,8 @@ package flexygames
 
 import grails.gorm.transactions.Transactional
 
+import java.time.ZoneId
+
 class SessionsController {
 
 	def displayService
@@ -12,7 +14,7 @@ class SessionsController {
 
 	def forumService
 	
-	def forecastService
+	def oldForecastService
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// Following actions are not transactional and not restricted to authenticated users
@@ -103,32 +105,32 @@ class SessionsController {
 			}
 		}
 
-        // Prepare data about carpooling
-        def approvedCarpoolRequestIds = '['
-        def relatedCarpoolProposalIds = '['
+		// Prepare data about carpooling
+		def approvedCarpoolRequestIds = '['
+		def relatedCarpoolProposalIds = '['
 		def relatedSeatIndexes = '['
 		def relatedPickupTimes = '['
 		def seatIndex = 1
-        session.carpoolRequests.each{ request ->
-            if (request.driver) {
-                approvedCarpoolRequestIds += request.id + ', '
-                relatedCarpoolProposalIds += request.driver.id + ', '
+		session.carpoolRequests.each { request ->
+			if (request.driver) {
+				approvedCarpoolRequestIds += request.id + ', '
+				relatedCarpoolProposalIds += request.driver.id + ', '
 				relatedSeatIndexes += seatIndex++ + ', '
 				relatedPickupTimes += '\'' + request.pickupTime + '\', '
-            }
-        }
-        if (approvedCarpoolRequestIds.endsWith(', ')) {
+			}
+		}
+		if (approvedCarpoolRequestIds.endsWith(', ')) {
 			approvedCarpoolRequestIds = approvedCarpoolRequestIds.substring(0, approvedCarpoolRequestIds.length() - 2)
 			relatedCarpoolProposalIds = relatedCarpoolProposalIds.substring(0, relatedCarpoolProposalIds.length() - 2)
 			relatedSeatIndexes = relatedSeatIndexes.substring(0, relatedSeatIndexes.length() - 2)
 			relatedPickupTimes = relatedPickupTimes.substring(0, relatedPickupTimes.length() - 2)
 		}
-        approvedCarpoolRequestIds += ']'
-        relatedCarpoolProposalIds += ']'
+		approvedCarpoolRequestIds += ']'
+		relatedCarpoolProposalIds += ']'
 		relatedSeatIndexes += ']'
 		relatedPickupTimes += ']'
 
-        // Prepare data about votes of participants (move it to the Vote domain class) ?
+		// Prepare data about votes of participants (move it to the Vote domain class) ?
 		def currentVotes = null
 		def participantsByScore = []
 		def effectivePlayers = session.getEffectiveParticipants()
@@ -170,16 +172,13 @@ class SessionsController {
 			forumService.enhanceText(comment)
 		}
 
-		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'),
-                model: [sessionInstance: session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes,
-                        approvedCarpoolRequestIds: approvedCarpoolRequestIds, relatedCarpoolProposalIds: relatedCarpoolProposalIds,
-						relatedSeatIndexes:relatedSeatIndexes, relatedPickupTimes: relatedPickupTimes, tasksByTypeCode: tasksByTypeCode])
-	}
+		// Get the day of week (as int) for the Windy widget
+		//def dayOfTheWeek = java.text.SimpleDateFormat('E').format(session.date)
 
-	def forecast = {
-		Session session = Session.get(params.id)
-		def weatherData = forecastService.getWeatherData(session)
-		render(view: '/common/_forecast', model: [weatherData: weatherData])
+		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'),
+				model: [sessionInstance          : session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes,
+						approvedCarpoolRequestIds: approvedCarpoolRequestIds, relatedCarpoolProposalIds: relatedCarpoolProposalIds,
+						relatedSeatIndexes       : relatedSeatIndexes, relatedPickupTimes: relatedPickupTimes, tasksByTypeCode: tasksByTypeCode])
 	}
 
 	// TODO remake the grails file uploader plugin

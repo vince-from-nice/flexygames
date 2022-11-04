@@ -109,12 +109,13 @@
 						<h3 style="margin-top: 0px"><g:message code="forecast" default="Forecast" /></h3>
 						<div style="text-align: left">
 							<!--iframe src="${createLink(controller: 'sessions', action: 'forecast', id: sessionInstance.id)}" id="forecastFrame" style="border: 0px;" ></iframe-->
-							<div id="forecastDiv"></div>
+							<!--div id="forecastDiv"></div>
 							<script style="javascript">
 								$.get( "${createLink(controller: 'sessions', action: 'forecast', id: sessionInstance.id)}", function( data ) {
 									$("#forecastDiv").html(data)
 								});
-							</script>
+							</script-->
+							<g:render template="forecast" />
 						</div>
 					</td>
 					<g:if test="${sessionInstance.imageUrl}">

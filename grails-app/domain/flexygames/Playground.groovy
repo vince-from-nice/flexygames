@@ -16,6 +16,7 @@ class Playground implements Comparable<Playground> {
 	String flexymapUrl
 	String forecastType
 	String forecastToken
+	String windySpotId
 	
 	///////////////////////////////////////////////////////////////////////////
 	// Grails stuff
@@ -38,6 +39,7 @@ class Playground implements Comparable<Playground> {
 		flexymapUrl(nullable: true, url:true)
 		forecastType(nullable: true)
 		forecastToken(nullable: true)
+		windySpotId(nullable: true)
     }
 
 	// def forecastService
