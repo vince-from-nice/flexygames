@@ -10,19 +10,19 @@
             <g:actionSubmit class="create"
                             onclick="toggleDisplay('extraInternalUserDiv'); return false"
                             value="${message(code: 'management.participations.requestInternalPlayer')}"/>
-            <g:actionSubmit class="create"
+            <!--g:actionSubmit class="create"
                             onclick="toggleDisplay('extraExternalUserDiv'); return false"
-                            value="${message(code: 'management.participations.requestExternalPlayer')}"/>
-            <br/>
+                            value="${message(code: 'management.participations.requestExternalPlayer')}"/-->
+            <!--br/-->
             <g:actionSubmit class="create" action="requestAllRegulars"
                             value="${message(code: 'management.participations.requestAllRegulars')}"/>
             <g:actionSubmit class="create" action="requestAllTourists"
                             value="${message(code: 'management.participations.requestAllTourists')}"/>
             <div id="extraExternalUserDiv" style="display: none">
                 <br/>
-                <g:select name="externalUserId"
+                <!--g:select name="externalUserId"
                           from="${flexygames.User.list(sort: 'username', order: 'asc')}"
-                          optionKey="id" noSelection="['': '']"/>
+                          optionKey="id" noSelection="['': '']"/-->
                 <g:actionSubmit class="create" action="requestExtraPlayer"
                                 value="Invite that FlexyGames user !!"/>
             </div>
@@ -91,11 +91,11 @@
                             value="${message(code: 'management.participations.validateApprovedParticipants')}"/>
             <br>
             <g:message code="management.participations.multiUpdate"/>:
-            <g:message code="status"/>
+            <!--g:message code="status"/-->
             <g:select name="statusCode" from="${flexygames.Participation.constrainedProperties.statusCode.inList}"
                       valueMessagePrefix="participation.status" style="font-size : 14px" />
             <g:message code="optionalText"/>
-            <g:field type="text" name="userLog" style="background-color: white; color: black;"  />
+            <g:textField type="text" name="userLog" style="background-color: white; color: black;"  />
             <g:actionSubmit class="save" action="updateParticipationStatus" value="${message(code: 'update')}"/>
         </div>
     </g:form>
