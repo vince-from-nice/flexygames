@@ -8,7 +8,7 @@ class PlaygroundsController {
 
 	def list = {
 		// prepare default params values
-		params.max = Math.min(params.max ? params.int('max') : 30, 100)
+		params.max = Math.min(params.max ? params.int('max') : 50, 100)
 		if(!params.offset) params.offset = 0
 		if(!params.sort) params.sort = "city"
 		if(!params.order) params.order = "asc"
