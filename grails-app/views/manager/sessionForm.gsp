@@ -118,7 +118,7 @@
                                   <label for="date"><nobr><g:message code="session.date" default="Date" /> <font color="red">*</font></nobr></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sessionInstance, field: 'date', 'errors')}">
-                                    <g:datePicker name="date" precision="minute" value="${sessionInstance?.date}" years="${2011..2021}"  />
+                                    <g:datePicker name="date" precision="minute" value="${sessionInstance?.date}" years="${2011..2031}"  />
                                     <!--calendar:resources lang="en" theme="green"/-->
                                     <!--calendar:datePicker name="date" defaultValue="${sessionInstance?.date}" showTime="true" dateFormat="%Y/%m/%d %H:%M" /-->
                                 </td>
