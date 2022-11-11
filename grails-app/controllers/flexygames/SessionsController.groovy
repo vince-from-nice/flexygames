@@ -26,7 +26,7 @@ class SessionsController {
 
 	def list() {
 		// prepare default params values
-		params.max = Math.min(params.max ? params.int('max') : 10, 100)
+		params.max = Math.min(params.max ? params.int('max') : 20, 100)
 		if(!params.offset) params.offset = 0
 		if(!params.sort) params.sort = "date"
 		if(!params.order) params.order = "desc"

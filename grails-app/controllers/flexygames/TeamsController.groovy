@@ -12,7 +12,7 @@ class TeamsController {
 
 	def list = {
 		// prepare default params values
-		params.max = Math.min(params.max ? params.int('max') : 10, 30)
+		params.max = Math.min(params.max ? params.int('max') : 20, 30)
 		if(!params.offset) params.offset = 0
 		if(!params.sort) params.sort = "name"
 		if(!params.order) params.order = "asc"
