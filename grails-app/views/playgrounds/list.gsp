@@ -18,7 +18,7 @@
 			<br />
 			<table style="width: 100%; height:100%; border: 0px">
 				<tr>
-					<td style="width:80%; height:100%">
+					<td style="width:70%; height:100%">
 						<div id="map_canvas" >
 							<div id="popup" class="ol-popup">
 								<a href="#" id="popup-closer" class="ol-popup-closer"></a>
@@ -32,8 +32,7 @@
 								<tr>
 									<g:sortableColumn property="city" title="${message(code: 'city', default: 'City')}" />
 									<g:sortableColumn property="name" title="${message(code: 'name', default: 'Name')}" />
-									<!--th style="text-align: right;"><g:message code="playground.list.sessionNbr" /></th-->
-									<!--th style="text-align: left;"><g:message code="playground.list.sessionGroup" /></th-->
+									<th style="text-align: left;"><g:message code="sessions" /></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -49,7 +48,7 @@
 										<td style="text-align: left; vertical-align: middle;">
 											<b>${fieldValue(bean: playgroundInstance, field: "name")}</b>
 										</td>
-										<!--td style="text-align: right; vertical-align: middle;"><b> {playgroundInstance.sessions.size()}</td-->
+										<td style="text-align: right; vertical-align: middle;">${playgroundInstance.sessionsNbr}</td>
 									</tr>
 								</g:each>
 							</tbody>
@@ -79,15 +78,25 @@
 
 		// Add markers
 		var markers = [];
-		var marker_style = {
-			'stroke-width': 10,
-			'stroke-color': '#ff0000'
-		};
+		// var marker_style = {
+		// 	'stroke-width': 10,
+		// 	'stroke-color': '#ff0000'
+		// };
+		var marker_style = new ol.style.Style({
+			stroke: new ol.style.Stroke({
+				color: 'green',
+				width: 3
+			}),
+			fill: new ol.style.Fill({
+				color: '#ff0000'
+			})
+		});
 		<g:each in="${playgroundInstanceList}" status="i" var="p">
 			var marker = new ol.Feature({geometry: new ol.geom.Point(ol.proj.fromLonLat([${p.longitude}, ${p.latitude}])), name: "${p.name}"});
-			marker.setProperties({'name':"${p.name}", 'description':"${p.postalAddress}"})
-			marker.set('name', "${p.name}");
+			marker.name = "${p.name}";
+			marker.description = "${p.postalAddress}"
 			marker.style = marker_style;
+			//marker.setStyle(marker_style);
 			markers.push(marker);
 		</g:each>
 		var layer = new ol.layer.Vector({
@@ -122,7 +131,7 @@
 			if (map.hasFeatureAtPixel(event.pixel) === true) {
 				const hit = map.forEachFeatureAtPixel(event.pixel, (feature) => {
 					var coordinate = event.coordinate;
-					content.innerHTML = "<b>" + feature.name + "</b>";
+					content.innerHTML = "<b>" + feature.name + "</b><br>" + feature.description;
 					overlay.setPosition(coordinate);
 				});
 			} else {

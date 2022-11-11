@@ -42,6 +42,11 @@ class Playground implements Comparable<Playground> {
 		windySpotId(nullable: true)
     }
 
+	static mapping = {
+		sessions lazy: true, batchSize: 50
+		sessionGroups lazy: true, batchSize: 50
+	}
+
 	// def forecastService
 	
 	///////////////////////////////////////////////////////////////////////////
@@ -50,6 +55,10 @@ class Playground implements Comparable<Playground> {
 	
 	public String getPostalAddress() {
 		return (street?street+", ":"") + (zip?zip+", ":"") + (city?city+", ":"") + (country?country:"France")
+	}
+
+	public int getSessionsNbr() {
+		return sessions.size()
 	}
 	
 	/* Obsolete methods (they ware useful for the Meteocity service) */

@@ -9,7 +9,7 @@
 	<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
 </head>
   <body onload="">
-	<h1>${playground}</h1>
+	<h1><g:link controller="playgrounds" action="list"><g:message code="playground.list.title" /></g:link> : ${playground}</h1>
 	<table style="width: 100%; border: 0px">
 		<tr>
 			<td rowspan="3" style="width:80%; height:auto">
