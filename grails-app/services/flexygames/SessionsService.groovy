@@ -1,7 +1,7 @@
 package flexygames
 
 import grails.gorm.transactions.Transactional
-
+import groovy.time.TimeCategory
 import org.apache.shiro.SecurityUtils
 import org.jsoup.Jsoup
 import org.jsoup.safety.Whitelist
@@ -100,12 +100,44 @@ class SessionsService {
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////
+		// If player is approved, check he was not available on other sessions at the same time
+		///////////////////////////////////////////////////////////////////////////////////////////
+
+		if (newStatus == Participation.Status.APPROVED.code || newStatus == Participation.Status.APPROVED_EXTRA.code) {
+
+			// Compute date range for sessions in conflit
+			def minDate = participation.session.date
+			def maxDate = participation.session.date
+			use(TimeCategory) {
+				minDate -= 60.minutes
+				maxDate += 60.minutes
+			}
+
+			// Find other participations of the player where he is available
+			def otherParticipations = Participation.findAll("""from Participation where 
+			id != :id and 
+			player = :player and 
+			statusCode = 'AVAILABLE' and
+			session.date >= :minDate and
+			session.date <= :maxDate """,
+					[id: participation.id, player: participation.player, minDate: minDate, maxDate: maxDate])
+
+			// Update them to declined
+			otherParticipations.each { p ->
+				p.statusCode = Participation.Status.DECLINED
+				p.userLog = "Status has been automatically set to declined because the player has been approved on " +
+						"<a href=\"" + grailsApplication.config.grails.serverURL + '/sessions/show/' +
+						participation.session.id + "\">another session</a> at the same time"
+			}
+		}
+
+		///////////////////////////////////////////////////////////////////////////////////////////
 		// Email notification
 		///////////////////////////////////////////////////////////////////////////////////////////
 
 		// TODO get Locale from user profile
 		def locale = new Locale("en","Us")
-		
+
 		// If the status update has not been performed by user itself, notify him by email
 		if (updater != participation.player) {
 			def title = messageSource.getMessage('mail.statusUpdateNotification.title', [
