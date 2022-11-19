@@ -1,6 +1,6 @@
 <%@ page import="java.time.ZoneId" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<g:if test="${sessionInstance.date > new Date()}">
+<g:if test="${sessionInstance.date > new Date() && sessionInstance.date < new Date() + 7}">
 <div
         data-windywidget="windy-weather"
         data-thememode="light"
