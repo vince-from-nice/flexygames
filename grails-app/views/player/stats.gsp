@@ -48,6 +48,16 @@
 	<table>
 		<tr>
 			<td>
+				<g:message code="player.stats.votingScoreCounter" /> :
+				<b>${userStats.player.votingScoreCounter}</b>
+			</td>
+			<td>
+				<g:message code="player.stats.sentVotes" /> :
+				<b>${userStats.player.voteCounter}</b>
+			</td>
+		</tr>
+		<tr>
+			<td>
 				<g:message code="player.stats.requestedCarpools" /> :
 				<b>${userStats.player.countRequestedCarpools()}</b>
 			</td>

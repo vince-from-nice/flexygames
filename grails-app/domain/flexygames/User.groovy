@@ -36,6 +36,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	Integer waitingListCounter
 	Integer actionCounter
 	Integer voteCounter
+	Integer votingScoreCounter
 	Integer commentCounter
 	Date absenceLastDate
 	Date delayLastDate
@@ -123,6 +124,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		delayLastDate(nullable: true)
 		gateCrashLastDate(nullable: true)
 		waitingListLastDate(nullable: true)
+		votingScoreCounter(nullable: true)
     }
 
 	///////////////////////////////////////////////////////////////////////////

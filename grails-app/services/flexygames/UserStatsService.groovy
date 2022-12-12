@@ -82,6 +82,7 @@ class UserStatsService {
             user.setDelayCounter(user.countParticipationsByStatus(Participation.Status.DONE_LATE.code()))
             user.setWaitingListCounter(user.countParticipationsByStatus(Participation.Status.WAITING_LIST.code()))
             user.setVoteCounter(user.getVotes().size())
+            user.setVotingScoreCounter(user.getVotingScore())
             user.setActionCounter(user.getActions().size())
             user.setCommentCounter(SessionComment.findAllByUser(user).size() + BlogComment.findAllByUser(user).size())
         }

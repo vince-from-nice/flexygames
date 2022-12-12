@@ -28,6 +28,10 @@
 					%{--<span style="font-size: 14px"><g:message code="player.stats.partCounter.infos" /></span>--}%
 					%{--<br />--}%
 					<br />
+					<g:message code="player.stats.votingScoreCounter" /> :
+					<span style="font-size: 20px; font-weight: bold;">${playerInstance.votingScoreCounter}</span>
+					<br />
+					<br />
 					<g:message code="player.stats.commentCounter" /> :
 					<span style="font-size: 20px; font-weight: bold;">${playerInstance.commentCounter}</span>
 					<br />

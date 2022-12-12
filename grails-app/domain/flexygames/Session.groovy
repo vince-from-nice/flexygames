@@ -159,7 +159,7 @@ class Session implements Comparable {
 	List<User> getApprovedParticipants() {
 		def result = getEffectiveParticipants()
 		participations.each { p ->
-			if (p.statusCode == Participation.Status.APPROVED.code) {
+			if (p.statusCode == Participation.Status.APPROVED.code || p.statusCode == Participation.Status.APPROVED_EXTRA.code) {
 				result << p.player
 			}
 		}
@@ -190,8 +190,8 @@ class Session implements Comparable {
 	List<User> getParticipantsEligibleForAttendanceSheet() {
 		def result = []
 		participations.each { p ->
-			if (p.statusCode == Participation.Status.UNDONE.code || p.statusCode == Participation.Status.APPROVED.code
-					|| p.statusCode == Participation.Status.DONE_GOOD.code || p.statusCode == Participation.Status.DONE_BAD.code) {
+			if (p.statusCode == p.isEffective() || Participation.Status.UNDONE.code ||
+					p.statusCode == Participation.Status.APPROVED.code || p.statusCode == Participation.Status.APPROVED_EXTRA.code) {
 				result << p.player
 			}
 		}

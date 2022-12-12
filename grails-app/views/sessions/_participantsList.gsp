@@ -44,7 +44,7 @@
                                 </nobr>
                                 <br/>
                                 <nobr>
-                                    <span style="font-size: 10px;"><g:message code="player.show.scores.votes"/>: <b>${p.player.voteCounter}</b></span>
+                                    <span style="font-size: 10px;"><g:message code="player.show.scores.votes"/>: <b>${p.player.votingScoreCounter}</b></span>
                                 </nobr>
                             </td>
                             <td style="font-size: 10px; border: solid grey 0px">

@@ -35,6 +35,7 @@ class VotingService {
 			if (!vote.save()) {
 				throw new Exception("error on saving a vote: " + vote.errors)
 			}
+			player.votingScoreCounter += score
 		}
 	}
 
