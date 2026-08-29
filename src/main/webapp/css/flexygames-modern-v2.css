@@ -1,0 +1,342 @@
+/* ============================================================
+   FlexyGames — Modern CSS Override
+   Da aggiungere DOPO i fogli di stile esistenti
+   (main-20160208.css, mobile-20160208.css, flexygames-v6.css)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --fg-bg: #f4f6f9;
+  --fg-surface: #ffffff;
+  --fg-border: #e3e7ee;
+  --fg-text: #1f2530;
+  --fg-text-muted: #6b7280;
+  --fg-primary: #3b6bf0;
+  --fg-primary-dark: #2c53c4;
+  --fg-accent: #16c07a;
+  --fg-danger: #ef4444;
+  --fg-radius: 12px;
+  --fg-radius-sm: 8px;
+  --fg-shadow: 0 2px 10px rgba(20, 30, 60, 0.06);
+  --fg-shadow-hover: 0 6px 18px rgba(20, 30, 60, 0.1);
+}
+
+/* ---------- Base ---------- */
+html, body {
+  background: var(--fg-bg) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  color: var(--fg-text);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--fg-primary);
+  text-decoration: none;
+  transition: color .15s ease;
+}
+a:hover {
+  color: var(--fg-primary-dark);
+  text-decoration: underline;
+}
+
+h1, h2, h3 {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  color: var(--fg-text);
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 1.9rem !important;
+  margin: 0 0 1.2rem 0 !important;
+  padding-bottom: 0.6rem;
+  border-bottom: 3px solid var(--fg-primary);
+  display: inline-block;
+}
+
+h2 {
+  font-size: 1.25rem !important;
+  margin: 0 0 0.8rem 0 !important;
+  color: var(--fg-primary-dark);
+}
+
+hr {
+  border: none !important;
+  border-top: 1px solid var(--fg-border) !important;
+  margin: 1.5rem 0 !important;
+}
+
+/* ---------- Overall page layout ---------- */
+#mainPage {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 2rem;
+}
+
+/* ---------- Header ---------- */
+#mainTop {
+  background: var(--fg-surface);
+  border-radius: var(--fg-radius);
+  box-shadow: var(--fg-shadow);
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+#mainTop img {
+  display: block;
+  height: auto;
+  max-height: 64px;
+}
+
+/* ---------- Layout: sidebar + body side by side ---------- */
+#mainNav {
+  float: left;
+  width: 240px;
+  box-sizing: border-box;
+  margin-right: 1.5rem;
+}
+#mainBody {
+  overflow: hidden; /* clear the float */
+  background: var(--fg-surface);
+  border-radius: var(--fg-radius);
+  box-shadow: var(--fg-shadow);
+  padding: 1.75rem 2rem;
+}
+#mainPage::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* ---------- Sidebar blocks ---------- */
+#mainNav .block {
+  background: var(--fg-surface);
+  border-radius: var(--fg-radius-sm);
+  box-shadow: var(--fg-shadow);
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+#mainNav .block h3 {
+  font-size: 0.75rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-text-muted);
+  margin: 0 0 0.6rem 0 !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+#mainNav .block ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#mainNav .block li {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--fg-border);
+}
+#mainNav .block li:last-child {
+  border-bottom: none;
+}
+#mainNav .block li a {
+  color: var(--fg-text);
+  font-size: 0.9rem;
+  display: block;
+}
+#mainNav .block li a:hover {
+  color: var(--fg-primary);
+  text-decoration: none;
+  padding-left: 3px;
+}
+
+/* ---------- Tables (flexyTab) ---------- */
+table.flexyTab {
+  width: 100%;
+  border-collapse: separate !important;
+  border-spacing: 0;
+  border: 1px solid var(--fg-border) !important;
+  border-radius: var(--fg-radius-sm);
+  overflow: hidden;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+table.flexyTab th {
+  background: #f0f2f7 !important;
+  color: var(--fg-text-muted);
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 0.7rem 0.6rem !important;
+  border: none !important;
+  text-align: left;
+}
+table.flexyTab td {
+  padding: 0.6rem !important;
+  border: none !important;
+  border-top: 1px solid var(--fg-border) !important;
+  vertical-align: middle;
+}
+table.flexyTab tr.odd,
+table.flexyTab tr.even {
+  background: transparent !important;
+  transition: background .12s ease;
+}
+table.flexyTab tr:hover td {
+  background: #f6f8fc !important;
+}
+table.flexyTab img {
+  border-radius: 6px;
+}
+
+/* Date separator rows (e.g. "giovedì 27 agosto") */
+table.flexyTab tr td[colspan="6"] {
+  background: #eef1f8 !important;
+  color: var(--fg-text-muted) !important;
+  font-size: 0.8rem !important;
+  padding: 0.5rem !important;
+  border-top: none !important;
+}
+
+/* "Current hour" marker row */
+table.flexyTab tr td[style*="background-color: #FFB2B2"] {
+  background: #fff1f1 !important;
+  color: var(--fg-danger) !important;
+  font-weight: 600;
+}
+
+/* Status cells: soften the inline greens/greys, keep semantics */
+table.flexyTab td[style*="background-color: #2dd048"] {
+  background: rgba(22, 192, 122, 0.15) !important;
+  color: #0f7a4c !important;
+  border-radius: var(--fg-radius-sm);
+  font-weight: 600;
+}
+table.flexyTab td[style*="background-color: #EEEEEE"] {
+  background: #f0f2f5 !important;
+  color: var(--fg-text-muted) !important;
+  border-radius: var(--fg-radius-sm);
+}
+
+/* ---------- Forms / selects ---------- */
+select, input, button {
+  font-family: 'Inter', sans-serif;
+  border: 1px solid var(--fg-border);
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+  background: var(--fg-surface);
+  color: var(--fg-text);
+}
+select:focus, input:focus {
+  outline: none;
+  border-color: var(--fg-primary);
+  box-shadow: 0 0 0 3px rgba(59, 107, 240, 0.15);
+}
+
+/* ---------- Footer / powered icons ---------- */
+#poweredIcons {
+  opacity: 0.6;
+  filter: grayscale(100%);
+  padding: 1rem 0;
+}
+#poweredIcons img {
+  height: 24px;
+  margin: 0 0.5rem;
+}
+
+/* ---------- Session zones (pannelli pieghevoli sessione) ---------- */
+.sessionZone {
+  border: 1px solid var(--fg-border) !important;
+  border-radius: var(--fg-radius-sm);
+  overflow: hidden;
+  margin-top: 1.25rem !important;
+}
+.sessionZoneHeader {
+  background: #f0f2f7 !important;
+  background-image: none !important;
+  filter: none !important;
+  color: var(--fg-text) !important;
+  font-weight: 600 !important;
+  padding: 0.7rem 1rem !important;
+  line-height: 1.4 !important;
+  transition: background .12s ease;
+}
+div.sessionZoneHeader:hover {
+  background: #e6eaf3 !important;
+}
+.sessionZoneContent {
+  background: var(--fg-surface) !important;
+  padding: 1rem !important;
+}
+
+/* ---------- Tabs (tabSelected / tabNotSelected) ---------- */
+.tabSelected, .tabNotSelected {
+  border-radius: var(--fg-radius-sm) !important;
+  padding: 0.4rem 0.9rem !important;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background .12s ease, color .12s ease;
+}
+.tabSelected {
+  background: var(--fg-primary) !important;
+  color: #fff !important;
+  border: 1px solid var(--fg-primary) !important;
+}
+.tabSelected:hover {
+  background: var(--fg-primary-dark) !important;
+}
+.tabNotSelected {
+  background: var(--fg-surface) !important;
+  color: var(--fg-text-muted) !important;
+  border: 1px solid var(--fg-border) !important;
+}
+.tabNotSelected:hover {
+  background: #f0f2f7 !important;
+  color: var(--fg-text) !important;
+}
+
+/* ---------- Player composition chips (drag & drop formazioni) ---------- */
+.draggableCompoPlayer {
+  background: var(--fg-primary) !important;
+  border: none !important;
+  border-radius: 50% !important;
+  box-shadow: var(--fg-shadow);
+  font-weight: 600;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.draggableCompoPlayer:hover {
+  box-shadow: var(--fg-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* ---------- Carpool drop zones ---------- */
+.carpoolProposalDropZone, .carpoolRequestDropZone {
+  border-radius: var(--fg-radius-sm) !important;
+  background: #f6f8fc !important;
+  border: 2px dashed var(--fg-border) !important;
+}
+
+/* ---------- Blog entries ---------- */
+.userBlogEntry, .userBlogEntrySticky, .competitionBlogEntry, .trainingBlogEntry {
+  border-radius: var(--fg-radius-sm) !important;
+  border-width: 1px !important;
+  box-shadow: var(--fg-shadow);
+  padding: 1rem !important;
+}
+
+/* ---------- Tooltips ---------- */
+a.tooltip {
+  border-bottom: 1px dotted var(--fg-text-muted) !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  #mainNav {
+    float: none;
+    width: 100%;
+    margin-right: 0;
+  }
+  #mainBody {
+    padding: 1.25rem;
+  }
+}
