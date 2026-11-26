@@ -173,52 +173,37 @@
 							<br>
 							<br>
 							<g:each in="${sessionInstance.carpoolProposals}" var="proposal">
-								<g:form name="formOfCarpoolProposal${proposal.id}">
+								<g:form name="formOfCarpoolProposal${proposal.id}" class="carpool-card">
 									<g:hiddenField name="id" value="${proposal.id}" />
 									<g:hiddenField name="approvedRequestIds" value="" />
 									<g:hiddenField name="seatIndexes" value="" />
-									<table style="border: solid lightblue 2px; padding: 10px; border-radius: 5px;">
-										<tr style="font-size: small">
-											<td style="vertical-align: top; width: 250px;">
-												<g:render template="/common/avatar" model="[player:proposal.driver]" />
-												<g:message code="session.show.carpool.proposal.userXCanTakeY" args="[proposal.driver.username, proposal.freePlaceNbr]"/>
-												<g:if test="${proposal.carDescription}">
-													(${proposal.carDescription})
-												</g:if>
-											</td>
-											<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
-												<td style="text-align: center">
-													<div id="dropZoneForProposal${proposal.id}Seat${i}" class="carpoolProposalDropZone">
-														<g:message code="session.show.carpool.proposal.seatNbr" args="[i]"/>
-													</div>
-												</td>
-											</g:each>
-										</tr>
-										<tr style="font-size: small;">
-											<td style="padding-top: 0px;">
-												<g:message code="session.show.carpool.request.pickupTime"/> :
-											</td>
-											<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
-												<td style="text-align: center; padding: 0px;">
-													<g:field name="pickupTimeForProposal${proposal.id}Seat${i}" placeholder="" style="width: 60px" />
-												</td>
-											</g:each>
-										</tr>
-										<tr>
-											<td colspan="${1 + proposal.freePlaceNbr}">
-												<g:if test="${sessionIsManagedByCurrentUser || proposal.driver == request.currentUser}">
-													<div class="buttons" style="width: 100%">
-														<g:actionSubmit class="save" id="updateButtonForProposal${proposal.id}" style="display: inline; text-align: right"
-																		action="updateCarpoolProposal" value="${message(code:'update')}" />
-														<g:actionSubmit class="create" action="cancelAllCarpoolAcceptances" value="${message(code:'session.show.carpool.proposal.seatCancel')}"
-																		onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToReset')}')"/>
-														<g:actionSubmit class="delete"  action="removeCarpoolProposal" value="${message(code:'delete')}"
-																		onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToDelete')}')" />
-													</div>
-												</g:if>
-											</td>
-										</tr>
-									</table>
+									<div class="carpool-driver">
+										<span class="avatar-cell"><g:render template="/common/avatar" model="[player:proposal.driver]" /></span>
+										<span>
+											<g:message code="session.show.carpool.proposal.userXCanTakeY" args="[proposal.driver.username, proposal.freePlaceNbr]"/>
+											<g:if test="${proposal.carDescription}"><span class="muted">(${proposal.carDescription})</span></g:if>
+										</span>
+									</div>
+									<div class="carpool-seats">
+										<g:each in="${(1..proposal.freePlaceNbr).toList()}" var="i">
+											<div class="carpool-seat">
+												<div id="dropZoneForProposal${proposal.id}Seat${i}" class="carpoolProposalDropZone">
+													<g:message code="session.show.carpool.proposal.seatNbr" args="[i]"/>
+												</div>
+												<label class="small muted" for="pickupTimeForProposal${proposal.id}Seat${i}"><g:message code="session.show.carpool.request.pickupTime"/></label>
+												<g:field name="pickupTimeForProposal${proposal.id}Seat${i}" placeholder="" class="seat-time" />
+											</div>
+										</g:each>
+									</div>
+									<g:if test="${sessionIsManagedByCurrentUser || proposal.driver == request.currentUser}">
+										<div class="buttons">
+											<g:actionSubmit class="save" id="updateButtonForProposal${proposal.id}" action="updateCarpoolProposal" value="${message(code:'update')}" />
+											<g:actionSubmit class="create" action="cancelAllCarpoolAcceptances" value="${message(code:'session.show.carpool.proposal.seatCancel')}"
+													onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToReset')}')"/>
+											<g:actionSubmit class="delete" action="removeCarpoolProposal" value="${message(code:'delete')}"
+													onclick="return confirm('${message(code:'session.show.carpool.proposal.areYouSureToDelete')}')" />
+										</div>
+									</g:if>
 								</g:form>
 							</g:each>
 						</g:if>
@@ -234,15 +219,15 @@
 							<br>
 							<div class="carpoolRequestDropZone">
 								<g:each in="${sessionInstance.carpoolRequests}" var="r">
-									<div id="carpoolRequestOf${r.id}" class="draggableCarpoolRequest drag-drop"
-										 style="border: solid lightsalmon 1px; padding: 5px; display: inline-block; width: 70px; height: 95px; text-align: center; line-height: 1.0; ">
-										<img style="max-width:60px; max-height: 60px; vertical-align: middle; " src="${resource(dir:'images/user',file:r.enquirer.avatarName)}" alt="Player avatar" />
+									<div id="carpoolRequestOf${r.id}" class="draggableCarpoolRequest drag-drop carpool-request-card"
+>
+										<img src="${resource(dir:'images/user',file:r.enquirer.avatarName)}" alt="Player avatar" />
 										<g:set var="username" value="${r.enquirer.username}" />
 										<g:if test="${username.length() > 8}">
 											<g:set var="username" value="${username.substring(0, 7)}.." />
 										</g:if>
 										<br>
-										<span style="font-size: x-small; color: lightsalmon">${username}</span>
+										<span class="carpool-request-name">${username}</span>
 										<g:if test="${sessionIsManagedByCurrentUser || r.enquirer == request.currentUser}">
 											<g:link action="removeCarpoolRequest" id="${r.id}"
 													onclick="return confirm('${message(code:'session.show.carpool.request.areYouSureToDelete')}')" >
@@ -251,7 +236,7 @@
 										</g:if>
 										<g:if test="${r.pickupLocation}">
 											<br>
-											<span style="font-size: xx-small; ">${r.pickupLocation}</span>
+											<span class="carpool-request-place">${r.pickupLocation}</span>
 										</g:if>
 									</div>
 								</g:each>

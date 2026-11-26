@@ -2906,3 +2906,90 @@ table.carpool-layout > tbody > tr > td {
 .round-card .buttons {
 	margin: 0;
 }
+
+/* Session carpool: requests are dragged onto seats, so a seat stays larger than a request card. */
+
+.carpool-card {
+	display: grid;
+	gap: 10px;
+	margin: 0 0 12px;
+	padding: 12px 14px;
+	border: 1px solid var(--gray-200);
+	border-left: 4px solid var(--sky-300);
+	border-radius: var(--radius);
+	background: var(--surface-alt);
+}
+
+.carpool-driver {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 0.9rem;
+}
+
+.carpool-driver .avatar-cell {
+	width: auto;
+}
+
+.carpool-seats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.carpool-seat {
+	display: grid;
+	justify-items: center;
+	gap: 4px;
+}
+
+.carpoolProposalDropZone {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 2px dashed var(--gray-300);
+	background-color: var(--gray-100);
+	color: var(--gray-500);
+	font-size: 0.8rem;
+}
+
+.seat-time {
+	width: 100px;
+}
+
+.carpoolRequestDropZone {
+	min-height: 140px;
+	border-color: var(--gray-300);
+}
+
+.carpool-request-card {
+	display: inline-block;
+	width: 70px;
+	height: 95px;
+	min-width: 0;
+	padding: 5px;
+	border: 1px solid var(--orange-700);
+	border-radius: var(--radius-small);
+	background-color: var(--orange-100);
+	color: var(--orange-700);
+	line-height: 1;
+	text-align: center;
+	vertical-align: top;
+}
+
+.carpool-request-card img {
+	display: block;
+	max-width: 60px;
+	max-height: 60px;
+	margin: 0 auto 2px;
+}
+
+.carpool-request-name {
+	font-size: x-small;
+	font-weight: 600;
+}
+
+.carpool-request-place {
+	display: block;
+	font-size: xx-small;
+}
