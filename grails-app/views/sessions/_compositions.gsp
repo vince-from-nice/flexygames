@@ -149,11 +149,9 @@ var forceRedraw = function(element){
     },20); // you can play with this timeout to make it as short as possible
 }
 				</g:javascript>
-				<center>
-				<table style="width: 400px; padding: 0px; margin: 0px; border: 0px; ">
-					<tr>
+				<div class="compo-row">
 					<g:each in="${sessionInstance.compositions}" var="composition">
-						<td style="width: 400px; padding: 20px; margin: 0px; text-align: center; ">
+						<div class="compo-card">
 							<!--form name="form-for-composition-${composition.id}" method="post" action="../../manager/index"-->
 							<g:form name="form-for-composition-${composition.id}" controller="manager">
 								<g:hiddenField name="id" value="${composition.id}" />
@@ -212,7 +210,7 @@ forceRedraw(el);
 											args="[composition.lastUpdater, grailsApplication.mainContext.getBean('flexygames.FlexyTagLib').formatDate(composition.lastUpdate.time, true)]"/>
 										</td>
 									</tr>
-									<tr id="edit-zone-for-compo-${composition.id}" style="display: none; border: solid red 2px;">
+									<tr id="edit-zone-for-compo-${composition.id}" class="compo-edit-zone" style="display: none;">
 										<td>
 											<g:message code="session.show.compositions.editMode"/>
 											<g:actionSubmit class="edit" action="updateComposition" value="${message(code:'save')}" onclick="saveComposition(${composition.id}); return true; " />
@@ -231,29 +229,20 @@ forceRedraw(el);
 									</tr>
 								</table>
 							</g:form>
-						</td>
+						</div>
 					</g:each>
-				</tr>
-			</table>
-			</center>
+				</div>
 			</g:if>
 			<g:else>
-				<br />
-				<i><g:message code="session.show.compositions.noComposition"/></i>
-				<br />
-				<br />
+				<p class="muted"><g:message code="session.show.compositions.noComposition"/></p>
 			</g:else>
 			<g:if test="${sessionIsManagedByCurrentUser}">
-				<tr>
-					<td>
-						<g:form controller="manager">
-							<g:hiddenField name="id" value="${sessionInstance?.id}" />
-							<div class="buttons">
-								<g:actionSubmit class="create" action="addComposition" value="${message(code:'management.compositions.addNewCompositions')}" />
-							</div>
-						</g:form>
-					</td>
-				</tr>
+				<g:form controller="manager">
+					<g:hiddenField name="id" value="${sessionInstance?.id}" />
+					<div class="buttons">
+						<g:actionSubmit class="create" action="addComposition" value="${message(code:'management.compositions.addNewCompositions')}" />
+					</div>
+				</g:form>
 			</g:if>
 
 		</div>

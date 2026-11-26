@@ -2702,6 +2702,8 @@ table.carpool-layout > tbody > tr > td {
 }
 
 .podium-card img {
+	width: 72px;
+	height: 72px;
 	border-radius: 50%;
 	object-fit: cover;
 }
@@ -2788,4 +2790,119 @@ table.carpool-layout > tbody > tr > td {
 	.podium-empty {
 		grid-column: auto;
 	}
+}
+
+/* Session line-ups: the pitch keeps its fixed size, because players are placed in pixels on it. */
+
+.compo-row {
+	display: flex;
+	gap: 16px;
+	overflow-x: auto;
+	padding-bottom: 8px;
+}
+
+.compo-card {
+	flex: none;
+	padding: 12px;
+	border: 1px solid var(--gray-200);
+	border-radius: var(--radius);
+	background: var(--surface-alt);
+	text-align: center;
+}
+
+.compo-card table {
+	border-collapse: collapse;
+}
+
+.compo-edit-zone td {
+	padding: 8px;
+	border: 2px solid var(--red-700);
+	border-radius: var(--radius-small);
+}
+
+/* Session score sheet */
+
+.round-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 16px;
+	margin-bottom: 12px;
+}
+
+.round-card {
+	display: grid;
+	gap: 12px;
+	padding: 14px;
+	border: 1px solid var(--gray-200);
+	border-radius: var(--radius);
+	background: var(--surface-alt);
+}
+
+.round-card h3 {
+	margin: 0;
+	font-size: 1rem;
+}
+
+.round-teams {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+}
+
+.round-team {
+	padding: 10px 12px;
+	border: 1px solid var(--gray-200);
+	border-top: 4px solid var(--gray-300);
+	border-radius: var(--radius-small);
+	background: var(--surface);
+}
+
+.round-team.winner {
+	border-top-color: var(--green-700);
+}
+
+.round-team.loser {
+	border-top-color: var(--red-700);
+}
+
+.round-team h4 {
+	display: flex;
+	justify-content: space-between;
+	margin: 0 0 6px;
+	font-size: 0.9rem;
+}
+
+.round-score {
+	color: var(--text-strong);
+	font-size: 1.2rem;
+}
+
+.round-team.winner .round-score {
+	color: var(--green-700);
+}
+
+.round-team.loser .round-score {
+	color: var(--red-700);
+}
+
+.round-team ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.round-team li {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+	padding: 2px 0;
+}
+
+.action-icon {
+	height: 12px;
+}
+
+.round-card .buttons {
+	margin: 0;
 }

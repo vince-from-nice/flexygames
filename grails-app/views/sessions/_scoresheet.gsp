@@ -1,6 +1,6 @@
 <g:if test="${sessionInstance.date.time < System.currentTimeMillis() }">
 <div class="sessionZone">
-	<div class="sessionZoneHeader" onclick="toggleDisplay('scorescheetSummaryZone'); toggleTableDisplay('scorescheetDetailedZone'); return false">
+	<div class="sessionZoneHeader" onclick="toggleDisplay('scorescheetSummaryZone'); toggleDisplay('scorescheetDetailedZone'); return false">
 		<h2 style="vertical-align: top; display: inline;">
 			<g:message code="session.show.rounds" />
 		</h2>
@@ -8,179 +8,109 @@
 	</div>
 	<g:set var="defaultDisplayForSummaryZone" value="block" />
 	<g:set var="defaultDisplayForDetailedZone" value="none" />
-	<g:if test="${sessionInstance.rounds.size() > 0}">
+	<g:if test="${sessionInstance.rounds.size() > 0 || sessionIsManagedByCurrentUser}">
 		<g:set var="defaultDisplayForSummaryZone" value="none" />
-		<g:set var="defaultDisplayForDetailedZone" value="table" />
+		<g:set var="defaultDisplayForDetailedZone" value="block" />
 	</g:if>
 	<div class="sessionZoneContent">
 		<div id="scorescheetSummaryZone" style="display: ${defaultDisplayForSummaryZone};">
-			<g:if test="${sessionInstance.rounds.size() > 0}" >
-				<g:message code="session.show.rounds.roundsNbr"/> : <b>${sessionInstance.rounds.size()}</b>
+			<g:if test="${sessionInstance.rounds.size() > 0}">
+				<g:message code="session.show.rounds.roundsNbr"/> : <strong>${sessionInstance.rounds.size()}</strong>
 			</g:if>
 			<g:else>
-				<g:message code="session.show.rounds.noRound"/>
+				<span class="muted"><g:message code="session.show.rounds.noRound"/></span>
 			</g:else>
 		</div>
-		<table id="scorescheetDetailedZone" style="display: ${defaultDisplayForDetailedZone}; border: none; margin: 0px">
-			<tr>
-				<g:set var="index" value="${0}" />
-				<g:if test="${sessionInstance.rounds.size() > 0}" >
-					<g:each in="${sessionInstance.rounds}" var="round">
-						<g:set var="index" value="${index + 1}" />
-						<g:set var="actionsNbrForTeamA" value="${round.getActionsByTeam(true).size()}" />
-						<g:set var="actionsNbrForTeamB" value="${round.getActionsByTeam(false).size()}" />
-						<td style="text-align: center">
+		<div id="scorescheetDetailedZone" style="display: ${defaultDisplayForDetailedZone};">
+			<g:if test="${sessionInstance.rounds.size() > 0}">
+				<div class="round-grid">
+					<g:each in="${sessionInstance.rounds}" var="round" status="i">
+						<g:set var="index" value="${i + 1}" />
+						<g:set var="scoreA" value="${round.getActionsByTeam(true).size()}" />
+						<g:set var="scoreB" value="${round.getActionsByTeam(false).size()}" />
+						<section class="round-card">
 							<h3><g:message code="round" /> #${index}</h3>
-							<table>
-								<tr>
-									<th><g:message code="session.show.rounds.teamA" /></th>
-									<th><g:message code="session.show.rounds.teamB" /></th>
-								</tr>
-								<tr>
-									<td>
+							<div class="round-teams">
+								<g:each in="${[[true, 'session.show.rounds.teamA', round.playersForTeamA, scoreA, scoreB], [false, 'session.show.rounds.teamB', round.playersForTeamB, scoreB, scoreA]]}" var="team">
+									<div class="round-team ${team[3] > team[4] ? 'winner' : (team[3] < team[4] ? 'loser' : '')}">
+										<h4><g:message code="${team[1]}" /> <span class="round-score">${team[3]}</span></h4>
 										<ul>
-											<g:each in="${round.playersForTeamA}" var="p">
+											<g:each in="${team[2]}" var="p">
 												<li>
-													<nobr>
-													<g:link controller="player" action="show" id="${p.id}">${p}</g:link>&nbsp;&nbsp;&nbsp; 
+													<g:link controller="player" action="show" id="${p.id}">${p}</g:link>
 													<g:each in="${p.getActionsBySessionRound(round)}" var="a">
-														<img style="height: 12px" src='<g:resource dir="images/game" file="${round.session.type}.png" />' alt="${round.session} action logo">
+														<img class="action-icon" src="${resource(dir: 'images/game', file: round.session.type.toString() + '.png')}" alt="${round.session.type}" />
 													</g:each>
-													</nobr>
 												</li>
 											</g:each>
-										</ul></td>
-									<td>
-										<ul>
-											<g:each in="${round.playersForTeamB}" var="p">
-												<li>
-													<nobr>
-													<g:link controller="player" action="show" id="${p.id}">${p}</g:link>&nbsp;&nbsp;&nbsp; 
-													<g:each in="${p.getActionsBySessionRound(round)}" var="a">
-														<img style="height: 12px" src='<g:resource dir="images/game" file="${round.session.type}.png" />' alt="${round.session} action logo">
-													</g:each>
-													</nobr>
-												</li>
-											</g:each>
-										</ul></td>
-								</tr>
-								<g:if test="${round.getUnattribuedActions(true).size() > 0 || round.getUnattribuedActions(false).size() > 0}">
-									<tr>
-										<td>
-											<g:message code="session.show.rounds.unattribuedActions" />: <b>${round.getUnattribuedActions(true).size()}</b>
-										</td>
-										<td>
-											<g:message code="session.show.rounds.unattribuedActions" />: <b>${round.getUnattribuedActions(false).size()}</b>
-										</td>
-									</tr>
-								</g:if>
-								<g:if test="${actionsNbrForTeamA > actionsNbrForTeamB}">
-									<tr>
-										<th><div style="color: green"><g:message code="Total" />: ${actionsNbrForTeamA}</div>
-										</th>
-										<th><div style="color: red"><g:message code="Total" />: ${actionsNbrForTeamB}</div>
-										</th>
-									</tr>
-								</g:if>
-								<g:if test="${actionsNbrForTeamA < actionsNbrForTeamB}">
-									<tr>
-										<th><div style="color: red"><g:message code="Total" />: ${actionsNbrForTeamA}</div>
-										</th>
-										<th><div style="color: green"><g:message code="Total" />: ${actionsNbrForTeamB}</div>
-										</th>
-									</tr>
-								</g:if>
-								<g:if test="${actionsNbrForTeamA == actionsNbrForTeamB}">
-									<tr>
-										<th><div><g:message code="Total" />: ${actionsNbrForTeamA}</div>
-										</th>
-										<th><div><g:message code="Total" />: ${actionsNbrForTeamB}</div>
-										</th>
-									</tr>
-								</g:if>
-								<g:if test="${sessionIsManagedByCurrentUser}">
-									<tr>
-										<td colspan="2">
-										    <g:form controller="manager">
-										        <g:hiddenField name="id" value="${round.id}" />
-										        <div class="buttons">
-										            <input type="button" class="edit" onclick="toggleDisplay('round${index}EditDiv')" value="${message(code:'edit')}" />
-										            <g:actionSubmit class="create"  action="duplicateRound" value="${message(code:'duplicate')}" />
-										            <g:actionSubmit class="delete"  action="deleteRound" value="${message(code:'delete')}" />
-										        </div>
-										    </g:form>
-										    <div id="round${index}EditDiv" style="display: none">
-								            <br />
-								            <g:hiddenField name="id" value="${round.id}" />
-								            	<g:form controller="manager">
-								            		<g:hiddenField name="id" value="${round.id}" />
-								            		<table>
-								            			<tr>
-								            				<th><g:message code="player" /></th>
-								            				<th><g:message code="session.show.rounds.edit.teamAndActions" /></th>
-								            			</tr>
-								            			<g:each in="${sessionInstance.effectiveParticipants}" var="p">
-									            			<tr>
-									            				<td>
-									            					${p}
-									            				</td>
-									            				<td>
-									            					<g:set var="defaultTeam" value="NotPlayed"/>
-									            					<g:if test="${round.playersForTeamA.contains(p)}"><g:set var="defaultTeam" value="TeamA"/></g:if>
-									            					<g:if test="${round.playersForTeamB.contains(p)}"><g:set var="defaultTeam" value="TeamB"/></g:if>
-									            					<g:select name="player${p.id}Team" from="['NotPlayed', 'TeamA', 'TeamB']" value="${defaultTeam}"/>
-									            					<g:select name="player${p.id}Score" from="${0..10}" value="${round.getActionsByMainContributor(p).size()}" />
-									            				</td>
-									            			</tr>
-								            			</g:each>
-								            			<tr>
-								            				<th colspan="2"><g:message code="session.show.rounds.edit.unattribuedActions" /></th>
-								            			</tr>
-														<tr>
-															<td><g:message code="session.show.rounds.teamA" /></td>
-															<td><g:select name="unattribuedScoreForTeamA" from="${0..35}" value="${round.getUnattribuedActions(true).size()}" /></td>
-														</tr>
-														<tr>
-															<td><g:message code="session.show.rounds.teamB" /></td>
-															<td><g:select name="unattribuedScoreForTeamB" from="${0..35}" value="${round.getUnattribuedActions(false).size()}" /></td>
-														</tr>
-								            		</table>
-									        		<div class="buttons">
-														<g:actionSubmit class="edit" action="updateRound" value="${message(code:'update')}" />
-													</div>
-												</g:form>
-											</div>
-										</td>
-									</tr>
-								</g:if>
-							</table>
-						</td>
+										</ul>
+										<g:if test="${round.getUnattribuedActions(team[0]).size() > 0}">
+											<p class="small muted"><g:message code="session.show.rounds.unattribuedActions" />: <strong>${round.getUnattribuedActions(team[0]).size()}</strong></p>
+										</g:if>
+									</div>
+								</g:each>
+							</div>
+							<g:if test="${sessionIsManagedByCurrentUser}">
+								<g:form controller="manager" class="buttons">
+									<g:hiddenField name="id" value="${round.id}" />
+									<input type="button" class="edit" onclick="toggleDisplay('round${index}EditDiv')" value="${message(code:'edit')}" />
+									<g:actionSubmit class="create" action="duplicateRound" value="${message(code:'duplicate')}" />
+									<g:actionSubmit class="delete" action="deleteRound" value="${message(code:'delete')}" />
+								</g:form>
+								<div id="round${index}EditDiv" class="round-edit" style="display: none">
+									<g:form controller="manager">
+										<g:hiddenField name="id" value="${round.id}" />
+										<div class="table-wrap">
+											<table class="flexyTab">
+												<tr>
+													<th><g:message code="player" /></th>
+													<th><g:message code="session.show.rounds.edit.teamAndActions" /></th>
+												</tr>
+												<g:each in="${sessionInstance.effectiveParticipants}" var="p">
+													<g:set var="defaultTeam" value="NotPlayed"/>
+													<g:if test="${round.playersForTeamA.contains(p)}"><g:set var="defaultTeam" value="TeamA"/></g:if>
+													<g:if test="${round.playersForTeamB.contains(p)}"><g:set var="defaultTeam" value="TeamB"/></g:if>
+													<tr>
+														<td>${p}</td>
+														<td class="inline-row">
+															<g:select name="player${p.id}Team" from="['NotPlayed', 'TeamA', 'TeamB']" value="${defaultTeam}" aria-label="${p}"/>
+															<g:select name="player${p.id}Score" from="${0..10}" value="${round.getActionsByMainContributor(p).size()}" aria-label="${p}" />
+														</td>
+													</tr>
+												</g:each>
+												<tr>
+													<th colspan="2"><g:message code="session.show.rounds.edit.unattribuedActions" /></th>
+												</tr>
+												<tr>
+													<td><label for="unattribuedScoreForTeamA"><g:message code="session.show.rounds.teamA" /></label></td>
+													<td><g:select name="unattribuedScoreForTeamA" from="${0..35}" value="${round.getUnattribuedActions(true).size()}" /></td>
+												</tr>
+												<tr>
+													<td><label for="unattribuedScoreForTeamB"><g:message code="session.show.rounds.teamB" /></label></td>
+													<td><g:select name="unattribuedScoreForTeamB" from="${0..35}" value="${round.getUnattribuedActions(false).size()}" /></td>
+												</tr>
+											</table>
+										</div>
+										<div class="buttons">
+											<g:actionSubmit class="save" action="updateRound" value="${message(code:'update')}" />
+										</div>
+									</g:form>
+								</div>
+							</g:if>
+						</section>
 					</g:each>
-				</g:if>
-				<g:else>
-					<td style="text-align: center">
-						<br />
-						<i><g:message code="session.show.rounds.noRound"/></i>
-						<br />
-					</td>
-				</g:else>
-			</tr>
-			<g:if test="${sessionIsManagedByCurrentUser}">
-				<tr>
-					<td>
-					    <g:if test="${sessionInstance.date.time > System.currentTimeMillis() }">
-							<h2><g:message code="session.show.rounds" /></h2>
-						</g:if>
-					    <g:form controller="manager">
-					        <g:hiddenField name="id" value="${sessionInstance?.id}" />
-					        <div class="buttons">
-								<g:actionSubmit class="create"  action="addRound" value="${message(code:'management.rounds.addNewRound')}" />
-					        </div>
-					    </g:form>
-			    	</td>
-			    </tr>
+				</div>
 			</g:if>
-		</table>
+			<g:else>
+				<p class="muted"><g:message code="session.show.rounds.noRound"/></p>
+			</g:else>
+			<g:if test="${sessionIsManagedByCurrentUser}">
+				<g:form controller="manager" class="buttons">
+					<g:hiddenField name="id" value="${sessionInstance?.id}" />
+					<g:actionSubmit class="create" action="addRound" value="${message(code:'management.rounds.addNewRound')}" />
+				</g:form>
+			</g:if>
+		</div>
 	</div>
 </div>
 </g:if>
