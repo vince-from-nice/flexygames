@@ -47,7 +47,7 @@ class ForumService {
 				mailerService.mail(emails, title, body)
 			}
 		} else {
-			throw new Exception(comment.errors)
+			throw new Exception(comment.errors.allErrors*.defaultMessage.join(', '))
 		}
 		return comment
     }
@@ -60,7 +60,7 @@ class ForumService {
 				} else {
 					SessionWatcher watch = new SessionWatcher(user: user, session: session)
 					if (!watch.save()) {
-						throw new Exception(watch.errors)
+						throw new Exception(watch.errors.allErrors*.defaultMessage.join(', '))
 					}
 				}
 		} else {
@@ -79,10 +79,11 @@ class ForumService {
 		// clean the input before insert it into DB
 		comment.text = comment.text.replace(System.getProperty("line.separator"), "<br>" + System.getProperty("line.separator"))
 		comment.text = Jsoup.clean(comment.text, Safelist.basicWithImages())
-		if (!comment.save() || !user.setCommentCounter(user.getCommentCounter() + 1)) {
-			throw new Exception(comment.errors)
+		if (!comment.save()) {
+			throw new Exception(comment.errors.allErrors*.defaultMessage.join(', '))
 		}
-		return comment;
+		user.commentCounter = (user.commentCounter ?: 0) + 1
+		return comment
 	}
 
 	/**

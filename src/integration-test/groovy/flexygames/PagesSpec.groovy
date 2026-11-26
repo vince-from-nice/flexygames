@@ -114,6 +114,31 @@ class PagesSpec extends Specification {
         }
     }
 
+    void "a player posts a comment on a team blog entry"() {
+        given:
+        def client = newClient()
+        signIn(client, 'turman')
+        Long entryId = BlogEntry.withNewTransaction {
+            new BlogEntry(team: Team.list(max: 1)[0], user: User.findByUsername('turman'), date: new Date(),
+                    title: 'Season start', body: '<p>Welcome</p>').save(flush: true, failOnError: true).id
+        }
+
+        when:
+        def response = post(client, '/teams/teams', [['id', entryId as String], ['comment', 'See you there'], ['_action_postBlogComment', 'Post']])
+
+        then:
+        response.statusCode() == 302
+        location(response) ==~ /.*\/teams\/displayBlogEntry\/${entryId}#comment\d+/
+        BlogComment.withNewTransaction { BlogComment.countByBlogEntry(BlogEntry.get(entryId)) } == 1
+
+        cleanup:
+        BlogEntry.withNewTransaction {
+            BlogEntry entry = BlogEntry.get(entryId)
+            BlogComment.findAllByBlogEntry(entry)*.delete(flush: true)
+            entry.delete(flush: true)
+        }
+    }
+
     void "a private page sends a visitor to the login page"() {
         when:
         def response = get(newClient(), '/myself/myAccount')
