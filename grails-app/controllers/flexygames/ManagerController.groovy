@@ -6,7 +6,7 @@ import groovy.json.JsonSlurper;
 import java.text.SimpleDateFormat
 
 import org.jsoup.Jsoup
-import org.jsoup.safety.Whitelist
+import org.jsoup.safety.Safelist
 import org.springframework.dao.DataIntegrityViolationException
 
 @Transactional
@@ -519,7 +519,7 @@ class ManagerController {
 		def title = message(code:'mail.customizedMessage.title', args:[user.username])
 		def info = params.message
 		info = info.replace(System.getProperty("line.separator"), "<br>" + System.getProperty("line.separator"))
-		info = new Jsoup().clean(info, Whitelist.basic())
+		info = Jsoup.clean(info, Safelist.basic())
 		def body = message(code:'mail.customizedMessage.body', args:[
 			user.username,
 			'' + grailsApplication.config.grails.serverURL + '/sessions/show/' + session.id,

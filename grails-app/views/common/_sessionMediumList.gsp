@@ -5,7 +5,7 @@
 							<tr style="height: 5px;">
 								<td colspan="10" style="background-color: #FFB2B2; font-size: 12px; line-height: 10px; text-align: center; color: red">
 									<g:message code="home.session.currentHour" /> :
-									<g:formatDate date="${new Date()}" format="EEEEEEE dd MMMM (HH:mm)" />
+									<g:formatDate date="${new Date()}" format="EEEE dd MMMM (HH:mm)" />
 								</td>
 							</tr>
 						</g:if>
@@ -16,7 +16,7 @@
 						<g:if test="${lastDate != sessionInstance.date.toString().substring(0, sessionInstance.date.toString().length() - 10)}">
 							<tr>
 								<td colspan="6" style="text-align: center; font-size: larger">
-									<b><nobr><g:formatDate date="${sessionInstance.date}" format="EEEEEEE dd MMMM" /></nobr></b>
+									<b><nobr><g:formatDate date="${sessionInstance.date}" format="EEEE dd MMMM" /></nobr></b>
 								</td>
 							</tr>
 						</g:if>

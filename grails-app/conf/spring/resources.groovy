@@ -1,6 +1,9 @@
-import org.apache.shiro.authc.credential.Sha512CredentialsMatcher
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher
 
-// Place your Spring DSL code here
+// Passwords are stored as unsalted SHA-512 hashes, hex encoded.
 beans = {
-	credentialMatcher(Sha512CredentialsMatcher) { storedCredentialsHexEncoded = true }
+	credentialMatcher(HashedCredentialsMatcher) {
+		hashAlgorithmName = 'SHA-512'
+		storedCredentialsHexEncoded = true
+	}
 }

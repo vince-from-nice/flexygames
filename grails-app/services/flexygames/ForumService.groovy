@@ -3,7 +3,7 @@ package flexygames
 import grails.gorm.transactions.Transactional
 
 import org.jsoup.Jsoup
-import org.jsoup.safety.Whitelist
+import org.jsoup.safety.Safelist
 import org.springframework.context.MessageSource;
 
 @Transactional
@@ -28,7 +28,7 @@ class ForumService {
 		if (!text) throw new Exception("message is empty")
 		// clean the input before insert it into DB
 		comment.text = comment.text.replace(System.getProperty("line.separator"), "<br>" + System.getProperty("line.separator"))
-		comment.text = new Jsoup().clean(comment.text, Whitelist.basicWithImages())
+		comment.text = Jsoup.clean(comment.text, Safelist.basicWithImages())
 		if (comment.save()) {
 			// update user counter
 			user.setCommentCounter(user.getCommentCounter() + 1)
@@ -78,7 +78,7 @@ class ForumService {
 		if (!text) throw new Exception("message is empty")
 		// clean the input before insert it into DB
 		comment.text = comment.text.replace(System.getProperty("line.separator"), "<br>" + System.getProperty("line.separator"))
-		comment.text = new Jsoup().clean(comment.text, Whitelist.basicWithImages())
+		comment.text = Jsoup.clean(comment.text, Safelist.basicWithImages())
 		if (!comment.save() || !user.setCommentCounter(user.getCommentCounter() + 1)) {
 			throw new Exception(comment.errors)
 		}

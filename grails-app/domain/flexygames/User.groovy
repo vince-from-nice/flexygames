@@ -6,8 +6,8 @@ import grails.util.Holders
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-import javax.servlet.http.HttpSessionBindingEvent
-import javax.servlet.http.HttpSessionBindingListener
+import jakarta.servlet.http.HttpSessionBindingEvent
+import jakarta.servlet.http.HttpSessionBindingListener
 
 class User implements Comparable<User>, HttpSessionBindingListener {
 

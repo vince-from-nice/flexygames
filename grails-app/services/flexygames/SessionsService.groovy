@@ -4,7 +4,7 @@ import grails.gorm.transactions.Transactional
 import groovy.time.TimeCategory
 import org.apache.shiro.SecurityUtils
 import org.jsoup.Jsoup
-import org.jsoup.safety.Whitelist
+import org.jsoup.safety.Safelist
 import org.springframework.context.MessageSource;
 
 @Transactional
@@ -90,7 +90,7 @@ class SessionsService {
 		if (!userLog || userLog == 'null') {
 			userLog = ''
 		}
-		userLog = new Jsoup().clean(userLog, Whitelist.relaxed()) // damned <img> tags are not cleaned !
+		userLog = Jsoup.clean(userLog, Safelist.relaxed()) // damned <img> tags are not cleaned !
 		userLog = userLog.substring(0, (userLog.length() > Participation.USER_LOG_MAX_SIZE ? Participation.USER_LOG_MAX_SIZE : userLog.length()))
 		participation.setUserLog(userLog)
 		if (participation.save()) {

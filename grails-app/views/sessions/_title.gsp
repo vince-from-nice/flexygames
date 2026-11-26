@@ -15,7 +15,7 @@
             <g:else>
                 <h1 style="margin: 0px">
                     <g:message code="session.show.title" />
-                    <g:formatDate date='${sessionInstance?.date}' format="EEEEEEE dd MMMM" />
+                    <g:formatDate date='${sessionInstance?.date}' format="EEEE dd MMMM" />
                 </h1>
             </g:else>
         </td>
