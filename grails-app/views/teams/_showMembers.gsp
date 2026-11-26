@@ -1,38 +1,39 @@
 
+				<div class="table-wrap">
 				<table class="flexyTab">
 					<tr>
 						<th></th>
 						<th colspan="1"><g:message code="name" /></th>
-						<th style="vertical-align: middle; text-align: center;"><g:message code="statistics" /></th>
-						<th style="vertical-align: middle; text-align: center;"><g:message code="training" /></th>
-						<th style="vertical-align: middle; text-align: center;"><g:message code="competition" /></th>
-						<th style="vertical-align: middle; text-align: center;"><g:message code="lastLogin" /></th>
+						<th class="number"><g:message code="statistics" /></th>
+						<th class="number"><g:message code="training" /></th>
+						<th class="number"><g:message code="competition" /></th>
+						<th class="number"><g:message code="lastLogin" /></th>
 					</tr>
 					<g:each in="${teamInstance.memberships}" var="ms" status="i">
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-							<td style="vertical-align: middle; height: 50px"> 
+							<td class="avatar-cell"> 
 								<g:link controller="player" action="show" id="${ms.user.id}">
 									<g:render template="/common/avatar" model="[player: ms.user]" />
 								</g:link>
 							</td>
-							<td style="text-align: left; vertical-align: middle; height: 50px"> 
+							<td> 
 								<g:link controller="player" action="show" id="${ms.user.id}">
 									${fieldValue(bean: ms.user, field: "username")}
 								</g:link><br />
 								<nobr>
 								<g:if test="${ms.feesUpToDate}">
-									<span style="font-size: 10px; color: green"><g:message code="team.show.membership.feesUpToDate" /></span>
+									<span class="small score-plus"><g:message code="team.show.membership.feesUpToDate" /></span>
 								</g:if>
 								<g:else>
-									<span style="font-size: 10px; color: red"><g:message code="team.show.membership.feesNotUpToDate" /></span>
+									<span class="small score-minus"><g:message code="team.show.membership.feesNotUpToDate" /></span>
 								</g:else>
 								</nobr>
 								<br/>
 								<nobr>
-									<span style="font-size: 10px;"><g:message code="player.show.scores.votes"/>: <b>${ms.user.voteCounter}</b></span>
+									<span class="small muted"><g:message code="player.show.scores.votes"/>: <b>${ms.user.voteCounter}</b></span>
 								</nobr>
 							</td>
-							<td style="text-align: center; vertical-align: middle; font-size: 12px; ">
+							<td class="number small">
 								<nobr>
 									<b>${ms.user.participationCounter}</b>
 									<g:if test="${ms.user.participationCounter > 1}"><g:message code="participations" /></g:if>
@@ -64,7 +65,7 @@
 									</span>
 								</nobr>
 							</td>
-							<td style="text-align: center; vertical-align: middle; font-size: 12px;">
+							<td class="number small">
 								<g:if test="${ms.regularForTraining}">
 									<b><g:message code="regular" /></b>
 								</g:if>
@@ -72,7 +73,7 @@
 									<g:message code="tourist" />
 								</g:else>
 							</td>
-							<td style="text-align: center; vertical-align: middle; font-size: 12px;">
+							<td class="number small">
 								<g:if test="${ms.regularForCompetition}">
 									<b><g:message code="regular" /></b>
 								</g:if>
@@ -80,16 +81,17 @@
 									<g:message code="tourist" />
 								</g:else>
 							</td>
-							<td style="text-align: center; vertical-align: middle; font-size: 12px; ">
+							<td class="number small">
 								<g:formatDate date="${ms.user.lastLogin}" format="yyyy-MM-dd" timeStyle="LONG" />
 							</td>
 						</tr>
 					</g:each>
 				</table>
+				</div>
 
 				<g:if test="${teamIsManagedByCurrentUser}">
 				
-					<div style="border: 2px dotted gray;padding: 0em 1em; background-color: #FCFBC4; margin-bottom: 1em; color: #800000; font-size: 12px" >
+					<div class="management">
 					
 						<h3><g:message code="management.membership.title" /></h3>
 						
@@ -97,27 +99,27 @@
 							<g:message code="management.membership.updateMember.text" /> :
 							<table>
 								<tr>
-									<th style="font-size: 10px; vertical-align: middle; text-align: center;"><g:message code="username" /></th>
-									<th style="font-size: 10px; vertical-align: middle; text-align: center;"><g:message code="training" /></th>
-									<th style="font-size: 10px; vertical-align: middle; text-align: center;"><g:message code="competition" /></th>
-									<th style="font-size: 10px; vertical-align: middle; text-align: center;"><g:message code="subscription" /></th>
+									<th class="number"><g:message code="username" /></th>
+									<th class="number"><g:message code="training" /></th>
+									<th class="number"><g:message code="competition" /></th>
+									<th class="number"><g:message code="subscription" /></th>
 								</tr>
 								<tr>
-									<td colspan="1" style="text-align: center; vertical-align: middle;">
+									<td class="number">
 										<g:select name="id" from="${teamInstance.memberships}" optionKey="id"  optionValue="user" key="id"/>
 									</td>
-									<td style="text-align: center; vertical-align: middle;">
+									<td class="number">
 										<g:select name="regularForTraining" from="['Regular', 'Tourist']" />
 									</td>
-									<td style="text-align: center; vertical-align: middle;">
+									<td class="number">
 										<g:select name="regularForCompetition" from="['Regular', 'Tourist']" />
 									</td>
-									<td style="text-align: center; vertical-align: middle;">
+									<td class="number">
 										<g:select name="feesUpToDate" from="['UpToDate', 'NotUpToDate']" />
 									</td>
 								</tr> 
 								<tr>
-									<td colspan="4" style="text-align: center">
+									<td colspan="4" class="number">
 										<br />
 										<g:actionSubmit action="updateMembership" value="${message(code:'update')}" />
 										<g:actionSubmit action="removeMembership" value="${message(code:'delete')}"
@@ -142,7 +144,7 @@
 						</g:form>
 
 						<br>
-						<div style="text-align: center;">
+						<div class="buttons">
 							<g:link controller="manager" action="showAttendanceSheet" id="${teamInstance.id}"><g:message code="management.attendenceSheets.showAttendanceSheets" /></g:link>
 						</div>
 						

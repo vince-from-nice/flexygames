@@ -8,8 +8,8 @@
     <link rel="icon" href="${resource(dir: 'images', file: 'flexygames-icon-32x32.png')}" type="image/png" />
     <link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'flexygames-icon-114x114.png')}" />
 
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'flexygames-modern.css')}" />
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'flexygames-components.css')}" />
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'flexygames-modern.css')}" />
 
     <script src="${resource(dir: 'js', file: 'application.js')}"></script>
     <script src="${resource(dir: 'js', file: 'flexygames-20160508.js')}"></script>

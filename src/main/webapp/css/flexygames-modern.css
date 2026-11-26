@@ -1510,9 +1510,14 @@ td.carpool-request {
 .upload-form,
 .stacked-form {
 	display: grid;
+	grid-template-columns: minmax(0, 1fr);
 	gap: 8px;
 	width: 100%;
 	margin: 0;
+}
+
+.stacked-form select {
+	width: 100%;
 }
 
 .upload-form input[type="file"] {
@@ -1701,4 +1706,120 @@ input.remove:hover {
 
 .profile-table {
 	width: 100%;
+}
+
+/* Team page */
+
+.team-hero {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 24px;
+}
+
+.team-hero-logo {
+	flex-shrink: 0;
+}
+
+.team-hero-info {
+	flex: 1;
+	min-width: 240px;
+}
+
+.team-hero-info h1 {
+	margin-bottom: 12px;
+}
+
+.team-logo-upload {
+	max-width: 260px;
+}
+
+.tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin-bottom: 12px;
+	border-bottom: 1px solid var(--gray-300);
+}
+
+.tabs a {
+	margin-bottom: -1px;
+	padding: 10px 16px;
+	border: 1px solid transparent;
+	border-radius: var(--radius-small) var(--radius-small) 0 0;
+	color: var(--gray-700);
+	font-weight: 600;
+}
+
+.tabs a:hover {
+	background: var(--sky-100);
+	text-decoration: none;
+}
+
+.tabs a.active {
+	background: var(--white);
+	border-color: var(--gray-300) var(--gray-300) var(--white);
+	color: var(--navy-900);
+}
+
+.ranking-layout {
+	display: grid;
+	grid-template-columns: 280px minmax(0, 1fr);
+	gap: 24px;
+	align-items: start;
+}
+
+.flexyTab tr.rank-break td {
+	border-top: 2px solid var(--gray-300);
+}
+
+.next-sessions {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 16px;
+	margin-bottom: 16px;
+}
+
+.userBlogEntry,
+.userBlogEntrySticky,
+.competitionBlogEntry,
+.trainingBlogEntry {
+	margin: 0 0 16px;
+	padding: 16px 20px;
+	border: 1px solid var(--gray-200);
+	border-left: 4px solid var(--navy-500);
+	border-radius: var(--radius);
+	background: var(--white);
+	box-shadow: var(--shadow);
+}
+
+.next-sessions > * {
+	margin-bottom: 0;
+}
+
+.userBlogEntrySticky {
+	border-left-color: #c78a00;
+	background: #fffbeb;
+}
+
+.trainingBlogEntry {
+	border-left-color: var(--green-700);
+}
+
+.competitionBlogEntry {
+	border-left-color: var(--red-700);
+}
+
+.userBlogEntry hr,
+.userBlogEntrySticky hr,
+.competitionBlogEntry hr,
+.trainingBlogEntry hr {
+	border: 0;
+	border-top: 1px solid var(--gray-200);
+}
+
+@media (max-width: 900px) {
+	.ranking-layout {
+		grid-template-columns: minmax(0, 1fr);
+	}
 }

@@ -2,8 +2,8 @@
 				<g:each in="${sessionInstanceList}" status="i" var="sessionInstance">
 					<g:if test="${sessionInstance.date < new Date()}">
 						<g:if test="${!past}">
-							<tr style="height: 5px;">
-								<td colspan="7" style="background-color: #FFB2B2; line-height: 10px; text-align: center; color: red">
+							<tr class="now-row">
+								<td colspan="7">
 									<g:message code="home.session.currentHour" /> :
 									<g:formatDate date="${new Date()}" format="EEEE dd MMMM (HH:mm)" />
 								</td>
@@ -13,79 +13,39 @@
 					</g:if>
 					<g:if test="${sessionInstance.group.isVisibleByUsername(request.currentUser?.username)}">
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
-						<g:if test="${sessionInstance.canceled}">
-							<g:set var="isCanceled" value="text-decoration: line-through;"/>
-						</g:if>
-						<g:else>
-							<g:set var="isCanceled" value="" />
-						</g:else>
-						<tr style="${isCanceled}" class="${(i % 2) == 0 ? 'odd' : 'even'}">
-						
-							<!-- Date -->
-							<td style="vertical-align: middle; cursor: pointer;" onclick="document.location='${sessionLink}'">
-								<nobr><g:formatDate date="${sessionInstance.date}" format="EEEE dd MMMM (HH:mm)" /></nobr>
+						<g:set var="available" value="${sessionInstance.availableParticipants.size()}" />
+						<tr class="${(i % 2) == 0 ? 'odd' : 'even'} ${sessionInstance.canceled ? 'is-canceled' : ''} ${past ? 'is-past' : ''}">
+							<td class="clickable" onclick="document.location='${sessionLink}'">
+								<g:link controller="sessions" action="show" id="${sessionInstance.id}" class="date-cell">
+									<strong><g:formatDate date="${sessionInstance.date}" format="EEEE dd MMMM" /></strong>
+									<span><g:formatDate date="${sessionInstance.date}" format="HH:mm" /></span>
+								</g:link>
 							</td>
-							
-							<!-- Name -->
 							<g:if test="${competition}">
-						        <td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
-										<nobr>${sessionInstance.name}</nobr>
-						        </td>
-					        </g:if>
-					        
-					        <!-- Score -->
-					        <g:if test="${competition}">
-						        <td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
-						        	<g:each in="${sessionInstance.rounds}" var="round" >
-						        		<g:set var="scoreForTeamA" value="${round.getActionsByTeam(true).size()}" />
-						        		<g:set var="scoreForTeamB" value="${round.getActionsByTeam(false).size()}" />
-										<g:set var="color" value="#444" />
-				            			<g:if test="${scoreForTeamA > scoreForTeamB}">
-				                			<g:set var="color" value="#2f2" />
-				            			</g:if>
-				            			<g:if test="${scoreForTeamA < scoreForTeamB}">
-				                			<g:set var="color" value="#f22" />
-				            			</g:if>
-										<span style="color: ${color}; font-weight:bold;">
-											<nobr>${scoreForTeamA}-${scoreForTeamB}</nobr>  
-										</span>
+								<td class="clickable" onclick="document.location='${sessionLink}'">${sessionInstance.name}</td>
+								<td class="clickable" onclick="document.location='${sessionLink}'">
+									<g:each in="${sessionInstance.rounds}" var="round">
+										<g:set var="scoreForTeamA" value="${round.getActionsByTeam(true).size()}" />
+										<g:set var="scoreForTeamB" value="${round.getActionsByTeam(false).size()}" />
+										<span class="${scoreForTeamA > scoreForTeamB ? 'score-plus' : (scoreForTeamA < scoreForTeamB ? 'score-minus' : '')}">${scoreForTeamA}-${scoreForTeamB}</span>
 									</g:each>
-						        </td>
-					        </g:if>
-
-					        <!-- Playground -->
-					        <td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
-					        	${sessionInstance.playground}
-					        </td>
-					        
-					        <!-- Status -->
-					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': request.currentUser?.username]" />
-
-					        <!-- Players Numbers -->
-							<g:set var="color" value="#f33" />
-				            <g:if test="${sessionInstance.availableParticipants.size() >= sessionInstance.group.defaultMinPlayerNbr}">
-				                <g:set var="color" value="#3f3" />
-				            </g:if>
-							<td style="vertical-align: middle; text-align: center; cursor: pointer" onclick="document.location='${sessionLink}'">
-					        	<span style="color: ${color}; font-weight:bold;">${sessionInstance.availableParticipants.size()} / ${sessionInstance.participations.size()}</span> 
-					        </td>
-					        					        
-					        <!-- Comments -->
-							<td style="vertical-align: middle; font-size: 12px" onclick="document.location='${sessionLink}'" style="cursor: pointer;">
+								</td>
+							</g:if>
+							<td class="small clickable" onclick="document.location='${sessionLink}'">${sessionInstance.playground}</td>
+							<g:render template="/common/status" model="['sessionInstance': sessionInstance, 'username': request.currentUser?.username]" />
+							<td class="clickable" onclick="document.location='${sessionLink}'">
+								<span class="count-pill ${available >= sessionInstance.group.defaultMinPlayerNbr ? 'ok' : 'low'}">${available} / ${sessionInstance.participations.size()}</span>
+							</td>
+							<td class="small clickable" onclick="document.location='${sessionLink}'">
 								<g:if test="${sessionInstance.comments}">
 									<g:set var="lastComment" value="${sessionInstance.comments.first()}" />
-									<g:link controller="player" action="show" id="${lastComment.user.id}">
-										${lastComment.user}
-									</g:link>
+									<g:link controller="player" action="show" id="${lastComment.user.id}">${lastComment.user}</g:link>
 									<g:message code="session.show.comments.hasPosted" />
-									<g:link uri="/sessions/show/${sessionInstance.id}#comment${lastComment.id}">
-										<flexy:humanDate date="${lastComment.date.time}" />
-									</g:link>
+									<g:link uri="/sessions/show/${sessionInstance.id}#comment${lastComment.id}"><flexy:humanDate date="${lastComment.date.time}" /></g:link>
 								</g:if>
 								<g:else>
-									<g:message code="noComment" />
-								</g:else>		
-											
+									<span class="muted"><g:message code="noComment" /></span>
+								</g:else>
 							</td>
 						</tr>
 					</g:if>
