@@ -85,6 +85,10 @@ class TeamsController {
 			return redirect(action: "list")
 		}
 		def user = request.currentUser
+		if (!user) {
+			flash.error = message(code: 'team.show.blog.comments.needLogin')
+			return redirect(action: "displayBlogEntry", id: be.id)
+		}
 		def comment
 		try {
 			comment = forumService.postBlogComment(user, be, params.comment)

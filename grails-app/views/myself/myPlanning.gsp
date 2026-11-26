@@ -1,4 +1,3 @@
-
 <%@ page import="flexygames.User"%>
 <html>
 <head>
@@ -6,27 +5,19 @@
 	<g:render template="/common/layout" />
 </head>
 <body>
-	<h1><g:message code="myPlanning.title" /></h1>
+	<div class="page-header">
+		<h1><g:message code="myPlanning.title" /></h1>
+	</div>
 	<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
 	</g:if>
-	<p>
-		<g:message code="myPlanning.text1" />
-	</p>
-	<br />
-	<p>
-		<g:message code="myPlanning.text2" />
-	</p>
-	<br />
-	<g:message code="myPlanning.text3" />
-	<div class="block" style="width: auto; ">
-		<a href="${grailsApplication.config.grails.serverURL}/player/cal/${player.id}?token=${player.calendarToken}">
-			${grailsApplication.config.grails.serverURL}/player/cal/${player.id}?token=${player.calendarToken}
-		</a>
-	</div>
-	<br />
-	<p>
-		<g:message code="myPlanning.text4" />
-	</p>
+	<section class="card prose">
+		<p><g:message code="myPlanning.text1" /></p>
+		<p><g:message code="myPlanning.text2" /></p>
+		<p><g:message code="myPlanning.text3" /></p>
+		<g:set var="calendarUrl" value="${grailsApplication.config.grails.serverURL}/player/cal/${player.id}?token=${player.calendarToken}" />
+		<p class="copy-box"><a href="${calendarUrl}">${calendarUrl}</a></p>
+		<p><g:message code="myPlanning.text4" /></p>
+	</section>
 </body>
 </html>

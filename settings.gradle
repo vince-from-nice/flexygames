@@ -1,0 +1,9 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url = 'https://repo.grails.org/grails/restricted' }
+    }
+}
+
+rootProject.name = 'flexygames'

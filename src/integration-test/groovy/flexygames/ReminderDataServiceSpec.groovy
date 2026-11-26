@@ -1,5 +1,6 @@
 package flexygames
 
+import flexygames.admin.ReminderDataService
 import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.Rollback
 import spock.lang.Specification
@@ -7,9 +8,9 @@ import org.hibernate.SessionFactory
 
 @Integration
 @Rollback
-class ReminderServiceSpec extends Specification {
+class ReminderDataServiceSpec extends Specification {
 
-    ReminderService reminderService
+    ReminderDataService reminderDataService
     SessionFactory sessionFactory
 
     private Long setupData() {
@@ -27,14 +28,14 @@ class ReminderServiceSpec extends Specification {
         setupData()
 
         expect:
-        reminderService.get(1) != null
+        reminderDataService.get(1) != null
     }
 
     void "test list"() {
         setupData()
 
         when:
-        List<Reminder> reminderList = reminderService.list(max: 2, offset: 2)
+        List<Reminder> reminderList = reminderDataService.list(max: 2, offset: 2)
 
         then:
         reminderList.size() == 2
@@ -45,28 +46,28 @@ class ReminderServiceSpec extends Specification {
         setupData()
 
         expect:
-        reminderService.count() == 5
+        reminderDataService.count() == 5
     }
 
     void "test delete"() {
         Long reminderId = setupData()
 
         expect:
-        reminderService.count() == 5
+        reminderDataService.count() == 5
 
         when:
-        reminderService.delete(reminderId)
+        reminderDataService.delete(reminderId)
         sessionFactory.currentSession.flush()
 
         then:
-        reminderService.count() == 4
+        reminderDataService.count() == 4
     }
 
     void "test save"() {
         when:
         assert false, "TODO: Provide a valid instance to save"
         Reminder reminder = new Reminder()
-        reminderService.save(reminder)
+        reminderDataService.save(reminder)
 
         then:
         reminder.id != null

@@ -1,6 +1,5 @@
 
-<div class="dialog">
-	<table>
+<table class="profile-table">
 		<tbody>
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="firstName" default="First Name" /></td>
@@ -29,5 +28,4 @@
 				</tr>
 			</g:if>
 		</tbody>
-	</table>
-</div>
+</table>

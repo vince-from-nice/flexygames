@@ -6,8 +6,8 @@ import grails.util.Holders
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-import javax.servlet.http.HttpSessionBindingEvent
-import javax.servlet.http.HttpSessionBindingListener
+import jakarta.servlet.http.HttpSessionBindingEvent
+import jakarta.servlet.http.HttpSessionBindingListener
 
 class User implements Comparable<User>, HttpSessionBindingListener {
 
@@ -23,21 +23,21 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	String city
     Integer yearBirthDate
 	Date registrationDate
-	String avatarName
+	String avatarName = 'no-avatar.jpg'
 	String passwordResetToken
 	Date passwordResetExpiration
 	Date lastLogin
 	Date lastLogout
 	String calendarToken
-	Integer participationCounter
-	Integer absenceCounter
-	Integer delayCounter
-	Integer gateCrashCounter
-	Integer waitingListCounter
-	Integer actionCounter
-	Integer voteCounter
-	Integer votingScoreCounter
-	Integer commentCounter
+	Integer participationCounter = 0
+	Integer absenceCounter = 0
+	Integer delayCounter = 0
+	Integer gateCrashCounter = 0
+	Integer waitingListCounter = 0
+	Integer actionCounter = 0
+	Integer voteCounter = 0
+	Integer votingScoreCounter = 0
+	Integer commentCounter = 0
 	Date absenceLastDate
 	Date delayLastDate
 	Date gateCrashLastDate

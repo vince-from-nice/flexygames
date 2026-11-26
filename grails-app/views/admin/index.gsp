@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="layout" content="desktop" />
+<meta name="layout" content="modern" />
 </head>
 <body>
 	<h1>

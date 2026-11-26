@@ -6,182 +6,76 @@
 	<g:render template="/common/layout" />
 </head>
 <body>
-	<h1>${teamInstance}</h1>
 	<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
 	</g:if>
 	<g:if test="${flash.error}">
 		<div class="errors">${flash.error}</div>
 	</g:if>
-	<table style="width: 100%; border: 0px">
-		<tr>
-			<td style="text-align: center; vertical-align: middle; ">
-				<img style="max-width: 200px; max-height:120px;" src="${resource(dir:'images/team',file:teamInstance.logoName)}" alt="Team logo" />
-				<g:if test="${teamIsManagedByCurrentUser}">
-					<br />
-					<br />
-					<span style="font-size: 12px">
-					<g:message code="team.show.uploadLogo" /><br />
-					<g:form controller="fileUpload" action="process" method="post" enctype="multipart/form-data" >
-						<g:hiddenField name="uploadType" value="teamLogo" />
-						<g:hiddenField name="id" value="${teamInstance.id}" />
-						<g:hiddenField name="errorAction" value="changeTeamLogoError" />
-						<g:hiddenField name="errorController" value="manager" />
-						<g:hiddenField name="successAction" value="changeTeamLogoSuccess" />
-						<g:hiddenField name="successController" value="manager" />
-						<input type='file' name='file' />
-						<input type='submit' name='submit' value='Submit' />
-					</g:form>
+
+	<section class="card team-hero">
+		<div class="team-hero-logo">
+			<flexy:teamLogo team="${teamInstance}" size="large" />
+		</div>
+		<div class="team-hero-info">
+			<h1>${teamInstance}</h1>
+			<dl class="facts">
+				<g:if test="${teamInstance.city}">
+					<div><dt><g:message code="city" default="City" /></dt><dd>${fieldValue(bean: teamInstance, field: "city")}</dd></div>
 				</g:if>
-			</td>
-			<td style="width: 40%; ">
-				<h2 style="margin-top: 0px;"><g:message code="informations" /></h2>
-				<table>
-					<tbody>
-						<tr class="prop">
-							<td valign="top" class="name"><g:message code="city" default="City" /></td>
-							<td valign="top" class="value">
-								${fieldValue(bean: teamInstance, field: "city")}
-							</td>
-						</tr>
-						<tr class="prop">
-							<td valign="top" class="name"><g:message code="webUrl" default="Web Url" /></td>
-							<td valign="top" class="value">
-								<g:link url="${teamInstance.webUrl}">
-									${fieldValue(bean: teamInstance, field: "webUrl")}
-								</g:link>
-							</td>
-						</tr>
-						<!--tr class="prop">
-							<td valign="top" class="name"><g:message code="email" default="Email" /></td>
-							<td valign="top" class="value">
-								<a href="mailto:${teamInstance.email}">${fieldValue(bean: teamInstance, field: "email")}</a>
-							</td>
-						</tr-->
-						<tr class="prop">
-							<td valign="top" class="name"><g:message code="managers" default="Manager(s)" /></td>
-							<td>
-								<g:each in="${teamInstance.managers}" var="m">
-									<g:link controller="player" action="show" id="${m.id}">${m?.encodeAsHTML()}</g:link>
-								</g:each>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</td>
-			<td>
-				<h2 style="margin-top: 0px;"><g:message code="statistics" /></h2>
-				<div class="block" style="width: auto">
-					<g:message code="team.stats.totalOfMembers" /> :
-					<span style="font-size: 20px; font-weight: bold;">
-						${teamInstance.members.size()}
-					</span>
-					<br />
-					<g:message code="team.stats.totalOfSessions" /> :
-					<span style="font-size: 20px; font-weight: bold;">
-						${teamInstance.countSessions()}
-					</span>
-					<br />
-					<g:message code="team.stats.totalOfEffectiveSessions" /> :
-					<span style="font-size: 20px; font-weight: bold;">
-						${teamInstance.countAllEffectiveSessions()}
-					</span>
-					<br />
-					<g:message code="team.stats.totalOfParticipations" /> :
-					<span style="font-size: 20px; font-weight: bold;">
-						${teamInstance.countAllParticipations()}
-					</span>
-					<br />
-					<g:message code="team.stats.totalOfEffectiveParticipations" /> :
-					<span style="font-size: 20px; font-weight: bold;">
-						${teamInstance.countAllEffectiveParticipations()}
-					</span>
+				<g:if test="${teamInstance.webUrl}">
+					<div><dt><g:message code="webUrl" default="Web Url" /></dt><dd><g:link url="${teamInstance.webUrl}">${fieldValue(bean: teamInstance, field: "webUrl")}</g:link></dd></div>
+				</g:if>
+				<div>
+					<dt><g:message code="managers" default="Manager(s)" /></dt>
+					<dd><g:each in="${teamInstance.managers}" var="m" status="i">${i > 0 ? ', ' : ''}<g:link controller="player" action="show" id="${m.id}">${m?.encodeAsHTML()}</g:link></g:each></dd>
 				</div>
-			</td>
-		</tr>
-	</table>
-	
-	<table style="width: 100%; ">
+			</dl>
+		</div>
+		<g:if test="${teamIsManagedByCurrentUser}">
+			<g:form controller="fileUpload" action="process" method="post" enctype="multipart/form-data" class="upload-form team-logo-upload">
+				<g:hiddenField name="uploadType" value="teamLogo" />
+				<g:hiddenField name="id" value="${teamInstance.id}" />
+				<g:hiddenField name="errorAction" value="changeTeamLogoError" />
+				<g:hiddenField name="errorController" value="manager" />
+				<g:hiddenField name="successAction" value="changeTeamLogoSuccess" />
+				<g:hiddenField name="successController" value="manager" />
+				<label for="teamLogoFile" class="muted small"><g:message code="team.show.uploadLogo" /></label>
+				<input type="file" id="teamLogoFile" name="file" accept="image/jpeg,image/png,image/gif" />
+				<input type="submit" name="submit" value="${message(code: 'default.button.upload.label', default: 'Upload')}" />
+			</g:form>
+		</g:if>
+	</section>
 
-		<g:if test="${params.mode=='blog' }">
-			<g:set var="classForblogTab" value="tabSelected" />
-			<g:set var="classForCompetitionTab" value="tabNotSelected" />
-			<g:set var="classForTrainingTab" value="tabNotSelected" />
-			<g:set var="classForMembersTab" value="tabNotSelected" />
-			<g:set var="classForRankingTab" value="tabNotSelected" />
-		</g:if>
-		<g:if test="${params.mode=='training' }">
-			<g:set var="classForblogTab" value="tabNotSelected" />
-			<g:set var="classForCompetitionTab" value="tabNotSelected" />
-			<g:set var="classForTrainingTab" value="tabSelected" />	
-			<g:set var="classForMembersTab" value="tabNotSelected" />
-			<g:set var="classForRankingTab" value="tabNotSelected" />
-		</g:if>
-		<g:if test="${params.mode=='competition' }">
-			<g:set var="classForblogTab" value="tabNotSelected" />
-			<g:set var="classForCompetitionTab" value="tabSelected" />
-			<g:set var="classForTrainingTab" value="tabNotSelected" />
-			<g:set var="classForMembersTab" value="tabNotSelected" />
-			<g:set var="classForRankingTab" value="tabNotSelected" />
-		</g:if>
-		<g:if test="${params.mode=='members' }">
-			<g:set var="classForblogTab" value="tabNotSelected" />
-			<g:set var="classForCompetitionTab" value="tabNotSelected" />
-			<g:set var="classForTrainingTab" value="tabNotSelected" />	
-			<g:set var="classForMembersTab" value="tabSelected" />
-			<g:set var="classForRankingTab" value="tabNotSelected" />
-		</g:if>
-		<g:if test="${params.mode=='ranking' }">
-			<g:set var="classForblogTab" value="tabNotSelected" />
-			<g:set var="classForCompetitionTab" value="tabNotSelected" />
-			<g:set var="classForTrainingTab" value="tabNotSelected" />	
-			<g:set var="classForMembersTab" value="tabNotSelected" />
-			<g:set var="classForRankingTab" value="tabSelected" />
-		</g:if>
+	<div class="stat-tiles">
+		<div class="stat-tile"><strong>${teamInstance.members.size()}</strong><span><g:message code="team.stats.totalOfMembers" /></span></div>
+		<div class="stat-tile"><strong>${teamInstance.countSessions()}</strong><span><g:message code="team.stats.totalOfSessions" /></span></div>
+		<div class="stat-tile"><strong>${teamInstance.countAllEffectiveSessions()}</strong><span><g:message code="team.stats.totalOfEffectiveSessions" /></span></div>
+		<div class="stat-tile"><strong>${teamInstance.countAllParticipations()}</strong><span><g:message code="team.stats.totalOfParticipations" /></span></div>
+		<div class="stat-tile"><strong>${teamInstance.countAllEffectiveParticipations()}</strong><span><g:message code="team.stats.totalOfEffectiveParticipations" /></span></div>
+	</div>
 
-		<g:set var="blogLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'blog'])}" />
-		<g:set var="trainingLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'training'])}" />
-		<g:set var="competitionLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'competition'])}" />
-		<g:set var="membersLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'members'])}" />
-		<g:set var="rankingLink" value="${createLink(action: 'show', params: [id: teamInstance.id, mode: 'ranking'])}" />
+	<nav class="tabs">
+		<g:each in="${[['blog', 'blog'], ['training', 'trainings'], ['competition', 'competitions'], ['members', 'members'], ['ranking', 'rankings']]}" var="tab">
+			<g:link action="show" id="${teamInstance.id}" params="[mode: tab[0]]" class="${params.mode == tab[0] ? 'active' : ''}"><g:message code="${tab[1]}" /></g:link>
+		</g:each>
+	</nav>
 
-		<tr style="">
-			<td class="${classForblogTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${blogLink}'">
-				<b><g:message code="blog"/></b>
-			</td>
-			<td class="${classForTrainingTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${trainingLink}'">
-				<b><g:message code="trainings"/></b>
-			</td>
-			<td class="${classForCompetitionTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${competitionLink}'">
-				<b><g:message code="competitions"/></b>
-			</td>
-			<td class="${classForMembersTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${membersLink}'">
-				<b><g:message code="members"/></b>
-			</td>
-			<td class="${classForRankingTab}" style="width: 20%;  cursor: pointer;" onclick="document.location='${rankingLink}'">
-				<b><g:message code="rankings"/></b>
-			</td>
-		</tr>
-		
-		<tr>
-			<td colspan="5">
-				<g:if test="${params.mode=='blog'}">
-					<g:render template="showBlog" />
-				</g:if>
-				<g:if test="${params.mode=='competition' || params.mode=='training' }">
-					<g:render template="showSessions" />
-				</g:if>
-				<g:if test="${params.mode=='members'}">
-					<g:render template="showMembers" />
-				</g:if>
-				<g:if test="${params.mode=='ranking'}">
-					<g:render template="showRanking" />
-				</g:if>
-			</td>
-		</tr>
-	</table>
-		
+	<section class="card tab-panel">
+		<g:if test="${params.mode=='blog'}">
+			<g:render template="showBlog" />
+		</g:if>
+		<g:if test="${params.mode=='competition' || params.mode=='training' }">
+			<g:render template="showSessions" />
+		</g:if>
+		<g:if test="${params.mode=='members'}">
+			<g:render template="showMembers" />
+		</g:if>
+		<g:if test="${params.mode=='ranking'}">
+			<g:render template="showRanking" />
+		</g:if>
+	</section>
+
 	<g:render template="/common/backLinks" />
-		
-  </body>
+</body>
 </html>

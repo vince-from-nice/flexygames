@@ -1,9 +1,9 @@
 <div class="sessionZone">
     <div class="sessionZoneHeader" onclick="toggleDisplay('tasksSummaryZone'); toggleTableDisplay('tasksDetailedZone'); return false">
-        <h2 style="vertical-align: top; display: inline;">
+        <h2>
             <g:message code="session.show.tasks" />
         </h2>
-        <span style="float:right; font-size: small;"><g:message code="clickForShowOrHideDetails" /></span>
+        <span class="zone-hint"><g:message code="clickForShowOrHideDetails" /></span>
     </div>
     <g:set var="defaultDisplayForSummaryZone" value="block" />
     <g:set var="defaultDisplayForDetailedZone" value="none" />
@@ -88,9 +88,9 @@
                 </g:if>
             </g:if>
             <tr>
-                <td style="background-color: #d8f3f0">
-                    <g:form name="taskForm" action="addTask" id="${sessionInstance.id}">
-                        <g:message code="session.show.tasks.wantToHelp"/>:
+                <td>
+                    <g:form name="taskForm" action="addTask" id="${sessionInstance.id}" class="task-offer">
+                        <label for="newTaskCode"><g:message code="session.show.tasks.wantToHelp"/></label>
                         <g:select name="newTaskCode" from="${flexygames.TaskType.list()}" optionKey="code" valueMessagePrefix="session.show.tasks.new"/>
                         <g:submitButton name="newTask" value="OK"/>
                     </g:form>

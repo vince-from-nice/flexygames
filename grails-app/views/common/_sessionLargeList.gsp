@@ -1,59 +1,42 @@
 				<g:each in="${sessionInstanceList}" status="i" var="sessionInstance">
 					<g:if test="${sessionInstance.group.isVisibleByUsername(request.currentUser?.username)}">
 						<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: sessionInstance.id, absolute: true)}" />
-						<g:if test="${sessionInstance.canceled}">
-							<g:set var="isCanceled" value="text-decoration: line-through;"/>
-						</g:if>
-						<g:else>
-							<g:set var="isCanceled" value="" />
-						</g:else>
-						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}" style="height: 40px; ${isCanceled}; ">
-							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
-								<g:link controller="sessions" action="show" id="${sessionInstance.id}">
-									<nobr><g:formatDate date="${sessionInstance.date}" format="EEEEEEE dd MMMM (HH:mm)" /></nobr>
+						<g:set var="available" value="${sessionInstance.availableParticipants.size()}" />
+						<g:set var="minimum" value="${sessionInstance.group.defaultMinPlayerNbr}" />
+						<tr class="${(i % 2) == 0 ? 'odd' : 'even'} ${sessionInstance.canceled ? 'is-canceled' : ''}">
+							<td class="clickable" onclick="document.location='${sessionLink}'">
+								<g:link controller="sessions" action="show" id="${sessionInstance.id}" class="date-cell">
+									<strong><g:formatDate date="${sessionInstance.date}" format="EEEE dd MMMM" /></strong>
+									<span><g:formatDate date="${sessionInstance.date}" format="HH:mm" /></span>
 								</g:link>
 							</td>
-							<td style="vertical-align: middle; margin: 0px; padding: 0px; ">
+							<td class="team-cell">
 								<g:set var="team" value="${sessionInstance.group.defaultTeams.first()}" />
-								<g:link controller="teams" action="show" id="${team.id}">
-									<img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:team.logoName)}" alt="Team logo" />
+								<g:link controller="teams" action="show" id="${team.id}" title="${team}">
+									<flexy:teamLogo team="${team}" />
 								</g:link>
 							</td>
-							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
+							<td class="clickable" onclick="document.location='${sessionLink}'">
 								${fieldValue(bean: sessionInstance, field: "group")}
-								<g:if test="${sessionInstance.name}">
-									: ${fieldValue(bean: sessionInstance, field: "name")}
-								</g:if>
+								<g:if test="${sessionInstance.name}">: ${fieldValue(bean: sessionInstance, field: "name")}</g:if>
 							</td>
-							<g:set var="color" value="#f33" />
-				            <g:if test="${sessionInstance.availableParticipants.size() >= sessionInstance.group.defaultMinPlayerNbr}">
-				                <g:set var="color" value="#3f3" />
-				            </g:if>
-							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
-								<nobr>
-					        	<span style="color: ${color}; font-weight:bold;">${sessionInstance.availableParticipants.size()} / ${sessionInstance.participations.size()}</span>
-					        	<span style="font-size: small">(min: ${sessionInstance.group.defaultMinPlayerNbr})</span>
-					        	</nobr>
-					        </td>
-					        <g:render template="/common/status"  model="['sessionInstance': sessionInstance, 'username': request.currentUser?.username]" />
-							<g:if test="${request.display == 'desktop'}">
-								<td style="vertical-align: middle;">${fieldValue(bean: sessionInstance, field: "playground")}</td>
-								<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'" >
-									<g:if test="${sessionInstance.comments}">
-										<g:set var="lastComment" value="${sessionInstance.comments.first()}" />
-										<g:link controller="player" action="show" id="${lastComment.user.id}">
-											${lastComment.user}
-										</g:link>
-										<g:message code="session.show.comments.hasPosted" />
-										<g:link uri="/sessions/show/${sessionInstance.id}#comment${lastComment.id}">
-											<flexy:humanDate date="${lastComment.date.time}" />
-										</g:link>
-									</g:if>
-									<g:else>
-										<g:message code="noComment" />
-									</g:else>
-								</td>
-							</g:if>
+							<td class="clickable" onclick="document.location='${sessionLink}'">
+								<span class="count-pill ${available >= minimum ? 'ok' : 'low'}">${available} / ${sessionInstance.participations.size()}</span>
+								<span class="count-min">min ${minimum}</span>
+							</td>
+							<g:render template="/common/status" model="['sessionInstance': sessionInstance, 'username': request.currentUser?.username]" />
+							<td class="col-optional small">${fieldValue(bean: sessionInstance, field: "playground")}</td>
+							<td class="col-optional small clickable" onclick="document.location='${sessionLink}'">
+								<g:if test="${sessionInstance.comments}">
+									<g:set var="lastComment" value="${sessionInstance.comments.first()}" />
+									<g:link controller="player" action="show" id="${lastComment.user.id}">${lastComment.user}</g:link>
+									<g:message code="session.show.comments.hasPosted" />
+									<g:link uri="/sessions/show/${sessionInstance.id}#comment${lastComment.id}"><flexy:humanDate date="${lastComment.date.time}" /></g:link>
+								</g:if>
+								<g:else>
+									<span class="muted"><g:message code="noComment" /></span>
+								</g:else>
+							</td>
 						</tr>
 					</g:if>
 				</g:each>

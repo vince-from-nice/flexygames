@@ -21,7 +21,28 @@ class FlexyTagLib {
 		
 		return formatDate(date, includeSeconds)
 	}
-	
+
+	private static final String NO_LOGO = 'no-logo.png'
+
+	/**
+	 * Logo of a team, or a badge with the initials of its name when the team has no logo.
+	 *
+	 * @attr team REQUIRED the team
+	 * @attr size 'large' for the session page, the list size otherwise
+	 */
+	def teamLogo = { attrs ->
+		Team team = attrs.team
+		String sizeClass = attrs.size == 'large' ? 'team-logo-large' : 'team-logo'
+		String name = team?.name ?: ''
+		if (team?.logoName && team.logoName != NO_LOGO) {
+			out << "<img class=\"${sizeClass}\" src=\"${g.resource(dir: 'images/team', file: team.logoName)}\" alt=\"${name.encodeAsHTML()}\" />"
+		} else {
+			String initials = name.split(/\s+/).findAll().take(2).collect { it[0].toUpperCase() }.join()
+			int hue = Math.floorMod(name.hashCode(), 360)
+			out << "<span class=\"team-monogram ${sizeClass}\" style=\"--hue: ${hue}\" title=\"${name.encodeAsHTML()}\">${initials.encodeAsHTML()}</span>"
+		}
+	}
+
 	public String formatDate(Long date, Boolean includeSeconds) {
 
 		def now = System.currentTimeMillis()

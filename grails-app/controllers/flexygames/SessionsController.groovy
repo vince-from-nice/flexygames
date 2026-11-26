@@ -6,8 +6,6 @@ import java.time.ZoneId
 
 class SessionsController {
 
-	def displayService
-
 	def sessionsService
 
 	def votingService
@@ -78,7 +76,7 @@ class SessionsController {
 		Session session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
-			redirect(action: "list")
+			return redirect(action: "list")
 		}
 
 		// Prepare data about participants
@@ -175,7 +173,7 @@ class SessionsController {
 		// Get the day of week (as int) for the Windy widget
 		//def dayOfTheWeek = java.text.SimpleDateFormat('E').format(session.date)
 
-		render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'),
+		render(view: 'show',
 				model: [sessionInstance          : session, participantsByScore: participantsByScore.reverse(), currentVotes: currentVotes,
 						approvedCarpoolRequestIds: approvedCarpoolRequestIds, relatedCarpoolProposalIds: relatedCarpoolProposalIds,
 						relatedSeatIndexes       : relatedSeatIndexes, relatedPickupTimes: relatedPickupTimes, tasksByTypeCode: tasksByTypeCode])

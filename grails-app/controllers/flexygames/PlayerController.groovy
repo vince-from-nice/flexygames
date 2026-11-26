@@ -11,8 +11,6 @@ import org.apache.shiro.crypto.hash.Sha512Hash
 
 class PlayerController {
 
-	def displayService
-
 	def mailerService
 
 	def userStatsService
@@ -67,7 +65,7 @@ class PlayerController {
 			redirect(action: "list")
 		}
 		else {
-			render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [playerInstance: playerInstance])
+			render(view: 'show', model: [playerInstance: playerInstance])
 		}
 	}
 
@@ -123,7 +121,6 @@ class PlayerController {
 		user.firstName = params.firstName
 		user.email = params.email.toLowerCase()
 		user.registrationDate = new Date()
-		user.avatarName = 'no-avatar.jpg'
 		user.addToRoles(Role.findByName("Player"))
 		if (team) {
 			Membership ms = new Membership(user: user, team: team, manager: false,
@@ -131,15 +128,6 @@ class PlayerController {
 					regularForCompetition: false)
 			user.addToMemberships(ms)
 		}
-		// Init counters to avoid null values
-		user.commentCounter = 0;
-		user.participationCounter = 0;
-		user.voteCounter = 0;
-		user.actionCounter = 0;
-		user.absenceCounter = 0;
-		user.delayCounter = 0;
-		user.gateCrashCounter = 0;
-		user.waitingListCounter = 0;
 		if (!user.save()) {
 			flash.message = "${message(code: 'register.failed')}"
 			return render(view: "register", model: [user: user])
@@ -204,16 +192,16 @@ class PlayerController {
 		def player = User.get(params.id)
 		if (!player) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'player.label', default: 'Player'), params.id])}"
-			redirect(action: "list")
+			return redirect(action: "list")
 		}
 		if (player.calendarToken != params.token) {
 			flash.message = "Sorry, your calendar link is invalid.. are you trying to spy $player ? :)"
-			redirect(action: "show", id: player.id)
+			return redirect(action: "show", id: player.id)
 		}
-		def calendar = calendarService.getPlayerCalendar(player)
+		String calendar = calendarService.getPlayerCalendar(player)
 		// TODO mettre un bon filename dans la réponse
 		response.addHeader("content-disposition", String.format("attachment;filename=%s", "FlexyCalendarFor"+player.username + ".ics"))
 		println new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " FlexyGames : Calendar generated for $player"
-		return calendar
+		render(text: calendar, contentType: 'text/calendar', encoding: 'UTF-8')
 	}
 }

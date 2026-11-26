@@ -1,15 +1,9 @@
 <%@ page import="java.text.DateFormat" %>
 
-    <table style="border: 0px;">
-        <tr>
-            <td style="width: 50%;">
-                <g:render template="blogEntryFromSession" bean="${nextTraining}" var="blogEntry" model="[competition: false]" />
-            </td>
-            <td style="width: 50%;">
-                <g:render template="blogEntryFromSession" bean="${nextCompetition}" var="blogEntry" model="[competition: true]" />
-            </td>
-        </tr>
-    </table>
+    <div class="next-sessions">
+        <g:render template="blogEntryFromSession" bean="${nextTraining}" var="blogEntry" model="[competition: false]" />
+        <g:render template="blogEntryFromSession" bean="${nextCompetition}" var="blogEntry" model="[competition: true]" />
+    </div>
 
     <g:each in="${stickyUserBlogEntries}" var="blogEntry" >
         <div class="userBlogEntrySticky">
@@ -29,9 +23,9 @@
 
     <br>
     <g:if test="${teamIsManagedByCurrentUser}">
-        <g:form controller="manager" action="editBlogEntry" method="post" style="text-align: center">
+        <g:form controller="manager" action="editBlogEntry" method="post">
             <g:hiddenField name="teamId" value="${teamInstance.id}" />
-            <div class="buttons" style="text-align: center">
+            <div class="buttons">
                 <g:actionSubmit class="create" action="editBlogEntry" value="${message(code:'team.show.blog.create')}" />
             </div>
         </g:form>

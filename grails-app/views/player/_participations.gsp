@@ -1,70 +1,59 @@
 			<%def totalWins =0, totalDraws=0, totalDefeats=0, totalActionScore=0, totalVotingScore=0; %>
 			<g:each in="${userParticipations}" var="part">
 				<g:set var="sessionLink" value="${createLink(controller: 'sessions', action: 'show', id: part.session.id, absolute: true)}" />
-				<tr style="height: 60px; margin: 0px; padding: 0px; border: solid grey 1px; cursor: pointer;" onclick="document.location='${sessionLink}'">
-					<td style="vertical-align: middle;">
-						<g:link controller="sessions" action="show" id="${part.session.id}">
-							<nobr><g:formatDate date="${part.session.date}" format="yyyy-MM-dd" timeStyle="LONG" /></nobr>
-						</g:link>
+				<tr class="clickable" onclick="document.location='${sessionLink}'">
+					<td>
+						<g:link controller="sessions" action="show" id="${part.session.id}"><g:formatDate date="${part.session.date}" format="yyyy-MM-dd" /></g:link>
 					</td>
-					<td style="vertical-align: middle;">
+					<td class="team-cell">
 						<g:set var="team" value="${part.session.group.defaultTeams.first()}" />
-						<g:link controller="teams" action="show" id="${team.id}">
-							<img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:team.logoName)}" alt="Team logo" />
-						</g:link>
+						<g:link controller="teams" action="show" id="${team.id}" title="${team}"><flexy:teamLogo team="${team}" /></g:link>
 					</td>
-					<td style="vertical-align: middle; font-size: 12px">
-						<g:link controller="sessions" action="list" params="${['filteredSessionGroup':part.session.group.id]}">
-							<nobr>${part.session.group.encodeAsHTML()}</nobr>
-						</g:link>
+					<td class="small">
+						<g:link controller="sessions" action="list" params="${['filteredSessionGroup':part.session.group.id]}">${part.session.group.encodeAsHTML()}</g:link>
 					</td>
-					<td style="vertical-align: middle; border-left: solid black 1px; background-color: ${flexygames.Participation.Status.color(part.statusCode)}">
-						<b><g:message code="participation.status.${part.statusCode}" /></b>
+					<td class="status-cell">
+						<span class="status-pill" style="background-color: ${flexygames.Participation.Status.color(part.statusCode)};"><g:message code="participation.status.${part.statusCode}" /></span>
 					</td>
 					<g:if test="${withAllCols}">
-						<td style="text-align: right; vertical-align: middle; border-left: solid black 1px">
+						<td class="number">
 							<g:set var="v" value="${part.wins.size()}" />
-							<g:if test="${v > 0}"><%totalWins += v%><span style="color: green">${v}</span></g:if>
+							<g:if test="${v > 0}"><%totalWins += v%><span class="score-plus">${v}</span></g:if>
 						</td>
-						<td style="text-align: right; vertical-align: middle;">
+						<td class="number">
 							<g:set var="v" value="${part.draws.size()}" />
 							<g:if test="${v > 0}"><%totalDraws += v%>${v}</g:if>
 						</td>
-						<td style="text-align: right; vertical-align: middle;">
+						<td class="number">
 							<g:set var="v" value="${part.defeats.size()}" />
-							<g:if test="${v > 0}"><%totalDefeats += v%><span style="color: red">${v}</span></g:if>
+							<g:if test="${v > 0}"><%totalDefeats += v%><span class="score-minus">${v}</span></g:if>
 						</td>
-						<td style="text-align: right; vertical-align: middle; border-left: solid black 1px">
+						<td class="number">
 							<g:set var="v" value="${part.actionScore}" />
 							<%totalActionScore += v%>
 							<g:if test="${v > 0}">${v}</g:if>
 						</td>
-						<td style="text-align: right; vertical-align: middle; border-left: solid black 1px">
+						<td class="number">
 							<g:set var="v" value="${part.votingScore}" />
 							<%totalVotingScore += v%>
-							<g:if test="${v > 0}"><span style="color: green">+${v}</span></g:if>
-							<g:else>
-								<g:if test="${v < 0}"><span style="color: red">${v}</span></g:if>
-								<g:else><span style="color: black">${v}</span></g:else>
-							</g:else>
+							<g:if test="${v > 0}"><span class="score-plus">+${v}</span></g:if>
+							<g:elseif test="${v < 0}"><span class="score-minus">${v}</span></g:elseif>
+							<g:else>${v}</g:else>
 						</td>
 					</g:if>
 				</tr>
 			</g:each>
 			<g:if test="${withTotals}">
-				<tr>
-					<th style="font-size: 18px; font-weight: bold; text-align: left; vertical-align: middle;" colspan="4">
-					</th>
-					<th style="font-size: 18px; text-align: right; vertical-align: middle;"><span style="color: green">${totalWins}</span></th>
-					<th style="font-size: 18px; text-align: right; vertical-align: middle;">${totalDraws}</th>
-					<th style="font-size: 18px; text-align: right; vertical-align: middle;"><span style="color: red">${totalDefeats}</span></th>
-					<th style="font-size: 18px; text-align: right; vertical-align: middle;">${totalActionScore}</th>
-					<th style="font-size: 18px; text-align: right; vertical-align: middle;">
-						<g:if test="${totalVotingScore > 0}"><span style="color: green">+${totalVotingScore}</span></g:if>
-						<g:else>
-							<g:if test="${totalVotingScore < 0}"><span style="color: red">${totalVotingScore}</span></g:if>
-							<g:else>${totalVotingScore}</g:else>
-						</g:else>
+				<tr class="counter-row">
+					<th colspan="4"></th>
+					<th class="number"><span class="score-plus">${totalWins}</span></th>
+					<th class="number">${totalDraws}</th>
+					<th class="number"><span class="score-minus">${totalDefeats}</span></th>
+					<th class="number">${totalActionScore}</th>
+					<th class="number">
+						<g:if test="${totalVotingScore > 0}"><span class="score-plus">+${totalVotingScore}</span></g:if>
+						<g:elseif test="${totalVotingScore < 0}"><span class="score-minus">${totalVotingScore}</span></g:elseif>
+						<g:else>${totalVotingScore}</g:else>
 					</th>
 				</tr>
 			</g:if>
