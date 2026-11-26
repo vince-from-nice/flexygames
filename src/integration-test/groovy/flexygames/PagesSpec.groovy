@@ -105,8 +105,10 @@ class PagesSpec extends Specification {
         String path = page == 'a session page'
                 ? "/sessions/show/${Session.withNewSession { Session.list(max: 1, sort: 'id').first().id }}"
                 : '/'
-        def html = get(client, path).body()
-        List<String> assets = (html =~ /(?:href|src)="(\/[^"]+\.(?:css|js|png|jpg|gif))"/).collect { it[1] }.unique()
+        // A browser skips the markup inside HTML comments.
+        def html = get(client, path).body().replaceAll(/(?s)<!--.*?-->/, '')
+        List<String> assets = ((html =~ /href="(\/[^"]+\.css)"/).collect { it[1] } +
+                (html =~ /src="(\/[^"]+)"/).collect { it[1] }).unique()
 
         expect:
         assets.size() >= 5

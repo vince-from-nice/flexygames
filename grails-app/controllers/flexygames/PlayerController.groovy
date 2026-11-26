@@ -123,7 +123,6 @@ class PlayerController {
 		user.firstName = params.firstName
 		user.email = params.email.toLowerCase()
 		user.registrationDate = new Date()
-		user.avatarName = 'no-avatar.jpg'
 		user.addToRoles(Role.findByName("Player"))
 		if (team) {
 			Membership ms = new Membership(user: user, team: team, manager: false,

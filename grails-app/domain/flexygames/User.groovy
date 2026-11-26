@@ -23,7 +23,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	String city
     Integer yearBirthDate
 	Date registrationDate
-	String avatarName
+	String avatarName = 'no-avatar.jpg'
 	String passwordResetToken
 	Date passwordResetExpiration
 	Date lastLogin
