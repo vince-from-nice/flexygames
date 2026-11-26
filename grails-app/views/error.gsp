@@ -1,56 +1,39 @@
+<!doctype html>
 <html>
-  <head>
-	  <title>Grails Runtime Exception</title>
-	  <g:render template="/common/layout" />
-	  <!--meta name="layout" content="desktop" /-->
-	  <style type="text/css">
-	  		.message {
-	  			border: 1px solid black;
-	  			padding: 5px;
-	  			background-color:#E9E9E9;
-	  		}
-	  		.stack {
-	  			border: 1px solid black;
-	  			padding: 5px;
-	  			overflow:auto;
-	  			height: 300px;
-	  		}
-	  		.snippet {
-	  			padding: 5px;
-	  			background-color:white;
-	  			border:1px solid black;
-	  			margin:3px;
-	  			font-family:courier;
-	  		}
-	  </style>
-  </head>
-
-  <body>
-    <h1>Grails Runtime Exception</h1>
-    <h2>Error Details</h2>
-
-  	<div class="message">
-		<strong>Error ${request.'jakarta.servlet.error.status_code'}:</strong> ${request.'jakarta.servlet.error.message'.encodeAsHTML()}<br/>
-		<strong>Servlet:</strong> ${request.'jakarta.servlet.error.servlet_name'}<br/>
-		<strong>URI:</strong> ${request.'jakarta.servlet.error.request_uri'}<br/>
-		<g:if test="${exception}">
-	  		<strong>Exception Message:</strong> ${exception.message?.encodeAsHTML()} <br />
-	  		<strong>Caused by:</strong> ${exception.cause?.message?.encodeAsHTML()} <br />
-	  		<strong>Class:</strong> ${exception.className} <br />
-	  		<strong>At Line:</strong> [${exception.lineNumber}] <br />
-	  		<strong>Code Snippet:</strong><br />
-	  		<div class="snippet">
-	  			<g:each var="cs" in="${exception.codeSnippet}">
-	  				${cs?.encodeAsHTML()}<br />
-	  			</g:each>
-	  		</div>
-		</g:if>
-  	</div>
-	<g:if test="${exception}">
-	    <h2>Stack Trace</h2>
-	    <div class="stack">
-	      <pre><g:each in="${exception.stackTraceLines}">${it.encodeAsHTML()}<br/></g:each></pre>
-	    </div>
+<head>
+	<title>Error</title>
+	<g:render template="/common/layout" />
+</head>
+<body>
+	<div class="card form-card status-card">
+		<p class="status-code">${request.'jakarta.servlet.error.status_code' ?: 500}</p>
+		<h1>Sorry, something went wrong</h1>
+		<p class="muted">The error has been logged. Please try again, or go back to the homepage.</p>
+		<div class="form-actions">
+			<g:link controller="site" action="home" class="btn btn-primary"><g:message code="layout.backToHome"/></g:link>
+		</div>
+	</div>
+	<%-- Exception details are for developers only: they reveal code and server paths. --%>
+	<g:if env="development">
+		<section class="card error-details">
+			<h2>Error details</h2>
+			<p>
+				<strong>URI:</strong> ${request.'jakarta.servlet.error.request_uri'}<br/>
+				<strong>Message:</strong> ${request.'jakarta.servlet.error.message'?.encodeAsHTML()}
+			</p>
+			<g:if test="${exception}">
+				<p>
+					<strong>Exception:</strong> ${exception.message?.encodeAsHTML()}<br/>
+					<strong>Caused by:</strong> ${exception.cause?.message?.encodeAsHTML()}<br/>
+					<strong>Class:</strong> ${exception.className}, line ${exception.lineNumber}
+				</p>
+				<pre class="error-snippet"><g:each var="cs" in="${exception.codeSnippet}">${cs?.encodeAsHTML()}
+</g:each></pre>
+				<h3>Stack trace</h3>
+				<pre class="error-stack"><g:each in="${exception.stackTraceLines}">${it.encodeAsHTML()}
+</g:each></pre>
+			</g:if>
+		</section>
 	</g:if>
-  </body>
+</body>
 </html>

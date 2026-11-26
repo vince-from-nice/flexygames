@@ -1,14 +1,17 @@
 <!doctype html>
 <html>
-    <head>
-        <title>Page Not Found</title>
-        <g:render template="/common/layout" />
-        <g:if env="development"><asset:stylesheet src="errors.css"/></g:if>
-    </head>
-    <body>
-        <ul class="errors">
-            <li>Error: Page Not Found (404)</li>
-            <li>Path: ${request.forwardURI}</li>
-        </ul>
-    </body>
+<head>
+	<title>Page Not Found</title>
+	<g:render template="/common/layout" />
+</head>
+<body>
+	<div class="card form-card status-card">
+		<p class="status-code">404</p>
+		<h1>Page Not Found</h1>
+		<p class="muted">${request.forwardURI}</p>
+		<div class="form-actions">
+			<g:link controller="site" action="home" class="btn btn-primary"><g:message code="layout.backToHome"/></g:link>
+		</div>
+	</div>
+</body>
 </html>

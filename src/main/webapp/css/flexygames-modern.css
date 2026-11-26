@@ -3032,3 +3032,42 @@ table.carpool-layout > tbody > tr > td {
 .blog-article > p:first-child {
 	margin-top: 0;
 }
+
+/* Status pages (403, 404, 500) */
+
+.status-card {
+	text-align: center;
+}
+
+.status-card .form-actions {
+	justify-content: center;
+}
+
+.status-code {
+	margin: 0;
+	color: var(--sky-300);
+	font-size: 3rem;
+	font-weight: 800;
+	line-height: 1;
+}
+
+.error-details pre {
+	max-height: 320px;
+	overflow: auto;
+	padding: 10px;
+	border: 1px solid var(--gray-200);
+	border-radius: var(--radius-small);
+	background: var(--gray-100);
+	font-size: 0.8rem;
+}
+
+.back-links {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 8px 24px;
+	margin: 32px 0 0;
+	padding-top: 16px;
+	border-top: 1px solid var(--gray-200);
+	font-size: 0.9rem;
+}
