@@ -479,7 +479,7 @@ fieldset {
 .card,
 .block,
 .dialog,
-.list {
+div.list {
 	background: var(--white);
 	border: 1px solid var(--gray-200);
 	border-radius: var(--radius);
@@ -1468,4 +1468,119 @@ td.carpool-request {
 .player-table td.muted,
 .player-table td.small a {
 	white-space: nowrap;
+}
+
+.session-title h2 {
+	margin: 0;
+	text-align: center;
+}
+
+/* My account */
+
+.account-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+	gap: 24px;
+	align-items: start;
+}
+
+.account-grid .card h3 {
+	margin-top: 20px;
+	font-size: 1rem;
+}
+
+.avatar-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	text-align: center;
+}
+
+.avatar-card img {
+	width: 160px;
+	height: 160px;
+	border-radius: 50%;
+	object-fit: cover;
+	box-shadow: var(--shadow);
+}
+
+.upload-form,
+.stacked-form {
+	display: grid;
+	gap: 8px;
+	width: 100%;
+	margin: 0;
+}
+
+.upload-form input[type="file"] {
+	max-width: 100%;
+	font-size: 0.85rem;
+}
+
+.stacked-form label {
+	font-size: 0.85rem;
+	font-weight: 600;
+}
+
+.stacked-form input[type="password"] {
+	width: 100%;
+}
+
+.inline-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 12px;
+	margin: 8px 0 0;
+}
+
+.inline-row label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.9rem;
+}
+
+.skill-list {
+	margin: 0 0 12px;
+	padding: 0;
+	list-style: none;
+}
+
+.skill-list li {
+	display: flex;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 8px 0;
+	border-bottom: 1px solid var(--gray-200);
+}
+
+input.remove {
+	border-color: var(--red-700);
+	color: var(--red-700);
+	background: var(--white);
+}
+
+input.remove:hover {
+	background: var(--red-100);
+	color: var(--red-700);
+}
+
+@media (max-width: 900px) {
+	.account-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.buttons a.btn-primary {
+	background: var(--navy-700);
+	border-color: var(--navy-700);
+	color: var(--white);
+}
+
+.buttons a.btn-primary:hover {
+	background: var(--navy-900);
+	border-color: var(--navy-900);
+	color: var(--white);
 }
