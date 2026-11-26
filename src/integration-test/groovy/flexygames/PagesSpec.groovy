@@ -105,10 +105,7 @@ class PagesSpec extends Specification {
         String path = page == 'a session page'
                 ? "/sessions/show/${Session.withNewSession { Session.list(max: 1, sort: 'id').first().id }}"
                 : '/'
-        // A browser skips the markup inside HTML comments.
-        def html = get(client, path).body().replaceAll(/(?s)<!--.*?-->/, '')
-        List<String> assets = ((html =~ /href="(\/[^"]+\.css)"/).collect { it[1] } +
-                (html =~ /src="(\/[^"]+)"/).collect { it[1] }).unique()
+        List<String> assets = linkedFiles(client, path)
 
         expect:
         assets.size() >= 5
@@ -116,6 +113,27 @@ class PagesSpec extends Specification {
 
         where:
         page << ['the home page', 'a session page']
+    }
+
+    void "every file of the account page loads for a signed-in player"() {
+        given:
+        def client = newClient()
+        signIn(client, 'turman')
+        List<String> assets = linkedFiles(client, '/myself/myAccount')
+
+        expect:
+        assets.size() >= 5
+        assets.findAll { get(client, it).statusCode() != 200 } == []
+    }
+
+    // Local stylesheets and src attributes of the page, resolved against the page path as a browser does.
+    // A browser skips the markup inside HTML comments.
+    private List<String> linkedFiles(HttpClient client, String path) {
+        def html = get(client, path).body().replaceAll(/(?s)<!--.*?-->/, '')
+        List<String> links = (html =~ /href="([^"]+\.css)"/).collect { it[1] } + (html =~ /src="([^"]+)"/).collect { it[1] }
+        links.findAll { !(it ==~ /(?i)(https?:|data:|\/\/).*/) }
+                .collect { url(path).resolve(it).path }
+                .unique()
     }
 
     void "a seed player posts a comment on a session"() {
