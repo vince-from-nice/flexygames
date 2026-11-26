@@ -136,6 +136,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 		commentCounter = 0
 		participationCounter = 0
 		voteCounter = 0
+		votingScoreCounter = 0
 		actionCounter = 0
 		absenceCounter = 0
 		delayCounter = 0

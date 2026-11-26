@@ -83,6 +83,37 @@ class PagesSpec extends Specification {
         }
     }
 
+    void "a player votes for a teammate who has not received any point yet"() {
+        given:
+        def client = newClient()
+        signIn(client, 'turman')
+        Map ids = Session.withNewTransaction {
+            Session session = Session.findAll { date < new Date() }.min { it.date }
+            User voter = User.findByUsername('turman')
+            User player = User.findByUsername('user1')
+            player.votingScoreCounter = null
+            player.save(flush: true, failOnError: true)
+            [voter, player].each {
+                new Participation(player: it, session: session, statusCode: Participation.Status.DONE_GOOD.code(),
+                        lastUpdate: new Date(), lastUpdater: 'turman').save(flush: true, failOnError: true)
+            }
+            [session: session.id, player: player.id]
+        }
+
+        when:
+        def response = post(client, '/sessions/vote', [['id', ids.session as String], ['firstChoiceBestPlayer', 'user1'], ['_action_vote', 'vote']])
+
+        then:
+        response.statusCode() == 302
+        User.withNewTransaction { User.get(ids.player).votingScoreCounter } == 3
+
+        cleanup:
+        Session.withNewTransaction {
+            Vote.findAllBySession(Session.get(ids.session))*.delete(flush: true)
+            Participation.findAllBySession(Session.get(ids.session))*.delete(flush: true)
+        }
+    }
+
     void "a private page sends a visitor to the login page"() {
         when:
         def response = get(newClient(), '/myself/myAccount')
