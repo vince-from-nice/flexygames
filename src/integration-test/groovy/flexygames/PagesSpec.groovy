@@ -99,6 +99,23 @@ class PagesSpec extends Specification {
         Membership.withNewSession { Membership.get(membershipId) } != null
     }
 
+    void "every stylesheet, script and image of #page loads"() {
+        given:
+        def client = newClient()
+        String path = page == 'a session page'
+                ? "/sessions/show/${Session.withNewSession { Session.list(max: 1, sort: 'id').first().id }}"
+                : '/'
+        def html = get(client, path).body()
+        List<String> assets = (html =~ /(?:href|src)="(\/[^"]+\.(?:css|js|png|jpg|gif))"/).collect { it[1] }.unique()
+
+        expect:
+        assets.size() >= 5
+        assets.findAll { get(client, it).statusCode() != 200 } == []
+
+        where:
+        page << ['the home page', 'a session page']
+    }
+
     void "a seed player posts a comment on a session"() {
         given:
         def client = newClient()
