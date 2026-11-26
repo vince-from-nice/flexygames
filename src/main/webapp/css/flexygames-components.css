@@ -152,9 +152,9 @@
 /***************/
 a.tooltip {
 	position: relative;
-	color: black;
+	color: inherit;
 	text-decoration: none;
-	border-bottom: 1px gray dotted; /* on souligne le texte */
+	border-bottom: 1px currentColor dotted; /* on souligne le texte */
 }
 
 a.tooltip span {
@@ -174,11 +174,11 @@ a.tooltip:hover span {
 	/* on change la valeur de la propriété white-space pour qu'il n'y ait pas de retour à la ligne non-désiré */
 	top: 30px; /* on positionne notre infobulle */
 	left: -200px;
-	background: white;
-	color: green;
+	background: var(--surface, white);
+	color: var(--green-700, green);
 	padding: 3px;
-	border: 1px solid green;
-	border-left: 4px solid green;
+	border: 1px solid var(--green-700, green);
+	border-left: 4px solid var(--green-700, green);
 }
 
 /* Blinking text */
@@ -212,7 +212,7 @@ a.tooltip:hover span {
 .tooltip {
 	position: relative;
 	display: inline-block;
-	border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+	border-bottom: 1px dotted currentColor;
 }
 
 /* Tooltip text */

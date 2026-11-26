@@ -8,6 +8,7 @@
     <link rel="icon" href="${resource(dir: 'images', file: 'flexygames-icon-32x32.png')}" type="image/png" />
     <link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'flexygames-icon-114x114.png')}" />
 
+    <script src="${resource(dir: 'js', file: 'theme.js')}"></script>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'flexygames-components.css')}" />
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'flexygames-modern.css')}" />
 
@@ -44,6 +45,13 @@
         </nav>
 
         <div class="account">
+            <button type="button" id="themeToggle" class="theme-toggle"
+                    data-label-auto="${message(code: 'theme.auto')}" data-label-light="${message(code: 'theme.light')}" data-label-dark="${message(code: 'theme.dark')}"
+                    aria-label="${message(code: 'theme.auto')}" title="${message(code: 'theme.auto')}">
+                <svg class="theme-icon theme-icon-auto" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>
+                <svg class="theme-icon theme-icon-light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
+                <svg class="theme-icon theme-icon-dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" fill="currentColor"/></svg>
+            </button>
             <shiro:user>
                 <details class="dropdown">
                     <summary><span class="account-greeting"><g:message code="logbox.welcome" /></span> <strong><shiro:principal /></strong></summary>

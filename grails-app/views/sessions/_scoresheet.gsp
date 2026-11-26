@@ -92,9 +92,9 @@
 								</g:if>
 								<g:if test="${actionsNbrForTeamA == actionsNbrForTeamB}">
 									<tr>
-										<th><div style="color: black"><g:message code="Total" />: ${actionsNbrForTeamA}</div>
+										<th><div><g:message code="Total" />: ${actionsNbrForTeamA}</div>
 										</th>
-										<th><div style="color: black"><g:message code="Total" />: ${actionsNbrForTeamB}</div>
+										<th><div><g:message code="Total" />: ${actionsNbrForTeamB}</div>
 										</th>
 									</tr>
 								</g:if>

@@ -172,7 +172,7 @@ var forceRedraw = function(element){
 													<td style="width: 400px; height: 540px; padding: 0px; margin: 0px; " background="${resource(dir: 'images/composition',file: sessionInstance.type.name + 'Background.png')}"> </td>
 												</tr>
 												<tr>
-													<td style="width: 400px; padding: 0px; margin: 0px; text-align: center; background-color: #EFEFEF">
+													<td style="width: 400px; padding: 0px; margin: 0px; text-align: center; background-color: var(--gray-100)">
 														<h3><g:message code="session.show.compositions.bench" /> :</h3>
 														<div >
 															<g:each in="${composition.allPlayersIncludingEligibleNotYetPresent}" var="item">
