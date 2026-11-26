@@ -39,13 +39,11 @@
 				<th><g:message code="teams" default="Teams" /></th>
 				<th><g:message code="players" default="Players" /></th>
 				<th class="status-head"><g:message code="myStatus" default="My Status" /></th>
-				<g:if test="${request.display == 'desktop'}">
-					<th class="col-optional"><g:message code="playground" default="Playground" /></th>
-					<th class="col-optional number"><g:message code="rounds" default="Sets" /></th>
-					<th class="col-optional number"><g:message code="votes" default="Votes" /></th>
-					<th class="col-optional number"><g:message code="posts" default="Posts" /></th>
-					<th class="col-optional"><g:message code="home.lastComment" /></th>
-				</g:if>
+				<th class="col-optional"><g:message code="playground" default="Playground" /></th>
+				<th class="col-optional number"><g:message code="rounds" default="Sets" /></th>
+				<th class="col-optional number"><g:message code="votes" default="Votes" /></th>
+				<th class="col-optional number"><g:message code="posts" default="Posts" /></th>
+				<th class="col-optional"><g:message code="home.lastComment" /></th>
 			</tr>
 		</thead>
 		<tbody>

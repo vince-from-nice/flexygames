@@ -46,7 +46,7 @@
         <div class="account">
             <shiro:user>
                 <details class="dropdown">
-                    <summary><g:message code="logbox.welcome" /> <strong><shiro:principal /></strong></summary>
+                    <summary><span class="account-greeting"><g:message code="logbox.welcome" /></span> <strong><shiro:principal /></strong></summary>
                     <ul class="dropdown-menu">
                         <li><g:link controller="myself" action="mySessions"><g:message code="logbox.mySessions" /></g:link></li>
                         <li><g:link controller="myself" action="myStats"><g:message code="logbox.myStats" /></g:link></li>
@@ -60,7 +60,7 @@
             </shiro:user>
             <shiro:notUser>
                 <g:link controller="auth" action="login" class="btn btn-ghost"><g:message code="logbox.login" /></g:link>
-                <g:link controller="player" action="register" class="btn btn-primary"><g:message code="logbox.newAccount" /></g:link>
+                <g:link controller="player" action="register" class="btn btn-primary account-register"><g:message code="logbox.newAccount" /></g:link>
             </shiro:notUser>
         </div>
     </div>

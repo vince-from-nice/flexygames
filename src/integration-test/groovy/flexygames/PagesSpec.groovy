@@ -25,6 +25,26 @@ class PagesSpec extends Specification {
                  '/auth/login']
     }
 
+    void "a phone gets the responsive page #path, not a separate mobile page"() {
+        given:
+        def client = newClient()
+        signIn(client, 'turman')
+        String resolved = path
+                .replace('{session}', "${Session.withNewTransaction { Session.list(max: 1)[0].id }}")
+                .replace('{player}', "${User.withNewTransaction { User.findByUsername('turman').id }}")
+
+        when:
+        def response = get(client, resolved, IPHONE)
+
+        then:
+        response.statusCode() == 200
+        response.body().contains('flexygames-modern.css')
+        !response.body().contains('mobilemenu')
+
+        where:
+        path << ['/', '/sessions/show/{session}', '/player/show/{player}', '/myself/myAccount']
+    }
+
     void "a private page sends a visitor to the login page"() {
         when:
         def response = get(newClient(), '/myself/myAccount')
@@ -218,6 +238,13 @@ class PagesSpec extends Specification {
 
     private HttpResponse<String> get(HttpClient client, String path) {
         client.send(HttpRequest.newBuilder(url(path)).build(), HttpResponse.BodyHandlers.ofString())
+    }
+
+    private static final String IPHONE =
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'
+
+    private HttpResponse<String> get(HttpClient client, String path, String userAgent) {
+        client.send(HttpRequest.newBuilder(url(path)).header('User-Agent', userAgent).build(), HttpResponse.BodyHandlers.ofString())
     }
 
     private URI url(String path) {

@@ -1,10 +1,11 @@
+            <div class="table-wrap">
             <table class="flexyTab">
                 <thead>
                 <tr>
                     <g:if test="${sessionIsManagedByCurrentUser}"><th></th></g:if>
                     <th style="vertical-align: top; text-align: center;" colspan="2"><g:message code="player"/></th>
                     <th>&nbsp;</th>
-                    <g:if test="${!mobile}"><th><g:message code="teams"/></th></g:if>
+                    <th><g:message code="teams"/></th>
                     <th style="vertical-align: top; text-align: center;"><g:message code="status"/></th>
                     <th style="vertical-align: top; min-width: 200px;"><g:message code="log"/></th>
                 </tr>
@@ -111,13 +112,11 @@
                                     </span>
                                 </nobr>
                             </td>
-                            <g:if test="${!mobile}">
                             <td class="small">
                                 <g:each in="${p.player.teamsInCurrentSession}" var="t">
                                     <g:link controller="teams" action="show" id="${t.id}">${t}</g:link><br/>
                                 </g:each>
                             </td>
-                            </g:if>
                             <g:render template="/common/status" model="['part': p, 'allStatusesArePossible':sessionIsManagedByCurrentUser]"/>
                             <td class="log-cell" style="--status-color: ${flexygames.Participation.Status.color(p.statusCode)};">
                                 <g:if test="${p.lastUpdate}">
@@ -159,3 +158,4 @@
                     </tbody>
                 </g:if>
             </table>
+            </div>

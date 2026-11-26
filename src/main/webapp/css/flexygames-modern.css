@@ -269,6 +269,27 @@ ul {
 	}
 }
 
+@media (max-width: 600px) {
+	.brand img {
+		width: 110px;
+		height: auto;
+	}
+
+	.account-greeting {
+		display: none;
+	}
+
+	.account {
+		margin-left: auto;
+	}
+}
+
+@media (max-width: 480px) {
+	.account .account-register {
+		display: none;
+	}
+}
+
 /* Page frame */
 
 .site-main {
@@ -357,6 +378,19 @@ button,
 	cursor: pointer;
 	text-decoration: none;
 	white-space: nowrap;
+	max-width: 100%;
+}
+
+@media (max-width: 600px) {
+	.btn,
+	input[type="submit"],
+	input[type="button"],
+	button,
+	.buttons a,
+	.buttons input {
+		white-space: normal;
+		text-align: center;
+	}
 }
 
 .btn:hover,
@@ -577,6 +611,10 @@ th a {
 tr.prop td {
 	padding: 8px 12px;
 	border-bottom: 1px solid var(--gray-200);
+}
+
+tr.prop td.value {
+	overflow-wrap: anywhere;
 }
 
 td.name {
@@ -1350,6 +1388,7 @@ th.sorted.desc a::after {
 
 table.zone-table {
 	width: 100%;
+	table-layout: fixed;
 	border: 0;
 }
 
@@ -2404,5 +2443,29 @@ fieldset.buttons a.edit {
 
 	fieldset.form > .fieldcontain > :nth-child(n+3) {
 		grid-column: auto;
+	}
+}
+
+table.carpool-layout {
+	width: 100%;
+	margin: 0;
+	border: 0;
+}
+
+table.carpool-layout > tbody > tr > td {
+	vertical-align: top;
+}
+
+@media (max-width: 700px) {
+	table.carpool-layout,
+	table.carpool-layout > tbody,
+	table.carpool-layout > tbody > tr,
+	table.carpool-layout > tbody > tr > td {
+		display: block;
+		width: 100% !important;
+	}
+
+	table.carpool-layout > tbody > tr > td + td {
+		margin-top: 16px;
 	}
 }

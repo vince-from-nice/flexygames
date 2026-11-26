@@ -11,8 +11,6 @@ import org.apache.shiro.crypto.hash.Sha512Hash
 
 class PlayerController {
 
-	def displayService
-
 	def mailerService
 
 	def userStatsService
@@ -67,7 +65,7 @@ class PlayerController {
 			redirect(action: "list")
 		}
 		else {
-			render(view: (displayService.isMobileDevice(request) ? 'mobileShow' : 'show'), model: [playerInstance: playerInstance])
+			render(view: 'show', model: [playerInstance: playerInstance])
 		}
 	}
 

@@ -133,7 +133,7 @@
 			<g:set var="defaultDisplayForDetailedZone" value="block" />
 		</g:if>
 		<div id="carpoolSummaryZone" style="display: ${defaultDisplayForSummaryZone};">
-			<table style="width: 100%; border: 0px; margin: 0px;" >
+			<table class="carpool-layout">
 				<tr>
 					<td style="width: 50%">
 						<g:if test="${sessionInstance.carpoolProposals.size() > 0}" >
@@ -165,7 +165,7 @@
 			</table>
 		</div>
 		<div id="carpoolDetailedZone" style="display: ${defaultDisplayForDetailedZone};">
-			<table style="width: 100%; border: 0px; margin: 0px;" >
+			<table class="carpool-layout">
 				<tr>
 					<td style="width: 50%">
 						<g:if test="${sessionInstance.carpoolProposals.size() > 0}" >

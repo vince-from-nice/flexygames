@@ -62,7 +62,7 @@
             </tr>
             <g:if test="${sessionIsManagedByCurrentUser}">
                 <tr>
-                    <td colspan="2">
+                    <td>
                         <g:render template="participantsManagement" />
                     </td>
                 </tr>

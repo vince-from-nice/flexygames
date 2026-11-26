@@ -25,20 +25,18 @@
 								<span class="count-min">min ${minimum}</span>
 							</td>
 							<g:render template="/common/status" model="['sessionInstance': sessionInstance, 'username': request.currentUser?.username]" />
-							<g:if test="${request.display == 'desktop'}">
-								<td class="col-optional small">${fieldValue(bean: sessionInstance, field: "playground")}</td>
-								<td class="col-optional small clickable" onclick="document.location='${sessionLink}'">
-									<g:if test="${sessionInstance.comments}">
-										<g:set var="lastComment" value="${sessionInstance.comments.first()}" />
-										<g:link controller="player" action="show" id="${lastComment.user.id}">${lastComment.user}</g:link>
-										<g:message code="session.show.comments.hasPosted" />
-										<g:link uri="/sessions/show/${sessionInstance.id}#comment${lastComment.id}"><flexy:humanDate date="${lastComment.date.time}" /></g:link>
-									</g:if>
-									<g:else>
-										<span class="muted"><g:message code="noComment" /></span>
-									</g:else>
-								</td>
-							</g:if>
+							<td class="col-optional small">${fieldValue(bean: sessionInstance, field: "playground")}</td>
+							<td class="col-optional small clickable" onclick="document.location='${sessionLink}'">
+								<g:if test="${sessionInstance.comments}">
+									<g:set var="lastComment" value="${sessionInstance.comments.first()}" />
+									<g:link controller="player" action="show" id="${lastComment.user.id}">${lastComment.user}</g:link>
+									<g:message code="session.show.comments.hasPosted" />
+									<g:link uri="/sessions/show/${sessionInstance.id}#comment${lastComment.id}"><flexy:humanDate date="${lastComment.date.time}" /></g:link>
+								</g:if>
+								<g:else>
+									<span class="muted"><g:message code="noComment" /></span>
+								</g:else>
+							</td>
 						</tr>
 					</g:if>
 				</g:each>

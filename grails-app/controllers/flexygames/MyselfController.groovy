@@ -5,15 +5,13 @@ import org.apache.shiro.crypto.hash.Sha512Hash
 
 class MyselfController {
 
-	def displayService
-	
     def index() {
         redirect(action: "myAccount", params: params)
     }
 
 	def myAccount() {
 		User user = request.currentUser
-		render(view: (displayService.isMobileDevice(request) ? 'myAccountMobile' : 'myAccount'),  model:[playerInstance: user])
+		render(view: 'myAccount', model: [playerInstance: user])
 	}
 	
 	def myPlanning() {

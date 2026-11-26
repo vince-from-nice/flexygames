@@ -38,10 +38,8 @@
 				<th><g:message code="groups" default="Groups" /></th>
 				<th><g:message code="players" default="Players" /></th>
 				<th class="status-head"><g:message code="myStatus" default="My Status" /></th>
-				<g:if test="${request.display == 'desktop'}">
-					<th class="col-optional"><g:message code="playground" default="Playground" /></th>
-					<th class="col-optional"><g:message code="home.lastComment" /></th>
-				</g:if>
+				<th class="col-optional"><g:message code="playground" default="Playground" /></th>
+				<th class="col-optional"><g:message code="home.lastComment" /></th>
 			</tr>
 		</thead>
 		<tbody>

@@ -97,36 +97,29 @@
 						
 						<g:form controller="manager">
 							<g:message code="management.membership.updateMember.text" /> :
-							<table>
-								<tr>
-									<th class="number"><g:message code="username" /></th>
-									<th class="number"><g:message code="training" /></th>
-									<th class="number"><g:message code="competition" /></th>
-									<th class="number"><g:message code="subscription" /></th>
-								</tr>
-								<tr>
-									<td class="number">
-										<g:select name="id" from="${teamInstance.memberships}" optionKey="id"  optionValue="user" key="id"/>
-									</td>
-									<td class="number">
-										<g:select name="regularForTraining" from="['Regular', 'Tourist']" />
-									</td>
-									<td class="number">
-										<g:select name="regularForCompetition" from="['Regular', 'Tourist']" />
-									</td>
-									<td class="number">
-										<g:select name="feesUpToDate" from="['UpToDate', 'NotUpToDate']" />
-									</td>
-								</tr> 
-								<tr>
-									<td colspan="4" class="number">
-										<br />
-										<g:actionSubmit action="updateMembership" value="${message(code:'update')}" />
-										<g:actionSubmit action="removeMembership" value="${message(code:'delete')}"
-										 	onclick="return confirm('${message(code:'management.membership.remove.warning')}')" />
-									</td>
-								</tr>
-							</table>
+							<div class="field-row">
+								<div class="field">
+									<label for="id"><g:message code="username" /></label>
+									<g:select name="id" from="${teamInstance.memberships}" optionKey="id" optionValue="user" key="id"/>
+								</div>
+								<div class="field">
+									<label for="regularForTraining"><g:message code="training" /></label>
+									<g:select name="regularForTraining" from="['Regular', 'Tourist']" />
+								</div>
+								<div class="field">
+									<label for="regularForCompetition"><g:message code="competition" /></label>
+									<g:select name="regularForCompetition" from="['Regular', 'Tourist']" />
+								</div>
+								<div class="field">
+									<label for="feesUpToDate"><g:message code="subscription" /></label>
+									<g:select name="feesUpToDate" from="['UpToDate', 'NotUpToDate']" />
+								</div>
+							</div>
+							<div class="form-actions">
+								<g:actionSubmit action="updateMembership" value="${message(code:'update')}" />
+								<g:actionSubmit action="removeMembership" class="delete" value="${message(code:'delete')}"
+									onclick="return confirm('${message(code:'management.membership.remove.warning')}')" />
+							</div>
 						</g:form>
 						
 						<g:form controller="manager">
