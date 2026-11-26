@@ -1,11 +1,13 @@
 package flexygames
 
 import grails.testing.mixin.integration.Integration
+import org.jsoup.Jsoup
 import spock.lang.Specification
 
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import java.nio.charset.StandardCharsets
 
 @Integration
 class PagesSpec extends Specification {
@@ -43,6 +45,42 @@ class PagesSpec extends Specification {
 
         where:
         path << ['/', '/sessions/show/{session}', '/player/show/{player}', '/myself/myAccount']
+    }
+
+    void "an administrator removes a role from a user through the admin form"() {
+        given:
+        def client = newClient()
+        signIn(client, 'turman')
+
+        when:
+        Long userId = User.withNewTransaction {
+            User user = User.findByUsername('user1')
+            user.addToRoles(Role.findByName('Administrator'))
+            user.save(flush: true, failOnError: true).id
+        }
+
+        then:
+        rolesOf(userId) == ['Administrator', 'Player'] as Set
+
+        when:
+        String playerRoleId = Role.withNewTransaction { Role.findByName('Player').id as String }
+        def form = Jsoup.parse(get(client, "/user/edit/${userId}").body()).selectFirst('form:has(select[name=roles])')
+        def fields = form.formData().findAll { it.key() != 'roles' }.collect { [it.key(), it.value()] } + [['roles', playerRoleId]]
+        def response = post(client, form.attr('action'), fields)
+
+        then:
+        response.statusCode() == 302
+        rolesOf(userId) == ['Player'] as Set
+
+        cleanup:
+        User.withNewTransaction {
+            User user = User.findByUsername('user1')
+            user.roles.findAll { it.name != 'Player' }.each { user.removeFromRoles(it) }
+            if (!user.roles*.name.contains('Player')) {
+                user.addToRoles(Role.findByName('Player'))
+            }
+            user.save(flush: true, failOnError: true)
+        }
     }
 
     void "a private page sends a visitor to the login page"() {
@@ -238,6 +276,20 @@ class PagesSpec extends Specification {
 
     private HttpResponse<String> get(HttpClient client, String path) {
         client.send(HttpRequest.newBuilder(url(path)).build(), HttpResponse.BodyHandlers.ofString())
+    }
+
+    private static Set<String> rolesOf(Long userId) {
+        User.withNewTransaction { User.get(userId).roles*.name as Set }
+    }
+
+    private HttpResponse<String> post(HttpClient client, String path, List<List<String>> fields) {
+        String body = fields.collect { URLEncoder.encode(it[0], StandardCharsets.UTF_8) + '=' + URLEncoder.encode(it[1], StandardCharsets.UTF_8) }.join('&')
+        client.send(
+                HttpRequest.newBuilder(url(path))
+                        .header('Content-Type', 'application/x-www-form-urlencoded')
+                        .POST(HttpRequest.BodyPublishers.ofString(body))
+                        .build(),
+                HttpResponse.BodyHandlers.ofString())
     }
 
     private static final String IPHONE =
