@@ -394,13 +394,15 @@ input[type="submit"]:hover,
 	color: var(--navy-700);
 }
 
-.buttons .delete {
+.buttons .delete,
+.form-actions .delete {
 	background: var(--white);
 	border-color: var(--red-700);
 	color: var(--red-700);
 }
 
-.buttons .delete:hover {
+.buttons .delete:hover,
+.form-actions .delete:hover {
 	background: var(--red-100);
 	color: var(--red-700);
 }
@@ -780,18 +782,67 @@ td.value {
 	margin: 20px auto;
 }
 
-.auth-card form {
+.auth-card form,
+.form-card form {
 	display: grid;
 	gap: 14px;
 }
 
-.auth-card .field {
+.field {
 	display: grid;
+	align-content: start;
 	gap: 6px;
 }
 
-.auth-card .field input {
+.field input,
+.field textarea,
+.field select {
 	width: 100%;
+}
+
+.field.error input,
+.field.error textarea,
+.field.error select {
+	border-color: var(--red-700);
+}
+
+.field-short input {
+	width: 6rem;
+}
+
+/* Form pages */
+
+.form-card {
+	max-width: 640px;
+	margin: 20px auto;
+}
+
+.form-card h1 {
+	margin-top: 0;
+}
+
+.form-card form > input[type="submit"] {
+	justify-self: start;
+}
+
+/* Text pages */
+
+.prose {
+	max-width: 820px;
+	line-height: 1.65;
+}
+
+.prose h2:first-child {
+	margin-top: 0;
+}
+
+.prose ul {
+	margin: 0;
+	padding-left: 1.25rem;
+}
+
+.prose li + li {
+	margin-top: 6px;
 }
 
 .auth-card .links {
@@ -1974,4 +2025,174 @@ input.remove:hover {
 	.bar-chart li {
 		grid-template-columns: minmax(0, 8rem) minmax(0, 1fr) 2.5rem;
 	}
+}
+
+.field-help {
+	margin: 0;
+	color: var(--gray-500);
+	font-size: 0.85rem;
+}
+
+.required-mark {
+	color: var(--red-700);
+}
+
+.form-separator {
+	margin: 0;
+	color: var(--gray-500);
+	font-size: 0.85rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.field > label,
+.field-label {
+	font-size: 0.9rem;
+	font-weight: 600;
+}
+
+.field-row {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 14px;
+}
+
+.field-short select,
+.field-short input {
+	justify-self: start;
+}
+
+.field-short select {
+	width: auto;
+}
+
+.form-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px;
+}
+
+.form-wide {
+	max-width: 860px;
+}
+
+.form-section {
+	display: grid;
+	gap: 14px;
+	margin: 0;
+	padding: 16px 0 0;
+	border: 0;
+	border-top: 1px solid var(--gray-200);
+}
+
+.form-section legend {
+	padding: 0 8px 0 0;
+	color: var(--navy-900);
+	font-weight: 700;
+}
+
+.date-picker {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.field .date-picker select {
+	width: auto;
+}
+
+.item-list {
+	display: grid;
+	gap: 6px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.item-list li {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 10px;
+	border-radius: var(--radius);
+	background: var(--gray-100);
+}
+
+.item-delete {
+	margin-left: auto;
+	line-height: 0;
+}
+
+
+.check-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.number-input {
+	width: 6rem;
+}
+
+.attendance-sheet td,
+.attendance-sheet th {
+	white-space: nowrap;
+}
+
+.attendance-sheet td.present {
+	color: var(--green-700);
+	font-weight: 600;
+}
+
+.attendance-sheet td.absent {
+	color: var(--gray-500);
+}
+
+.attendance-sheet .signature {
+	min-width: 12rem;
+	border-left: 1px solid var(--gray-300);
+}
+
+@media print {
+	.site-header,
+	.site-footer,
+	.no-print {
+		display: none !important;
+	}
+
+	body {
+		background: #fff;
+	}
+
+	.card {
+		border: 0;
+		box-shadow: none;
+		padding: 0;
+	}
+
+	.table-wrap {
+		overflow: visible;
+	}
+
+	.attendance-sheet td,
+	.attendance-sheet th {
+		border: 1px solid #000;
+	}
+}
+
+.form-card .ck-editor__editable {
+	min-height: 280px;
+}
+
+.copy-box {
+	padding: 12px 14px;
+	border: 1px dashed var(--gray-300);
+	border-radius: var(--radius);
+	background: var(--gray-100);
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.85rem;
+	overflow-wrap: anywhere;
 }
