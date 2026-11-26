@@ -14,6 +14,16 @@ Concretly it is a web site developped with the Groovy language and with the Grai
 - **Production package:** `./gradlew bootWar` builds `build/libs/flexygames.war`.  
   It runs with `java -jar`, or in an external Tomcat `10.1` or later, because the app uses the Jakarta EE 10 servlet API.
 
+## Front end
+
+- **One layout:** every page uses the responsive `modern` layout, on phones too.  
+  There is no separate mobile site.
+- **Stylesheets:** `src/main/webapp/css/flexygames-components.css` holds the feature rules and loads first.  
+  `flexygames-modern.css` holds the design tokens and the page styles, and loads second, so its rules win.
+- **Message files:** a running `bootRun` copies an edited `messages*.properties` file into `build/classes/groovy/main`,
+  and that copy wins over the source file.  
+  After editing a message file while the server is stopped, delete those copies before the next `bootRun`.
+
 ## Tests
 
 - **Unit tests:** `./gradlew test`.
