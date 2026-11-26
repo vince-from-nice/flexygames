@@ -1,9 +1,7 @@
 <g:set var="style" value="trainingBlogEntry" />
-<g:set var="color" value="#6ea7ff" />
 <g:set var="code" value="nextTraining" />
 <g:if test="${competition}">
     <g:set var="style" value="competitionBlogEntry" />
-    <g:set var="color" value="#ef4a3e" />
     <g:set var="code" value="nextCompetition" />
 </g:if>
 <g:if test="${blogEntry}">
@@ -13,7 +11,7 @@
             <g:message code="team.show.blog.${code}"/>:
             <g:formatDate date="${blogEntry.date}" format="EEEE dd MMMM yyyy (HH:mm)" />
         </h2>
-        <hr style="border-color: ${color}; margin-bottom: 0.6em;">
+        <hr>
         <g:if test="${blogEntry.name}">
             <b>${blogEntry.name}</b><br>
         </g:if>
@@ -55,7 +53,7 @@
 <g:else>
     <div class="${style}">
         <h2 style="margin-top: 0.1em"><g:message code="team.show.blog.${code}"/></h2>
-        <hr style="border-color:  ${color}; margin-bottom: 0.6em;">
+        <hr>
         <g:message code="team.show.blog.${code}.nothing" />
     </div>
 </g:else>

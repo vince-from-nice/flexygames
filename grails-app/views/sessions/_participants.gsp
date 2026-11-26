@@ -2,10 +2,10 @@
     <div class="sessionZoneHeader" onclick="toggleTableDisplay('participantsSummaryZone');
     toggleTableDisplay('participantsDetailedZone');
     return false">
-        <h2 style="vertical-align: top; display: inline;">
+        <h2>
             <g:message code="session.show.participants"/>
         </h2>
-        <span style="float:right; font-size: small;"><g:message code="clickForShowOrHideDetails"/></span>
+        <span class="zone-hint"><g:message code="clickForShowOrHideDetails"/></span>
     </div>
 
     <g:set var="currentUserParticipation" value="${sessionInstance.getParticipationOf(request.currentUser?.username)}"/>
@@ -18,12 +18,9 @@
             <tr>
                 <td colspan="6" style="text-align: center; width: 100%; ">
                     <g:if test="${currentUserParticipation}">
-                        <div style="text-align: center; vertical-align: middle; border: solid black 1px;
-                        background-color: ${flexygames.Participation.Status.color(currentUserParticipation.statusCode)}; ">
-                            &nbsp;<br>
+                        <div class="joined-box" style="background-color: ${flexygames.Participation.Status.color(currentUserParticipation.statusCode)};">
                             <g:message code="session.show.participants.youHaveAlreadyJoined"
                                        args="[message(code: 'participation.status.' + currentUserParticipation.statusCode), currentUserParticipation.lastUpdater, grailsApplication.mainContext.getBean('flexygames.FlexyTagLib').formatDate(currentUserParticipation.lastUpdate.time, true)]"/>
-                            <br>&nbsp;
                         </div>
                     </g:if>
                     <g:else>

@@ -13,9 +13,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'flexygames-components.css')}" />
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'flexygames-modern.css')}" />
 
-    <script src="${resource(dir: 'js', file: 'application.js')}"></script>
     <script src="${resource(dir: 'js', file: 'flexygames-20160508.js')}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <g:set var="now" value="${System.currentTimeMillis()}" />
     <g:layoutHead/>
@@ -143,6 +141,5 @@
     </shiro:hasRole>
 </footer>
 
-<div id="spinner" class="spinner" style="display: none;"><g:message code="spinner.alt" default="Loading&hellip;" /></div>
 </body>
 </html>

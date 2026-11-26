@@ -16,10 +16,10 @@
                     <td class="team-cell"><flexy:teamLogo team="${m.team}" /></td>
                     <td><g:link controller="teams" action="show" id="${m.team.id}">${m.team}</g:link></td>
                     <td>
-                        <g:select name="regularForTraining" from="[message(code:'regular'), message(code:'tourist')]" value="${m.regularForTraining ? message(code:'regular') : message(code:'tourist')}" />
+                        <g:select name="regularForTraining" from="[message(code:'regular'), message(code:'tourist')]" value="${m.regularForTraining ? message(code:'regular') : message(code:'tourist')}" aria-label="${message(code: 'training')}" />
                     </td>
                     <td>
-                        <g:select name="regularForCompetition" from="[message(code:'regular'), message(code:'tourist')]" value="${m.regularForCompetition ? message(code:'regular') : message(code:'tourist')}" />
+                        <g:select name="regularForCompetition" from="[message(code:'regular'), message(code:'tourist')]" value="${m.regularForCompetition ? message(code:'regular') : message(code:'tourist')}" aria-label="${message(code: 'competition')}" />
                     </td>
                     <td><g:actionSubmit class="edit" action="updateMembership" value="${message(code:'update')}" /></td>
                     <td><g:actionSubmit class="remove" action="leaveTeam" value="${message(code:'leave')}" /></td>
@@ -37,7 +37,7 @@
 
 <h3><g:message code="myAccount.joinNewTeam" /></h3>
 <g:form class="inline-row">
-    <g:select name="id" from="${flexygames.Team.list(sort:'name', order:'asc')}" optionKey="id" />
+    <g:select name="id" from="${flexygames.Team.list(sort:'name', order:'asc')}" optionKey="id" aria-label="${message(code: 'myAccount.joinNewTeam')}" />
     <label><g:message code="training" />? <g:select name="regularForTraining" from="[message(code:'regular'), message(code:'tourist')]" /></label>
     <label><g:message code="competition" />? <g:select name="regularForCompetition" from="[message(code:'regular'), message(code:'tourist')]" /></label>
     <g:actionSubmit class="create" action="joinTeam" value="${message(code:'join')}" />

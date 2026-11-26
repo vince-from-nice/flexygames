@@ -37,10 +37,10 @@
                                 <br/>
                                 <nobr>
                                     <g:if test="${p.player.membershipInCurrentSession?.feesUpToDate}">
-                                        <span style="font-size: 10px; color: green"><g:message code="team.show.membership.feesUpToDate"/></span>
+                                        <span class="small score-plus"><g:message code="team.show.membership.feesUpToDate"/></span>
                                     </g:if>
                                     <g:else>
-                                        <span style="font-size: 10px; color: red"><g:message code="team.show.membership.feesNotUpToDate"/></span>
+                                        <span class="small score-minus"><g:message code="team.show.membership.feesNotUpToDate"/></span>
                                     </g:else>
                                 </nobr>
                                 <br/>

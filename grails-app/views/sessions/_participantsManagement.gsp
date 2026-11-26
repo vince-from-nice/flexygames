@@ -30,7 +30,7 @@
                 <br/>
                 <g:select name="internalUserId"
                           from="${sessionInstance.group.defaultTeams.first().members}"
-                          optionKey="id" noSelection="['': '']"/>
+                          optionKey="id" noSelection="['': '']" aria-label="${message(code: 'player')}"/>
                 <g:actionSubmit class="create" action="requestExtraPlayer"
                                 value="Invite that team player !!"/>
             </div>
@@ -57,22 +57,13 @@
                         </td>
                         --%>
                         <td>
-                            <input type="radio" name="recipients" value="ONE_PARTICIPANT"
-                                   checked><g:message
-                                code="management.participations.sendToSpecificParticipant"/> :
-                        &nbsp;&nbsp;&nbsp;<g:select name="recipientId"
-                                                    from="${sessionInstance.participations*.player}"
-                                                    optionKey="id"/><br/>
-                            <input type="radio" name="recipients"
-                                   value="AVAILABLE_PARTICIPANTS"><g:message
-                                code="management.participations.sendToAllParticipantsAvailable"/><br/>
-                            <input type="radio" name="recipients"
-                                   value="ALL_PARTICIPANTS"><g:message
-                                code="management.participations.sendToAllParticipants"/>
+                            <label class="check-row"><input type="radio" name="recipients" value="ONE_PARTICIPANT" checked> <g:message code="management.participations.sendToSpecificParticipant"/></label>
+                            <g:select name="recipientId" from="${sessionInstance.participations*.player}" optionKey="id" aria-label="${message(code: 'player')}"/>
+                            <label class="check-row"><input type="radio" name="recipients" value="AVAILABLE_PARTICIPANTS"> <g:message code="management.participations.sendToAllParticipantsAvailable"/></label>
+                            <label class="check-row"><input type="radio" name="recipients" value="ALL_PARTICIPANTS"> <g:message code="management.participations.sendToAllParticipants"/></label>
                         </td>
                         <td>
-                            <g:textArea name="message" rows="2" cols="40"
-                                        style="width: 450px; height: 70px;"></g:textArea><br/>
+                            <g:textArea name="message" rows="3" aria-label="${message(code: 'management.participations.sendCustomizedMessage')}"></g:textArea>
                         </td>
                         <td style="vertical-align: middle;">
                             <g:actionSubmit class="save" action="sendMessage"
@@ -90,12 +81,11 @@
             <g:actionSubmit class="save" action="validateApprovedParticipants"
                             value="${message(code: 'management.participations.validateApprovedParticipants')}"/>
             <br>
-            <g:message code="management.participations.multiUpdate"/>:
-            <!--g:message code="status"/-->
-            <g:select name="statusCode" from="${flexygames.Participation.constrainedProperties.statusCode.inList}"
-                      valueMessagePrefix="participation.status" style="font-size : 14px" />
-            <g:message code="optionalText"/>
-            <g:textField type="text" name="userLog" />
+            <label for="multiStatusCode"><g:message code="management.participations.multiUpdate"/></label>
+            <g:select id="multiStatusCode" name="statusCode" from="${flexygames.Participation.constrainedProperties.statusCode.inList}"
+                      valueMessagePrefix="participation.status" />
+            <label for="multiUserLog"><g:message code="optionalText"/></label>
+            <g:textField type="text" id="multiUserLog" name="userLog" />
             <g:actionSubmit class="save" action="updateParticipationStatus" value="${message(code: 'update')}"/>
         </div>
     </g:form>

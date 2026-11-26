@@ -1,9 +1,9 @@
 <div class="sessionZone">
 	<div class="sessionZoneHeader" onclick="toggleDisplay('commentsSummaryZone'); toggleDisplay('commentsDetailedZone'); return false">
-		<h2 style="vertical-align: top; display: inline;">
+		<h2>
 			<g:message code="session.show.comments" />
 		</h2>
-		<span style="float:right; font-size: small;"><g:message code="clickForShowOrHideDetails" /></span>
+		<span class="zone-hint"><g:message code="clickForShowOrHideDetails" /></span>
 	</div>
 	<div class="sessionZoneContent">
 		<g:if test="${request.currentUser != null}">
@@ -22,7 +22,7 @@
 		<shiro:user>
 			<g:form action="sessions" class="comment-form">
 				<g:hiddenField name="id" value="${sessionInstance.id}" />
-				<g:textArea name="comment" value="" rows="4" aria-label="${message(code: 'session.show.comments.postComment')}" />
+				<g:textArea name="comment" value="" rows="4" aria-label="${message(code: 'session.show.comments')}" />
 				<g:actionSubmit class="save" action="post" value="${message(code:'session.show.comments.postComment')}" />
 			</g:form>
 		</shiro:user>

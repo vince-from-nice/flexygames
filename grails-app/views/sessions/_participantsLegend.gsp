@@ -1,8 +1,8 @@
 <%@ page import="flexygames.Participation" %>
 <g:set var="legendGroups" value="${[
-        [title: 'Players', statuses: [Participation.Status.REQUESTED, Participation.Status.AVAILABLE, Participation.Status.DECLINED]],
-        [title: 'Managing', statuses: [Participation.Status.APPROVED, Participation.Status.APPROVED_EXTRA, Participation.Status.WAITING_LIST, Participation.Status.REMOVED]],
-        [title: 'Reporting', statuses: [Participation.Status.DONE_GOOD, Participation.Status.DONE_LATE, Participation.Status.DONE_BAD, Participation.Status.UNDONE]]
+        [title: message(code: 'availability'), statuses: [Participation.Status.REQUESTED, Participation.Status.AVAILABLE, Participation.Status.DECLINED]],
+        [title: message(code: 'selection'), statuses: [Participation.Status.APPROVED, Participation.Status.APPROVED_EXTRA, Participation.Status.WAITING_LIST, Participation.Status.REMOVED]],
+        [title: message(code: 'reporting'), statuses: [Participation.Status.DONE_GOOD, Participation.Status.DONE_LATE, Participation.Status.DONE_BAD, Participation.Status.UNDONE]]
 ]}" />
 <div class="legend">
     <g:each in="${legendGroups}" var="legendGroup">

@@ -1,10 +1,10 @@
 <g:if test="${sessionInstance.date.time < System.currentTimeMillis() }">
 <div class="sessionZone">
 	<div class="sessionZoneHeader" onclick="toggleDisplay('scorescheetSummaryZone'); toggleDisplay('scorescheetDetailedZone'); return false">
-		<h2 style="vertical-align: top; display: inline;">
+		<h2>
 			<g:message code="session.show.rounds" />
 		</h2>
-		<span style="float:right; font-size: small;"><g:message code="clickForShowOrHideDetails" /></span>
+		<span class="zone-hint"><g:message code="clickForShowOrHideDetails" /></span>
 	</div>
 	<g:set var="defaultDisplayForSummaryZone" value="block" />
 	<g:set var="defaultDisplayForDetailedZone" value="none" />

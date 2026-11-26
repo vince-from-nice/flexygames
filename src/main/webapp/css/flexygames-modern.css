@@ -233,6 +233,12 @@ ul {
 	pointer-events: none;
 }
 
+@media (min-width: 1081px) {
+	.nav-toggle {
+		display: none;
+	}
+}
+
 .nav-toggle-label {
 	display: none;
 	flex-direction: column;
@@ -248,7 +254,7 @@ ul {
 .nav-toggle-label span {
 	display: block;
 	height: 2px;
-	background: var(--navy-900);
+	background: var(--gray-700);
 	border-radius: 2px;
 }
 
@@ -580,8 +586,6 @@ fieldset {
 /* Cards and blocks */
 
 .card,
-.block,
-.dialog,
 div.list {
 	background: var(--surface);
 	border: 1px solid var(--gray-200);
@@ -1215,8 +1219,7 @@ th.sorted.desc a::after {
 	font-size: 1.1rem;
 }
 
-.zone-hint,
-.sessionZoneHeader span[style*="float"] {
+.zone-hint {
 	color: var(--gray-500);
 	font-size: 0.8rem;
 	font-weight: 500;
@@ -2042,6 +2045,8 @@ input.remove:hover {
 	border-color: var(--gray-200);
 	padding: 12px 28px 12px 14px;
 	min-width: 240px;
+	background: var(--surface);
+	color: var(--gray-900);
 }
 
 .ol-popup-title {
@@ -2565,12 +2570,6 @@ table.carpool-layout > tbody > tr > td {
 
 /* Map popup follows the theme */
 
-.map .ol-popup {
-	background: var(--surface);
-	color: var(--gray-900);
-	border-color: var(--gray-200);
-}
-
 .map .ol-popup::after {
 	border-top-color: var(--surface);
 }
@@ -3070,4 +3069,33 @@ table.carpool-layout > tbody > tr > td {
 	padding-top: 16px;
 	border-top: 1px solid var(--gray-200);
 	font-size: 0.9rem;
+}
+
+/* Anchor targets stay below the sticky header */
+
+html {
+	scroll-padding-top: 80px;
+}
+
+/* Drag and drop: the zone under a dragged item */
+
+.drop-target,
+.carpoolProposalDropZone.drop-target {
+	border-color: var(--green-700);
+	background-color: var(--green-100);
+}
+
+/* The player's own participation, on the status color */
+
+.joined-box {
+	margin: 4px 0;
+	padding: 10px 12px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: var(--radius-small);
+	color: var(--ink);
+	text-align: center;
+}
+
+.seat-count {
+	width: 4rem;
 }

@@ -76,7 +76,7 @@
 					</ul>
 				</g:if>
 				<g:form class="inline-row">
-					<g:select name="id" from="${flexygames.GameSkill.list(sort: 'type', order: 'asc')}" optionKey="id" />
+					<g:select name="id" from="${flexygames.GameSkill.list(sort: 'type', order: 'asc')}" optionKey="id" aria-label="${message(code: 'myAccount.addNewSkill')}" />
 					<g:actionSubmit action="addSkill" value="${message(code: 'myAccount.addNewSkill')}" />
 				</g:form>
 			</section>

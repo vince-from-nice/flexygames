@@ -127,29 +127,6 @@
 /********************************/
 /* Selectable tabs */
 /********************************/
-.tabSelected {
-	background-color: #aaffaa;
-	text-align: center;
-	border: 2px solid #66aa66;
-}
-
-.tabSelected:hover {
-	background-color: #66ff66;
-}
-
-.tabNotSelected {
-	background-color: #ddffdd;
-	text-align: center;
-	border: 2px solid #66aa66;
-}
-
-.tabNotSelected:hover {
-	background-color: #66ff66;
-}
-
-/***************/
-/* Tooltip */
-/***************/
 a.tooltip {
 	position: relative;
 	color: inherit;
@@ -169,7 +146,7 @@ a.tooltip:hover {
 
 a.tooltip:hover span {
 	display: inline; /* on affiche l'infobulle */
-	position: absolute; //
+	position: absolute;
 	white-space: nowrap;
 	/* on change la valeur de la propriété white-space pour qu'il n'y ait pas de retour à la ligne non-désiré */
 	top: 30px; /* on positionne notre infobulle */

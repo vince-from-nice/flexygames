@@ -99,8 +99,8 @@
 							<g:message code="management.membership.updateMember.text" /> :
 							<div class="field-row">
 								<div class="field">
-									<label for="id"><g:message code="username" /></label>
-									<g:select name="id" from="${teamInstance.memberships}" optionKey="id" optionValue="user" key="id"/>
+									<label for="membershipId"><g:message code="username" /></label>
+									<g:select id="membershipId" name="id" from="${teamInstance.memberships}" optionKey="id" optionValue="user" key="id"/>
 								</div>
 								<div class="field">
 									<label for="regularForTraining"><g:message code="training" /></label>
@@ -124,8 +124,8 @@
 						
 						<g:form controller="manager">
 							<g:hiddenField name="id" value="${teamInstance.id}"/>
-							<g:message code="management.membership.updateAllMembers.text" /> :
-							<select name="with">
+							<label for="updateAllWith"><g:message code="management.membership.updateAllMembers.text" /></label>
+							<select id="updateAllWith" name="with">
  									<option value="cotizOk"><g:message code="management.membership.updateAllMembers.cotizOk" /></option>
  									<option value="cotizKo"><g:message code="management.membership.updateAllMembers.cotizKo" /></option>
  									<option value="regularForCompetition"><g:message code="management.membership.updateAllMembers.regularForCompetition" /></option>

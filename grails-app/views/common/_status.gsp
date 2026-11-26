@@ -43,7 +43,7 @@
                     <select
                             onChange="document.getElementById('participationStatusForm${part.id}').userLog.value = prompt(promptMsg, '');
                             document.getElementById('participationStatusForm${part.id}').submit()"
-                            name="statusCode">
+                            name="statusCode" aria-label="${message(code: 'status')}">
                         <g:each in="${possibleStatus}" var="status">
                             <g:if test="${status == flexygames.Participation.Status.REQUESTED.code}">
                                 <option disabled>── <g:message code="availability"/> ──</option>
@@ -65,7 +65,7 @@
                             onChange="document.getElementById('participationStatusForm${part.id}').userLog.value = prompt(promptMsg, '');
 		                    	document.getElementById('participationStatusForm${part.id}').submit()"
                             name="statusCode" from="${possibleStatus}" value="${part.statusCode}"
-                            valueMessagePrefix="participation.status"/>
+                            valueMessagePrefix="participation.status" aria-label="${message(code: 'status')}"/>
                 </g:else>
             </g:if>
             <g:else>
