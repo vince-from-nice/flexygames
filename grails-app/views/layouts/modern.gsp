@@ -9,6 +9,7 @@
     <link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'flexygames-icon-114x114.png')}" />
 
     <script src="${resource(dir: 'js', file: 'theme.js')}"></script>
+    <script src="${resource(dir: 'js', file: 'forms.js')}" defer></script>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'flexygames-components.css')}" />
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'flexygames-modern.css')}" />
 
