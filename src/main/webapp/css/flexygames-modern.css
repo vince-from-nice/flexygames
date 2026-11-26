@@ -2196,3 +2196,213 @@ input.remove:hover {
 	font-size: 0.85rem;
 	overflow-wrap: anywhere;
 }
+
+/* Admin scaffold pages (fields plugin markup) */
+
+a.skip {
+	position: absolute;
+	left: -9999px;
+}
+
+a.skip:focus {
+	position: static;
+	display: inline-block;
+	margin-bottom: 8px;
+}
+
+.nav[role="navigation"] ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0 0 16px;
+	padding: 0;
+	list-style: none;
+}
+
+.nav[role="navigation"] a {
+	display: inline-block;
+	padding: 6px 14px;
+	border: 1px solid var(--gray-300);
+	border-radius: 999px;
+	background: var(--white);
+	color: var(--navy-700);
+	font-size: 0.9rem;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.nav[role="navigation"] a:hover {
+	background: var(--sky-100);
+}
+
+.nav[role="navigation"] a.create {
+	border-color: var(--navy-700);
+	background: var(--navy-700);
+	color: var(--white);
+}
+
+.content.scaffold-list,
+.content.scaffold-show,
+.content.scaffold-create,
+.content.scaffold-edit {
+	padding: 20px;
+	border: 1px solid var(--gray-200);
+	border-radius: var(--radius);
+	background: var(--white);
+	box-shadow: var(--shadow);
+}
+
+.content[class*="scaffold-"] h1 {
+	margin-top: 0;
+}
+
+.scaffold-list {
+	overflow-x: auto;
+}
+
+.scaffold-list table {
+	width: 100%;
+	border: 1px solid var(--gray-200);
+	border-collapse: separate;
+	border-radius: var(--radius);
+}
+
+.scaffold-list th {
+	padding: 10px 12px;
+	border-bottom: 1px solid var(--gray-200);
+	background: var(--gray-100);
+	font-size: 0.85rem;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	white-space: nowrap;
+}
+
+.scaffold-list td {
+	padding: 10px 12px;
+	border-bottom: 1px solid var(--gray-200);
+}
+
+.scaffold-list tr:last-child td {
+	border-bottom: 0;
+}
+
+.scaffold-list tbody tr:hover td {
+	background: var(--sky-100);
+}
+
+.property-list {
+	display: grid;
+	margin: 0 0 16px;
+	padding: 0;
+	list-style: none;
+}
+
+.property-list > li.fieldcontain,
+fieldset.form > .fieldcontain {
+	display: grid;
+	grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+	align-items: start;
+	gap: 6px 16px;
+	padding: 10px 0;
+	border-bottom: 1px solid var(--gray-200);
+}
+
+.property-list > li.fieldcontain:last-child,
+fieldset.form > .fieldcontain:last-child {
+	border-bottom: 0;
+}
+
+.property-label,
+fieldset.form > .fieldcontain > label {
+	color: var(--gray-500);
+	font-size: 0.9rem;
+	font-weight: 600;
+}
+
+.property-value {
+	overflow-wrap: anywhere;
+}
+
+.property-value ul,
+fieldset.form > .fieldcontain ul {
+	margin: 0;
+	padding-left: 1.1rem;
+}
+
+fieldset.form,
+fieldset.buttons {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+fieldset.form > .fieldcontain input:not([type="checkbox"]):not([type="radio"]),
+fieldset.form > .fieldcontain select,
+fieldset.form > .fieldcontain textarea {
+	width: 100%;
+	max-width: 480px;
+}
+
+fieldset.form > .fieldcontain > :nth-child(n+3) {
+	grid-column: 2;
+}
+
+fieldset.form > .fieldcontain:has(> select + select) {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 8px;
+}
+
+fieldset.form > .fieldcontain:has(> select + select) > label:first-child {
+	flex: 0 0 14rem;
+	margin-right: 8px;
+}
+
+fieldset.form > .fieldcontain:has(> select + select) > select {
+	width: auto;
+}
+
+fieldset.form > .fieldcontain select[multiple] {
+	min-height: 6rem;
+}
+
+.required-indicator {
+	margin-left: 2px;
+	color: var(--red-700);
+}
+
+fieldset.buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 16px;
+}
+
+fieldset.buttons .delete {
+	border-color: var(--red-700);
+	background: var(--white);
+	color: var(--red-700);
+}
+
+fieldset.buttons a.edit {
+	display: inline-block;
+	padding: 8px 16px;
+	border: 1px solid var(--navy-700);
+	border-radius: var(--radius);
+	background: var(--navy-700);
+	color: var(--white);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+@media (max-width: 700px) {
+	.property-list > li.fieldcontain,
+	fieldset.form > .fieldcontain {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	fieldset.form > .fieldcontain > :nth-child(n+3) {
+		grid-column: auto;
+	}
+}
