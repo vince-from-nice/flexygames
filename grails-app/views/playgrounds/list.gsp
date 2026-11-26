@@ -91,7 +91,7 @@
 				color: '#ff0000'
 			})
 		});
-		<g:each in="${playgroundInstanceList}" status="i" var="p">
+		<g:each in="${playgroundInstanceList.findAll { it.latitude != null && it.longitude != null }}" status="i" var="p">
 			var marker = new ol.Feature({geometry: new ol.geom.Point(ol.proj.fromLonLat([${p.longitude}, ${p.latitude}])), name: "${p.name}"});
 			marker.name = "${p.name}";
 			marker.description = "${p.postalAddress}"

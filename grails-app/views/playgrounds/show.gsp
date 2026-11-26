@@ -10,15 +10,21 @@
 </head>
   <body onload="">
 	<h1><g:link controller="playgrounds" action="list"><g:message code="playground.list.title" /></g:link> : ${playground}</h1>
+	<g:set var="hasPosition" value="${playground.latitude != null && playground.longitude != null}" />
 	<table style="width: 100%; border: 0px">
 		<tr>
 			<td rowspan="3" style="width:80%; height:auto">
+				<g:if test="${hasPosition}">
 				<div id="map_canvas" >
 					<div id="popup" class="ol-popup">
 						<a href="#" id="popup-closer" class="ol-popup-closer"></a>
 						<div id="popup-content"></div>
 					</div>
 				</div>
+				</g:if>
+				<g:else>
+					<p class="message"><g:message code="playground.show.noCoordinates" /></p>
+				</g:else>
 			</td>
 			<td>
 				<h2><g:message code="informations" /></h2>
@@ -73,6 +79,7 @@
 			</td>
 		</tr>
 	</table>
+  <g:if test="${hasPosition}">
   <script>
 	  // Create the map
 	  const map = new ol.Map({
@@ -135,5 +142,6 @@
 	  content.innerHTML = "<b>${playground.name}</b><br>${playground.postalAddress}";
 	  overlay.setPosition(ol.proj.fromLonLat([${playground.longitude}, ${playground.latitude}]));
   </script>
+  </g:if>
   </body>
 </html>

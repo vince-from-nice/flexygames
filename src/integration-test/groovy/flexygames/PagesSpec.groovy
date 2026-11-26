@@ -128,6 +128,25 @@ class PagesSpec extends Specification {
         assets.findAll { get(client, it).statusCode() != 200 } == []
     }
 
+    void "a playground without position is left off the map and its page says so"() {
+        given:
+        Long id = Playground.withNewTransaction { new Playground(name: 'Field without position').save(flush: true, failOnError: true).id }
+
+        when:
+        def list = get(newClient(), '/playgrounds/list')
+        def page = get(newClient(), "/playgrounds/show/${id}")
+
+        then:
+        list.statusCode() == 200
+        !list.body().contains('fromLonLat([, ])')
+        page.statusCode() == 200
+        !page.body().contains('new ol.Map')
+        page.body().contains('no defined coordinates')
+
+        cleanup:
+        Playground.withNewTransaction { Playground.get(id)?.delete(flush: true) }
+    }
+
     // Local stylesheets and src attributes of the page, resolved against the page path as a browser does.
     // A browser skips the markup inside HTML comments.
     private List<String> linkedFiles(HttpClient client, String path) {

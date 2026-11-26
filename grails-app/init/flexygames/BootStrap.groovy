@@ -135,10 +135,10 @@ class BootStrap {
         volley.addToSkills(new GameSkill(code: "Hitter", type: volley))
         volley.save()
         
-        Playground bonneuil = new Playground(name:"UrbanFoot de Bonneuil").save()
-        Playground meudon = new Playground(name:"DreamFoot de Meudon").save()
-        Playground turgot = new Playground(name:"Lycée Turgot").save()
-        Playground pv = new Playground(name:"Lycée Paul-Valérie").save()
+        Playground bonneuil = new Playground(name:"UrbanFoot de Bonneuil", zip: "94380", city: "Bonneuil-sur-Marne", latitude: 48.7712f, longitude: 2.4870f).save()
+        Playground meudon = new Playground(name:"DreamFoot de Meudon", zip: "92190", city: "Meudon", latitude: 48.8127f, longitude: 2.2364f).save()
+        Playground turgot = new Playground(name:"Lycée Turgot", street: "69 rue de Turbigo", zip: "75003", city: "Paris", latitude: 48.8662f, longitude: 2.3578f).save()
+        Playground pv = new Playground(name:"Lycée Paul-Valérie", street: "38 boulevard Soult", zip: "75012", city: "Paris", latitude: 48.8402f, longitude: 2.4094f).save()
         
         SessionGroup sgFoot = new SessionGroup(name:"Entraînements de foot à 5 d'ASAS (2011-2012)", defaultType: foot, defaultPlayground:bonneuil, defaultMinPlayerNbr: 8, defaultMaxPlayerNbr: 10, defaultPreferredPlayerNbr: 10, defaultDuration: 60, defaultLockingTime: 0)
         sgFoot.addToDefaultTeams(t1)
