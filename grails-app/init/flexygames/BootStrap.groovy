@@ -39,6 +39,17 @@ class BootStrap {
         println "***** FlexyGames: ApplicationBootStrap.destroy() returned..."                   
     }
     
+    // Sample sessions sit around today, so the home page and the session list show past and coming sessions.
+    private static Date at21h(int daysFromToday) {
+        Calendar c = Calendar.instance
+        c.add(Calendar.DAY_OF_MONTH, daysFromToday)
+        c.set(Calendar.HOUR_OF_DAY, 21)
+        c.set(Calendar.MINUTE, 0)
+        c.set(Calendar.SECOND, 0)
+        c.set(Calendar.MILLISECOND, 0)
+        c.time
+    }
+
     def private createObjects() {
         println "Creating objects..."
         
@@ -139,15 +150,15 @@ class BootStrap {
         
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm")
         
-        Session s1 = new Session(date: df.parse("2011-11-29 21:00"), type: foot, playground: bonneuil, group:sgFoot)
+        Session s1 = new Session(date: at21h(-14), type: foot, playground: bonneuil, group:sgFoot)
         s1.save()
-        Session s2 = new Session(date: df.parse("2011-12-06 21:00"), type: foot, playground: meudon, group:sgFoot)
+        Session s2 = new Session(date: at21h(-7), type: foot, playground: meudon, group:sgFoot)
         s2.save()
-        Session s3 = new Session(date: df.parse("2011-12-13 21:00"), type: foot, playground: bonneuil, group:sgFoot)
+        Session s3 = new Session(date: at21h(-1), type: foot, playground: bonneuil, group:sgFoot)
         s3.save()
-        Session s4 = new Session(date: df.parse("2011-12-20 21:00"), type: foot, playground: bonneuil, group:sgFoot)
+        Session s4 = new Session(date: at21h(2), type: foot, playground: bonneuil, group:sgFoot)
         s4.save()
-        Session s5 = new Session(date: df.parse("2011-12-27 21:00"), type: foot, playground: bonneuil, group:sgFoot)
+        Session s5 = new Session(date: at21h(5), type: foot, playground: bonneuil, group:sgFoot)
         s5.save()
        
         df = new SimpleDateFormat("yyyy-MM-dd HH:mm")
