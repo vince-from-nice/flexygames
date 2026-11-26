@@ -11,11 +11,11 @@
                     <div class="competitionBlogEntry">
                         <g:if test="${blogEntry.session.name}">
                             <g:link controller="sessions" action="show" id="${blogEntry.session.id}" ><b>${blogEntry.session.name}</b></g:link>
-                            <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEEEEE dd MMMM yyyy (HH:mm)" />
+                            <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEE dd MMMM yyyy (HH:mm)" />
                         </g:if>
                         <g:else>
                             <g:link controller="sessions" action="show" id="${blogEntry.session.id}" ><b><g:message code="competition" />
-                            <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEEEEE dd MMMM yyyy (HH:mm)" /></b></g:link>
+                            <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEE dd MMMM yyyy (HH:mm)" /></b></g:link>
                         </g:else>
                         <hr>
                         <g:render template="blogEntryFromSession" bean="${blogEntry}" var="blogEntry" />
@@ -25,11 +25,11 @@
                     <div class="trainingBlogEntry">
                         <g:if test="${blogEntry.session.name}">
                             <g:link controller="sessions" action="show" id="${blogEntry.session.id}" ><b>${blogEntry.title}</b></g:link>
-                            <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEEEEE dd MMMM yyyy (HH:mm)" />
+                            <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEE dd MMMM yyyy (HH:mm)" />
                         </g:if>
                         <g:else>
                             <g:link controller="sessions" action="show" id="${blogEntry.session.id}" ><b><g:message code="training" />
-                            <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEEEEE dd MMMM yyyy (HH:mm)" /></b></g:link>
+                            <g:message code="on" /> <g:formatDate date="${blogEntry.date}" format="EEEE dd MMMM yyyy (HH:mm)" /></b></g:link>
                         </g:else>
                         <hr>
                         <g:render template="blogEntryFromSession" bean="${blogEntry}" var="blogEntry" />

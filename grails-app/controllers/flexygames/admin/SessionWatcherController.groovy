@@ -7,6 +7,8 @@ import static org.springframework.http.HttpStatus.*
 
 class SessionWatcherController {
 
+    static namespace = 'admin'
+
     SessionWatcherService sessionWatcherService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]

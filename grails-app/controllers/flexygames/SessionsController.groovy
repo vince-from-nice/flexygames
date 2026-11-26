@@ -78,7 +78,7 @@ class SessionsController {
 		Session session = Session.get(params.id)
 		if (!session) {
 			flash.error = "${message(code: 'default.not.found.message', args: [message(code: 'session', default: 'Session'), params.id])}"
-			redirect(action: "list")
+			return redirect(action: "list")
 		}
 
 		// Prepare data about participants

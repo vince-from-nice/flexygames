@@ -1,6 +1,7 @@
 package flexygames
 
 import flexygames.admin.ReminderController
+import flexygames.admin.ReminderDataService
 import grails.testing.gorm.DomainUnitTest
 import grails.testing.web.controllers.ControllerUnitTest
 import grails.validation.ValidationException
@@ -18,7 +19,7 @@ class ReminderControllerSpec extends Specification implements ControllerUnitTest
 
     void "Test the index action returns the correct model"() {
         given:
-        controller.reminderService = Mock(ReminderService) {
+        controller.reminderDataService = Mock(ReminderDataService) {
             1 * list(_) >> []
             1 * count() >> 0
         }
@@ -52,7 +53,7 @@ class ReminderControllerSpec extends Specification implements ControllerUnitTest
 
     void "Test the save action correctly persists"() {
         given:
-        controller.reminderService = Mock(ReminderService) {
+        controller.reminderDataService = Mock(ReminderDataService) {
             1 * save(_ as Reminder)
         }
 
@@ -73,7 +74,7 @@ class ReminderControllerSpec extends Specification implements ControllerUnitTest
 
     void "Test the save action with an invalid instance"() {
         given:
-        controller.reminderService = Mock(ReminderService) {
+        controller.reminderDataService = Mock(ReminderDataService) {
             1 * save(_ as Reminder) >> { Reminder reminder ->
                 throw new ValidationException("Invalid instance", reminder.errors)
             }
@@ -92,7 +93,7 @@ class ReminderControllerSpec extends Specification implements ControllerUnitTest
 
     void "Test the show action with a null id"() {
         given:
-        controller.reminderService = Mock(ReminderService) {
+        controller.reminderDataService = Mock(ReminderDataService) {
             1 * get(null) >> null
         }
 
@@ -105,7 +106,7 @@ class ReminderControllerSpec extends Specification implements ControllerUnitTest
 
     void "Test the show action with a valid id"() {
         given:
-        controller.reminderService = Mock(ReminderService) {
+        controller.reminderDataService = Mock(ReminderDataService) {
             1 * get(2) >> new Reminder()
         }
 
@@ -118,7 +119,7 @@ class ReminderControllerSpec extends Specification implements ControllerUnitTest
 
     void "Test the edit action with a null id"() {
         given:
-        controller.reminderService = Mock(ReminderService) {
+        controller.reminderDataService = Mock(ReminderDataService) {
             1 * get(null) >> null
         }
 
@@ -131,7 +132,7 @@ class ReminderControllerSpec extends Specification implements ControllerUnitTest
 
     void "Test the edit action with a valid id"() {
         given:
-        controller.reminderService = Mock(ReminderService) {
+        controller.reminderDataService = Mock(ReminderDataService) {
             1 * get(2) >> new Reminder()
         }
 
@@ -156,7 +157,7 @@ class ReminderControllerSpec extends Specification implements ControllerUnitTest
 
     void "Test the update action correctly persists"() {
         given:
-        controller.reminderService = Mock(ReminderService) {
+        controller.reminderDataService = Mock(ReminderDataService) {
             1 * save(_ as Reminder)
         }
 
@@ -177,7 +178,7 @@ class ReminderControllerSpec extends Specification implements ControllerUnitTest
 
     void "Test the update action with an invalid instance"() {
         given:
-        controller.reminderService = Mock(ReminderService) {
+        controller.reminderDataService = Mock(ReminderDataService) {
             1 * save(_ as Reminder) >> { Reminder reminder ->
                 throw new ValidationException("Invalid instance", reminder.errors)
             }
@@ -206,7 +207,7 @@ class ReminderControllerSpec extends Specification implements ControllerUnitTest
 
     void "Test the delete action with an instance"() {
         given:
-        controller.reminderService = Mock(ReminderService) {
+        controller.reminderDataService = Mock(ReminderDataService) {
             1 * delete(2)
         }
 

@@ -1,26 +1,26 @@
 package flexygames
 
-import grails.gorm.transactions.Transactional
-import org.geeks.browserdetection.UserAgentIdentService
+import jakarta.servlet.http.HttpServletRequest
 
-@Transactional(readOnly = true)
+import java.util.regex.Pattern
+
 class DisplayService {
 
     static transactional = false
 
-    UserAgentIdentService userAgentIdentService
+    // Phones, tablets and handhelds get the mobile pages, every Android and iOS device included.
+    private static final Pattern MOBILE_USER_AGENT =
+            ~/(?i)Mobi|Android|iPhone|iPad|iPod|BlackBerry|BB10|Bada|PlayStation Portable|Windows Phone|IEMobile|Opera Mini|webOS|Symbian/
 
-    def isMobileDevice(request) {
-        if ('mobile'.equals(request.session.flavour)) {
+    boolean isMobileDevice(HttpServletRequest request) {
+        def flavour = request.session.getAttribute('flavour')
+        if (flavour == 'mobile') {
             return true
-        } else if ('desktop'.equals(request.session.flavour)) {
-            return false
-        } else {
-            if (userAgentIdentService.isMobile()) {
-                return true
-            } else {
-                return false
-            }
         }
+        if (flavour == 'desktop') {
+            return false
+        }
+        String userAgent = request.getHeader('User-Agent')
+        return userAgent != null && MOBILE_USER_AGENT.matcher(userAgent).find()
     }
 }

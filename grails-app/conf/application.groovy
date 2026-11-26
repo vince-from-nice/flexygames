@@ -5,11 +5,11 @@
 environments {
     development {
         grails.serverURL="http://localhost:8080"
-        server.session.timeout = 600
+        server.servlet.session.timeout = "600s"
     }
     production {
         grails.serverURL="https://www.flexygames.net"
-        server.session.timeout = 600
+        server.servlet.session.timeout = "600s"
     }
 }
 
@@ -47,39 +47,6 @@ environments {
                 host = "localhost"
                 port = 25
             }
-        }
-    }
-}
-
-ckeditor {
-    config = "/js/myckconfig.js"
-    skipAllowedItemsCheck = false
-    defaultFileBrowser = "ofm"
-    upload {
-        basedir = "/uploads/"
-        overwrite = false
-        link {
-            browser = true
-            //upload = false
-            upload = true
-            //allowed = []
-            allowed = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'pwt', 'pwtx', 'odt', 'ods', 'odp', 'odb', 'odg', 'odf']
-            denied = ['html', 'htm', 'php', 'php2', 'php3', 'php4', 'php5',
-                      'phtml', 'pwml', 'inc', 'asp', 'aspx', 'ascx', 'jsp',
-                      'cfm', 'cfc', 'pl', 'bat', 'exe', 'com', 'dll', 'vbs', 'js', 'reg',
-                      'cgi', 'htaccess', 'asis', 'sh', 'shtml', 'shtm', 'phtm']
-        }
-        image {
-            browser = true
-            upload = true
-            allowed = ['jpg', 'gif', 'jpeg', 'png']
-            denied = []
-        }
-        flash {
-            browser = false
-            upload = false
-            allowed = ['swf']
-            denied = []
         }
     }
 }

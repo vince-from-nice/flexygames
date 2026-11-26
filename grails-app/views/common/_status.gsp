@@ -36,7 +36,7 @@
                     </g:if>
                 </g:if>
             </g:else>
-            <g:if test="${possibleStatus.size > 1}">
+            <g:if test="${possibleStatus.size() > 1}">
                 <script>var promptMsg = '${message(code:'session.show.participants.enterMessage')}'</script>
                 <g:if test="${allStatusesArePossible || sessionIsManagedByCurrentUser}">
                     <select

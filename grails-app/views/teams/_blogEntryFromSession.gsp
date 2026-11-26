@@ -11,7 +11,7 @@
     <div class="${style}" style="cursor: pointer" onclick="document.location='${sessionLink}'">
         <h2 style="margin-top: 0.1em;">
             <g:message code="team.show.blog.${code}"/>:
-            <g:formatDate date="${blogEntry.date}" format="EEEEEEE dd MMMM yyyy (HH:mm)" />
+            <g:formatDate date="${blogEntry.date}" format="EEEE dd MMMM yyyy (HH:mm)" />
         </h2>
         <hr style="border-color: ${color}; margin-bottom: 0.6em;">
         <g:if test="${blogEntry.name}">

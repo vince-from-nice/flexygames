@@ -5,7 +5,7 @@
 							<tr style="height: 5px;">
 								<td colspan="11" style="background-color: #FFB2B2; line-height: 10px; text-align: center; color: red">
 									<g:message code="home.session.currentHour" /> :
-									<g:formatDate date="${new Date()}" format="EEEEEEE dd MMMM (HH:mm)" />
+									<g:formatDate date="${new Date()}" format="EEEE dd MMMM (HH:mm)" />
 								</td>
 							</tr>
 						</g:if>
@@ -22,7 +22,7 @@
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}" style="height: 40px; ${isCanceled}; ">
 							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
 								<g:link controller="sessions" action="show" id="${sessionInstance.id}">
-									<nobr><g:formatDate date="${sessionInstance.date}" format="EEEEEEE dd MMMM (HH:mm)" /></nobr>
+									<nobr><g:formatDate date="${sessionInstance.date}" format="EEEE dd MMMM (HH:mm)" /></nobr>
 								</g:link>
 							</td>
 							<!--td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">

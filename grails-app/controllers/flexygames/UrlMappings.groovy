@@ -2,6 +2,9 @@ package flexygames
 
 class UrlMappings {
 
+	// Static files (resource() links) bypass the controller mappings and the security interceptor.
+	static excludes = ['/static/**']
+
 	static mappings = {
         
 		"/$controller/$action?/$id?"{

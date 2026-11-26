@@ -10,7 +10,7 @@
 						<tr class="${(i % 2) == 0 ? 'odd' : 'even'}" style="height: 40px; ${isCanceled}; ">
 							<td style="vertical-align: middle; cursor: pointer" onclick="document.location='${sessionLink}'">
 								<g:link controller="sessions" action="show" id="${sessionInstance.id}">
-									<nobr><g:formatDate date="${sessionInstance.date}" format="EEEEEEE dd MMMM (HH:mm)" /></nobr>
+									<nobr><g:formatDate date="${sessionInstance.date}" format="EEEE dd MMMM (HH:mm)" /></nobr>
 								</g:link>
 							</td>
 							<td style="vertical-align: middle; margin: 0px; padding: 0px; ">

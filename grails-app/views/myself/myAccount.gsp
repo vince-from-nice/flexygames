@@ -45,7 +45,7 @@
 					<td>
 						<div class="nav">
 							<ul>
-								<li><g:link class="edit" action="editMyProfile" id="${playerInstance?.id}"><img src="../images/skin/database_edit.png"> ${message(code:'myAccount.editPersonalInfos')}</g:link></li>
+								<li><g:link class="edit" action="editMyProfile" id="${playerInstance?.id}"><img src="${resource(dir: 'images/skin', file: 'database_edit.png')}" alt=""> ${message(code:'myAccount.editPersonalInfos')}</g:link></li>
 								<li><g:link class="list" controller="player" action="show" id="${playerInstance?.id}">${message(code:'myAccount.viewMyProfile')}</g:link></li>
 							</ul>
 						</div>

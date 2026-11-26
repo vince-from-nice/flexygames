@@ -6,8 +6,8 @@ import grails.util.Holders
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-import javax.servlet.http.HttpSessionBindingEvent
-import javax.servlet.http.HttpSessionBindingListener
+import jakarta.servlet.http.HttpSessionBindingEvent
+import jakarta.servlet.http.HttpSessionBindingListener
 
 class User implements Comparable<User>, HttpSessionBindingListener {
 
@@ -23,7 +23,7 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	String city
     Integer yearBirthDate
 	Date registrationDate
-	String avatarName
+	String avatarName = 'no-avatar.jpg'
 	String passwordResetToken
 	Date passwordResetExpiration
 	Date lastLogin
@@ -130,6 +130,18 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	///////////////////////////////////////////////////////////////////////////
 	// Business methods
 	///////////////////////////////////////////////////////////////////////////
+
+	// The services increment these counters, so a new player starts them at 0.
+	void initCounters() {
+		commentCounter = 0
+		participationCounter = 0
+		voteCounter = 0
+		actionCounter = 0
+		absenceCounter = 0
+		delayCounter = 0
+		gateCrashCounter = 0
+		waitingListCounter = 0
+	}
 
 	def getName() {
 		return (firstName?firstName + " ":"") + (lastName?lastName + " ":"") + "[" + username + "]"

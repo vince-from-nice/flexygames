@@ -3,11 +3,6 @@ grails:
     profile: web
     codegen:
         defaultPackage: flexygames
-    gorm:
-        reactor:
-            # Whether to translate GORM events into Reactor events
-            # Disabled by default for performance reasons
-            events: false
 info:
     app:
         name: '@info.app.name@'
@@ -20,11 +15,12 @@ spring:
         template:
             check-template-location: false
 
-# Spring Actuator Endpoints are Disabled by Default
-endpoints:
-    enabled: false
-    jmx:
-        enabled: true
+# Access control is done by the Grails interceptors, so the Shiro filter lets every request through.
+security:
+    shiro:
+        filter:
+            loginUrl: /auth/login
+            allowAccessByDefault: true
 
 ---
 grails:
@@ -78,9 +74,6 @@ grails:
                 scriptlets: html
                 taglib: none
                 staticparts: none
-endpoints:
-    jmx:
-        unique-names: true
 
 ---
 hibernate:
@@ -105,27 +98,20 @@ environments:
     test:
         dataSource:
             dbCreate: update
-            url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            driverClassName: org.h2.Driver
+            username: sa
+            url: jdbc:h2:mem:testDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
     production:
         dataSource:
             dbCreate: update
             url: jdbc:postgresql://localhost/flexygames
             dialect: org.hibernate.dialect.PostgreSQLDialect
+            # HikariCP pool settings
             properties:
-                jmxEnabled: true
-                initialSize: 5
-                maxActive: 50
-                minIdle: 5
-                maxIdle: 25
-                maxWait: 10000
-                maxAge: 600000
-                timeBetweenEvictionRunsMillis: 5000
-                minEvictableIdleTimeMillis: 60000
-                validationQuery: SELECT 1
-                validationQueryTimeout: 3
-                validationInterval: 15000
-                testOnBorrow: true
-                testWhileIdle: true
-                testOnReturn: false
-                jdbcInterceptors: ConnectionState
-                defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+                maximumPoolSize: 50
+                minimumIdle: 5
+                connectionTimeout: 10000
+                idleTimeout: 60000
+                maxLifetime: 600000
+                validationTimeout: 3000
+                transactionIsolation: TRANSACTION_READ_COMMITTED
