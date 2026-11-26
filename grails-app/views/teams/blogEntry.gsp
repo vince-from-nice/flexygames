@@ -8,7 +8,7 @@
 <body>
 	<p class="breadcrumb"><g:message code="team.show.blog.blogEntryOf" /> <g:link controller="teams" action="show" id="${blogEntry.team.id}">${blogEntry.team}</g:link></p>
 	<div class="page-header">
-		<h1>${blogEntry?.title}</h1>
+		<h1>${blogEntry?.title?.encodeAsHTML()}</h1>
 	</div>
 	<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
@@ -38,7 +38,7 @@
 		<shiro:user>
 			<g:form action="teams" class="comment-form">
 				<g:hiddenField name="id" value="${blogEntry.id}" />
-				<g:textArea name="comment" value="" rows="4" aria-label="${message(code: 'team.show.blog.comments.postComment')}" />
+				<g:textArea name="comment" value="" rows="4" aria-label="${message(code: 'team.show.blog.comments')}" />
 				<g:actionSubmit class="save" action="postBlogComment" value="${message(code:'team.show.blog.comments.postComment')}" />
 			</g:form>
 		</shiro:user>

@@ -11,10 +11,10 @@
     <div class="message">${flash.message}</div>
   </g:if>
   <g:form action="signIn">
-    <input type="hidden" name="targetUri" value="${targetUri}" />
+    <input type="hidden" name="targetUri" value="${targetUri?.encodeAsHTML()}" />
     <div class="field">
       <label for="username"><g:message code="logbox.login" /></label>
-      <input type="text" id="username" name="username" value="${username}" autocomplete="username" required />
+      <input type="text" id="username" name="username" value="${username?.encodeAsHTML()}" autocomplete="username" required />
     </div>
     <div class="field">
       <label for="password"><g:message code="logbox.password" /></label>

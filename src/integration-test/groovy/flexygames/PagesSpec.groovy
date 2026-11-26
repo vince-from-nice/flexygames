@@ -111,6 +111,7 @@ class PagesSpec extends Specification {
         Session.withNewTransaction {
             Vote.findAllBySession(Session.get(ids.session))*.delete(flush: true)
             Participation.findAllBySession(Session.get(ids.session))*.delete(flush: true)
+            User.get(ids.player).votingScoreCounter = null
         }
     }
 
@@ -122,6 +123,7 @@ class PagesSpec extends Specification {
             new BlogEntry(team: Team.list(max: 1)[0], user: User.findByUsername('turman'), date: new Date(),
                     title: 'Season start', body: '<p>Welcome</p>').save(flush: true, failOnError: true).id
         }
+        Integer commentsBefore = User.withNewTransaction { User.findByUsername('turman').commentCounter }
 
         when:
         def response = post(client, '/teams/teams', [['id', entryId as String], ['comment', 'See you there'], ['_action_postBlogComment', 'Post']])
@@ -136,7 +138,57 @@ class PagesSpec extends Specification {
             BlogEntry entry = BlogEntry.get(entryId)
             BlogComment.findAllByBlogEntry(entry)*.delete(flush: true)
             entry.delete(flush: true)
+            User.findByUsername('turman').commentCounter = commentsBefore
         }
+    }
+
+    void "the login and access denied pages show request values as text"() {
+        when:
+        def login = get(newClient(), '/auth/login?targetUri=%22%3E%3Cb%3Ex%3C%2Fb%3E&username=%3Cb%3Ey%3C%2Fb%3E')
+        def denied = get(newClient(), '/auth/unauthorized?targetUri=%3Cb%3Ex%3C%2Fb%3E')
+
+        then:
+        !login.body().contains('<b>x</b>')
+        !login.body().contains('<b>y</b>')
+        login.body().contains('&quot;&gt;&lt;b&gt;x&lt;/b&gt;')
+        !denied.body().contains('<b>x</b>')
+    }
+
+    void "a player is sent away from the admin page #path"() {
+        given:
+        def client = newClient()
+        signIn(client, 'user1')
+
+        when:
+        def response = get(client, path)
+
+        then:
+        response.statusCode() == 302
+        location(response).contains('/auth/unauthorized')
+
+        where:
+        path << ['/admin/index', '/user/index', '/role/edit/1']
+    }
+
+    void "a visitor who is not signed in is asked to sign in before posting a blog comment"() {
+        given:
+        def client = newClient()
+        Long entryId = BlogEntry.withNewTransaction {
+            new BlogEntry(team: Team.list(max: 1)[0], user: User.findByUsername('turman'), date: new Date(),
+                    title: 'Season start', body: '<p>Welcome</p>').save(flush: true, failOnError: true).id
+        }
+
+        when:
+        post(client, '/teams/teams', [['id', entryId as String], ['comment', 'Hello'], ['_action_postBlogComment', 'Post']])
+        def page = get(client, "/teams/displayBlogEntry/${entryId}")
+
+        then:
+        page.body().contains('You need to be authenticated in order to post')
+        !page.body().contains('{0}')
+        BlogComment.withNewTransaction { BlogComment.countByBlogEntry(BlogEntry.get(entryId)) } == 0
+
+        cleanup:
+        BlogEntry.withNewTransaction { BlogEntry.get(entryId).delete(flush: true) }
     }
 
     void "a private page sends a visitor to the login page"() {
@@ -288,6 +340,7 @@ class PagesSpec extends Specification {
         def client = newClient()
         signIn(client, 'user1')
         Long sessionId = Session.withNewSession { Session.list(max: 1, sort: 'id').first().id }
+        Integer commentsBefore = User.withNewTransaction { User.findByUsername('user1').commentCounter }
 
         when:
         def response = client.send(
@@ -300,6 +353,13 @@ class PagesSpec extends Specification {
         then:
         response.statusCode() == 302
         location(response) ==~ /.*\/sessions\/show\/${sessionId}#comment\d+/
+
+        cleanup:
+        SessionComment.withNewTransaction {
+            User user = User.findByUsername('user1')
+            SessionComment.findAllBySessionAndUser(Session.get(sessionId), user)*.delete(flush: true)
+            user.commentCounter = commentsBefore
+        }
     }
 
     static final String TEAM = 'ASAS UrbanFoot Team'

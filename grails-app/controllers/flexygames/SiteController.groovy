@@ -6,8 +6,6 @@ class SiteController {
 	
 	static int STATS_TEAMS_SIZE = 10
 	static int STATS_SESSIONS_GROUPS_SIZE = 10
-	static int STATS_PARTICIPANTS_SIZE = 10
-	static int STATS_POSTERS_SIZE = 20
 	static int STATS_SCORERS_SIZE = 20
 	
     def home = {

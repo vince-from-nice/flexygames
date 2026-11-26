@@ -29,15 +29,15 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	Date lastLogin
 	Date lastLogout
 	String calendarToken
-	Integer participationCounter
-	Integer absenceCounter
-	Integer delayCounter
-	Integer gateCrashCounter
-	Integer waitingListCounter
-	Integer actionCounter
-	Integer voteCounter
-	Integer votingScoreCounter
-	Integer commentCounter
+	Integer participationCounter = 0
+	Integer absenceCounter = 0
+	Integer delayCounter = 0
+	Integer gateCrashCounter = 0
+	Integer waitingListCounter = 0
+	Integer actionCounter = 0
+	Integer voteCounter = 0
+	Integer votingScoreCounter = 0
+	Integer commentCounter = 0
 	Date absenceLastDate
 	Date delayLastDate
 	Date gateCrashLastDate
@@ -130,19 +130,6 @@ class User implements Comparable<User>, HttpSessionBindingListener {
 	///////////////////////////////////////////////////////////////////////////
 	// Business methods
 	///////////////////////////////////////////////////////////////////////////
-
-	// The services increment these counters, so a new player starts them at 0.
-	void initCounters() {
-		commentCounter = 0
-		participationCounter = 0
-		voteCounter = 0
-		votingScoreCounter = 0
-		actionCounter = 0
-		absenceCounter = 0
-		delayCounter = 0
-		gateCrashCounter = 0
-		waitingListCounter = 0
-	}
 
 	def getName() {
 		return (firstName?firstName + " ":"") + (lastName?lastName + " ":"") + "[" + username + "]"

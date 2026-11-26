@@ -18,7 +18,7 @@
 		<section class="card error-details">
 			<h2>Error details</h2>
 			<p>
-				<strong>URI:</strong> ${request.'jakarta.servlet.error.request_uri'}<br/>
+				<strong>URI:</strong> ${request.'jakarta.servlet.error.request_uri'?.encodeAsHTML()}<br/>
 				<strong>Message:</strong> ${request.'jakarta.servlet.error.message'?.encodeAsHTML()}
 			</p>
 			<g:if test="${exception}">

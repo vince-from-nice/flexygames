@@ -1,5 +1,5 @@
 <header class="blog-entry-head">
-    <h3><g:link controller="teams" action="displayBlogEntry" id="${blogEntry.id}">${blogEntry.title}</g:link></h3>
+    <h3><g:link controller="teams" action="displayBlogEntry" id="${blogEntry.id}">${blogEntry.title?.encodeAsHTML()}</g:link></h3>
     <p class="small muted">
         <g:message code="team.show.blog.postedBy" />
         <g:link controller="player" action="show" id="${blogEntry.user.id}">${blogEntry.user}</g:link>

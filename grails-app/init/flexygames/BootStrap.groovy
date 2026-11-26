@@ -86,37 +86,31 @@ class BootStrap {
         turman.addToRoles(playerRole)
         turman.addToRoles(adminRole)
         turman.addToMemberships(new Membership(user: turman, team: t1, manager: true, regularForTraining: true, regularForCompetition: false))
-        turman.initCounters()
         turman.save()
         
         User user1 = new User(username:"user1", passwordHash: new Sha512Hash("gluar").toHex(), registrationDate: new Date(), email:"user1@example.com")
         user1.addToRoles(playerRole)
         user1.addToMemberships(new Membership(user: user1, team: t1, manager: false, regularForTraining: true, regularForCompetition: false))
-        user1.initCounters()
         user1.save()
         
         User user2 = new User(username:"user2", passwordHash: new Sha512Hash("gluar").toHex(), registrationDate: new Date(), email:"user2@example.com")
         user2.addToRoles(playerRole)
         user2.addToMemberships(new Membership(user: user2, team: t1, manager: false, regularForTraining: true, regularForCompetition: false))
-        user2.initCounters()
         user2.save()
         
         User user3 = new User(username:"user3", passwordHash: new Sha512Hash("gluar").toHex(), registrationDate: new Date(), email:"user3@example.com")
         user3.addToRoles(playerRole)
         user3.addToMemberships(new Membership(user: user3, team: t1, manager: false, regularForTraining: true, regularForCompetition: false))
-        user3.initCounters()
         user3.save()
         
         User user4 = new User(username:"user4", passwordHash: new Sha512Hash("gluar").toHex(), registrationDate: new Date(), email:"user4@example.com")
         user4.addToRoles(playerRole)
         user4.addToMemberships(new Membership(user: user4, team: t1, manager: false, regularForTraining: true, regularForCompetition: false))
-        user4.initCounters()
         user4.save()
         
         User user5 = new User(username:"user5", passwordHash: new Sha512Hash("gluar").toHex(), registrationDate: new Date(), email:"user5@example.com")
         user5.addToRoles(playerRole)
         user5.addToMemberships(new Membership(user: user5, team: t1, manager: false, regularForTraining: true, regularForCompetition: false))
-        user5.initCounters()
         user5.save()
        
         GameType foot

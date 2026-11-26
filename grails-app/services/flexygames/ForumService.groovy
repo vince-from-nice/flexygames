@@ -5,6 +5,8 @@ import grails.gorm.transactions.Transactional
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder
+import org.springframework.validation.Errors
 
 @Transactional
 class ForumService {
@@ -30,8 +32,7 @@ class ForumService {
 		comment.text = comment.text.replace(System.getProperty("line.separator"), "<br>" + System.getProperty("line.separator"))
 		comment.text = Jsoup.clean(comment.text, Safelist.basicWithImages())
 		if (comment.save()) {
-			// update user counter
-			user.setCommentCounter(user.getCommentCounter() + 1)
+			user.commentCounter = (user.commentCounter ?: 0) + 1
 			// notify by email users who are watching that session
 			def watches = SessionWatcher.findAllBySession(session)
 			def emails = watches*.user.email
@@ -47,7 +48,7 @@ class ForumService {
 				mailerService.mail(emails, title, body)
 			}
 		} else {
-			throw new Exception(comment.errors.allErrors*.defaultMessage.join(', '))
+			throw new Exception(errorText(comment.errors))
 		}
 		return comment
     }
@@ -60,7 +61,7 @@ class ForumService {
 				} else {
 					SessionWatcher watch = new SessionWatcher(user: user, session: session)
 					if (!watch.save()) {
-						throw new Exception(watch.errors.allErrors*.defaultMessage.join(', '))
+						throw new Exception(errorText(watch.errors))
 					}
 				}
 		} else {
@@ -80,10 +81,14 @@ class ForumService {
 		comment.text = comment.text.replace(System.getProperty("line.separator"), "<br>" + System.getProperty("line.separator"))
 		comment.text = Jsoup.clean(comment.text, Safelist.basicWithImages())
 		if (!comment.save()) {
-			throw new Exception(comment.errors.allErrors*.defaultMessage.join(', '))
+			throw new Exception(errorText(comment.errors))
 		}
 		user.commentCounter = (user.commentCounter ?: 0) + 1
 		return comment
+	}
+
+	private String errorText(Errors errors) {
+		errors.allErrors.collect { messageSource.getMessage(it, LocaleContextHolder.locale) }.join(', ')
 	}
 
 	/**

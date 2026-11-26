@@ -120,10 +120,10 @@
 		</script>
 	</g:if>
 	<div class="sessionZoneHeader" onclick="toggleDisplay('carpoolSummaryZone'); toggleDisplay('carpoolDetailedZone'); return false">
-		<h2 style="vertical-align: top; display: inline;">
+		<h2>
 			<g:message code="session.show.carpool" />
 		</h2>
-		<span style="float:right; font-size: small;"><g:message code="clickForShowOrHideDetails" /></span>
+		<span class="zone-hint"><g:message code="clickForShowOrHideDetails" /></span>
 	</div>
 	<div class="sessionZoneContent">
 		<g:set var="defaultDisplayForSummaryZone" value="block" />
@@ -181,7 +181,7 @@
 										<span class="avatar-cell"><g:render template="/common/avatar" model="[player:proposal.driver]" /></span>
 										<span>
 											<g:message code="session.show.carpool.proposal.userXCanTakeY" args="[proposal.driver.username, proposal.freePlaceNbr]"/>
-											<g:if test="${proposal.carDescription}"><span class="muted">(${proposal.carDescription})</span></g:if>
+											<g:if test="${proposal.carDescription}"><span class="muted">(${proposal.carDescription.encodeAsHTML()})</span></g:if>
 										</span>
 									</div>
 									<div class="carpool-seats">
@@ -219,8 +219,7 @@
 							<br>
 							<div class="carpoolRequestDropZone">
 								<g:each in="${sessionInstance.carpoolRequests}" var="r">
-									<div id="carpoolRequestOf${r.id}" class="draggableCarpoolRequest drag-drop carpool-request-card"
->
+									<div id="carpoolRequestOf${r.id}" class="draggableCarpoolRequest drag-drop carpool-request-card">
 										<img src="${resource(dir:'images/user',file:r.enquirer.avatarName)}" alt="Player avatar" />
 										<g:set var="username" value="${r.enquirer.username}" />
 										<g:if test="${username.length() > 8}">
@@ -236,7 +235,7 @@
 										</g:if>
 										<g:if test="${r.pickupLocation}">
 											<br>
-											<span class="carpool-request-place">${r.pickupLocation}</span>
+											<span class="carpool-request-place">${r.pickupLocation.encodeAsHTML()}</span>
 										</g:if>
 									</div>
 								</g:each>
@@ -258,11 +257,11 @@
 						<br>
 						<g:form action="proposeCarpool">
 							<g:hiddenField name="id" value="${sessionInstance.id}" />
-							<g:message code="session.show.carpool.proposal.freePlaces.prefix" />
-							<g:field name="freePlaceNbr" type="number" value="3" required="" size="2" min="1" max="9" style="width: 1.8em;" />
+							<label for="freePlaceNbr"><g:message code="session.show.carpool.proposal.freePlaces.prefix" /></label>
+							<g:field name="freePlaceNbr" type="number" value="3" required="" min="1" max="9" class="seat-count" />
 							<g:message code="session.show.carpool.proposal.freePlaces.suffix" />
 							<br>
-							<g:message code="session.show.carpool.proposal.carDescription" />
+							<label for="carDescription"><g:message code="session.show.carpool.proposal.carDescription" /></label>
 							<g:field name="carDescription" placeholder="ex: 307cc grise" required=""/>
 							<!--
 							<br>
@@ -285,7 +284,7 @@
 							<b><g:message code="session.show.carpool.request.title" /></b>
 							<br>
 							<br>
-							<g:message code="session.show.carpool.request.pickupLocation" />
+							<label for="pickupLocation"><g:message code="session.show.carpool.request.pickupLocation" /></label>
 							<g:field name="pickupLocation" placeholder="ex: Devant le portail d'Air France" required="" maxlength="30"/>
 							<!--
 							<br>

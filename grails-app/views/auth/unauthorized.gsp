@@ -10,11 +10,11 @@
 		<h1>Not Authorized</h1>
 		<p>
 			You are not authorized
-			<g:if test="${targetUri}">to access the page at <code>${targetUri}</code>.</g:if>
+			<g:if test="${targetUri}">to access the page at <code>${targetUri?.encodeAsHTML()}</code>.</g:if>
 			<g:else>to access this resource.</g:else>
 		</p>
 		<g:if test="${msg}">
-			<p class="muted">The error message was: ${msg}</p>
+			<p class="muted">The error message was: ${msg?.encodeAsHTML()}</p>
 		</g:if>
 		<shiro:isLoggedIn>
 			<p class="muted">You are signed in as <strong><shiro:principal/></strong>.</p>
