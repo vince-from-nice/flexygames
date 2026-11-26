@@ -138,10 +138,11 @@ class PagesSpec extends Specification {
 
         then:
         list.statusCode() == 200
-        !list.body().contains('fromLonLat([, ])')
+        list.body().contains('Field without position')
+        !(list.body() =~ /lon: *,/)
         page.statusCode() == 200
-        !page.body().contains('new ol.Map')
-        page.body().contains('no defined coordinates')
+        !page.body().contains('flexyPlaygroundMap(')
+        page.body().contains('No coordinates are defined for this playground')
 
         cleanup:
         Playground.withNewTransaction { Playground.get(id)?.delete(flush: true) }

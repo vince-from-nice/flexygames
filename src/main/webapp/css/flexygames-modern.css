@@ -1823,3 +1823,84 @@ input.remove:hover {
 		grid-template-columns: minmax(0, 1fr);
 	}
 }
+
+/* Playgrounds */
+
+.breadcrumb {
+	margin: 0 0 4px;
+	font-size: 0.9rem;
+}
+
+.breadcrumb a::after {
+	content: " /";
+	color: var(--gray-500);
+}
+
+.map-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+	gap: 24px;
+	align-items: start;
+	margin-top: 16px;
+}
+
+.map-card {
+	position: sticky;
+	top: 88px;
+	padding: 0;
+	overflow: hidden;
+}
+
+.map {
+	position: relative;
+	width: 100%;
+	height: 560px;
+}
+
+.map-empty {
+	margin: 0;
+	padding: 32px 24px;
+}
+
+.side-stack {
+	display: grid;
+	gap: 20px;
+}
+
+.side-stack > .card,
+.side-stack > .stat-tile {
+	margin: 0;
+}
+
+.side-stack h2 {
+	margin-top: 0;
+}
+
+.map .ol-popup {
+	font-family: inherit !important;
+	font-size: 0.9rem;
+	border-radius: var(--radius);
+	border-color: var(--gray-200);
+	padding: 12px 28px 12px 14px;
+	min-width: 240px;
+}
+
+.ol-popup-title {
+	display: block;
+	margin-bottom: 2px;
+	font-weight: 700;
+}
+
+@media (max-width: 900px) {
+	.map-layout {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.map-card {
+		position: static;
+	}
+
+	.map {
+		height: 340px;
+	}
+}
