@@ -131,15 +131,7 @@ class PlayerController {
 					regularForCompetition: false)
 			user.addToMemberships(ms)
 		}
-		// Init counters to avoid null values
-		user.commentCounter = 0;
-		user.participationCounter = 0;
-		user.voteCounter = 0;
-		user.actionCounter = 0;
-		user.absenceCounter = 0;
-		user.delayCounter = 0;
-		user.gateCrashCounter = 0;
-		user.waitingListCounter = 0;
+		user.initCounters()
 		if (!user.save()) {
 			flash.message = "${message(code: 'register.failed')}"
 			return render(view: "register", model: [user: user])

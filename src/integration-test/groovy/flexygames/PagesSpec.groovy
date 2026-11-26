@@ -99,6 +99,25 @@ class PagesSpec extends Specification {
         Membership.withNewSession { Membership.get(membershipId) } != null
     }
 
+    void "a seed player posts a comment on a session"() {
+        given:
+        def client = newClient()
+        signIn(client, 'user1')
+        Long sessionId = Session.withNewSession { Session.list(max: 1, sort: 'id').first().id }
+
+        when:
+        def response = client.send(
+                HttpRequest.newBuilder(url('/sessions/post'))
+                        .header('Content-Type', 'application/x-www-form-urlencoded')
+                        .POST(HttpRequest.BodyPublishers.ofString("id=${sessionId}&comment=See+you+there"))
+                        .build(),
+                HttpResponse.BodyHandlers.ofString())
+
+        then:
+        response.statusCode() == 302
+        location(response) ==~ /.*\/sessions\/show\/${sessionId}#comment\d+/
+    }
+
     static final String TEAM = 'ASAS UrbanFoot Team'
 
     static final List<String> ADMIN_CONTROLLERS = ['blogComment', 'blogEntry', 'carpoolProposal', 'carpoolRequest',
