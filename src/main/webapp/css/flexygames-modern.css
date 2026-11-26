@@ -2993,3 +2993,42 @@ table.carpool-layout > tbody > tr > td {
 	display: block;
 	font-size: xx-small;
 }
+
+/* Team blog entries */
+
+.blog-entry-head h3 {
+	margin: 0;
+	font-size: 1.15rem;
+}
+
+.blog-entry-head p {
+	margin: 2px 0 10px;
+}
+
+.blog-entry-body {
+	line-height: 1.6;
+	overflow-wrap: anywhere;
+}
+
+.blog-entry-body img {
+	max-width: 100%;
+	height: auto;
+}
+
+.blog-entry-foot {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 8px;
+	margin-top: 12px;
+	padding-top: 8px;
+	border-top: 1px solid var(--gray-200);
+}
+
+.blog-article {
+	max-width: 860px;
+}
+
+.blog-article > p:first-child {
+	margin-top: 0;
+}

@@ -18,13 +18,7 @@
             <b>${blogEntry.name}</b><br>
         </g:if>
         <g:message code="session.show.participants"/>:
-        <g:set var="c" value="#f33" />
-        <g:if test="${blogEntry.availableParticipants.size() >= blogEntry.group.defaultMinPlayerNbr}">
-            <g:set var="c" value="#3f3" />
-        </g:if>
-        <nobr>
-            <span style="color: ${c}; font-weight:bold;">${blogEntry.availableParticipants.size()} / ${blogEntry.participations.size()}</span>
-        </nobr>
+        <span class="count-pill ${blogEntry.availableParticipants.size() >= blogEntry.group.defaultMinPlayerNbr ? 'ok' : 'low'}">${blogEntry.availableParticipants.size()} / ${blogEntry.participations.size()}</span>
         <br />
         <g:message code="playground"/>: <g:link controller="playgrounds" action="show" id="${blogEntry.playground.id}">${blogEntry.playground}</g:link>
         <br />

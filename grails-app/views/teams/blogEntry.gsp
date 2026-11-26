@@ -6,69 +6,62 @@
 	<g:render template="/common/layout" />
 </head>
 <body>
-	<h1 style="margin-top: 10px;">${blogEntry?.title}</h1>
+	<p class="breadcrumb"><g:message code="team.show.blog.blogEntryOf" /> <g:link controller="teams" action="show" id="${blogEntry.team.id}">${blogEntry.team}</g:link></p>
+	<div class="page-header">
+		<h1>${blogEntry?.title}</h1>
+	</div>
 	<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
 	</g:if>
 	<g:if test="${flash.error}">
 		<div class="errors">${flash.error}</div>
 	</g:if>
-	<div style="border: solid 1px; margin: 10px; padding: 10px; width: 500px;">
-		<g:message code="team.show.blog.blogEntryOf" />
-		<g:link controller="teams" action="show" id="${blogEntry.team.id}">${blogEntry.team}</g:link>
-	</div>
-	<div class="userBlogEntry">
-		${blogEntry.body}
-	</div>
-	<div style="border: solid 1px; margin: 10px; padding: 10px; width: 500px;">
-		<g:message code="team.show.blog.postedBy" />
-		<g:link controller="player" action="show" id="${blogEntry.user.id}">${blogEntry.user}</g:link>
-		<flexy:humanDate date="${blogEntry.date.time}" />
-		<g:if test="${blogEntry.lastUpdater}">
-			|
-			<g:message code="team.show.blog.updatedBy" />
-			<g:link controller="player" action="show" id="${blogEntry.lastUpdater.id}">${blogEntry.lastUpdater}</g:link>
-			<flexy:humanDate date="${blogEntry.lastUpdate.time}" />
-			<br>
-		</g:if>
-	</div>
-	<h2><g:message code="team.show.blog.comments" /></h2>
-	<shiro:notUser>
-		<p><b><g:message code="team.show.blog.comments.needLogin" /></b></p>
-	</shiro:notUser>
-	<shiro:user>
-		<div style="text-align: left;">
-			<g:form action="teams">
+	<article class="card blog-article">
+		<p class="small muted">
+			<g:message code="team.show.blog.postedBy" />
+			<g:link controller="player" action="show" id="${blogEntry.user.id}">${blogEntry.user}</g:link>
+			<flexy:humanDate date="${blogEntry.date.time}" />
+			<g:if test="${blogEntry.lastUpdater}">
+				·
+				<g:message code="team.show.blog.updatedBy" />
+				<g:link controller="player" action="show" id="${blogEntry.lastUpdater.id}">${blogEntry.lastUpdater}</g:link>
+				<flexy:humanDate date="${blogEntry.lastUpdate.time}" />
+			</g:if>
+		</p>
+		<div class="blog-entry-body">${blogEntry.body}</div>
+	</article>
+	<section class="card">
+		<h2><g:message code="team.show.blog.comments" /></h2>
+		<shiro:notUser>
+			<p class="muted"><g:message code="team.show.blog.comments.needLogin" /></p>
+		</shiro:notUser>
+		<shiro:user>
+			<g:form action="teams" class="comment-form">
 				<g:hiddenField name="id" value="${blogEntry.id}" />
-				<g:textArea name="comment" value="" rows="4" cols="140" style="width: 600px; height: 100px" />
-				<br />
+				<g:textArea name="comment" value="" rows="4" aria-label="${message(code: 'team.show.blog.comments.postComment')}" />
 				<g:actionSubmit class="save" action="postBlogComment" value="${message(code:'team.show.blog.comments.postComment')}" />
 			</g:form>
-		</div>
-	</shiro:user>
-	<br />
-	<g:if test="${blogEntry.comments.size() > 0}">
-		<g:each var="c" in="${blogEntry.comments}">
-			<table style="width: auto;">
-				<tr>
-					<td>
-						<a id="comment${c.id}"></a>
-						<g:render template="/common/avatar" model="[player:c.user]" />
-					</td>
-					<td>
-						<g:link controller="player" action="show" id="${c.user.id}"><i>${c.user}</i></g:link>
-						<i> <g:message code="team.show.blog.comments.hasPosted" /> <flexy:humanDate date="${c.date.time}" />:</i><br />
-						<br />
-						${c.text}
-					</td>
-				</tr>
-			</table>
-			<br />
-		</g:each>
-	</g:if>
-	<g:else>
-		<i><g:message code="team.show.blog.comments.noComment" /></i><br />
-	</g:else>
+		</shiro:user>
+		<g:if test="${blogEntry.comments.size() > 0}">
+			<ol class="comment-list">
+				<g:each var="c" in="${blogEntry.comments}">
+					<li class="comment" id="comment${c.id}">
+						<div class="avatar-cell"><g:render template="/common/avatar" model="[player: c.user]" /></div>
+						<div class="comment-body">
+							<p class="comment-meta">
+								<g:link controller="player" action="show" id="${c.user.id}" class="player-name">${c.user}</g:link>
+								<span class="muted"><g:message code="team.show.blog.comments.hasPosted" /> <flexy:humanDate date="${c.date.time}" /></span>
+							</p>
+							<div class="comment-text">${c.text}</div>
+						</div>
+					</li>
+				</g:each>
+			</ol>
+		</g:if>
+		<g:else>
+			<p class="muted"><g:message code="team.show.blog.comments.noComment" /></p>
+		</g:else>
+	</section>
 	<g:render template="/common/backLinks" />
-  </body>
+</body>
 </html>
