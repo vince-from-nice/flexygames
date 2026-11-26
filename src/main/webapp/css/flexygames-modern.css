@@ -1269,6 +1269,8 @@ th.sorted.desc a::after {
 }
 
 .legend-dot {
+	display: inline-block;
+	vertical-align: -1px;
 	flex-shrink: 0;
 	width: 12px;
 	height: 12px;
@@ -1583,4 +1585,120 @@ input.remove:hover {
 	background: var(--navy-900);
 	border-color: var(--navy-900);
 	color: var(--white);
+}
+
+/* Player profile */
+
+.profile-hero {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 20px;
+}
+
+.profile-avatar img {
+	display: block;
+	width: 96px;
+	height: 96px;
+	border-radius: 50%;
+	object-fit: cover;
+	box-shadow: var(--shadow);
+}
+
+.profile-identity {
+	flex: 1;
+	min-width: 200px;
+}
+
+.profile-identity h1 {
+	margin-bottom: 4px;
+}
+
+.profile-identity p {
+	margin: 0;
+}
+
+.stat-tiles {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	gap: 16px;
+	margin-bottom: 20px;
+}
+
+.stat-tile {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 16px 20px;
+	background: var(--white);
+	border: 1px solid var(--gray-200);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+}
+
+.stat-tile strong {
+	color: var(--navy-900);
+	font-size: 1.8rem;
+	line-height: 1.1;
+}
+
+.stat-tile span {
+	color: var(--gray-500);
+	font-size: 0.85rem;
+}
+
+.profile-table td.name {
+	width: 40%;
+}
+
+.team-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.team-list li {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 8px 0;
+	border-bottom: 1px solid var(--gray-200);
+}
+
+.team-list li:last-child {
+	border-bottom: 0;
+}
+
+.team-list-name {
+	display: flex;
+	flex-direction: column;
+}
+
+.chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.chip {
+	padding: 4px 10px;
+	border-radius: 999px;
+	background: var(--sky-100);
+	color: var(--navy-900);
+	font-size: 0.85rem;
+	font-weight: 600;
+}
+
+.score-plus {
+	color: var(--green-700);
+	font-weight: 700;
+}
+
+.score-minus {
+	color: var(--red-700);
+	font-weight: 700;
+}
+
+.profile-table {
+	width: 100%;
 }

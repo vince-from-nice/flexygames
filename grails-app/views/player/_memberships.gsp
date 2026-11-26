@@ -1,33 +1,16 @@
-<table>
-    <tr>
-        <th colspan="2"><g:message code="name" /></th>
-        <th><g:message code="training" />?</th>
-        <th><g:message code="competition" />?</th>
-    </tr>
-    <g:each in="${playerInstance.getSortedMemberships()}" var="m">
-        <g:form>
-            <g:hiddenField name="id" value="${m.id}" />
-            <tr style="height: 40px; border: solid black 0px;">
-                <td style="vertical-align: middle; text-align: right; margin: 0px; padding: 0px">
-                    <g:set var="team" value="${m.team}" />
-                    <g:link controller="teams" action="show" id="${m.team.id}">
-                        <g:link controller="teams" action="show" id="${team.id}">
-                            <img style="max-width: 40px; max-height:40px;" src="${resource(dir:'images/team',file:team.logoName)}" alt="Team logo" />
-                        </g:link>
-                    </g:link>
-                </td>
-                <td style="vertical-align: middle; text-align: left">
-                    <g:link controller="teams" action="show" id="${m.team.id}">
-                        ${team}
-                    </g:link>
-                </td>
-                <td style="vertical-align: middle;">
-                    ${m.regularForTraining ? message(code:'regular') : message(code:'tourist')}
-                </td>
-                <td style="vertical-align: middle;">
-                    ${m.regularForCompetition ? message(code:'regular') : message(code:'tourist')}
-                </td>
-            </tr>
-        </g:form>
-    </g:each>
-</table>
+<g:if test="${playerInstance.memberships}">
+    <ul class="team-list">
+        <g:each in="${playerInstance.getSortedMemberships()}" var="m">
+            <li>
+                <g:link controller="teams" action="show" id="${m.team.id}" title="${m.team}"><flexy:teamLogo team="${m.team}" /></g:link>
+                <span class="team-list-name">
+                    <g:link controller="teams" action="show" id="${m.team.id}">${m.team}</g:link>
+                    <span class="small muted">
+                        <g:message code="training" />: ${m.regularForTraining ? message(code: 'regular') : message(code: 'tourist')}
+                        · <g:message code="competition" />: ${m.regularForCompetition ? message(code: 'regular') : message(code: 'tourist')}
+                    </span>
+                </span>
+            </li>
+        </g:each>
+    </ul>
+</g:if>
