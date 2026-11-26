@@ -587,11 +587,14 @@ td.value {
 	color: var(--gray-900);
 }
 
-@media (max-width: 760px) {
-	.flexyTab {
-		display: block;
-		overflow-x: auto;
-	}
+/* Wide tables scroll sideways inside this wrapper instead of widening the page. */
+.table-wrap {
+	overflow-x: auto;
+	margin-bottom: 20px;
+}
+
+.table-wrap > .flexyTab {
+	margin-bottom: 0;
 }
 
 /* Pagination */
@@ -1407,4 +1410,62 @@ td.carpool-request {
 .management select,
 .management input[type="text"] {
 	margin: 0 6px 6px 0;
+}
+
+/* Player list */
+
+.letter-filter {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+	margin-bottom: 20px;
+}
+
+.letter-filter-label {
+	margin-right: 8px;
+	color: var(--gray-700);
+	font-weight: 600;
+}
+
+.letter-filter a {
+	min-width: 32px;
+	padding: 4px 8px;
+	border-radius: var(--radius-small);
+	text-align: center;
+	color: var(--navy-700);
+	font-weight: 600;
+}
+
+.letter-filter a:hover {
+	background: var(--sky-100);
+	text-decoration: none;
+}
+
+.letter-filter a.active {
+	background: var(--navy-700);
+	color: var(--white);
+}
+
+.avatar-cell {
+	width: 56px;
+}
+
+.avatar-cell img {
+	display: block;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.player-name {
+	color: var(--gray-900);
+	font-weight: 650;
+}
+
+.player-table th,
+.player-table td.muted,
+.player-table td.small a {
+	white-space: nowrap;
 }

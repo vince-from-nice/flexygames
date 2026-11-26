@@ -43,6 +43,7 @@
             </div>
             <p class="muted"><g:message code="home.session.closedXDays" args="[2, 6]" /></p>
             <g:if test="${sessions}">
+                <div class="table-wrap">
                 <table class="flexyTab">
                     <tr>
                         <th style="text-align: center;"><g:message code="teams" /></th>
@@ -54,6 +55,7 @@
                     </tr>
                     <g:render template="/common/sessionMediumList" model="['sessionInstanceList': sessions]" />
                 </table>
+                </div>
             </g:if>
             <g:else>
                 <p><g:message code="home.sessions.none" /></p>

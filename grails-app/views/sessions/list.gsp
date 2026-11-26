@@ -31,6 +31,7 @@
 		</g:form>
 	</div>
 
+	<div class="table-wrap">
 	<table class="flexyTab session-table">
 		<thead>
 			<tr>
@@ -51,6 +52,7 @@
 			<g:render template="/common/sessionFullList" model="['sessionInstanceList': sessionInstanceList]" />
 		</tbody>
 	</table>
+	</div>
 	<div class="pagination">
 		<g:paginate total="${sessionListSize}" />
 	</div>
