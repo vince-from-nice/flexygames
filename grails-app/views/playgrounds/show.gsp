@@ -3,10 +3,7 @@
 <html>
 <head>
 	<g:render template="/common/layout"/>
-	<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
-	<link rel="stylesheet" href="${resource(dir:'css',file:'openlayers-popup.css')}" />
-	<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
-	<script src="${resource(dir:'js',file:'playground-map.js')}"></script>
+	<g:render template="mapAssets" />
 </head>
 <body>
 	<g:set var="hasPosition" value="${playground.latitude != null && playground.longitude != null}" />
