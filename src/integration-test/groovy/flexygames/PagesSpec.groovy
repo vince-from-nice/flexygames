@@ -148,6 +148,17 @@ class PagesSpec extends Specification {
         Playground.withNewTransaction { Playground.get(id)?.delete(flush: true) }
     }
 
+    void "the statistics page draws its rankings as bars linked to the teams, without an external chart script"() {
+        when:
+        def page = get(newClient(), '/site/stats')
+
+        then:
+        page.statusCode() == 200
+        !page.body().contains('google.com/jsapi')
+        page.body().contains('class="bar-chart"')
+        page.body() =~ /class="bar-label"><a href="\/teams\/show\/\d+"/
+    }
+
     // Local stylesheets and src attributes of the page, resolved against the page path as a browser does.
     // A browser skips the markup inside HTML comments.
     private List<String> linkedFiles(HttpClient client, String path) {
