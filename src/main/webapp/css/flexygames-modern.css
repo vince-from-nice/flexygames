@@ -2613,3 +2613,179 @@ table.carpool-layout > tbody > tr > td {
 	color: var(--text-strong);
 	font-weight: 700;
 }
+
+/* Session comments */
+
+.watch-row {
+	margin: 0 0 12px;
+}
+
+.comment-form {
+	display: grid;
+	gap: 8px;
+	margin: 0 0 16px;
+}
+
+.comment-form textarea {
+	width: 100%;
+	min-height: 96px;
+	resize: vertical;
+}
+
+.comment-form input[type="submit"] {
+	justify-self: start;
+}
+
+.comment-list {
+	display: grid;
+	gap: 12px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.comment {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	gap: 12px;
+	padding: 12px 14px;
+	border: 1px solid var(--gray-200);
+	border-radius: var(--radius);
+	background: var(--surface-alt);
+}
+
+.comment-meta {
+	margin: 0 0 6px;
+	font-size: 0.9rem;
+}
+
+.comment-text {
+	overflow-wrap: anywhere;
+}
+
+.comment-text img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Session votes */
+
+.votes-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr)) minmax(0, 1.2fr);
+	gap: 16px;
+	align-items: start;
+	margin-bottom: 20px;
+}
+
+.podium-card {
+	display: grid;
+	justify-items: center;
+	gap: 6px;
+	padding: 16px;
+	border: 1px solid var(--gray-200);
+	border-top: 4px solid var(--green-700);
+	border-radius: var(--radius);
+	background: var(--surface-alt);
+	text-align: center;
+}
+
+.podium-card.worst {
+	border-top-color: var(--red-700);
+}
+
+.podium-card h3,
+.vote-scores h3,
+.vote-form h3 {
+	margin: 0;
+	font-size: 0.95rem;
+}
+
+.podium-card img {
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.podium-empty {
+	grid-column: span 2;
+	margin: 0;
+	padding: 16px;
+	border: 1px dashed var(--gray-300);
+	border-radius: var(--radius);
+	text-align: center;
+}
+
+.vote-scores p {
+	margin: 10px 0 4px;
+}
+
+.score-list {
+	display: grid;
+	gap: 4px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.score-list li {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 8px;
+}
+
+.score-list .avatar-cell {
+	width: auto;
+}
+
+.score-list .avatar-cell img {
+	width: 28px;
+	height: 28px;
+}
+
+.vote-form {
+	display: grid;
+	gap: 12px;
+	padding-top: 16px;
+	border-top: 1px solid var(--gray-200);
+}
+
+.vote-columns {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+}
+
+.vote-column {
+	display: grid;
+	gap: 10px;
+	margin: 0;
+	padding: 12px 14px;
+	border: 1px solid var(--gray-200);
+	border-left: 4px solid var(--green-700);
+	border-radius: var(--radius);
+}
+
+.vote-column.worst {
+	border-left-color: var(--red-700);
+}
+
+.vote-column legend {
+	padding: 0 6px;
+	font-weight: 700;
+}
+
+.vote-form input[type="submit"] {
+	justify-self: start;
+}
+
+@media (max-width: 900px) {
+	.votes-grid,
+	.vote-columns {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.podium-empty {
+		grid-column: auto;
+	}
+}
