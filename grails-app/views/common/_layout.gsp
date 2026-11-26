@@ -2,5 +2,5 @@
     <meta name="layout" content="mobile" />
 </g:if>
 <g:else>
-    <meta name="layout" content="desktop" />
+    <meta name="layout" content="modern" />
 </g:else>

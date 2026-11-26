@@ -3,7 +3,7 @@
     <g:form name="managementForm"  controller="manager">
         <g:hiddenField name="id" value="${sessionInstance?.id}"/>
         <g:hiddenField name="messageType" value="email"/>
-        <div class="buttons">
+        <div class="management">
 
             <b><g:message code="management.participations.invite"/></b>
             <br>

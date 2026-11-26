@@ -263,7 +263,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td style="text-align: left; border: solid darkgray 1px; width: auto; background-color: lightblue; text-align: center; padding: 10px">
+					<td class="carpool-action carpool-offer">
 						<shiro:notUser>
 							<p><b><g:message code="session.show.carpool.proposal.needLogin" /></b></p>
 						</shiro:notUser>
@@ -290,7 +290,7 @@
 						</g:form>
 						</shiro:user>
 					</td>
-					<td style="text-align: left; border: solid darkgray 1px; width: auto; background-color: lightsalmon; text-align: center; padding: 10px">
+					<td class="carpool-action carpool-request">
 						<shiro:notUser>
 							<p><b><g:message code="session.show.carpool.request.needLogin" /></b></p>
 						</shiro:notUser>

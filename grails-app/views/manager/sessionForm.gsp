@@ -1,7 +1,7 @@
 <%@ page import="flexygames.Session" %>
 <html>
     <head>
-        <meta name="layout" content="desktop" />
+        <meta name="layout" content="modern" />
         <g:set var="entityName" value="${message(code: 'session.label', default: 'Session')}" />
         <g:if test="${params.create == '1'}">
         	<title><g:message code="management.session.add" /></title>

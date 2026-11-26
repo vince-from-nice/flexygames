@@ -17,6 +17,8 @@ class PagesSpec extends Specification {
         then:
         response.statusCode() == 200
         response.body().contains('id="mainNav"')
+        response.body().contains('flexygames-modern.css')
+        response.body().contains('content="width=device-width, initial-scale=1"')
 
         where:
         path << ['/', '/teams/list', '/sessions/list', '/player/list', '/playgrounds/list', '/site/stats', '/site/about',

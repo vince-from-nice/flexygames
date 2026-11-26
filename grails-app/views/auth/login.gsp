@@ -5,31 +5,28 @@
   <title>Login</title>
 </head>
 <body>
-<g:if test="${flash.message}">
-  <div class="message">${flash.message}</div>
-</g:if>
-<g:form action="signIn">
-  <input type="hidden" name="targetUri" value="${targetUri}" />
-  <table>
-    <tbody>
-    <tr>
-      <td><g:message code="logbox.login" /></td>
-      <td><input type="text" name="username" value="${username}" /></td>
-    </tr>
-    <tr>
-      <td><g:message code="logbox.password" /></td>
-      <td><input type="password" name="password" value="" /></td>
-    </tr>
-    <tr>
-      <td><g:message code="logbox.rememberMe" /></td>
-      <td><g:checkBox name="rememberMe" value="${rememberMe}" /></td>
-    </tr>
-    <tr>
-      <td />
-      <td><input type="submit" value="Login" /></td>
-    </tr>
-    </tbody>
-  </table>
-</g:form>
+<div class="card auth-card">
+  <h1><g:message code="logbox.login" /></h1>
+  <g:if test="${flash.message}">
+    <div class="message">${flash.message}</div>
+  </g:if>
+  <g:form action="signIn">
+    <input type="hidden" name="targetUri" value="${targetUri}" />
+    <div class="field">
+      <label for="username"><g:message code="logbox.login" /></label>
+      <input type="text" id="username" name="username" value="${username}" autocomplete="username" required />
+    </div>
+    <div class="field">
+      <label for="password"><g:message code="logbox.password" /></label>
+      <input type="password" id="password" name="password" value="" autocomplete="current-password" required />
+    </div>
+    <label><g:checkBox name="rememberMe" value="${rememberMe}" /> <g:message code="logbox.rememberMe" /></label>
+    <input type="submit" value="${message(code: 'logbox.login')}" />
+    <div class="links">
+      <g:link controller="player" action="remindPassword"><g:message code="logbox.remindPassword" /></g:link>
+      <g:link controller="player" action="register"><g:message code="logbox.newAccount" /></g:link>
+    </div>
+  </g:form>
+</div>
 </body>
 </html>

@@ -39,25 +39,25 @@
             </tr>
             <g:render template="counter" model="[]"/>
         </table>
-        <table id="participantsDetailedZone"
-               style="border: 0px; display: ${defaultDisplayForDetailedZone}; width: 100%">
+        <table id="participantsDetailedZone" class="zone-table" style="display: ${defaultDisplayForDetailedZone};">
             <tr>
                 <td>
                     <g:set var="hidePendingPlayersByDefault" value="${true}" />
-                    <g:if test="${sessionIsManagedByCurrentUser}">
-                        <g:set var="hidePendingPlayersByDefault" value="${true}" />
-                    </g:if>
-                    <g:render template="participantsList" />
-                </td>
-                <td style="width: 100px;">
-                    <h3><g:message code="options"/></h3>
-                    <g:checkBox name="hidePendingPlayers" value="${hidePendingPlayersByDefault}" checked="${hidePendingPlayersByDefault}"
-                                onclick="togglePendingParticipations(); return true; " />
-                    <g:message code="session.show.participants.hidePendingPlayers"/>
-                    <br/>
-                    <br/>
-                    <h3><g:message code="session.show.participants.legend"/></h3>
-                    <g:render template="participantsLegend" />
+                    <div class="participants-layout">
+                        <div class="participants-main">
+                            <g:render template="participantsList" />
+                        </div>
+                        <aside class="participants-aside">
+                            <h3><g:message code="options"/></h3>
+                            <label class="option">
+                                <g:checkBox name="hidePendingPlayers" value="${hidePendingPlayersByDefault}" checked="${hidePendingPlayersByDefault}"
+                                            onclick="togglePendingParticipations(); return true; " />
+                                <span><g:message code="session.show.participants.hidePendingPlayers"/></span>
+                            </label>
+                            <h3><g:message code="session.show.participants.legend"/></h3>
+                            <g:render template="participantsLegend" />
+                        </aside>
+                    </div>
                 </td>
             </tr>
             <g:if test="${sessionIsManagedByCurrentUser}">

@@ -3,8 +3,8 @@
                 <tr>
                     <g:if test="${sessionIsManagedByCurrentUser}"><th></th></g:if>
                     <th style="vertical-align: top; text-align: center;" colspan="2"><g:message code="player"/></th>
-                    <th style="vertical-align: top;">&nbsp;</th>
-                    <g:if test="${!mobile}"><th style="vertical-align: top;"><g:message code="teams"/></th></g:if>
+                    <th>&nbsp;</th>
+                    <g:if test="${!mobile}"><th><g:message code="teams"/></th></g:if>
                     <th style="vertical-align: top; text-align: center;"><g:message code="status"/></th>
                     <th style="vertical-align: top; min-width: 200px;"><g:message code="log"/></th>
                 </tr>
@@ -20,7 +20,7 @@
                                 <g:set var="display" value="${hidePendingPlayersByDefault?'none':'table-row'}"/>
                             </g:if>
                         </g:if>
-                        <tr id="participation-${p.id}" class="${(i % 2) == 0 ? 'odd' : 'even'}" style="display: ${display}; border: solid grey 1px">
+                        <tr id="participation-${p.id}" class="${(i % 2) == 0 ? 'odd' : 'even'}" style="display: ${display};">
                             <g:if test="${sessionIsManagedByCurrentUser}">
                                 <td style="vertical-align: middle; text-align: center; padding: 2px;">
                                     <input type="checkbox" name="selectParticipation${p.id}" form="managementForm"/>
@@ -47,7 +47,7 @@
                                     <span style="font-size: 10px;"><g:message code="player.show.scores.votes"/>: <b>${p.player.votingScoreCounter}</b></span>
                                 </nobr>
                             </td>
-                            <td style="font-size: 10px; border: solid grey 0px">
+                            <td class="small">
                                 <g:set var="amnestyTime" value="${java.lang.System.currentTimeMillis() - Integer.valueOf(grailsApplication.config.flexygames.amnestyDaysNbr) * 24 * 60 * 60 * 1000}" />
                                 <nobr>
                                     <span style="font-size: 12px;">
@@ -112,19 +112,19 @@
                                 </nobr>
                             </td>
                             <g:if test="${!mobile}">
-                            <td style="font-size: 10px; line-height: 10px; border: solid grey 1px">
+                            <td class="small">
                                 <g:each in="${p.player.teamsInCurrentSession}" var="t">
                                     <g:link controller="teams" action="show" id="${t.id}">${t}</g:link><br/>
                                 </g:each>
                             </td>
                             </g:if>
                             <g:render template="/common/status" model="['part': p, 'allStatusesArePossible':sessionIsManagedByCurrentUser]"/>
-                            <td style="background-color: ${flexygames.Participation.Status.color(p.statusCode)}; font-size: 12px; border: solid black 1px">
+                            <td class="log-cell" style="--status-color: ${flexygames.Participation.Status.color(p.statusCode)};">
                                 <g:if test="${p.lastUpdate}">
                                     <g:message code="session.show.participants.lastUpdate" args="[]"/>
                                     <b><flexy:humanDate date="${p.lastUpdate.time}"/></b>
                                     <g:if test="${p.lastUpdater}"><g:message code="by"/> ${p.lastUpdater}</g:if>
-                                    <g:if test="${p.userLog?.length() > 0}">: <span style="font-size: 12px"><i>${p.userLog}</i></span></g:if>
+                                    <g:if test="${p.userLog?.length() > 0}">: <i>${p.userLog}</i></g:if>
                                 </g:if>
                             </td>
                         </tr>

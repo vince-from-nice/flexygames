@@ -88,8 +88,8 @@
                 </g:if>
             </g:if>
             <tr>
-                <td style="background-color: #d8f3f0">
-                    <g:form name="taskForm" action="addTask" id="${sessionInstance.id}">
+                <td>
+                    <g:form name="taskForm" action="addTask" id="${sessionInstance.id}" class="task-offer">
                         <g:message code="session.show.tasks.wantToHelp"/>:
                         <g:select name="newTaskCode" from="${flexygames.TaskType.list()}" optionKey="code" valueMessagePrefix="session.show.tasks.new"/>
                         <g:submitButton name="newTask" value="OK"/>
