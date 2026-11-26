@@ -1,7 +1,6 @@
 package flexygames.admin
 
 import flexygames.Reminder
-import flexygames.ReminderService
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
@@ -9,17 +8,17 @@ class ReminderController {
 
     static namespace = 'admin'
 
-    ReminderService reminderService
+    ReminderDataService reminderDataService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond reminderService.list(params), model:[reminderCount: reminderService.count()]
+        respond reminderDataService.list(params), model:[reminderCount: reminderDataService.count()]
     }
 
     def show(Long id) {
-        respond reminderService.get(id)
+        respond reminderDataService.get(id)
     }
 
     def create() {
@@ -33,7 +32,7 @@ class ReminderController {
         }
 
         try {
-            reminderService.save(reminder)
+            reminderDataService.save(reminder)
         } catch (ValidationException e) {
             respond reminder.errors, view:'create'
             return
@@ -49,7 +48,7 @@ class ReminderController {
     }
 
     def edit(Long id) {
-        respond reminderService.get(id)
+        respond reminderDataService.get(id)
     }
 
     def update(Reminder reminder) {
@@ -59,7 +58,7 @@ class ReminderController {
         }
 
         try {
-            reminderService.save(reminder)
+            reminderDataService.save(reminder)
         } catch (ValidationException e) {
             respond reminder.errors, view:'edit'
             return
@@ -80,7 +79,7 @@ class ReminderController {
             return
         }
 
-        reminderService.delete(id)
+        reminderDataService.delete(id)
 
         request.withFormat {
             form multipartForm {

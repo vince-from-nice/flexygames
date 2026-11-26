@@ -508,7 +508,7 @@ class ManagerController {
 			def player = User.get(params.recipientId)
 			if (!player) {
 				flash.message = "Emails has been sent to session players."
-				redirect(controller:"sessions", action: "show", id: session.id)
+				return redirect(controller:"sessions", action: "show", id: session.id)
 			}
 			addresses << player.email
 		}
@@ -803,7 +803,7 @@ class ManagerController {
 		def user = request.currentUser
 		if (!ms.team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
-			redirect(controller:"teams", action: "show", id: ms.team.id)
+			return redirect(controller:"teams", action: "show", id: ms.team.id)
 		}
 		ms.feesUpToDate = 'UpToDate' == params.feesUpToDate
 		ms.regularForTraining = 'Regular' == params.regularForTraining
@@ -825,7 +825,7 @@ class ManagerController {
 		def user = request.currentUser
 		if (!team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
-			redirect(controller:"teams", action: "show", id: team.id)
+			return redirect(controller:"teams", action: "show", id: team.id)
 		}
 		team.memberships.each { ms ->
 			if (params.with == 'cotizOk') ms.feesUpToDate = true
@@ -854,7 +854,7 @@ class ManagerController {
 		def user = request.currentUser
 		if (!ms.team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
-			redirect(controller:"teams", action: "show", id: ms.team.id)
+			return redirect(controller:"teams", action: "show", id: ms.team.id)
 		}
 		def teamId = team.id
 		try {
@@ -936,7 +936,7 @@ class ManagerController {
 		def user = request.currentUser
 		if (!team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
-			redirect(controller:"teams", action: "show", id: team.id)
+			return redirect(controller:"teams", action: "show", id: team.id)
 		}
 		render(view: '../manager/blogEntryForm', model: [team: team, blogEntry: params.id ? BlogEntry.get(params.id) : null])
 	}
@@ -950,7 +950,7 @@ class ManagerController {
 		def user = request.currentUser
 		if (!team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
-			redirect(controller:"teams", action: "show", id: team.id)
+			return redirect(controller:"teams", action: "show", id: team.id)
 		}
 		BlogEntry be
 		// Update an existing blog entry
@@ -995,7 +995,7 @@ class ManagerController {
 		def team = be.getTeam()
 		if (!team.isManagedBy(user.username)) {
 			flash.error = "You cannot manage that team since you're not a manager !"
-			redirect(controller:"teams", action: "show", id: team.id)
+			return redirect(controller:"teams", action: "show", id: team.id)
 		}
 		be.delete()
 		// Decrement posts counters for participants
